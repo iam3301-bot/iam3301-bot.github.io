@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 用户中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../CSS/index.css" />
+</head>
+<body data-current-page="profile">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="home.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="home.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">用户中心</div>
+        <div class="page-intro" id="profileIntro">
+          简单展示“账号”的感觉，结合登录状态与本地游戏记录做一个汇总。
+        </div>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+          <div style="width:64px;height:64px;border-radius:50%;
+              background:linear-gradient(135deg,#4fc3f7,#7c4dff);
+              box-shadow:0 0 20px rgba(56,189,248,0.6);"></div>
+          <div style="flex:1;min-width:200px;font-size:13px;">
+            <p>昵称：<span id="profileName">游客玩家</span></p>
+            <p>账号等级：<span id="profileLevel">Lv. 1</span></p>
+            <p id="profileSummary" style="color:var(--text-muted);margin-top:4px;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>数据概览</span></div>
+        </header>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:13px;">
+          <div style="flex:1;min-width:140px;">
+            <div class="sidebar-title">游戏记录</div>
+            <p style="color:var(--text-muted);margin-top:4px;">
+              已拥有游戏：<strong id="statOwned">0</strong> 款<br />
+              想玩游戏：<strong id="statWish">0</strong> 款
+            </p>
+          </div>
+          <div style="flex:1;min-width:140px;">
+            <div class="sidebar-title">说明</div>
+            <p style="color:var(--text-muted);margin-top:4px;">
+              以上数据均来自本地 localStorage，是课程项目的前端示例。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">操作建议</div>
+        <div class="sidebar-item">
+          <span class="label">登录</span><span class="value"><a href="login.html">去登录页</a></span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">查看游戏</span><span class="value"><a href="my-library.html">我的游戏</a></span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="../JS/common.js"></script>
+<script>
+  initCommon();
+
+  function getArray(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  const ownedCount = getArray("ownedGames").length;
+  const wishCount = getArray("wishlistGames").length;
+
+  document.getElementById("statOwned").textContent = ownedCount;
+  document.getElementById("statWish").textContent = wishCount;
+
+  let currentUser = null;
+  try {
+    const raw = localStorage.getItem("currentUser");
+    if (raw) currentUser = JSON.parse(raw);
+  } catch {}
+
+  const profileName = document.getElementById("profileName");
+  const profileSummary = document.getElementById("profileSummary");
+  const profileIntro = document.getElementById("profileIntro");
+
+  if (currentUser) {
+    const name = currentUser.nickname || currentUser.username || "玩家";
+    profileName.textContent = name;
+    profileIntro.innerHTML =
+      `欢迎回来，<strong>${name}</strong>。这是一个用于课程展示的前端 Demo 用户中心。`;
+  }
+
+  if (ownedCount === 0 && wishCount === 0) {
+    profileSummary.textContent =
+      "还没有记录任何游戏，可以去游戏详情页试试“标记为已拥有 / 加入想玩清单”的按钮。";
+  } else {
+    const who = currentUser
+      ? (currentUser.nickname || currentUser.username || "你")
+      : "你";
+    profileSummary.textContent =
+      `${who} 当前已记录 ${ownedCount} 款已拥有游戏，${wishCount} 款想玩的游戏。`;
+  }
+</script>
+</body>
+</html>

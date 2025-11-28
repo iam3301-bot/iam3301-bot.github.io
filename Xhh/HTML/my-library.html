@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 我的游戏</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../CSS/index.css" />
+</head>
+<body data-current-page="my">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="home.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="home.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">我的游戏</div>
+        <div class="page-intro">
+          这里从浏览器 localStorage 中读取“已拥有”和“想玩”的游戏 ID，并转成可阅读列表。
+        </div>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>列表类型</span></div>
+        </header>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <button class="btn btn-primary btn-inline" id="tabOwned">已拥有</button>
+          <button class="btn btn-inline" id="tabWish">想玩</button>
+        </div>
+        <div class="form">
+          <div class="form-row">
+            <label for="mySearch">按名称搜索</label>
+            <input id="mySearch" type="text" placeholder="例如：艾尔登法环" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>我的列表</span></div>
+          <div class="chip" id="myCount">共 0 款</div>
+        </header>
+        <div id="myList" class="game-list"></div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">说明</div>
+        <div class="sidebar-item">
+          <span class="label">数据来源</span><span class="value">game-detail 标记结果</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">存储</span><span class="value">localStorage</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="../JS/common.js"></script>
+<script>
+  initCommon();
+
+  const gameNameMap = {
+    "elden-ring": "艾尔登法环",
+    "genshin": "原神",
+    "hollow-knight": "空洞骑士",
+    "cp2077": "赛博朋克 2077",
+    "mh-rise": "怪物猎人：崛起",
+    "stardew": "星露谷物语",
+    "slay-the-spire": "杀戮尖塔",
+    "lol": "英雄联盟",
+  };
+
+  function getList(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  const myListEl = document.getElementById("myList");
+  const myCountEl = document.getElementById("myCount");
+  const mySearchEl = document.getElementById("mySearch");
+  const tabOwned = document.getElementById("tabOwned");
+  const tabWish = document.getElementById("tabWish");
+
+  let currentType = "owned"; // owned / wish
+
+  function renderMyList() {
+    const kw = mySearchEl.value.trim().toLowerCase();
+    const ids = currentType === "owned" ? getList("ownedGames") : getList("wishlistGames");
+
+    let list = ids.map((id) => ({
+      id,
+      name: gameNameMap[id] || ("未知游戏 (" + id + ")"),
+    }));
+
+    if (kw) {
+      list = list.filter((g) => g.name.toLowerCase().includes(kw));
+    }
+
+    myListEl.innerHTML = "";
+    myCountEl.textContent = `共 ${list.length} 款`;
+
+    if (!list.length) {
+      myListEl.innerHTML =
+        '<div style="font-size:12px;color:var(--text-muted);">当前列表为空，可以去游戏详情页试试标记按钮。</div>';
+      return;
+    }
+
+    list.forEach((g) => {
+      const div = document.createElement("div");
+      div.className = "game-card";
+      div.innerHTML = `
+        <div class="game-info">
+          <div class="game-name">${g.name}</div>
+          <div class="game-meta">ID：${g.id}</div>
+          <div class="game-footer">
+            <span class="tag">来源：本地记录</span>
+            <button class="btn btn-inline btn-ghost">查看详情</button>
+          </div>
+        </div>
+      `;
+      div.querySelector("button").addEventListener("click", () => {
+        if (g.id === "elden-ring") {
+          window.location.href = "game-detail.html";
+        } else {
+          alert("当前 Demo 只有《艾尔登法环》做了详情页示例。");
+        }
+      });
+      myListEl.appendChild(div);
+    });
+  }
+
+  mySearchEl.addEventListener("input", renderMyList);
+
+  tabOwned.addEventListener("click", () => {
+    currentType = "owned";
+    tabOwned.classList.add("btn-primary");
+    tabWish.classList.remove("btn-primary");
+    renderMyList();
+  });
+
+  tabWish.addEventListener("click", () => {
+    currentType = "wish";
+    tabWish.classList.add("btn-primary");
+    tabOwned.classList.remove("btn-primary");
+    renderMyList();
+  });
+
+  // 默认选中“已拥有”
+  tabOwned.classList.add("btn-primary");
+  renderMyList();
+</script>
+</body>
+</html>

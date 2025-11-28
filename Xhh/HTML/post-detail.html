@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 帖子详情（示例）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../CSS/index.css" />
+</head>
+<body data-current-page="community">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="home.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="home.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <article class="card">
+        <div class="page-title">新手入门：如何在《艾尔登法环》中少死一点（示例）</div>
+        <div class="page-intro">
+          版块：攻略 · 游戏：艾尔登法环 · 楼主：示例玩家 A
+        </div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-top:8px;">
+          <p>
+            本帖为课程 Demo 帖子正文示例，用于展示帖子详情页面的布局结构。
+          </p>
+          <p>
+            1. 前期不要急着挑战所有 Boss，可以先在开放世界探索，提升等级和装备；<br />
+            2. 学会翻滚与体力管理，比盲目堆攻击更重要；<br />
+            3. 适当使用灵体和道具，这不是“作弊”，是游戏设计的一部分。
+          </p>
+          <p>
+            再次提醒：以上内容不代表实际攻略，仅为展示用途。
+          </p>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>评论区（本地追加示例）</span>
+          </div>
+        </header>
+        <div class="comment-list" id="commentList"></div>
+        <div class="form" style="margin-top:10px;">
+          <div class="form-row">
+            <label for="newComment">发表你的看法（不会发送到服务器）</label>
+            <textarea id="newComment" placeholder="说点什么吧……"></textarea>
+          </div>
+          <button class="btn btn-primary btn-inline" id="btnComment">发表评论</button>
+          <div id="commentMsg" style="font-size:11px;color:var(--text-soft);margin-top:4px;">
+            提示：评论只会保存在当前页面刷新前的内存中。
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">返回</div>
+        <div class="sidebar-item">
+          <span class="label">回到社区</span><span class="value"><a href="community.html">社区列表</a></span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="../JS/common.js"></script>
+<script>
+  initCommon();
+
+  const commentListEl = document.getElementById("commentList");
+  const newCommentEl = document.getElementById("newComment");
+  const btnComment = document.getElementById("btnComment");
+  const commentMsg = document.getElementById("commentMsg");
+
+  let comments = [
+    { author: "路人甲", time: "示例 · 1 小时前", content: "少贪刀，多观察 Boss 动作。" },
+    { author: "路人乙", time: "示例 · 10 分钟前", content: "灵马冲刺绕后戳几刀挺好用的。" },
+  ];
+
+  function renderComments() {
+    commentListEl.innerHTML = "";
+    comments.forEach((c) => {
+      const div = document.createElement("div");
+      div.className = "comment-item";
+      div.innerHTML = `
+        <div class="comment-meta">${c.author} · ${c.time}</div>
+        <div class="comment-content">${c.content}</div>
+      `;
+      commentListEl.appendChild(div);
+    });
+  }
+
+  btnComment.addEventListener("click", () => {
+    const text = newCommentEl.value.trim();
+    if (!text) {
+      commentMsg.textContent = "内容不能为空。";
+      return;
+    }
+    const user = (function(){
+      try {
+        const raw = localStorage.getItem("currentUser");
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch { return null; }
+    })();
+    const name = user ? (user.nickname || user.username || "已登录玩家") : "游客";
+
+    comments.push({
+      author: name,
+      time: "刚刚（本地）",
+      content: text,
+    });
+    newCommentEl.value = "";
+    commentMsg.textContent = "评论已添加（仅当前页面有效）。";
+    renderComments();
+  });
+
+  renderComments();
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 工具中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../CSS/index.css" />
+</head>
+<body data-current-page="tools">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="home.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="home.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">工具中心</div>
+        <div class="page-intro">
+          一些贴近日常需求的小工具：配置 vs 画质估算、通关时间估算、“今晚玩什么”随机推荐。
+        </div>
+      </div>
+
+      <!-- 配置估算 -->
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>配置 vs 画质估算（示例）</span></div>
+        </header>
+        <div class="form">
+          <div class="form-row">
+            <label for="cfgCpu">CPU 档次</label>
+            <select id="cfgCpu">
+              <option value="low">入门</option>
+              <option value="mid">主流</option>
+              <option value="high">高端</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="cfgGpu">显卡档次</label>
+            <select id="cfgGpu">
+              <option value="low">入门</option>
+              <option value="mid">主流</option>
+              <option value="high">高端</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-inline" id="cfgBtn">估算可用画质</button>
+          <div id="cfgResult" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+        </div>
+      </div>
+
+      <!-- 通关时间 -->
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>通关时间估算（示例）</span></div>
+        </header>
+        <div class="form">
+          <div class="form-row">
+            <label for="timeTotal">游戏总时长（小时，示例）</label>
+            <input id="timeTotal" type="number" min="1" placeholder="例如：60" />
+          </div>
+          <div class="form-row">
+            <label for="timeDaily">每天可玩时间（小时）</label>
+            <input id="timeDaily" type="number" min="0.5" step="0.5" placeholder="例如：2" />
+          </div>
+          <button class="btn btn-primary btn-inline" id="timeBtn">估算需要几天</button>
+          <div id="timeResult" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+        </div>
+      </div>
+
+      <!-- 随机今晚玩什么 -->
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title"><span class="dot"></span><span>今晚玩什么？</span></div>
+        </header>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">
+          随机从一个示例游戏池中选一款，当作今晚的推荐。
+        </div>
+        <button class="btn btn-primary btn-inline" id="randBtn">抽一抽</button>
+        <div id="randResult" style="font-size:13px;color:var(--text-main);margin-top:8px;"></div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">说明</div>
+        <div class="sidebar-item">
+          <span class="label">工具性质</span><span class="value">前端 Demo</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="../JS/common.js"></script>
+<script>
+  initCommon();
+
+  // 配置估算
+  const cfgCpu = document.getElementById("cfgCpu");
+  const cfgGpu = document.getElementById("cfgGpu");
+  const cfgBtn = document.getElementById("cfgBtn");
+  const cfgResult = document.getElementById("cfgResult");
+
+  cfgBtn.addEventListener("click", () => {
+    const cpu = cfgCpu.value;
+    const gpu = cfgGpu.value;
+    let text = "";
+
+    if (cpu === "low" && gpu === "low") {
+      text = "推荐 720p 或 1080p 低画质，适当关闭特效。";
+    } else if (gpu === "high" && cpu === "high") {
+      text = "大部分 3A 在 2K 分辨率下中高甚至最高画质都没问题。";
+    } else if (gpu === "mid" && cpu !== "low") {
+      text = "1080p 中高画质比较合适，部分游戏可以尝试 2K 中画质。";
+    } else {
+      text = "大多数情况建议 1080p 中画质，关闭极端特效。";
+    }
+
+    cfgResult.textContent = "示例估算结果：" + text;
+  });
+
+  // 通关时间
+  const timeTotal = document.getElementById("timeTotal");
+  const timeDaily = document.getElementById("timeDaily");
+  const timeBtn = document.getElementById("timeBtn");
+  const timeResult = document.getElementById("timeResult");
+
+  timeBtn.addEventListener("click", () => {
+    const total = parseFloat(timeTotal.value);
+    const daily = parseFloat(timeDaily.value);
+    if (!total || !daily || total <= 0 || daily <= 0) {
+      timeResult.textContent = "请正确填写总时长和每日游戏时间。";
+      return;
+    }
+    const days = Math.ceil(total / daily);
+    timeResult.textContent = `如果每天玩约 ${daily} 小时，大概要 ${days} 天可以通关（示例估算）。`;
+  });
+
+  // 随机今晚玩什么
+  const randBtn = document.getElementById("randBtn");
+  const randResult = document.getElementById("randResult");
+  const randPool = [
+    "艾尔登法环",
+    "空洞骑士",
+    "赛博朋克 2077",
+    "星露谷物语",
+    "杀戮尖塔",
+    "英雄联盟",
+    "原神",
+  ];
+
+  randBtn.addEventListener("click", () => {
+    const idx = Math.floor(Math.random() * randPool.length);
+    const game = randPool[idx];
+    randResult.textContent = `今晚不如试试：${game}`;
+  });
+</script>
+</body>
+</html>
