@@ -7,381 +7,191 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body data-current-page="detail">
-<div class="page">
-  <!-- 顶部导航 -->
-  <header class="header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <div class="logo-mark">G</div>
-        <div>
-          <div>GameBox 游盒</div>
-          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
-        </div>
-      </a>
-
-      <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- 主体 -->
-  <main class="main main--single">
-    <section>
-      <article class="card detail-card">
-        <!-- 顶部标题 + 返回 -->
-        <div class="detail-header-bar">
-          <div class="detail-breadcrumb">
-            游戏详情 / <span id="breadcrumbName">加载中...</span>
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-mark">G</div>
+          <div>
+            <div>GameBox 游盒</div>
+            <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
           </div>
-          <button class="btn-secondary" onclick="history.back()">← 返回上一页</button>
-        </div>
-
-        <!-- 视觉主区域（封面 + 标题 + 大号评分 + 标签） -->
-        <div class="detail-hero">
-          <div class="detail-hero-left">
-            <div class="detail-cover-large">
-              <img id="gameCover" src="" alt="游戏封面" />
+        </a>
+        <nav class="nav-main">
+          <a href="index.html" class="nav-link">首页</a>
+          <a href="game-library.html" class="nav-link">游戏库</a>
+          <a href="ranking.html" class="nav-link">排行榜</a>
+        </nav>
+      </div>
+    </header>
+    <main class="main main--single">
+      <section>
+        <article class="card detail-card">
+          <div class="detail-header-bar">
+            <div class="detail-breadcrumb">
+              游戏详情 / <span id="breadcrumbName">加载中...</span>
             </div>
+            <button class="btn-secondary" onclick="history.back()">← 返回上一页</button>
           </div>
 
-          <div class="detail-hero-right">
-            <div class="detail-title-row">
-              <div class="detail-title-block">
-                <h1 id="gameTitle" class="detail-title">游戏名称加载中...</h1>
-                <div id="gamePlatform" class="detail-platform">平台信息加载中...</div>
+          <div class="detail-hero">
+            <div class="detail-hero-left">
+              <div class="detail-cover-large">
+                <img id="gameCover" src="" alt="游戏封面" />
               </div>
-
-              <div class="detail-score-card">
-                <div class="detail-score-label">游盒热度评分</div>
-                <div class="detail-score-main">
-                  <span id="gameScore" class="detail-score-value">-</span>
-                  <span class="detail-score-outof">/ 10</span>
+            </div>
+            <div class="detail-hero-right">
+              <div class="detail-title-row">
+                <div class="detail-title-block">
+                  <h1 id="gameTitle">游戏名称加载中...</h1>
+                  <div id="gamePlatform">平台信息加载中...</div>
                 </div>
-                <div class="detail-score-sub">基于排行榜位置模拟</div>
-              </div>
-            </div>
-
-            <div class="detail-tag-row">
-              <span class="pill" id="gameTag">标签加载中...</span>
-              <span class="pill pill-soft">
-                发售：<span id="gameReleaseDate">未知</span>
-              </span>
-              <span class="pill pill-soft">
-                开发：<span id="gameDeveloper">未知</span>
-              </span>
-              <span class="pill pill-soft">
-                发行：<span id="gamePublisher">未知</span>
-              </span>
-            </div>
-
-            <p id="gameDescription" class="detail-hero-desc">
-              游戏简介加载中...
-            </p>
-
-            <div class="detail-links">
-              <a
-                id="gameUrl"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                class="detail-btn detail-btn-main"
-              >
-                <span>前往游戏官网 / 启动平台</span>
-                <span class="detail-btn-icon">↗</span>
-              </a>
-
-              <a
-                id="gameProfileUrl"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                class="detail-btn detail-btn-ghost"
-              >
-                <span>查看 FreeToGame 详情页</span>
-                <span class="detail-btn-icon">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 下方信息区 -->
-        <div class="detail-info-grid">
-          <!-- 左：基础信息 -->
-          <section class="detail-section">
-            <h2 class="detail-section-title">基础信息</h2>
-            <div class="detail-meta-list">
-              <div class="detail-meta-row">
-                <span class="detail-meta-label">开发商</span>
-                <span class="detail-meta-value" id="gameDeveloperMeta">未知</span>
-              </div>
-              <div class="detail-meta-row">
-                <span class="detail-meta-label">发行商</span>
-                <span class="detail-meta-value" id="gamePublisherMeta">未知</span>
-              </div>
-              <div class="detail-meta-row">
-                <span class="detail-meta-label">发售日期</span>
-                <span class="detail-meta-value" id="gameReleaseMeta">未知</span>
-              </div>
-              <div class="detail-meta-row">
-                <span class="detail-meta-label">平台 / 类型</span>
-                <span class="detail-meta-value" id="gamePlatformMeta">-</span>
-              </div>
-              <div class="detail-meta-row">
-                <span class="detail-meta-label">推荐指数</span>
-                <span class="detail-meta-value">
-                  <span id="gameScoreMeta">-</span> / 10（项目内部模拟评分）
-                </span>
-              </div>
-            </div>
-          </section>
-
-          <!-- 右：系统配置（最低 + 推荐说明） -->
-          <section class="detail-section detail-section--secondary">
-            <h2 class="detail-section-title">系统配置（来自 FreeToGame）</h2>
-
-            <div class="sysreq-grid">
-              <!-- 最低配置 -->
-              <div class="sysreq-column">
-                <div class="sysreq-title">最低配置</div>
-                <ul class="sysreq-list">
-                  <li>
-                    <span class="sysreq-label">系统</span>
-                    <span class="sysreq-value" id="sysMinOs">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">处理器</span>
-                    <span class="sysreq-value" id="sysMinCpu">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">内存</span>
-                    <span class="sysreq-value" id="sysMinRam">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">显卡</span>
-                    <span class="sysreq-value" id="sysMinGpu">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">存储</span>
-                    <span class="sysreq-value" id="sysMinStorage">接口未提供</span>
-                  </li>
-                </ul>
-              </div>
-
-              <!-- 推荐配置说明：不造数据，只说明来源 -->
-              <div class="sysreq-column sysreq-column--muted">
-                <div class="sysreq-title">推荐配置</div>
-                <div class="sysreq-placeholder">
-                  FreeToGame API 当前仅提供
-                  <strong>minimum_system_requirements（最低配置）</strong>，
-                  未提供官方推荐配置。
-                  <br />本项目不虚构推荐配置，以保证数据真实可信。
+                <div class="detail-score-card">
+                  <div class="detail-score-label">游盒热度评分</div>
+                  <div class="detail-score-main">
+                    <span id="gameScore">-</span>
+                    <span class="detail-score-outof">/ 10</span>
+                  </div>
+                  <div class="detail-score-sub">基于排行榜位置模拟</div>
                 </div>
               </div>
+
+              <div class="detail-tag-row">
+                <span class="pill" id="gameTag">标签加载中...</span>
+                <span class="pill pill-soft">发售：<span id="gameReleaseDate">未知</span></span>
+                <span class="pill pill-soft">开发：<span id="gameDeveloper">未知</span></span>
+                <span class="pill pill-soft">发行：<span id="gamePublisher">未知</span></span>
+              </div>
+
+              <p id="gameDescription">游戏简介加载中...</p>
+              <div class="detail-links">
+                <a id="gameUrl" href="#" target="_blank" class="detail-btn detail-btn-main">
+                  <span>前往游戏官网 / 启动平台</span>
+                  <span class="detail-btn-icon">↗</span>
+                </a>
+                <a id="gameProfileUrl" href="#" target="_blank" class="detail-btn detail-btn-ghost">
+                  <span>查看 FreeToGame 详情页</span>
+                  <span class="detail-btn-icon">↗</span>
+                </a>
+              </div>
             </div>
+          </div>
 
-            <p class="detail-section-text sysreq-note">
-              以上最低配置数据直接来自 FreeToGame API 的
-              <code>minimum_system_requirements</code> 字段；若某项仍显示“接口未提供”，
-              表示该游戏在接口中没有给出对应配置。
-            </p>
-          </section>
-        </div>
-      </article>
-    </section>
-  </main>
-</div>
+          <div class="detail-info-grid">
+            <!-- 基础信息 -->
+            <section class="detail-section">
+              <h2 class="detail-section-title">基础信息</h2>
+              <div class="detail-meta-list">
+                <div class="detail-meta-row">
+                  <span class="detail-meta-label">开发商</span>
+                  <span class="detail-meta-value" id="gameDeveloperMeta">未知</span>
+                </div>
+                <div class="detail-meta-row">
+                  <span class="detail-meta-label">发行商</span>
+                  <span class="detail-meta-value" id="gamePublisherMeta">未知</span>
+                </div>
+                <div class="detail-meta-row">
+                  <span class="detail-meta-label">发售日期</span>
+                  <span class="detail-meta-value" id="gameReleaseMeta">未知</span>
+                </div>
+                <div class="detail-meta-row">
+                  <span class="detail-meta-label">平台 / 类型</span>
+                  <span class="detail-meta-value" id="gamePlatformMeta">-</span>
+                </div>
+                <div class="detail-meta-row">
+                  <span class="detail-meta-label">推荐指数</span>
+                  <span class="detail-meta-value">
+                    <span id="gameScoreMeta">-</span> / 10（项目内部模拟评分）
+                  </span>
+                </div>
+              </div>
+            </section>
 
-<script src="common.js"></script>
-<script>
-  // 初始化通用逻辑（导航高亮）
-  initCommon();
+            <!-- 系统配置 -->
+            <section class="detail-section detail-section--secondary">
+              <h2 class="detail-section-title">系统配置（来自 FreeToGame / Steam）</h2>
+              <div class="sysreq-grid">
+                <div class="sysreq-column">
+                  <div class="sysreq-title">最低配置</div>
+                  <ul class="sysreq-list">
+                    <li><span class="sysreq-label">系统</span><span id="sysMinOs">加载中...</span></li>
+                    <li><span class="sysreq-label">处理器</span><span id="sysMinCpu">加载中...</span></li>
+                    <li><span class="sysreq-label">内存</span><span id="sysMinRam">加载中...</span></li>
+                    <li><span class="sysreq-label">显卡</span><span id="sysMinGpu">加载中...</span></li>
+                    <li><span class="sysreq-label">存储</span><span id="sysMinStorage">加载中...</span></li>
+                  </ul>
+                </div>
 
-  const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("id"); // 优先用 id 精确定位
-  const gameName = params.get("name");
+                <div class="sysreq-column sysreq-column--muted">
+                  <div class="sysreq-title">推荐配置</div>
+                  <div class="sysreq-placeholder">
+                    FreeToGame API 当前仅提供最低配置；推荐配置暂未提供官方数据。
+                    <br />本项目不虚构推荐配置，以确保数据真实可信。
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
 
-  // 顶部元素
-  const breadcrumbNameEl = document.getElementById("breadcrumbName");
-  const titleEl = document.getElementById("gameTitle");
-  const platformEl = document.getElementById("gamePlatform");
-  const coverEl = document.getElementById("gameCover");
-  const scoreEl = document.getElementById("gameScore");
-  const devEl = document.getElementById("gameDeveloper");
-  const pubEl = document.getElementById("gamePublisher");
-  const dateEl = document.getElementById("gameReleaseDate");
-  const tagEl = document.getElementById("gameTag");
-  const descEl = document.getElementById("gameDescription");
-  const urlEl = document.getElementById("gameUrl");
-  const profileEl = document.getElementById("gameProfileUrl");
+  <script src="common.js"></script>
+  <script>
+    // 在页面加载时获取详情数据
+    function loadDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const gameId = params.get("id");
+      const gameName = params.get("name");
 
-  // 下方“基础信息”区域
-  const devMetaEl = document.getElementById("gameDeveloperMeta");
-  const pubMetaEl = document.getElementById("gamePublisherMeta");
-  const releaseMetaEl = document.getElementById("gameReleaseMeta");
-  const platformMetaEl = document.getElementById("gamePlatformMeta");
-  const scoreMetaEl = document.getElementById("gameScoreMeta");
+      // 顶部数据
+      const breadcrumbNameEl = document.getElementById("breadcrumbName");
+      const titleEl = document.getElementById("gameTitle");
+      const platformEl = document.getElementById("gamePlatform");
+      const coverEl = document.getElementById("gameCover");
+      const scoreEl = document.getElementById("gameScore");
+      const devEl = document.getElementById("gameDeveloper");
+      const pubEl = document.getElementById("gamePublisher");
+      const dateEl = document.getElementById("gameReleaseDate");
+      const tagEl = document.getElementById("gameTag");
+      const descEl = document.getElementById("gameDescription");
+      const gameUrlEl = document.getElementById("gameUrl");
+      const profileUrlEl = document.getElementById("gameProfileUrl");
 
-  // 系统配置 DOM
-  const sysMinOsEl = document.getElementById("sysMinOs");
-  const sysMinCpuEl = document.getElementById("sysMinCpu");
-  const sysMinRamEl = document.getElementById("sysMinRam");
-  const sysMinGpuEl = document.getElementById("sysMinGpu");
-  const sysMinStorageEl = document.getElementById("sysMinStorage");
+      fetch(`/ranking.json`)
+        .then((response) => response.json())
+        .then((data) => {
+          const game = data.find((g) => g.id === gameId || g.name === gameName);
+          if (!game) {
+            alert("未找到游戏详情！");
+            return;
+          }
 
-  // 安全设置文本
-  function safeSetText(el, text) {
-    if (el) el.textContent = text;
-  }
-
-  if (!gameId && !gameName) {
-    safeSetText(breadcrumbNameEl, "未指定");
-    safeSetText(titleEl, "未指定游戏名称");
-    safeSetText(
-      descEl,
-      "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。"
-    );
-  } else {
-    safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
-    safeSetText(
-      titleEl,
-      "正在加载：" + (gameName || ("ID " + gameId))
-    );
-  }
-
-  // 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
-  function findGame(data) {
-    const all = []
-      .concat(data.hot || [], data.score || [], data.new || [], data.discount || []);
-
-    let found = null;
-
-    if (gameId) {
-      found = all.find((g) => String(g.id) === String(gameId));
-    }
-    if (!found && gameName) {
-      found = all.find((g) => g.name === gameName);
-    }
-    return found;
-  }
-
-  function fillSysReq(sys) {
-    const fallback = "接口未提供";
-    if (!sys) {
-      safeSetText(sysMinOsEl, fallback);
-      safeSetText(sysMinCpuEl, fallback);
-      safeSetText(sysMinRamEl, fallback);
-      safeSetText(sysMinGpuEl, fallback);
-      safeSetText(sysMinStorageEl, fallback);
-      return;
-    }
-    safeSetText(sysMinOsEl, sys.os || fallback);
-    safeSetText(sysMinCpuEl, sys.processor || fallback);
-    safeSetText(sysMinRamEl, sys.memory || fallback);
-    safeSetText(sysMinGpuEl, sys.graphics || fallback);
-    safeSetText(sysMinStorageEl, sys.storage || fallback);
-  }
-
-  function loadDetail() {
-    if (!gameId && !gameName) return;
-
-    fetch("ranking.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        const game = findGame(data);
-
-        if (!game) {
-          safeSetText(titleEl, gameName || ("ID " + gameId));
-          safeSetText(platformEl, "");
-          safeSetText(
-            descEl,
-            "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。"
-          );
-          if (coverEl) coverEl.style.display = "none";
-          fillSysReq(null);
-          return;
-        }
-
-        // ===== 顶部主信息 =====
-        safeSetText(breadcrumbNameEl, game.name);
-        safeSetText(titleEl, game.name);
-        safeSetText(platformEl, game.platform || "");
-        if (platformMetaEl) platformMetaEl.textContent = game.platform || "-";
-
-        if (coverEl) {
+          breadcrumbNameEl.textContent = game.name;
+          titleEl.textContent = game.name;
+          platformEl.textContent = game.platform;
           coverEl.src = game.cover;
-          coverEl.alt = game.name + " 封面";
-        }
+          scoreEl.textContent = game.score.toFixed(1);
+          devEl.textContent = game.developer;
+          pubEl.textContent = game.publisher;
+          dateEl.textContent = game.releaseDate || "未知";
+          tagEl.textContent = game.tag;
+          descEl.textContent = game.description || "暂无简介";
+          gameUrlEl.href = game.gameUrl;
+          profileUrlEl.href = game.profileUrl;
 
-        // 评分（项目内部模拟）
-        const score = Number(game.score) || 0;
-        const scoreText = score ? score.toFixed(1) : "-";
-        safeSetText(scoreEl, scoreText);
-        if (scoreMetaEl) scoreMetaEl.textContent = scoreText;
-
-        // 开发商 / 发行商 / 日期（真实字段）
-        const dev = game.developer || "未知";
-        const pub = game.publisher || "未知";
-        const releaseDate = game.releaseDate || "未知";
-
-        safeSetText(devEl, dev);
-        safeSetText(pubEl, pub);
-        safeSetText(dateEl, releaseDate);
-
-        if (devMetaEl) devMetaEl.textContent = dev;
-        if (pubMetaEl) pubMetaEl.textContent = pub;
-        if (releaseMetaEl) releaseMetaEl.textContent = releaseDate;
-
-        // 标签 / 简介
-        const tag = game.tag || "暂无标签";
-        safeSetText(tagEl, tag);
-
-        safeSetText(
-          descEl,
-          game.description ||
-            game.short_description ||
-            "暂无简介（原 API 未提供详细介绍）。"
-        );
-
-        // 官网 / FreeToGame 链接
-        if (game.gameUrl && urlEl) {
-          urlEl.href = game.gameUrl;
-          urlEl.style.display = "inline-flex";
-        } else if (urlEl) {
-          urlEl.style.display = "none";
-        }
-
-        if (game.profileUrl && profileEl) {
-          profileEl.href = game.profileUrl;
-          profileEl.style.display = "inline-flex";
-        } else if (profileEl) {
-          profileEl.style.display = "none";
-        }
-
-        // 系统配置（真实 minimum_system_requirements）
-        const sys =
-          game.systemRequirements ||
-          game.minimum_system_requirements ||
-          null;
-        fillSysReq(sys);
-      })
-      .catch((err) => {
-        console.error("加载详情失败：", err);
-        safeSetText(
-          descEl,
-          "加载详情失败，请稍后再试（可以检查 ranking.json 是否存在且格式正确）。"
-        );
-        fillSysReq(null);
-      });
-  }
-
-  loadDetail();
-</script>
+          // 系统配置
+          const sysMin = game.systemRequirements?.minimum || {};
+          document.getElementById("sysMinOs").textContent = sysMin.os || "未知";
+          document.getElementById("sysMinCpu").textContent = sysMin.processor || "未知";
+          document.getElementById("sysMinRam").textContent = sysMin.memory || "未知";
+          document.getElementById("sysMinGpu").textContent = sysMin.graphics || "未知";
+          document.getElementById("sysMinStorage").textContent = sysMin.storage || "未知";
+        })
+        .catch(console.error);
+    }
+    loadDetail();
+  </script>
 </body>
 </html>
-
