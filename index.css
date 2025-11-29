@@ -1725,89 +1725,34 @@ header .btn-secondary {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* 推荐配置区域 */
-.sysreq-placeholder {
-  font-size: 14px;
-  color: #e0f2fe;
-  font-weight: 500;
-  line-height: 1.7;
-  margin-top: 8px;
-  background: rgba(15, 23, 42, 0.9);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px dashed #e0f2fe;
+/* 推荐配置区域样式 */
+.sysreq-column--recommended {
+  background-color: #2c3e50; /* 与最低配置不同的背景色 */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* 配置内容区的每一行 */
-.sysreq-list li {
+.sysreq-column--recommended .sysreq-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.sysreq-column--recommended .sysreq-list li {
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.1); /* 每一行添加底部边线 */
+  margin-bottom: 10px;
 }
 
-.sysreq-note {
-  margin-top: 16px;
-  font-size: 12px;
+.sysreq-column--recommended .sysreq-label {
+  font-size: 14px;
   color: var(--text-muted);
-  line-height: 1.5;
 }
 
-/* 可折叠内容 */
-.sysreq-expandable {
-  cursor: pointer;
-  color: var(--accent);
-  font-weight: 600;
-  margin-top: 10px;
-}
-
-.sysreq-expandable:hover {
-  color: var(--accent-strong);
-}
-
-/* 响应式设计 */
-@media (max-width: 960px) {
-  .sysreq-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .sysreq-title {
-    font-size: 16px;
-  }
-
-  .sysreq-label {
-    font-size: 13px;
-  }
-
-  .sysreq-value {
-    font-size: 13px;
-  }
-
-  .sysreq-placeholder {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 640px) {
-  .sysreq-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sysreq-title {
-    font-size: 14px;
-  }
-
-  .sysreq-label {
-    font-size: 12px;
-  }
-
-  .sysreq-value {
-    font-size: 12px;
-  }
-
-  .sysreq-placeholder {
-    font-size: 12px;
-  }
+.sysreq-column--recommended .sysreq-value {
+  font-size: 14px;
+  color: #e5e7eb;
+  text-align: right;
 }
