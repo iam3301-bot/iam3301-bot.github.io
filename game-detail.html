@@ -140,7 +140,6 @@
     </main>
   </div>
 
-  <script src="common.js"></script>
   <script>
     function loadDetail() {
       const params = new URLSearchParams(window.location.search);
@@ -149,7 +148,10 @@
 
       // 获取 ranking.json 文件
       fetch(`/ranking.json`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) throw new Error('无法加载 ranking.json 数据');
+          return response.json();
+        })
         .then((data) => {
           const game = data.find((g) => g.id === gameId || g.name === gameName);
           if (!game) {
@@ -189,6 +191,7 @@
         })
         .catch((err) => {
           console.error("加载游戏数据失败:", err);
+          alert("加载游戏详情失败，请稍后重试");
         });
     }
     loadDetail();
