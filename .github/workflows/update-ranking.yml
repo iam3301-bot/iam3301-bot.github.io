@@ -1,0 +1,42 @@
+name: Update ranking data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"  # 每 6 小时跑一次，想每天跑一次可以改成 "0 0 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-ranking:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate latest ranking.json
+        run: npm run update:ranking
+
+      - name: Commit and push if ranking.json changed
+        run: |
+          if git diff --quiet ranking.json; then
+            echo "ranking.json 没有变化，不需要提交。"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add ranking.json
+          git commit -m "chore: update ranking data"
+          git push
