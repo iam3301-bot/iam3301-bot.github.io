@@ -124,10 +124,13 @@
 
                 <div class="sysreq-column sysreq-column--muted">
                   <div class="sysreq-title">推荐配置</div>
-                  <div class="sysreq-placeholder">
-                    FreeToGame API 当前仅提供最低配置；推荐配置暂未提供官方数据。
-                    <br />本项目不虚构推荐配置，以确保数据真实可信。
-                  </div>
+                  <ul class="sysreq-list">
+                    <li><span class="sysreq-label">系统</span><span id="sysRecOs">加载中...</span></li>
+                    <li><span class="sysreq-label">处理器</span><span id="sysRecCpu">加载中...</span></li>
+                    <li><span class="sysreq-label">内存</span><span id="sysRecRam">加载中...</span></li>
+                    <li><span class="sysreq-label">显卡</span><span id="sysRecGpu">加载中...</span></li>
+                    <li><span class="sysreq-label">存储</span><span id="sysRecStorage">加载中...</span></li>
+                  </ul>
                 </div>
               </div>
             </section>
@@ -139,26 +142,12 @@
 
   <script src="common.js"></script>
   <script>
-    // 在页面加载时获取详情数据
     function loadDetail() {
       const params = new URLSearchParams(window.location.search);
       const gameId = params.get("id");
       const gameName = params.get("name");
 
-      // 顶部数据
-      const breadcrumbNameEl = document.getElementById("breadcrumbName");
-      const titleEl = document.getElementById("gameTitle");
-      const platformEl = document.getElementById("gamePlatform");
-      const coverEl = document.getElementById("gameCover");
-      const scoreEl = document.getElementById("gameScore");
-      const devEl = document.getElementById("gameDeveloper");
-      const pubEl = document.getElementById("gamePublisher");
-      const dateEl = document.getElementById("gameReleaseDate");
-      const tagEl = document.getElementById("gameTag");
-      const descEl = document.getElementById("gameDescription");
-      const gameUrlEl = document.getElementById("gameUrl");
-      const profileUrlEl = document.getElementById("gameProfileUrl");
-
+      // 获取 ranking.json 文件
       fetch(`/ranking.json`)
         .then((response) => response.json())
         .then((data) => {
@@ -168,28 +157,39 @@
             return;
           }
 
-          breadcrumbNameEl.textContent = game.name;
-          titleEl.textContent = game.name;
-          platformEl.textContent = game.platform;
-          coverEl.src = game.cover;
-          scoreEl.textContent = game.score.toFixed(1);
-          devEl.textContent = game.developer;
-          pubEl.textContent = game.publisher;
-          dateEl.textContent = game.releaseDate || "未知";
-          tagEl.textContent = game.tag;
-          descEl.textContent = game.description || "暂无简介";
-          gameUrlEl.href = game.gameUrl;
-          profileUrlEl.href = game.profileUrl;
+          // 填充游戏详情内容
+          document.getElementById("breadcrumbName").textContent = game.name;
+          document.getElementById("gameTitle").textContent = game.name;
+          document.getElementById("gamePlatform").textContent = game.platform;
+          document.getElementById("gameCover").src = game.cover;
+          document.getElementById("gameScore").textContent = game.score.toFixed(1);
+          document.getElementById("gameDeveloper").textContent = game.developer;
+          document.getElementById("gamePublisher").textContent = game.publisher;
+          document.getElementById("gameReleaseDate").textContent = game.releaseDate || "未知";
+          document.getElementById("gameTag").textContent = game.tag;
+          document.getElementById("gameDescription").textContent = game.description || "暂无简介";
+          document.getElementById("gameUrl").href = game.gameUrl;
+          document.getElementById("gameProfileUrl").href = game.profileUrl;
 
-          // 系统配置
+          // 填充系统配置
           const sysMin = game.systemRequirements?.minimum || {};
           document.getElementById("sysMinOs").textContent = sysMin.os || "未知";
           document.getElementById("sysMinCpu").textContent = sysMin.processor || "未知";
           document.getElementById("sysMinRam").textContent = sysMin.memory || "未知";
           document.getElementById("sysMinGpu").textContent = sysMin.graphics || "未知";
           document.getElementById("sysMinStorage").textContent = sysMin.storage || "未知";
+
+          // 推荐配置
+          const sysRec = game.systemRequirements?.recommended || {};
+          document.getElementById("sysRecOs").textContent = sysRec.os || "未知";
+          document.getElementById("sysRecCpu").textContent = sysRec.processor || "未知";
+          document.getElementById("sysRecRam").textContent = sysRec.memory || "未知";
+          document.getElementById("sysRecGpu").textContent = sysRec.graphics || "未知";
+          document.getElementById("sysRecStorage").textContent = sysRec.storage || "未知";
         })
-        .catch(console.error);
+        .catch((err) => {
+          console.error("加载游戏数据失败:", err);
+        });
     }
     loadDetail();
   </script>
