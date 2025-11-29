@@ -1,5 +1,5 @@
 // tools/update-ranking.mjs
-// 在 GitHub Actions（Node 环境）里跑，用 FreeToGame API 拉真实数据，生成 ranking.json
+// 更新版：从 FreeToGame API 获取详细信息并写入 ranking.json
 
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -62,6 +62,7 @@ function mapGame(game, index, mode) {
 async function main() {
   console.log("开始从 FreeToGame API 拉取最新数据…");
 
+  // 获取数据（热门游戏榜单 + 新品榜单）
   const [hotGames, newGames] = await Promise.all([
     fetchGames(HOT_URL),
     fetchGames(NEW_URL)
@@ -90,6 +91,7 @@ async function main() {
   console.log("已写入最新排行榜数据 →", outputPath);
 }
 
+// 调用主函数
 main().catch((err) => {
   console.error("更新排行榜失败：", err);
   process.exit(1);
