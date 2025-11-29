@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 排行榜</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body data-current-page="ranking">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">综合排行榜</div>
+        <div class="page-intro">
+          按评分榜 / 热度榜 / 新品榜查看示例游戏排名，支持平台筛选与名称搜索。
+        </div>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>榜单筛选</span>
+          </div>
+        </header>
+        <div class="form">
+          <div class="form-row">
+            <label for="rankType">榜单类型</label>
+            <select id="rankType">
+              <option value="score">评分榜</option>
+              <option value="hot">热度榜</option>
+              <option value="new">新品榜</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="rankPlatform">平台</label>
+            <select id="rankPlatform">
+              <option value="all">全部平台</option>
+              <option value="steam">Steam</option>
+              <option value="pc">PC（其他）</option>
+              <option value="ps">PlayStation</option>
+              <option value="switch">Switch</option>
+              <option value="mobile">手机</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="rankSearch">名称关键字</label>
+            <input id="rankSearch" type="text" placeholder="输入游戏名，例如：艾尔登法环" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>榜单结果</span>
+          </div>
+          <div class="chip" id="rankCount">共 0 款</div>
+        </header>
+        <ol class="ranking-list" id="rankList"></ol>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">说明</div>
+        <div class="sidebar-item">
+          <span class="label">数据</span><span class="value">前端假数据</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">排序</span><span class="value">按评分或热度排序</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="common.js"></script>
+<script>
+  initCommon();
+
+  const rankingItems = [
+    { name: "艾尔登法环", board: "score", platform: "steam", score: 9.4, hot: 95, isNew: false, desc: "魂系 开放世界 ARPG" },
+    { name: "空洞骑士", board: "score", platform: "steam", score: 9.6, hot: 88, isNew: false, desc: "独立2D 像素硬核" },
+    { name: "巫师 3：狂猎", board: "score", platform: "steam", score: 9.7, hot: 82, isNew: false, desc: "RPG 神作" },
+    { name: "赛博朋克 2077", board: "hot", platform: "steam", score: 8.7, hot: 90, isNew: false, desc: "科幻 RPG" },
+    { name: "原神", board: "hot", platform: "pc", score: 8.8, hot: 98, isNew: false, desc: "开放世界 抽卡" },
+    { name: "英雄联盟", board: "hot", platform: "pc", score: 8.3, hot: 96, isNew: false, desc: "MOBA 联机" },
+    { name: "虚构新品 A", board: "new", platform: "steam", score: 8.2, hot: 70, isNew: true, desc: "新发售 Roguelike" },
+    { name: "虚构新品 B", board: "new", platform: "switch", score: 8.0, hot: 65, isNew: true, desc: "家庭向动作" },
+    { name: "杀戮尖塔", board: "score", platform: "steam", score: 9.0, hot: 75, isNew: false, desc: "卡牌 Roguelike" },
+    { name: "星露谷物语", board: "score", platform: "switch", score: 9.3, hot: 80, isNew: false, desc: "农场 休闲 独立" },
+  ];
+
+  const rankType = document.getElementById("rankType");
+  const rankPlatform = document.getElementById("rankPlatform");
+  const rankSearch = document.getElementById("rankSearch");
+  const rankList = document.getElementById("rankList");
+  const rankCount = document.getElementById("rankCount");
+
+  function renderRanking() {
+    const type = rankType.value; // score / hot / new
+    const plat = rankPlatform.value;
+    const kw = rankSearch.value.trim().toLowerCase();
+
+    let list = rankingItems.filter(item => {
+      if (type === "score" && item.board !== "score") return false;
+      if (type === "hot" && item.board !== "hot") return false;
+      if (type === "new" && item.board !== "new") return false;
+      if (plat !== "all" && item.platform !== plat) return false;
+      if (kw) {
+        const text = (item.name + " " + item.desc).toLowerCase();
+        if (!text.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    if (type === "score") {
+      list.sort((a, b) => b.score - a.score);
+    } else if (type === "hot") {
+      list.sort((a, b) => b.hot - a.hot);
+    } else {
+      list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+    }
+
+    rankList.innerHTML = "";
+    rankCount.textContent = `共 ${list.length} 款`;
+
+    if (!list.length) {
+      rankList.innerHTML =
+        '<li style="font-size:12px;color:var(--text-muted);padding:4px 0;">暂无符合条件的游戏。</li>';
+      return;
+    }
+
+    list.forEach((item, idx) => {
+      const li = document.createElement("li");
+      li.className = "ranking-item";
+      li.innerHTML = `
+        <div class="ranking-pos ${idx === 0 ? "ranking-pos--top1" : ""}">${idx + 1}</div>
+        <div class="ranking-game">
+          <div class="ranking-cover"></div>
+          <div class="ranking-info">
+            <div class="ranking-name">${item.name}</div>
+            <div class="ranking-meta">${item.desc}</div>
+          </div>
+        </div>
+        <div class="ranking-score">
+          <span class="value">${item.score.toFixed(1)}</span>
+          <div><span class="tag">${type === "hot" ? "热度 " + item.hot : (item.isNew ? "新品" : "老牌")}</span></div>
+        </div>
+      `;
+      li.addEventListener("click", () => {
+        if (item.name === "艾尔登法环") {
+          window.location.href = "game-detail.html";
+        }
+      });
+      rankList.appendChild(li);
+    });
+  }
+
+  rankType.addEventListener("change", renderRanking);
+  rankPlatform.addEventListener("change", renderRanking);
+  rankSearch.addEventListener("input", renderRanking);
+
+  renderRanking();
+</script>
+</body>
+</html>
