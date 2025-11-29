@@ -1,1 +1,234 @@
-{"hot":[{"name":"测试游戏","platform":"测试平台","score":9.0,"tag":"测试数据","cover":"https://placehold.co/250x140/38bdf8/020617?text=Test"}],"score":[],"new":[],"discount":[]}
+{
+  "hot": [
+    {
+      "name": "艾尔登法环",
+      "platform": "Steam · ACT RPG",
+      "score": 9.4,
+      "tag": "热度第 1",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Elden+Ring"
+    },
+    {
+      "name": "原神",
+      "platform": "PC / 移动 · 开放世界",
+      "score": 8.8,
+      "tag": "在线人数高",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Genshin"
+    },
+    {
+      "name": "CS2",
+      "platform": "Steam · FPS",
+      "score": 8.6,
+      "tag": "竞技向",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=CS2"
+    },
+    {
+      "name": "绝地求生",
+      "platform": "Steam · 吃鸡",
+      "score": 8.0,
+      "tag": "经典老牌",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=PUBG"
+    },
+    {
+      "name": "怪物猎人：崛起",
+      "platform": "Switch / PC · 狩猎动作",
+      "score": 8.5,
+      "tag": "刷刷刷",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=MH+Rise"
+    },
+    {
+      "name": "英雄联盟",
+      "platform": "PC · MOBA",
+      "score": 8.3,
+      "tag": "网吧标配",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=LoL"
+    },
+    {
+      "name": "DOTA 2",
+      "platform": "Steam · MOBA",
+      "score": 8.4,
+      "tag": "老牌竞技",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=DOTA+2"
+    },
+    {
+      "name": "APEX 英雄",
+      "platform": "多平台 · 吃鸡",
+      "score": 8.1,
+      "tag": "动作流畅",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Apex"
+    },
+    {
+      "name": "瓦罗兰特",
+      "platform": "PC · FPS",
+      "score": 8.2,
+      "tag": "新生代战术射击",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Valorant"
+    },
+    {
+      "name": "守望先锋 2",
+      "platform": "多平台 · 英雄射击",
+      "score": 7.9,
+      "tag": "多人对战",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=OW2"
+    }
+  ],
+  "score": [
+    {
+      "name": "巫师 3：狂猎",
+      "platform": "Steam · RPG",
+      "score": 9.7,
+      "tag": "神作殿堂",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Witcher+3"
+    },
+    {
+      "name": "空洞骑士",
+      "platform": "多平台 · 独立",
+      "score": 9.6,
+      "tag": "独立神作",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Hollow+Knight"
+    },
+    {
+      "name": "黑暗之魂 3",
+      "platform": "Steam · ARPG",
+      "score": 9.3,
+      "tag": "受虐狂最爱",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Dark+Souls+3"
+    },
+    {
+      "name": "只狼：影逝二度",
+      "platform": "Steam · 动作",
+      "score": 9.2,
+      "tag": "强烈推荐",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Sekiro"
+    },
+    {
+      "name": "塞尔达传说：旷野之息",
+      "platform": "Switch · 开放世界",
+      "score": 9.8,
+      "tag": "开放世界标杆",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Zelda+BotW"
+    },
+    {
+      "name": "杀戮尖塔",
+      "platform": "多平台 · 卡牌 Roguelike",
+      "score": 9.0,
+      "tag": "卡牌代表作",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Slay+the+Spire"
+    },
+    {
+      "name": "星露谷物语",
+      "platform": "多平台 · 休闲",
+      "score": 9.3,
+      "tag": "农场人生",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Stardew+Valley"
+    },
+    {
+      "name": "蔚蓝（Celeste）",
+      "platform": "多平台 · 独立",
+      "score": 9.2,
+      "tag": "手残克星",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Celeste"
+    }
+  ],
+  "new": [
+    {
+      "name": "虚构新品 A",
+      "platform": "Steam · Roguelike",
+      "score": 8.4,
+      "tag": "新发售",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+A"
+    },
+    {
+      "name": "虚构新品 B",
+      "platform": "PC / 主机 · ACT",
+      "score": 8.1,
+      "tag": "口碑不错",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+B"
+    },
+    {
+      "name": "虚构新品 C",
+      "platform": "移动 · RPG",
+      "score": 7.8,
+      "tag": "预约火热",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+C"
+    },
+    {
+      "name": "虚构新品 D",
+      "platform": "Steam · 独立",
+      "score": 8.6,
+      "tag": "小众精品",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+D"
+    },
+    {
+      "name": "虚构新品 E",
+      "platform": "Switch · 家庭向",
+      "score": 8.0,
+      "tag": "家庭聚会",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+E"
+    },
+    {
+      "name": "虚构新品 F",
+      "platform": "Steam · 抢先体验",
+      "score": 8.2,
+      "tag": "抢先体验",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+F"
+    },
+    {
+      "name": "虚构新品 G",
+      "platform": "PS5 · 主机佳作",
+      "score": 8.5,
+      "tag": "主机独占",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=New+G"
+    }
+  ],
+  "discount": [
+    {
+      "name": "赛博朋克 2077",
+      "platform": "Steam · RPG",
+      "score": 8.7,
+      "tag": "史低 -50%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=CP2077"
+    },
+    {
+      "name": "怪物猎人：世界",
+      "platform": "Steam · 狩猎动作",
+      "score": 8.9,
+      "tag": "限时 -60%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=MH+World"
+    },
+    {
+      "name": "仁王 2",
+      "platform": "Steam · 动作",
+      "score": 8.5,
+      "tag": "折扣 -70%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Nioh+2"
+    },
+    {
+      "name": "控制（Control）",
+      "platform": "多平台 · 超自然动作",
+      "score": 8.3,
+      "tag": "折扣 -65%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Control"
+    },
+    {
+      "name": "空洞骑士",
+      "platform": "多平台 · 独立",
+      "score": 9.6,
+      "tag": "限时 -60%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Hollow+Knight"
+    },
+    {
+      "name": "黑帝斯（Hades）",
+      "platform": "多平台 · Roguelike",
+      "score": 9.1,
+      "tag": "高分 -40%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Hades"
+    },
+    {
+      "name": "只狼：影逝二度",
+      "platform": "Steam · 动作",
+      "score": 9.2,
+      "tag": "史低 -50%",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Sekiro"
+    }
+  ]
+}
