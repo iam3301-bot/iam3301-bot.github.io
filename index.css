@@ -1276,3 +1276,86 @@ header .btn-secondary {
   font-size: 12px;
   color: #6b7280;
 }
+
+/* ===== 基础信息 + 系统配置统一风格 ===== */
+.detail-info-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr; /* 调整宽度，右侧变窄一些 */
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* 扩展左侧文字内容 */
+.detail-meta-list {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.detail-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.detail-meta-label {
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.detail-meta-value {
+  color: #cbd5e1;
+}
+
+.sysreq-column {
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: radial-gradient(circle at top left, rgba(15,23,42,0.8), rgba(15,23,42,0.95));
+  font-size: 14px; /* 保证字体一致 */
+}
+
+/* 系统配置相关 */
+.sysreq-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+}
+
+.sysreq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sysreq-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.sysreq-label {
+  color: #9ca3af;
+}
+
+.sysreq-value {
+  color: #e5e7eb;
+  max-width: 60%;
+  text-align: right;
+}
+
+/* 推荐配置说明 */
+.sysreq-placeholder {
+  font-size: 14px;
+  color: #e0f2fe;
+  font-weight: 500;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+.sysreq-note {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 16px;
+}
