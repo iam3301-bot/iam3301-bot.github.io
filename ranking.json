@@ -12,7 +12,16 @@
       "publisher": "MoreFun Studios",
       "developer": "MoreFun Studios",
       "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
-      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite",
+      "systemRequirements": {
+        "os": "64-bit Windows 10 or later",
+        "processor": "Intel Core i5-7500 / AMD Ryzen 5 1400",
+        "memory": "12 GB RAM",
+        "graphics": "NVIDIA GTX 960 2GB / AMD RX 5500 / Intel Arc A380",
+        "storage": "70 GB available space",
+        "source": "override",
+        "steamRaw": null
+      }
     },
     {
       "id": 618,
@@ -26,7 +35,16 @@
       "publisher": "Full Circle",
       "developer": "Electronic Arts",
       "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate"
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 624,
@@ -40,7 +58,16 @@
       "publisher": "Electronic Arts",
       "developer": "Battlefield Studios",
       "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
-      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-8400, AMD Ryzen 5 2600",
+        "memory": "16 GB RAM",
+        "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
+        "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 516,
@@ -54,7 +81,16 @@
       "publisher": "KRAFTON, Inc.",
       "developer": "KRAFTON, Inc.",
       "gameUrl": "https://www.freetogame.com/open/pubg",
-      "profileUrl": "https://www.freetogame.com/pubg"
+      "profileUrl": "https://www.freetogame.com/pubg",
+      "systemRequirements": {
+        "os": "64-bit Windows 7, Windows 8.1, Windows 10",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "40 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 608,
@@ -68,7 +104,16 @@
       "publisher": "Kakao Games",
       "developer": "Lionheart Studios",
       "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 466,
@@ -82,7 +127,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant"
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 475,
@@ -96,7 +150,16 @@
       "publisher": "miHoYo",
       "developer": "miHoYo",
       "gameUrl": "https://www.freetogame.com/open/genshin-impact",
-      "profileUrl": "https://www.freetogame.com/genshin-impact"
+      "profileUrl": "https://www.freetogame.com/genshin-impact",
+      "systemRequirements": {
+        "os": "Windows 7 SP1 64-bit",
+        "processor": "Intel Core i7 or equivalent",
+        "memory": "16 GB",
+        "graphics": "NVIDIA GeForce GTX 1060 6GB or better",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 121,
@@ -110,7 +173,16 @@
       "publisher": "Microsoft",
       "developer": "Turn 10",
       "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
-      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex"
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
+      "systemRequirements": {
+        "os": " Windows 10 64-bit version 1511",
+        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 626,
@@ -124,7 +196,16 @@
       "publisher": "Everstone Studio",
       "developer": "NetEase Games",
       "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
-      "profileUrl": "https://www.freetogame.com/where-winds-meet"
+      "profileUrl": "https://www.freetogame.com/where-winds-meet",
+      "systemRequirements": {
+        "os": "Windows 10/11 64bit",
+        "processor": "Core i7-7700K / Ryzen 5 1600",
+        "memory": "16 GB RAM",
+        "graphics": "GTX 1060(6GB) / RX 480(8GB)",
+        "storage": "100 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 623,
@@ -138,7 +219,16 @@
       "publisher": "Netmarble",
       "developer": "Netmarble",
       "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2"
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 540,
@@ -152,7 +242,16 @@
       "publisher": "Activision Blizzard",
       "developer": "Blizzard Entertainment",
       "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2"
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 508,
@@ -166,7 +265,16 @@
       "publisher": "Gaijin Entertainment",
       "developer": "Darkflow Software",
       "gameUrl": "https://www.freetogame.com/open/enlisted",
-      "profileUrl": "https://www.freetogame.com/enlisted"
+      "profileUrl": "https://www.freetogame.com/enlisted",
+      "systemRequirements": {
+        "os": "Windows 7 / 8 / 10 64bit",
+        "processor": "Intel Core i3 or better",
+        "memory": "8 GB",
+        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
+        "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 452,
@@ -180,7 +288,16 @@
       "publisher": "Activision",
       "developer": "Infinity Ward",
       "gameUrl": "https://www.freetogame.com/open/call-of-duty-warzone",
-      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone"
+      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone",
+      "systemRequirements": {
+        "os": "Windows 7 64-Bit (SP1) or Windows 10 64-Bit",
+        "processor": "Intel Core i3-4340 or AMD FX-6300",
+        "memory": "8GB RAM",
+        "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
+        "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 5,
@@ -194,7 +311,16 @@
       "publisher": "Targem",
       "developer": "Gaijin",
       "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout"
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 599,
@@ -208,7 +334,16 @@
       "publisher": "NetEase",
       "developer": "NetEase",
       "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals"
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 523,
@@ -222,7 +357,16 @@
       "publisher": "Mediatonic",
       "developer": "Mediatonic",
       "gameUrl": "https://www.freetogame.com/open/fall-guys",
-      "profileUrl": "https://www.freetogame.com/fall-guys"
+      "profileUrl": "https://www.freetogame.com/fall-guys",
+      "systemRequirements": {
+        "os": "Windows 10 64bit",
+        "processor": "Intel Core i5 or AMD equivalent",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GTX 660 or AMD Radeon HD 7950",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 511,
@@ -236,7 +380,16 @@
       "publisher": "Sega",
       "developer": "Sega",
       "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
-      "profileUrl": "https://www.freetogame.com/pso2-new-genesis"
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
+      "systemRequirements": {
+        "os": "Windows 8.1",
+        "processor": "Intel Core i5-9400 ",
+        "memory": "8 GB",
+        "graphics": "GeForce GTX 950 or Radeon R9 285",
+        "storage": "100 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 57,
@@ -250,7 +403,16 @@
       "publisher": "Epic Games",
       "developer": "Epic Games",
       "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
-      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale"
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
+      "systemRequirements": {
+        "os": "Window 7 or later",
+        "processor": "Intel HD 4000",
+        "memory": "4 GB",
+        "graphics": "Core i3 2.4",
+        "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 560,
@@ -264,7 +426,16 @@
       "publisher": "Singularity Six",
       "developer": "Singularity Six",
       "gameUrl": "https://www.freetogame.com/open/palia",
-      "profileUrl": "https://www.freetogame.com/palia"
+      "profileUrl": "https://www.freetogame.com/palia",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit or higher",
+        "processor": "Intel Core i5-4670K / AMD FX-8350 CPU or equivalent",
+        "memory": "4GB",
+        "graphics": "GeForce GTX 660 / Radeon R9 270 or equivalent",
+        "storage": "16GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 625,
@@ -278,7 +449,16 @@
       "publisher": "Logoi Games",
       "developer": "Pathea Games",
       "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball"
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 590,
@@ -292,7 +472,16 @@
       "publisher": "Amazon Games",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
-      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty",
+      "systemRequirements": {
+        "os": "Windows 10（64-bit)",
+        "processor": "Intel Core i5-6500",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA Geforce GTX960",
+        "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 517,
@@ -306,7 +495,16 @@
       "publisher": "Amazon Games",
       "developer": "Smilegate RPG",
       "gameUrl": "https://www.freetogame.com/open/lost-ark",
-      "profileUrl": "https://www.freetogame.com/lost-ark"
+      "profileUrl": "https://www.freetogame.com/lost-ark",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit only)",
+        "processor": "Intel i3 or AMD Ryzen 3",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460 / AMD HD6850",
+        "storage": "50 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 9,
@@ -320,7 +518,16 @@
       "publisher": "Wargaming",
       "developer": "Wargaming",
       "gameUrl": "https://www.freetogame.com/open/world-of-warships",
-      "profileUrl": "https://www.freetogame.com/world-of-warships"
+      "profileUrl": "https://www.freetogame.com/world-of-warships",
+      "systemRequirements": {
+        "os": "Windows XP, Windows Vista, or Windows 7",
+        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
+        "memory": "4GB DDR2",
+        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 11,
@@ -334,7 +541,16 @@
       "publisher": "Perfect World Entertainment",
       "developer": "Cryptic Studios",
       "gameUrl": "https://www.freetogame.com/open/neverwinter",
-      "profileUrl": "https://www.freetogame.com/neverwinter"
+      "profileUrl": "https://www.freetogame.com/neverwinter",
+      "systemRequirements": {
+        "os": "Windows® XP, Windows Vista, Windows 7 or Windows 8 ",
+        "processor": "Dual-core 2.0GHz CPU or better",
+        "memory": "1 GB RAM ",
+        "graphics": "Shader Model 2.0 or higher, GeForce 6800 or ATI Radeon X850 performance, 128MB+ video ram",
+        "storage": "4 GB available space ",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 24,
@@ -348,7 +564,16 @@
       "publisher": "Valve",
       "developer": "Valve",
       "gameUrl": "https://www.freetogame.com/open/counter-strike-2",
-      "profileUrl": "https://www.freetogame.com/counter-strike-2"
+      "profileUrl": "https://www.freetogame.com/counter-strike-2",
+      "systemRequirements": {
+        "os": "Windows® 7/Vista/XP",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better",
+        "memory": "2 GB RAM",
+        "graphics": "Video card must be 256 MB or more and should be a DirectX 9-compatible with support for Pixel Shader 3.0",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 588,
@@ -362,7 +587,16 @@
       "publisher": "Bohemia Interactive ",
       "developer": "Bohemia Interactive",
       "gameUrl": "https://www.freetogame.com/open/vigor",
-      "profileUrl": "https://www.freetogame.com/vigor"
+      "profileUrl": "https://www.freetogame.com/vigor",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
+        "storage": "18 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 621,
@@ -376,7 +610,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko"
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 521,
@@ -390,7 +633,16 @@
       "publisher": "Blizzard Entertainment",
       "developer": "Blizzard Entertainment",
       "gameUrl": "https://www.freetogame.com/open/diablo-immortal",
-      "profileUrl": "https://www.freetogame.com/diablo-immortal"
+      "profileUrl": "https://www.freetogame.com/diablo-immortal",
+      "systemRequirements": {
+        "os": "Windows 7 / Windows 8 / Windows 10 / Windows 11 (64-bit)",
+        "processor": "Intel Core i3 or AMD FX-8100",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460, ATI Radeon HD 6850 or Intel HD Graphics 530",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 212,
@@ -404,7 +656,16 @@
       "publisher": "Blue Mammoth Games",
       "developer": "Blue Mammoth Games",
       "gameUrl": "https://www.freetogame.com/open/brawlhalla",
-      "profileUrl": "https://www.freetogame.com/brawlhalla"
+      "profileUrl": "https://www.freetogame.com/brawlhalla",
+      "systemRequirements": {
+        "os": "?",
+        "processor": "?",
+        "memory": "1 GB RAM ",
+        "graphics": "?",
+        "storage": "75 MB available space ",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 584,
@@ -418,7 +679,16 @@
       "publisher": "Starry Studio",
       "developer": "Starry Studio",
       "gameUrl": "https://www.freetogame.com/open/once-human",
-      "profileUrl": "https://www.freetogame.com/once-human"
+      "profileUrl": "https://www.freetogame.com/once-human",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intedl Core i5-4460",
+        "memory": "8 GB",
+        "graphics": "Nvidia GTX 750ti 4G / AMD Radeon RX550",
+        "storage": "60 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     }
   ],
   "score": [
@@ -434,7 +704,16 @@
       "publisher": "MoreFun Studios",
       "developer": "MoreFun Studios",
       "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
-      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite",
+      "systemRequirements": {
+        "os": "64-bit Windows 10 or later",
+        "processor": "Intel Core i5-7500 / AMD Ryzen 5 1400",
+        "memory": "12 GB RAM",
+        "graphics": "NVIDIA GTX 960 2GB / AMD RX 5500 / Intel Arc A380",
+        "storage": "70 GB available space",
+        "source": "override",
+        "steamRaw": null
+      }
     },
     {
       "id": 618,
@@ -448,7 +727,16 @@
       "publisher": "Full Circle",
       "developer": "Electronic Arts",
       "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate"
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 624,
@@ -462,7 +750,16 @@
       "publisher": "Electronic Arts",
       "developer": "Battlefield Studios",
       "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
-      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-8400, AMD Ryzen 5 2600",
+        "memory": "16 GB RAM",
+        "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
+        "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 516,
@@ -476,7 +773,16 @@
       "publisher": "KRAFTON, Inc.",
       "developer": "KRAFTON, Inc.",
       "gameUrl": "https://www.freetogame.com/open/pubg",
-      "profileUrl": "https://www.freetogame.com/pubg"
+      "profileUrl": "https://www.freetogame.com/pubg",
+      "systemRequirements": {
+        "os": "64-bit Windows 7, Windows 8.1, Windows 10",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "40 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 608,
@@ -490,7 +796,16 @@
       "publisher": "Kakao Games",
       "developer": "Lionheart Studios",
       "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 466,
@@ -504,7 +819,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant"
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 475,
@@ -518,7 +842,16 @@
       "publisher": "miHoYo",
       "developer": "miHoYo",
       "gameUrl": "https://www.freetogame.com/open/genshin-impact",
-      "profileUrl": "https://www.freetogame.com/genshin-impact"
+      "profileUrl": "https://www.freetogame.com/genshin-impact",
+      "systemRequirements": {
+        "os": "Windows 7 SP1 64-bit",
+        "processor": "Intel Core i7 or equivalent",
+        "memory": "16 GB",
+        "graphics": "NVIDIA GeForce GTX 1060 6GB or better",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 121,
@@ -532,7 +865,16 @@
       "publisher": "Microsoft",
       "developer": "Turn 10",
       "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
-      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex"
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
+      "systemRequirements": {
+        "os": " Windows 10 64-bit version 1511",
+        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 626,
@@ -546,7 +888,16 @@
       "publisher": "Everstone Studio",
       "developer": "NetEase Games",
       "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
-      "profileUrl": "https://www.freetogame.com/where-winds-meet"
+      "profileUrl": "https://www.freetogame.com/where-winds-meet",
+      "systemRequirements": {
+        "os": "Windows 10/11 64bit",
+        "processor": "Core i7-7700K / Ryzen 5 1600",
+        "memory": "16 GB RAM",
+        "graphics": "GTX 1060(6GB) / RX 480(8GB)",
+        "storage": "100 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 623,
@@ -560,7 +911,16 @@
       "publisher": "Netmarble",
       "developer": "Netmarble",
       "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2"
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 540,
@@ -574,7 +934,16 @@
       "publisher": "Activision Blizzard",
       "developer": "Blizzard Entertainment",
       "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2"
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 508,
@@ -588,7 +957,16 @@
       "publisher": "Gaijin Entertainment",
       "developer": "Darkflow Software",
       "gameUrl": "https://www.freetogame.com/open/enlisted",
-      "profileUrl": "https://www.freetogame.com/enlisted"
+      "profileUrl": "https://www.freetogame.com/enlisted",
+      "systemRequirements": {
+        "os": "Windows 7 / 8 / 10 64bit",
+        "processor": "Intel Core i3 or better",
+        "memory": "8 GB",
+        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
+        "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 452,
@@ -602,7 +980,16 @@
       "publisher": "Activision",
       "developer": "Infinity Ward",
       "gameUrl": "https://www.freetogame.com/open/call-of-duty-warzone",
-      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone"
+      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone",
+      "systemRequirements": {
+        "os": "Windows 7 64-Bit (SP1) or Windows 10 64-Bit",
+        "processor": "Intel Core i3-4340 or AMD FX-6300",
+        "memory": "8GB RAM",
+        "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
+        "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 5,
@@ -616,7 +1003,16 @@
       "publisher": "Targem",
       "developer": "Gaijin",
       "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout"
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 599,
@@ -630,7 +1026,16 @@
       "publisher": "NetEase",
       "developer": "NetEase",
       "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals"
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 523,
@@ -644,7 +1049,16 @@
       "publisher": "Mediatonic",
       "developer": "Mediatonic",
       "gameUrl": "https://www.freetogame.com/open/fall-guys",
-      "profileUrl": "https://www.freetogame.com/fall-guys"
+      "profileUrl": "https://www.freetogame.com/fall-guys",
+      "systemRequirements": {
+        "os": "Windows 10 64bit",
+        "processor": "Intel Core i5 or AMD equivalent",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GTX 660 or AMD Radeon HD 7950",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 511,
@@ -658,7 +1072,16 @@
       "publisher": "Sega",
       "developer": "Sega",
       "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
-      "profileUrl": "https://www.freetogame.com/pso2-new-genesis"
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
+      "systemRequirements": {
+        "os": "Windows 8.1",
+        "processor": "Intel Core i5-9400 ",
+        "memory": "8 GB",
+        "graphics": "GeForce GTX 950 or Radeon R9 285",
+        "storage": "100 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 57,
@@ -672,7 +1095,16 @@
       "publisher": "Epic Games",
       "developer": "Epic Games",
       "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
-      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale"
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
+      "systemRequirements": {
+        "os": "Window 7 or later",
+        "processor": "Intel HD 4000",
+        "memory": "4 GB",
+        "graphics": "Core i3 2.4",
+        "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 560,
@@ -686,7 +1118,16 @@
       "publisher": "Singularity Six",
       "developer": "Singularity Six",
       "gameUrl": "https://www.freetogame.com/open/palia",
-      "profileUrl": "https://www.freetogame.com/palia"
+      "profileUrl": "https://www.freetogame.com/palia",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit or higher",
+        "processor": "Intel Core i5-4670K / AMD FX-8350 CPU or equivalent",
+        "memory": "4GB",
+        "graphics": "GeForce GTX 660 / Radeon R9 270 or equivalent",
+        "storage": "16GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 625,
@@ -700,7 +1141,16 @@
       "publisher": "Logoi Games",
       "developer": "Pathea Games",
       "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball"
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 590,
@@ -714,7 +1164,16 @@
       "publisher": "Amazon Games",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
-      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty",
+      "systemRequirements": {
+        "os": "Windows 10（64-bit)",
+        "processor": "Intel Core i5-6500",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA Geforce GTX960",
+        "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 517,
@@ -728,7 +1187,16 @@
       "publisher": "Amazon Games",
       "developer": "Smilegate RPG",
       "gameUrl": "https://www.freetogame.com/open/lost-ark",
-      "profileUrl": "https://www.freetogame.com/lost-ark"
+      "profileUrl": "https://www.freetogame.com/lost-ark",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit only)",
+        "processor": "Intel i3 or AMD Ryzen 3",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460 / AMD HD6850",
+        "storage": "50 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 9,
@@ -742,7 +1210,16 @@
       "publisher": "Wargaming",
       "developer": "Wargaming",
       "gameUrl": "https://www.freetogame.com/open/world-of-warships",
-      "profileUrl": "https://www.freetogame.com/world-of-warships"
+      "profileUrl": "https://www.freetogame.com/world-of-warships",
+      "systemRequirements": {
+        "os": "Windows XP, Windows Vista, or Windows 7",
+        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
+        "memory": "4GB DDR2",
+        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
+        "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 11,
@@ -756,7 +1233,16 @@
       "publisher": "Perfect World Entertainment",
       "developer": "Cryptic Studios",
       "gameUrl": "https://www.freetogame.com/open/neverwinter",
-      "profileUrl": "https://www.freetogame.com/neverwinter"
+      "profileUrl": "https://www.freetogame.com/neverwinter",
+      "systemRequirements": {
+        "os": "Windows® XP, Windows Vista, Windows 7 or Windows 8 ",
+        "processor": "Dual-core 2.0GHz CPU or better",
+        "memory": "1 GB RAM ",
+        "graphics": "Shader Model 2.0 or higher, GeForce 6800 or ATI Radeon X850 performance, 128MB+ video ram",
+        "storage": "4 GB available space ",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 24,
@@ -770,7 +1256,16 @@
       "publisher": "Valve",
       "developer": "Valve",
       "gameUrl": "https://www.freetogame.com/open/counter-strike-2",
-      "profileUrl": "https://www.freetogame.com/counter-strike-2"
+      "profileUrl": "https://www.freetogame.com/counter-strike-2",
+      "systemRequirements": {
+        "os": "Windows® 7/Vista/XP",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better",
+        "memory": "2 GB RAM",
+        "graphics": "Video card must be 256 MB or more and should be a DirectX 9-compatible with support for Pixel Shader 3.0",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 588,
@@ -784,7 +1279,16 @@
       "publisher": "Bohemia Interactive ",
       "developer": "Bohemia Interactive",
       "gameUrl": "https://www.freetogame.com/open/vigor",
-      "profileUrl": "https://www.freetogame.com/vigor"
+      "profileUrl": "https://www.freetogame.com/vigor",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
+        "storage": "18 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 621,
@@ -798,7 +1302,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko"
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 521,
@@ -812,7 +1325,16 @@
       "publisher": "Blizzard Entertainment",
       "developer": "Blizzard Entertainment",
       "gameUrl": "https://www.freetogame.com/open/diablo-immortal",
-      "profileUrl": "https://www.freetogame.com/diablo-immortal"
+      "profileUrl": "https://www.freetogame.com/diablo-immortal",
+      "systemRequirements": {
+        "os": "Windows 7 / Windows 8 / Windows 10 / Windows 11 (64-bit)",
+        "processor": "Intel Core i3 or AMD FX-8100",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460, ATI Radeon HD 6850 or Intel HD Graphics 530",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 212,
@@ -826,7 +1348,16 @@
       "publisher": "Blue Mammoth Games",
       "developer": "Blue Mammoth Games",
       "gameUrl": "https://www.freetogame.com/open/brawlhalla",
-      "profileUrl": "https://www.freetogame.com/brawlhalla"
+      "profileUrl": "https://www.freetogame.com/brawlhalla",
+      "systemRequirements": {
+        "os": "?",
+        "processor": "?",
+        "memory": "1 GB RAM ",
+        "graphics": "?",
+        "storage": "75 MB available space ",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 584,
@@ -840,7 +1371,16 @@
       "publisher": "Starry Studio",
       "developer": "Starry Studio",
       "gameUrl": "https://www.freetogame.com/open/once-human",
-      "profileUrl": "https://www.freetogame.com/once-human"
+      "profileUrl": "https://www.freetogame.com/once-human",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intedl Core i5-4460",
+        "memory": "8 GB",
+        "graphics": "Nvidia GTX 750ti 4G / AMD Radeon RX550",
+        "storage": "60 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     }
   ],
   "new": [
@@ -856,7 +1396,16 @@
       "publisher": "Everstone Studio",
       "developer": "NetEase Games",
       "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
-      "profileUrl": "https://www.freetogame.com/where-winds-meet"
+      "profileUrl": "https://www.freetogame.com/where-winds-meet",
+      "systemRequirements": {
+        "os": "Windows 10/11 64bit",
+        "processor": "Core i7-7700K / Ryzen 5 1600",
+        "memory": "16 GB RAM",
+        "graphics": "GTX 1060(6GB) / RX 480(8GB)",
+        "storage": "100 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 624,
@@ -870,7 +1419,16 @@
       "publisher": "Electronic Arts",
       "developer": "Battlefield Studios",
       "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
-      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-8400, AMD Ryzen 5 2600",
+        "memory": "16 GB RAM",
+        "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
+        "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 625,
@@ -884,7 +1442,16 @@
       "publisher": "Logoi Games",
       "developer": "Pathea Games",
       "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball"
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 623,
@@ -898,7 +1465,16 @@
       "publisher": "Netmarble",
       "developer": "Netmarble",
       "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2"
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 622,
@@ -912,7 +1488,16 @@
       "publisher": "A Plus",
       "developer": "Shanghai Bokura Networkd Technology",
       "gameUrl": "https://www.freetogame.com/open/blue-protocol-star-resonance",
-      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance"
+      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel i7-8700 or AMD Ryzen 5 3600 or better",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 6GB or AMD Radeon RX 580 or better",
+        "storage": "35 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 621,
@@ -926,7 +1511,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko"
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 619,
@@ -940,7 +1534,16 @@
       "publisher": "NCSoft",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
-      "profileUrl": "https://www.freetogame.com/blade-soul-heroes"
+      "profileUrl": "https://www.freetogame.com/blade-soul-heroes",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit v1607+",
+        "processor": "Intel i5-6500 or AMD Ryzen 5 1600",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1060 3G or AMD Radeon RX 480 8G or INTEL® Arc A380 (6GB, Alchemist)",
+        "storage": "35 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 616,
@@ -954,7 +1557,16 @@
       "publisher": "Qooland ",
       "developer": "Qooland",
       "gameUrl": "https://www.freetogame.com/open/warborne-above-ashes",
-      "profileUrl": "https://www.freetogame.com/warborne-above-ashes"
+      "profileUrl": "https://www.freetogame.com/warborne-above-ashes",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)/Windows 11 (64 bit)",
+        "processor": "Intel Core i5 8600 / AMD Ryzen 5 1500X",
+        "memory": "16 GB RAM",
+        "graphics": " NVIDIA GeForce GTX 1060 / AMD Radeon RX 5500 XT",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 615,
@@ -968,7 +1580,16 @@
       "publisher": "MoreFun Studios",
       "developer": "MoreFun Studios",
       "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
-      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite",
+      "systemRequirements": {
+        "os": "64-bit Windows 10 or later",
+        "processor": "Intel Core i5-7500 / AMD Ryzen 5 1400",
+        "memory": "12 GB RAM",
+        "graphics": "NVIDIA GTX 960 2GB / AMD RX 5500 / Intel Arc A380",
+        "storage": "70 GB available space",
+        "source": "override",
+        "steamRaw": null
+      }
     },
     {
       "id": 618,
@@ -982,7 +1603,16 @@
       "publisher": "Full Circle",
       "developer": "Electronic Arts",
       "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate"
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 617,
@@ -996,7 +1626,16 @@
       "publisher": "Stonehollow Workshop",
       "developer": "Stonehollow Workshop",
       "gameUrl": "https://www.freetogame.com/open/eterspire",
-      "profileUrl": "https://www.freetogame.com/eterspire"
+      "profileUrl": "https://www.freetogame.com/eterspire",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit)",
+        "processor": "Intel Core i3 @ 2.40 GHz or equivalent",
+        "memory": "6 GB RAM",
+        "graphics": "Intel HD Graphics or better",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 614,
@@ -1010,7 +1649,16 @@
       "publisher": "OneUniverse",
       "developer": "OneUniverse",
       "gameUrl": "https://www.freetogame.com/open/dungeon-stalker",
-      "profileUrl": "https://www.freetogame.com/dungeon-stalker"
+      "profileUrl": "https://www.freetogame.com/dungeon-stalker",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel® Core i3-3225",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA® GeForce GTX 1060",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 613,
@@ -1024,7 +1672,16 @@
       "publisher": "Dfiance",
       "developer": "Dfiance",
       "gameUrl": "https://www.freetogame.com/open/dfiance",
-      "profileUrl": "https://www.freetogame.com/dfiance"
+      "profileUrl": "https://www.freetogame.com/dfiance",
+      "systemRequirements": {
+        "os": "Windows 10 64bit",
+        "processor": "x64 architecture with SSE2",
+        "memory": "1 GB RAM",
+        "graphics": "DX11, DX12 capable",
+        "storage": "1200 MB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 612,
@@ -1038,7 +1695,16 @@
       "publisher": "Pew Pew Games",
       "developer": "Pew Pew Games",
       "gameUrl": "https://www.freetogame.com/open/terminull-brigade",
-      "profileUrl": "https://www.freetogame.com/terminull-brigade"
+      "profileUrl": "https://www.freetogame.com/terminull-brigade",
+      "systemRequirements": {
+        "os": "Windows 10（64bit）",
+        "processor": "Intel(R) Core(TM) i5-7500/AMD Ryzen(TM) 5 1400",
+        "memory": "16 GB RAM",
+        "graphics": " NVIDIA GeForce GTX 1650，AMD Radeon RX 580",
+        "storage": "24 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 611,
@@ -1052,7 +1718,16 @@
       "publisher": "Amazing Seasun Games",
       "developer": "Amazing Seasun Games",
       "gameUrl": "https://www.freetogame.com/open/mecha-break",
-      "profileUrl": "https://www.freetogame.com/mecha-break"
+      "profileUrl": "https://www.freetogame.com/mecha-break",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-6500/AMD Ryzen 3 1300X or above",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1650/AMD Radeon RX 570 or above",
+        "storage": "60 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 609,
@@ -1066,7 +1741,16 @@
       "publisher": "Skystone Games",
       "developer": "Nuverse",
       "gameUrl": "https://www.freetogame.com/open/crystal-of-atlan",
-      "profileUrl": "https://www.freetogame.com/crystal-of-atlan"
+      "profileUrl": "https://www.freetogame.com/crystal-of-atlan",
+      "systemRequirements": {
+        "os": "Windows10 64bit",
+        "processor": "Intel Core i5 （9th generation)",
+        "memory": "8G",
+        "graphics": "GTX750ti",
+        "storage": "50G",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 610,
@@ -1080,7 +1764,16 @@
       "publisher": "1047 Games",
       "developer": "1047 Games",
       "gameUrl": "https://www.freetogame.com/open/splitgate-2",
-      "profileUrl": "https://www.freetogame.com/splitgate-2"
+      "profileUrl": "https://www.freetogame.com/splitgate-2",
+      "systemRequirements": {
+        "os": "Windows® 10 64 Bit",
+        "processor": "Intel® Core™ i3-6100 / Core™ i5-2500K or AMD Ryzen™ 3 1200",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA® GeForce® GTX 1050",
+        "storage": "27 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 607,
@@ -1094,7 +1787,16 @@
       "publisher": "Honig Studios GmbH",
       "developer": "Mimunga LLC",
       "gameUrl": "https://www.freetogame.com/open/the-lost-glitches",
-      "profileUrl": "https://www.freetogame.com/the-lost-glitches"
+      "profileUrl": "https://www.freetogame.com/the-lost-glitches",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual Core CPU - 2.6ghz",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce 560 or higher, AMD Radeon HD 5830 or higher",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 608,
@@ -1108,7 +1810,16 @@
       "publisher": "Kakao Games",
       "developer": "Lionheart Studios",
       "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 606,
@@ -1122,7 +1833,16 @@
       "publisher": "Wargaming ",
       "developer": "Wargaming",
       "gameUrl": "https://www.freetogame.com/open/steel-hunters",
-      "profileUrl": "https://www.freetogame.com/steel-hunters"
+      "profileUrl": "https://www.freetogame.com/steel-hunters",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5 8400 / AMD Ryzen 5 2600",
+        "memory": "16 GB ",
+        "graphics": "NVIDIA GeForce RTX 2060 / AMD Radeon Vega 64",
+        "storage": "32 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 604,
@@ -1136,7 +1856,16 @@
       "publisher": "Bad Guitar Studio",
       "developer": "Bad Guitar Studio",
       "gameUrl": "https://www.freetogame.com/open/fragpunk",
-      "profileUrl": "https://www.freetogame.com/fragpunk"
+      "profileUrl": "https://www.freetogame.com/fragpunk",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit or newer",
+        "processor": "Intel i7 8th or AMD Zen2",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / Intel ARC A380",
+        "storage": "35 GB available space (SSD required)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 603,
@@ -1150,7 +1879,16 @@
       "publisher": "My.games",
       "developer": "My.games",
       "gameUrl": "https://www.freetogame.com/open/war-robots-frontiers",
-      "profileUrl": "https://www.freetogame.com/war-robots-frontiers"
+      "profileUrl": "https://www.freetogame.com/war-robots-frontiers",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-3470 @ 3.20GHz",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 660 3GB VRAM",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 599,
@@ -1164,7 +1902,16 @@
       "publisher": "NetEase",
       "developer": "NetEase",
       "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals"
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 601,
@@ -1178,7 +1925,16 @@
       "publisher": "TiMi Studio Group",
       "developer": "Team Jade",
       "gameUrl": "https://www.freetogame.com/open/delta-force",
-      "profileUrl": "https://www.freetogame.com/delta-force"
+      "profileUrl": "https://www.freetogame.com/delta-force",
+      "systemRequirements": {
+        "os": "Windows 10 64 bit",
+        "processor": "Intel Core i3-4150 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "Nvidia Geforce GTX 660 / AMD HD 7870 / Intel Arc A380",
+        "storage": "60 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 597,
@@ -1192,7 +1948,16 @@
       "publisher": "iDreamSky",
       "developer": "iDreamSky",
       "gameUrl": "https://www.freetogame.com/open/strinova",
-      "profileUrl": "https://www.freetogame.com/strinova"
+      "profileUrl": "https://www.freetogame.com/strinova",
+      "systemRequirements": {
+        "os": "Windows 7/8/10/11 64bit",
+        "processor": "Intel Core i3-4170",
+        "memory": "4 GB RAM",
+        "graphics": "Nvidia GeForce GT 730, AMD R7 240",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 598,
@@ -1206,7 +1971,16 @@
       "publisher": "Theorycraft Games",
       "developer": "Theorycraft Games",
       "gameUrl": "https://www.freetogame.com/open/supervive",
-      "profileUrl": "https://www.freetogame.com/supervive"
+      "profileUrl": "https://www.freetogame.com/supervive",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit build 1909.1350 or newer",
+        "processor": "Intel i5-4440 (3.1GHz) - AMD Ryzen 3 3100 (3.6GHz) - 4 physical cores",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 980ti or equivalent",
+        "storage": "8 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 595,
@@ -1220,7 +1994,16 @@
       "publisher": "Fen Research LTD",
       "developer": "Fen Research LTD",
       "gameUrl": "https://www.freetogame.com/open/brighter-shores",
-      "profileUrl": "https://www.freetogame.com/brighter-shores"
+      "profileUrl": "https://www.freetogame.com/brighter-shores",
+      "systemRequirements": {
+        "os": "Windows 10/11",
+        "processor": " Intel i3 or AMD equivalent",
+        "memory": "8 GB RAM",
+        "graphics": "DirectX 11 capable graphics with at least 2GB RAM",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 593,
@@ -1234,7 +2017,16 @@
       "publisher": "KOG",
       "developer": "KOG",
       "gameUrl": "https://www.freetogame.com/open/return-alive",
-      "profileUrl": "https://www.freetogame.com/return-alive"
+      "profileUrl": "https://www.freetogame.com/return-alive",
+      "systemRequirements": {
+        "os": "Windows 10 (64Bit)",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "30 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 592,
@@ -1248,7 +2040,16 @@
       "publisher": "Solid Clouds hf.",
       "developer": "Solid Clouds hf.",
       "gameUrl": "https://www.freetogame.com/open/starborne-frontiers",
-      "profileUrl": "https://www.freetogame.com/starborne-frontiers"
+      "profileUrl": "https://www.freetogame.com/starborne-frontiers",
+      "systemRequirements": {
+        "os": "Windows 10 and later (64-bit only)",
+        "processor": "Intel Core i3 / AMD Athlon",
+        "memory": " 3 GB RAM",
+        "graphics": "Intel / AMD Radeon / Nvidia GeForce",
+        "storage": "5 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 590,
@@ -1262,7 +2063,16 @@
       "publisher": "Amazon Games",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
-      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty",
+      "systemRequirements": {
+        "os": "Windows 10（64-bit)",
+        "processor": "Intel Core i5-6500",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA Geforce GTX960",
+        "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     }
   ],
   "discount": [
@@ -1278,7 +2088,16 @@
       "publisher": "Everstone Studio",
       "developer": "NetEase Games",
       "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
-      "profileUrl": "https://www.freetogame.com/where-winds-meet"
+      "profileUrl": "https://www.freetogame.com/where-winds-meet",
+      "systemRequirements": {
+        "os": "Windows 10/11 64bit",
+        "processor": "Core i7-7700K / Ryzen 5 1600",
+        "memory": "16 GB RAM",
+        "graphics": "GTX 1060(6GB) / RX 480(8GB)",
+        "storage": "100 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 624,
@@ -1292,7 +2111,16 @@
       "publisher": "Electronic Arts",
       "developer": "Battlefield Studios",
       "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
-      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-8400, AMD Ryzen 5 2600",
+        "memory": "16 GB RAM",
+        "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
+        "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 625,
@@ -1306,7 +2134,16 @@
       "publisher": "Logoi Games",
       "developer": "Pathea Games",
       "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball"
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 623,
@@ -1320,7 +2157,16 @@
       "publisher": "Netmarble",
       "developer": "Netmarble",
       "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2"
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 622,
@@ -1334,7 +2180,16 @@
       "publisher": "A Plus",
       "developer": "Shanghai Bokura Networkd Technology",
       "gameUrl": "https://www.freetogame.com/open/blue-protocol-star-resonance",
-      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance"
+      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel i7-8700 or AMD Ryzen 5 3600 or better",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 6GB or AMD Radeon RX 580 or better",
+        "storage": "35 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 621,
@@ -1348,7 +2203,16 @@
       "publisher": "Riot Games",
       "developer": "Riot Games",
       "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko"
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 619,
@@ -1362,7 +2226,16 @@
       "publisher": "NCSoft",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
-      "profileUrl": "https://www.freetogame.com/blade-soul-heroes"
+      "profileUrl": "https://www.freetogame.com/blade-soul-heroes",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit v1607+",
+        "processor": "Intel i5-6500 or AMD Ryzen 5 1600",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1060 3G or AMD Radeon RX 480 8G or INTEL® Arc A380 (6GB, Alchemist)",
+        "storage": "35 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 616,
@@ -1376,7 +2249,16 @@
       "publisher": "Qooland ",
       "developer": "Qooland",
       "gameUrl": "https://www.freetogame.com/open/warborne-above-ashes",
-      "profileUrl": "https://www.freetogame.com/warborne-above-ashes"
+      "profileUrl": "https://www.freetogame.com/warborne-above-ashes",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)/Windows 11 (64 bit)",
+        "processor": "Intel Core i5 8600 / AMD Ryzen 5 1500X",
+        "memory": "16 GB RAM",
+        "graphics": " NVIDIA GeForce GTX 1060 / AMD Radeon RX 5500 XT",
+        "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 615,
@@ -1390,7 +2272,16 @@
       "publisher": "MoreFun Studios",
       "developer": "MoreFun Studios",
       "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
-      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite",
+      "systemRequirements": {
+        "os": "64-bit Windows 10 or later",
+        "processor": "Intel Core i5-7500 / AMD Ryzen 5 1400",
+        "memory": "12 GB RAM",
+        "graphics": "NVIDIA GTX 960 2GB / AMD RX 5500 / Intel Arc A380",
+        "storage": "70 GB available space",
+        "source": "override",
+        "steamRaw": null
+      }
     },
     {
       "id": 618,
@@ -1404,7 +2295,16 @@
       "publisher": "Full Circle",
       "developer": "Electronic Arts",
       "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate"
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 617,
@@ -1418,7 +2318,16 @@
       "publisher": "Stonehollow Workshop",
       "developer": "Stonehollow Workshop",
       "gameUrl": "https://www.freetogame.com/open/eterspire",
-      "profileUrl": "https://www.freetogame.com/eterspire"
+      "profileUrl": "https://www.freetogame.com/eterspire",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit)",
+        "processor": "Intel Core i3 @ 2.40 GHz or equivalent",
+        "memory": "6 GB RAM",
+        "graphics": "Intel HD Graphics or better",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 614,
@@ -1432,7 +2341,16 @@
       "publisher": "OneUniverse",
       "developer": "OneUniverse",
       "gameUrl": "https://www.freetogame.com/open/dungeon-stalker",
-      "profileUrl": "https://www.freetogame.com/dungeon-stalker"
+      "profileUrl": "https://www.freetogame.com/dungeon-stalker",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel® Core i3-3225",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA® GeForce GTX 1060",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 613,
@@ -1446,7 +2364,16 @@
       "publisher": "Dfiance",
       "developer": "Dfiance",
       "gameUrl": "https://www.freetogame.com/open/dfiance",
-      "profileUrl": "https://www.freetogame.com/dfiance"
+      "profileUrl": "https://www.freetogame.com/dfiance",
+      "systemRequirements": {
+        "os": "Windows 10 64bit",
+        "processor": "x64 architecture with SSE2",
+        "memory": "1 GB RAM",
+        "graphics": "DX11, DX12 capable",
+        "storage": "1200 MB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 612,
@@ -1460,7 +2387,16 @@
       "publisher": "Pew Pew Games",
       "developer": "Pew Pew Games",
       "gameUrl": "https://www.freetogame.com/open/terminull-brigade",
-      "profileUrl": "https://www.freetogame.com/terminull-brigade"
+      "profileUrl": "https://www.freetogame.com/terminull-brigade",
+      "systemRequirements": {
+        "os": "Windows 10（64bit）",
+        "processor": "Intel(R) Core(TM) i5-7500/AMD Ryzen(TM) 5 1400",
+        "memory": "16 GB RAM",
+        "graphics": " NVIDIA GeForce GTX 1650，AMD Radeon RX 580",
+        "storage": "24 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 611,
@@ -1474,7 +2410,16 @@
       "publisher": "Amazing Seasun Games",
       "developer": "Amazing Seasun Games",
       "gameUrl": "https://www.freetogame.com/open/mecha-break",
-      "profileUrl": "https://www.freetogame.com/mecha-break"
+      "profileUrl": "https://www.freetogame.com/mecha-break",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-6500/AMD Ryzen 3 1300X or above",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1650/AMD Radeon RX 570 or above",
+        "storage": "60 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 609,
@@ -1488,7 +2433,16 @@
       "publisher": "Skystone Games",
       "developer": "Nuverse",
       "gameUrl": "https://www.freetogame.com/open/crystal-of-atlan",
-      "profileUrl": "https://www.freetogame.com/crystal-of-atlan"
+      "profileUrl": "https://www.freetogame.com/crystal-of-atlan",
+      "systemRequirements": {
+        "os": "Windows10 64bit",
+        "processor": "Intel Core i5 （9th generation)",
+        "memory": "8G",
+        "graphics": "GTX750ti",
+        "storage": "50G",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 610,
@@ -1502,7 +2456,16 @@
       "publisher": "1047 Games",
       "developer": "1047 Games",
       "gameUrl": "https://www.freetogame.com/open/splitgate-2",
-      "profileUrl": "https://www.freetogame.com/splitgate-2"
+      "profileUrl": "https://www.freetogame.com/splitgate-2",
+      "systemRequirements": {
+        "os": "Windows® 10 64 Bit",
+        "processor": "Intel® Core™ i3-6100 / Core™ i5-2500K or AMD Ryzen™ 3 1200",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA® GeForce® GTX 1050",
+        "storage": "27 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 607,
@@ -1516,7 +2479,16 @@
       "publisher": "Honig Studios GmbH",
       "developer": "Mimunga LLC",
       "gameUrl": "https://www.freetogame.com/open/the-lost-glitches",
-      "profileUrl": "https://www.freetogame.com/the-lost-glitches"
+      "profileUrl": "https://www.freetogame.com/the-lost-glitches",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual Core CPU - 2.6ghz",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce 560 or higher, AMD Radeon HD 5830 or higher",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 608,
@@ -1530,7 +2502,16 @@
       "publisher": "Kakao Games",
       "developer": "Lionheart Studios",
       "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 606,
@@ -1544,7 +2525,16 @@
       "publisher": "Wargaming ",
       "developer": "Wargaming",
       "gameUrl": "https://www.freetogame.com/open/steel-hunters",
-      "profileUrl": "https://www.freetogame.com/steel-hunters"
+      "profileUrl": "https://www.freetogame.com/steel-hunters",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5 8400 / AMD Ryzen 5 2600",
+        "memory": "16 GB ",
+        "graphics": "NVIDIA GeForce RTX 2060 / AMD Radeon Vega 64",
+        "storage": "32 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 604,
@@ -1558,7 +2548,16 @@
       "publisher": "Bad Guitar Studio",
       "developer": "Bad Guitar Studio",
       "gameUrl": "https://www.freetogame.com/open/fragpunk",
-      "profileUrl": "https://www.freetogame.com/fragpunk"
+      "profileUrl": "https://www.freetogame.com/fragpunk",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit or newer",
+        "processor": "Intel i7 8th or AMD Zen2",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / Intel ARC A380",
+        "storage": "35 GB available space (SSD required)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 603,
@@ -1572,7 +2571,16 @@
       "publisher": "My.games",
       "developer": "My.games",
       "gameUrl": "https://www.freetogame.com/open/war-robots-frontiers",
-      "profileUrl": "https://www.freetogame.com/war-robots-frontiers"
+      "profileUrl": "https://www.freetogame.com/war-robots-frontiers",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-3470 @ 3.20GHz",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 660 3GB VRAM",
+        "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 599,
@@ -1586,7 +2594,16 @@
       "publisher": "NetEase",
       "developer": "NetEase",
       "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals"
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 601,
@@ -1600,7 +2617,16 @@
       "publisher": "TiMi Studio Group",
       "developer": "Team Jade",
       "gameUrl": "https://www.freetogame.com/open/delta-force",
-      "profileUrl": "https://www.freetogame.com/delta-force"
+      "profileUrl": "https://www.freetogame.com/delta-force",
+      "systemRequirements": {
+        "os": "Windows 10 64 bit",
+        "processor": "Intel Core i3-4150 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "Nvidia Geforce GTX 660 / AMD HD 7870 / Intel Arc A380",
+        "storage": "60 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 597,
@@ -1614,7 +2640,16 @@
       "publisher": "iDreamSky",
       "developer": "iDreamSky",
       "gameUrl": "https://www.freetogame.com/open/strinova",
-      "profileUrl": "https://www.freetogame.com/strinova"
+      "profileUrl": "https://www.freetogame.com/strinova",
+      "systemRequirements": {
+        "os": "Windows 7/8/10/11 64bit",
+        "processor": "Intel Core i3-4170",
+        "memory": "4 GB RAM",
+        "graphics": "Nvidia GeForce GT 730, AMD R7 240",
+        "storage": "25 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 598,
@@ -1628,7 +2663,16 @@
       "publisher": "Theorycraft Games",
       "developer": "Theorycraft Games",
       "gameUrl": "https://www.freetogame.com/open/supervive",
-      "profileUrl": "https://www.freetogame.com/supervive"
+      "profileUrl": "https://www.freetogame.com/supervive",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit build 1909.1350 or newer",
+        "processor": "Intel i5-4440 (3.1GHz) - AMD Ryzen 3 3100 (3.6GHz) - 4 physical cores",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 980ti or equivalent",
+        "storage": "8 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 595,
@@ -1642,7 +2686,16 @@
       "publisher": "Fen Research LTD",
       "developer": "Fen Research LTD",
       "gameUrl": "https://www.freetogame.com/open/brighter-shores",
-      "profileUrl": "https://www.freetogame.com/brighter-shores"
+      "profileUrl": "https://www.freetogame.com/brighter-shores",
+      "systemRequirements": {
+        "os": "Windows 10/11",
+        "processor": " Intel i3 or AMD equivalent",
+        "memory": "8 GB RAM",
+        "graphics": "DirectX 11 capable graphics with at least 2GB RAM",
+        "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 593,
@@ -1656,7 +2709,16 @@
       "publisher": "KOG",
       "developer": "KOG",
       "gameUrl": "https://www.freetogame.com/open/return-alive",
-      "profileUrl": "https://www.freetogame.com/return-alive"
+      "profileUrl": "https://www.freetogame.com/return-alive",
+      "systemRequirements": {
+        "os": "Windows 10 (64Bit)",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "30 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 592,
@@ -1670,7 +2732,16 @@
       "publisher": "Solid Clouds hf.",
       "developer": "Solid Clouds hf.",
       "gameUrl": "https://www.freetogame.com/open/starborne-frontiers",
-      "profileUrl": "https://www.freetogame.com/starborne-frontiers"
+      "profileUrl": "https://www.freetogame.com/starborne-frontiers",
+      "systemRequirements": {
+        "os": "Windows 10 and later (64-bit only)",
+        "processor": "Intel Core i3 / AMD Athlon",
+        "memory": " 3 GB RAM",
+        "graphics": "Intel / AMD Radeon / Nvidia GeForce",
+        "storage": "5 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     },
     {
       "id": 590,
@@ -1684,7 +2755,16 @@
       "publisher": "Amazon Games",
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
-      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty",
+      "systemRequirements": {
+        "os": "Windows 10（64-bit)",
+        "processor": "Intel Core i5-6500",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA Geforce GTX960",
+        "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
     }
   ]
 }
