@@ -1,5 +1,7 @@
 // tools/update-ranking.mjs
-// 更新版：从 FreeToGame API 获取详细信息并写入 ranking.json
+// 从 FreeToGame API 拉取“热门 + 新品”榜单
+// 再对每个游戏调用 /game?id=xxx 拿到完整信息
+// 生成 ranking.json，给前端排行榜 + 详情页使用
 
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -10,21 +12,48 @@ const __dirname = path.dirname(__filename);
 
 const API_BASE = "https://www.freetogame.com/api";
 
-// 热度榜 & 新品榜：用平台=pc + popularity / release-date 排序
+// 列表接口：热门 & 新品
 const HOT_URL = `${API_BASE}/games?platform=pc&sort-by=popularity`;
 const NEW_URL = `${API_BASE}/games?platform=pc&sort-by=release-date`;
 
-// 通用请求函数
-async function fetchGames(url) {
+// --- 小工具函数 ---
+
+async function fetchJson(url) {
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error(`请求失败 ${url} 状态码 ${res.status}`);
+    throw new Error(`请求失败：${url}，状态码 ${res.status}`);
   }
   return res.json();
 }
 
-// 把 API 返回的一条游戏，转成我们网站自己的结构
-function mapGame(game, index, mode) {
+// 拉热门 / 新品列表
+async function fetchGames(url) {
+  return fetchJson(url);
+}
+
+// 拉单个游戏详情 /game?id=xxx
+async function fetchGameDetail(id) {
+  const url = `${API_BASE}/game?id=${id}`;
+  try {
+    const detail = await fetchJson(url);
+    return detail;
+  } catch (err) {
+    console.warn(`获取游戏详情失败 id=${id}:`, err.message);
+    return null;
+  }
+}
+
+// 把“列表里的粗信息 + 详情里的完整信息”融合成我们自己的结构
+function mapGame(listGame, detailGame, index, mode) {
+  // 以详情为主，列表为辅
+  const id = listGame.id ?? detailGame?.id;
+  const title = listGame.title ?? detailGame?.title;
+  const platform =
+    (detailGame?.platform || listGame.platform || "PC (Windows)") +
+    " · " +
+    (detailGame?.genre || listGame.genre || "Game");
+  const thumbnail = detailGame?.thumbnail || listGame.thumbnail;
+
   // API 没有官方评分，这里根据名次模拟一个“热度评分”
   const baseScore = mode === "hot" ? 9.3 : 9.0;
   const score = Math.max(7.5, baseScore - index * 0.05);
@@ -40,42 +69,90 @@ function mapGame(game, index, mode) {
 
   return {
     // 基本字段（真实）
-    id: game.id,                              // ★ 保留 FreeToGame 的真实 id
-    name: game.title,
-    platform: `${game.platform} · ${game.genre}`,
-    cover: game.thumbnail,
+    id,
+    name: title,
+    platform,
+    cover: thumbnail,
 
     // 评分（项目内部模拟）
     score,
     tag,
 
-    // 详情页用的真实信息：直接来自 FreeToGame
-    description: game.short_description,      // 简要介绍
-    releaseDate: game.release_date,
-    publisher: game.publisher,
-    developer: game.developer,
-    gameUrl: game.game_url,
-    profileUrl: game.freetogame_profile_url
+    // 详情页用的真实信息：优先来自 /game，再退回列表
+    description:
+      detailGame?.short_description ||
+      detailGame?.description ||
+      listGame.short_description ||
+      "",
+
+    releaseDate:
+      detailGame?.release_date ||
+      listGame.release_date ||
+      "",
+
+    publisher:
+      detailGame?.publisher ||
+      listGame.publisher ||
+      "",
+
+    developer:
+      detailGame?.developer ||
+      listGame.developer ||
+      "",
+
+    gameUrl: detailGame?.game_url || listGame.game_url || "",
+    profileUrl:
+      detailGame?.freetogame_profile_url ||
+      listGame.freetogame_profile_url ||
+      ""
   };
 }
 
 async function main() {
   console.log("开始从 FreeToGame API 拉取最新数据…");
 
-  // 获取数据（热门游戏榜单 + 新品榜单）
-  const [hotGames, newGames] = await Promise.all([
+  // 1. 先拉热门 + 新品列表
+  const [hotGamesRaw, newGamesRaw] = await Promise.all([
     fetchGames(HOT_URL),
     fetchGames(NEW_URL)
   ]);
 
-  // 取前 30 条就够当榜单
-  const hotList = hotGames.slice(0, 30).map((g, i) => mapGame(g, i, "hot"));
-  const newList = newGames.slice(0, 30).map((g, i) => mapGame(g, i, "new"));
+  // 只取前 30 个
+  const hotTop = hotGamesRaw.slice(0, 30);
+  const newTop = newGamesRaw.slice(0, 30);
 
-  // 评分榜：按 score 排序
+  // 2. 计算需要补充详情的 id（去重）
+  const idSet = new Set();
+  for (const g of hotTop) idSet.add(g.id);
+  for (const g of newTop) idSet.add(g.id);
+  const ids = Array.from(idSet);
+
+  console.log(`需要拉取详情的游戏数量：${ids.length} 条`);
+
+  // 3. 逐个拉 /game?id=xxx 详情
+  const detailResults = await Promise.all(
+    ids.map((id) => fetchGameDetail(id))
+  );
+
+  const detailMap = new Map();
+  for (const d of detailResults) {
+    if (d && d.id != null) {
+      detailMap.set(d.id, d);
+    }
+  }
+
+  // 4. 把列表 + 详情融合成我们自己的数据结构
+  const hotList = hotTop.map((g, i) =>
+    mapGame(g, detailMap.get(g.id), i, "hot")
+  );
+  const newList = newTop.map((g, i) =>
+    mapGame(g, detailMap.get(g.id), i, "new")
+  );
+
+  // 评分榜：按 score 排序即可
   const scoreList = [...hotList].sort((a, b) => b.score - a.score);
 
-  // 折扣榜：FreeToGame 没有价格字段，暂时用新品榜占位
+  // 折扣榜：暂时用新品榜占位（FreeToGame 没有价格字段）
   const discountList = newList;
 
   const data = {
@@ -91,7 +168,6 @@ async function main() {
   console.log("已写入最新排行榜数据 →", outputPath);
 }
 
-// 调用主函数
 main().catch((err) => {
   console.error("更新排行榜失败：", err);
   process.exit(1);
