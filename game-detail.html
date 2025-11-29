@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 艾尔登法环</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body data-current-page="library">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <article class="card">
+        <div class="page-title">艾尔登法环</div>
+        <div class="page-intro">
+          FromSoftware 开放世界 ARPG · Steam / 主机 · 当前页面仅为示例，不代表真实数据。
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;align-items:flex-start;">
+          <div style="width:260px;height:150px;border-radius:14px;background:
+              radial-gradient(circle at top,#38bdf8 0,transparent 60%),
+              radial-gradient(circle at bottom,#8b5cf6 0,transparent 60%),
+              #020617;
+              box-shadow:0 18px 40px rgba(15,23,42,0.9);flex-shrink:0;"></div>
+          <div style="flex:1;min-width:220px;font-size:13px;">
+            <p>类型：动作角色扮演（ARPG） / 开放世界 / 高难度战斗</p>
+            <p>平台：Steam / PS5 / PS4 / Xbox Series</p>
+            <p>发售：示例 · 价格：¥298（示例） · 综合评分：<strong>9.4</strong></p>
+            <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="tag tag--accent">魂系</span>
+              <span class="tag">开放世界</span>
+              <span class="tag">高自由度</span>
+              <span class="tag">单机</span>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button id="btnOwned" class="btn btn-primary btn-inline">标记为已拥有</button>
+              <button id="btnWish" class="btn btn-ghost btn-inline">加入想玩清单</button>
+            </div>
+            <div id="markMsg" style="font-size:11px;color:var(--text-soft);margin-top:4px;"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>游戏简介</span>
+          </div>
+        </header>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+          <p>
+            你将以“褪色者”的身份，踏入名为“交界地”的广袤世界，挑战强大的将军与半神，收集碎片，最终成为新的“艾尔登之王”。
+          </p>
+          <p>
+            本作继承魂系列高自由度 Build 和高难度 Boss 设计，同时引入开放世界探索、灵马移动与更多地下迷宫，适合喜欢挑战与探索的玩家。
+          </p>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>配置需求（示例）</span>
+          </div>
+        </header>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;">
+          <div style="flex:1;min-width:180px;">
+            <div class="sidebar-title">最低配置</div>
+            <ul style="padding-left:16px;margin:4px 0;color:var(--text-muted);">
+              <li>CPU：示例 i5 处理器</li>
+              <li>显卡：示例 GTX 1060 6G</li>
+              <li>内存：12 GB</li>
+              <li>存储：60 GB 可用空间</li>
+            </ul>
+          </div>
+          <div style="flex:1;min-width:180px;">
+            <div class="sidebar-title">推荐配置</div>
+            <ul style="padding-left:16px;margin:4px 0;color:var(--text-muted);">
+              <li>CPU：示例 i7 / R7 级别</li>
+              <li>显卡：示例 RTX 2060 / RX 5600 XT</li>
+              <li>内存：16 GB</li>
+              <li>存储：SSD 推荐</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>玩家短评（示例）</span>
+          </div>
+        </header>
+        <div class="comment-list" id="sampleComments">
+          <div class="comment-item">
+            <div class="comment-meta">玩家 A · 评价：推荐</div>
+            <div class="comment-content">打不过是我的问题，但探索的时候真的很爽。</div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-meta">玩家 B · 评价：特别推荐</div>
+            <div class="comment-content">交界地太大了，走哪都顺便顺便就天亮了。</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">与本作相关</div>
+        <div class="sidebar-item">
+          <span class="label">同类型推荐</span>
+          <span class="value">黑魂 / 只狼</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">DLC</span>
+          <span class="value">黄金树之影（示例）</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">社区讨论</span>
+          <span class="value"><a href="community.html">去看看</a></span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="common.js"></script>
+<script>
+  initCommon();
+
+  const GAME_ID = "elden-ring";
+
+  function getList(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  function setList(key, list) {
+    const uniq = Array.from(new Set(list));
+    localStorage.setItem(key, JSON.stringify(uniq));
+  }
+
+  const btnOwned = document.getElementById("btnOwned");
+  const btnWish = document.getElementById("btnWish");
+  const markMsg = document.getElementById("markMsg");
+
+  function refreshButtons() {
+    const owned = getList("ownedGames");
+    const wish = getList("wishlistGames");
+    const isOwned = owned.includes(GAME_ID);
+    const inWish = wish.includes(GAME_ID);
+
+    btnOwned.textContent = isOwned ? "已拥有 ✓" : "标记为已拥有";
+    btnWish.textContent = inWish ? "已在想玩清单 ✓" : "加入想玩清单";
+
+    btnOwned.classList.toggle("btn-primary", !isOwned);
+    btnOwned.classList.toggle("btn-ghost", isOwned);
+  }
+
+  btnOwned.addEventListener("click", () => {
+    let owned = getList("ownedGames");
+    if (owned.includes(GAME_ID)) {
+      owned = owned.filter((id) => id !== GAME_ID);
+      markMsg.textContent = "已从“已拥有”中移除。";
+    } else {
+      owned.push(GAME_ID);
+      markMsg.textContent = "已标记为“已拥有”。";
+    }
+    setList("ownedGames", owned);
+    refreshButtons();
+  });
+
+  btnWish.addEventListener("click", () => {
+    let wish = getList("wishlistGames");
+    if (wish.includes(GAME_ID)) {
+      wish = wish.filter((id) => id !== GAME_ID);
+      markMsg.textContent = "已从“想玩清单”移除。";
+    } else {
+      wish.push(GAME_ID);
+      markMsg.textContent = "已加入“想玩清单”。";
+    }
+    setList("wishlistGames", wish);
+    refreshButtons();
+  });
+
+  refreshButtons();
+</script>
+</body>
+</html>
