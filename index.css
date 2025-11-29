@@ -1029,20 +1029,29 @@ mark {
   }
 }
 
-/*“返回上一页”按钮 */
+/* 美化“返回上一页”按钮 */
 .btn-secondary {
-  background-color: #1f2937;
-  color: #fef9c3;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  transition: all 0.3s ease-in-out;
+  background-color: #1f2937;  /* 深色背景 */
+  color: #fef9c3;              /* 浅色文字 */
+  padding: 8px 18px;           /* 内边距，调整按钮大小 */
+  border-radius: 20px;         /* 圆角 */
+  font-size: 14px;             /* 字体大小 */
+  font-weight: 600;            /* 字体加粗 */
+  border: 1px solid transparent; /* 默认没有边框 */
+  transition: all 0.3s ease-in-out; /* 平滑过渡 */
+  text-decoration: none; /* 去掉默认的下划线 */
 }
 
 .btn-secondary:hover {
-  background-color: #3b82f6;
-  color: #ffffff;
-  border-color: #3b82f6;
+  background-color: #3b82f6 !important;  /* 悬停时变成蓝色 */
+  color: #ffffff;  /* 悬停时字体变为白色 */
+  border-color: #3b82f6 !important;  /* 边框也变为蓝色 */
 }
+
+/* 如果按钮位于顶部右侧，确保它的定位不受其他干扰 */
+header .btn-secondary {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
