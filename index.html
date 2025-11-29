@@ -157,63 +157,19 @@
 
 <script src="common.js"></script>
 <script>
-  // 通用部分（导航高亮 + 登录状态 + 顶部搜索）
+  // 通用初始化
   initCommon();
 
-  // ====== 1. 排行榜数据（带封面图）======
-
-  // 提示：这些 cover 路径需要你自己在 /images 下放图片文件，可以改成你实际使用的文件名
-  const rankingData = {
-    hot: [
-      { name: "艾尔登法环", platform: "Steam · ACT RPG", score: 9.4, tag: "热度第 1", cover: "images/elden-ring.jpg" },
-      { name: "原神", platform: "PC / 移动 · 开放世界", score: 8.8, tag: "在线人数高", cover: "images/genshin.jpg" },
-      { name: "CS2", platform: "Steam · FPS", score: 8.6, tag: "竞技向", cover: "images/cs2.jpg" },
-      { name: "绝地求生", platform: "Steam · 吃鸡", score: 8.0, tag: "经典老牌", cover: "images/pubg.jpg" },
-      { name: "怪物猎人：崛起", platform: "Switch / PC", score: 8.5, tag: "刷刷刷", cover: "images/mh-rise.jpg" },
-      { name: "英雄联盟", platform: "PC · MOBA", score: 8.3, tag: "网吧标配", cover: "images/lol.jpg" },
-      { name: "DOTA 2", platform: "Steam · MOBA", score: 8.4, tag: "老牌竞技", cover: "images/dota2.jpg" },
-      { name: "APEX 英雄", platform: "多平台 · 吃鸡", score: 8.1, tag: "动作流畅", cover: "images/apex.jpg" },
-      { name: "瓦罗兰特", platform: "PC · FPS", score: 8.2, tag: "新生代战术射击", cover: "images/valorant.jpg" },
-      { name: "守望先锋 2", platform: "多平台 · 英雄射击", score: 7.9, tag: "多人对战", cover: "images/overwatch2.jpg" }
-    ],
-    score: [
-      { name: "巫师 3：狂猎", platform: "Steam · RPG", score: 9.7, tag: "神作殿堂", cover: "images/witcher3.jpg" },
-      { name: "空洞骑士", platform: "多平台 · 独立", score: 9.6, tag: "独立神作", cover: "images/hollow-knight.jpg" },
-      { name: "黑暗之魂 3", platform: "Steam · ARPG", score: 9.3, tag: "受虐狂最爱", cover: "images/ds3.jpg" },
-      { name: "只狼：影逝二度", platform: "Steam · ACT", score: 9.2, tag: "强烈推荐", cover: "images/sekiro.jpg" },
-      { name: "塞尔达：旷野之息", platform: "Switch", score: 9.8, tag: "开放世界标杆", cover: "images/zelda-botw.jpg" },
-      { name: "杀戮尖塔", platform: "多平台 · 卡牌", score: 9.0, tag: "Roguelike 代表", cover: "images/slay-the-spire.jpg" },
-      { name: "星露谷物语", platform: "多平台 · 休闲", score: 9.3, tag: "农场人生", cover: "images/stardew.jpg" },
-      { name: "蔚蓝", platform: "多平台 · 独立", score: 9.2, tag: "手残克星", cover: "images/celeste.jpg" }
-    ],
-    new: [
-      { name: "虚构新品 A", platform: "Steam · Roguelike", score: 8.4, tag: "新发售", cover: "images/new-a.jpg" },
-      { name: "虚构新品 B", platform: "PC / 主机", score: 8.1, tag: "口碑不错", cover: "images/new-b.jpg" },
-      { name: "虚构新品 C", platform: "移动 · RPG", score: 7.8, tag: "预约火热", cover: "images/new-c.jpg" },
-      { name: "虚构新品 D", platform: "Steam · 独立", score: 8.6, tag: "小众精品", cover: "images/new-d.jpg" },
-      { name: "虚构新品 E", platform: "Switch", score: 8.0, tag: "家庭向", cover: "images/new-e.jpg" },
-      { name: "虚构新品 F", platform: "Steam", score: 8.2, tag: "抢先体验", cover: "images/new-f.jpg" },
-      { name: "虚构新品 G", platform: "PS5", score: 8.5, tag: "主机佳作", cover: "images/new-g.jpg" }
-    ],
-    discount: [
-      { name: "赛博朋克 2077", platform: "Steam · RPG", score: 8.7, tag: "史低 -50%", cover: "images/cp2077.jpg" },
-      { name: "怪物猎人：世界", platform: "Steam · 狩猎", score: 8.9, tag: "-60%", cover: "images/mh-world.jpg" },
-      { name: "仁王 2", platform: "Steam · 动作", score: 8.5, tag: "-70%", cover: "images/nioh2.jpg" },
-      { name: "控制", platform: "多平台 · 超自然", score: 8.3, tag: "-65%", cover: "images/control.jpg" },
-      { name: "空洞骑士", platform: "多平台 · 独立", score: 9.6, tag: "-60%", cover: "images/hollow-knight.jpg" },
-      { name: "黑帝斯", platform: "多平台 · Roguelike", score: 9.1, tag: "-40%", cover: "images/hades.jpg" },
-      { name: "只狼：影逝二度", platform: "Steam · ACT", score: 9.2, tag: "-50%", cover: "images/sekiro.jpg" }
-    ]
-  };
-
-  // ====== 2. 无限滚动逻辑 ======
-
+  // DOM 引用
   const rankingListEl = document.getElementById("rankingList");
   const rankingTabsEl = document.getElementById("rankingTabs");
   const rankingLoadedEl = document.getElementById("rankingLoaded");
   const rankingTotalEl = document.getElementById("rankingTotal");
 
-  const PAGE_SIZE = 5;                        // 每次加载 5 个
+  const PAGE_SIZE = 5;
+
+  // 从 JSON 里读进来的数据放这里
+  let rankingData = { hot: [], score: [], new: [], discount: [] };
   const loadedCount = { hot: 0, score: 0, new: 0, discount: 0 };
   let currentType = "hot";
 
@@ -227,7 +183,7 @@
   function appendItems(type) {
     const data = rankingData[type] || [];
     const start = loadedCount[type] || 0;
-    if (start >= data.length) return;       // 已经到底了
+    if (start >= data.length) return;
 
     const end = Math.min(start + PAGE_SIZE, data.length);
 
@@ -251,11 +207,6 @@
           <div><span class="tag">${item.tag}</span></div>
         </div>
       `;
-      li.addEventListener("click", () => {
-        if (item.name === "艾尔登法环") {
-          window.location.href = "game-detail.html";
-        }
-      });
       rankingListEl.appendChild(li);
     }
 
@@ -270,7 +221,7 @@
     appendItems(type);
   }
 
-  // 滚动到底部时自动加载更多
+  // 滚动到底部继续加载
   rankingListEl.addEventListener("scroll", () => {
     const el = rankingListEl;
     if (el.scrollTop + el.clientHeight >= el.scrollHeight - 4) {
@@ -282,20 +233,38 @@
   rankingTabsEl.addEventListener("click", (e) => {
     const btn = e.target.closest(".ranking-tab");
     if (!btn) return;
-    rankingTabsEl.querySelectorAll(".ranking-tab").forEach((b) => b.classList.remove("is-active"));
+    rankingTabsEl
+      .querySelectorAll(".ranking-tab")
+      .forEach((b) => b.classList.remove("is-active"));
     btn.classList.add("is-active");
     const type = btn.dataset.type;
     resetAndRender(type);
   });
 
-  // 初始：加载热度榜
-  resetAndRender("hot");
+  // 🔑 关键：从本仓库的 data/ranking.json 加载数据（GitHub Pages 也支持）
+  function loadRankingFromJson() {
+    fetch("data/ranking.json")
+      .then((res) => res.json())
+      .then((data) => {
+        rankingData = data || rankingData;
+        resetAndRender("hot");
+      })
+      .catch((err) => {
+        console.error("加载 ranking.json 失败：", err);
+        rankingListEl.innerHTML =
+          '<li style="font-size:12px;color:var(--text-muted);padding:4px 0;">排行榜数据加载失败，请检查 data/ranking.json 是否存在。</li>';
+      });
+  }
 
-  // ====== 3. 分类点击跳转游戏库 ======
+  loadRankingFromJson();
+
+  // 分类点击跳转（保持原来的逻辑）
   document.getElementById("categoryGrid").addEventListener("click", (e) => {
     const chip = e.target.closest(".category-chip");
     if (!chip) return;
-    document.querySelectorAll(".category-chip").forEach((c) => c.classList.remove("is-active"));
+    document
+      .querySelectorAll(".category-chip")
+      .forEach((c) => c.classList.remove("is-active"));
     chip.classList.add("is-active");
     const cat = chip.dataset.category;
     if (cat !== "all") {
@@ -303,5 +272,6 @@
     }
   });
 </script>
+
 </body>
 </html>
