@@ -1111,3 +1111,92 @@ header .btn-secondary {
   font-size: 10px;
   opacity: 0.85;
 }
+
+/* ===== 详情页：外链按钮美化 ===== */
+
+.detail-links {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 通用按钮基底 */
+.detail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* 主按钮：前往游戏官网 / 启动平台 */
+.detail-btn-main {
+  background: linear-gradient(130deg, #22d3ee, #0ea5e9);
+  color: #020617;
+  box-shadow: 0 10px 26px rgba(8, 47, 73, 0.8);
+}
+
+.detail-btn-main:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(8, 47, 73, 0.95);
+}
+
+/* 次按钮：查看 FreeToGame 详情页 */
+.detail-btn-ghost {
+  background: rgba(15, 23, 42, 0.96);
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #e0f2fe;
+}
+
+.detail-btn-ghost:hover {
+  background: rgba(15, 23, 42, 1);
+  border-color: rgba(129, 140, 248, 0.9);
+  color: #ffffff;
+}
+
+/* 小箭头图标 */
+.detail-btn-icon {
+  font-size: 10px;
+  opacity: 0.85;
+}
+
+/* ===== 详情页：返回上一页按钮 ===== */
+
+.detail-header-bar .btn-secondary {
+  background: rgba(15, 23, 42, 0.96);
+  color: #e5e7eb;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.detail-header-bar .btn-secondary:hover {
+  background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
+  color: #020617;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+}
