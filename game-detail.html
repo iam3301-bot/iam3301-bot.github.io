@@ -315,7 +315,46 @@ async function fetchSteamRecommendedSysReq(gameTitle) {
   }
 }
 
-// 加载详情并填充最低配置和推荐配置
+// 获取 Steam 推荐配置的标题
+async function fetchSteamRequirementsForTitles(titles) {
+  const uniqueTitles = Array.from(new Set(titles.filter(Boolean)));
+  if (uniqueTitles.length === 0) return new Map();
+
+  console.log("尝试从 Steam 获取系统配置的游戏数：", uniqueTitles.length);
+
+  const steamResults = await Promise.all(
+    uniqueTitles.map(async (title) => {
+      try {
+        const appId = await searchSteamAppIdByName(title);
+        if (!appId) {
+          console.log(`Steam 未找到游戏：${title}`);
+          return null;
+        }
+        const req = await fetchSteamRequirements(appId);
+        if (!req) {
+          console.log(`Steam 返回无系统配置：${title} (appid=${appId})`);
+          return null;
+        }
+        console.log(`Steam 配置已获取：${title} (appid=${appId})`);
+        return { title, requirements: req };
+      } catch (err) {
+        console.warn(`获取 Steam 配置失败：${title}`, err.message);
+        return null;
+      }
+    })
+  );
+
+  // 过滤有效数据
+  const map = new Map();
+  steamResults.forEach((result) => {
+    if (result && result.title && result.requirements) {
+      map.set(result.title, result.requirements);
+    }
+  });
+
+  return map;
+}
+
 function loadDetail() {
   if (!gameId && !gameName) return;
 
@@ -326,7 +365,7 @@ function loadDetail() {
     })
     .then((data) => {
       const game = findGame(data);
-      
+
       if (!game) return;
 
       // 填充最低配置
