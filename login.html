@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 登录</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body data-current-page="profile">
+<div class="page">
+  <!-- 顶部导航 -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体：登录表单 -->
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">登录 GameBox</div>
+        <div class="page-intro">
+          这是课程 Demo 的前端模拟登录，不连接真实服务器。<br />
+          示例账号：<strong>demo</strong> / 密码：<strong>123456</strong>
+        </div>
+
+        <form class="form" id="loginForm">
+          <div class="form-row">
+            <label for="loginUsername">用户名</label>
+            <input type="text" id="loginUsername" required placeholder="demo" />
+          </div>
+          <div class="form-row">
+            <label for="loginPassword">密码</label>
+            <input type="password" id="loginPassword" required placeholder="123456" />
+          </div>
+          <button type="submit" class="btn btn-primary">登录</button>
+          <div id="loginMsg" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+        </form>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <div class="sidebar-title">说明</div>
+        <div class="sidebar-item">
+          <span class="label">仅用于前端课程演示，不进行真实账号验证。</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    GameBox 游盒 · 登录页面示例
+  </footer>
+</div>
+
+<script src="common.js"></script>
+<script>
+  initCommon();
+
+  // 模拟用户数据
+  const mockUsers = [
+    { username: "demo", password: "123456", nickname: "演示玩家" }
+  ];
+
+  const form = document.getElementById("loginForm");
+  const msg  = document.getElementById("loginMsg");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const u = document.getElementById("loginUsername").value.trim();
+    const p = document.getElementById("loginPassword").value.trim();
+
+    const user = mockUsers.find(item => item.username === u && item.password === p);
+
+    if (!user) {
+      msg.textContent = "用户名或密码错误，试试 demo / 123456";
+      return;
+    }
+
+    // 写入 localStorage
+    localStorage.setItem("currentUser", JSON.stringify({
+      username: user.username,
+      nickname: user.nickname
+    }));
+
+    msg.textContent = "登录成功，正在跳转首页……";
+    setTimeout(() => {
+      window.location.href = "home.html";
+    }, 600);
+  });
+</script>
+</body>
+</html>
