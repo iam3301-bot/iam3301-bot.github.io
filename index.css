@@ -484,6 +484,8 @@ a {
     radial-gradient(circle at top, #38bdf8 0, transparent 55%),
     radial-gradient(circle at bottom, #8b5cf6 0, transparent 60%),
     #020617;
+   background-size: cover;
+    background-position: center;
 }
 
 .game-info {
