@@ -1,4 +1,3 @@
-// tools/update-ranking.mjs
 // ------------------------------------------------------------
 // 1. 从 FreeToGame API 获取热门 / 新品列表
 // 2. 对每个游戏调用 FreeToGame /game?id=xxx 拿详细数据
