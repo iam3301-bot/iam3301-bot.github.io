@@ -138,7 +138,7 @@
             </div>
           </section>
 
-          <!-- 右：系统配置（最低 + 推荐说明） -->
+          <!-- 右：系统配置（最低 + 推荐配置） -->
           <section class="detail-section detail-section--secondary">
             <h2 class="detail-section-title">系统配置（来自 FreeToGame）</h2>
 
@@ -146,39 +146,17 @@
               <!-- 最低配置 -->
               <div class="sysreq-column">
                 <div class="sysreq-title">最低配置</div>
-                <ul class="sysreq-list">
-                  <li>
-                    <span class="sysreq-label">系统</span>
-                    <span class="sysreq-value" id="sysMinOs">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">处理器</span>
-                    <span class="sysreq-value" id="sysMinCpu">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">内存</span>
-                    <span class="sysreq-value" id="sysMinRam">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">显卡</span>
-                    <span class="sysreq-value" id="sysMinGpu">接口未提供</span>
-                  </li>
-                  <li>
-                    <span class="sysreq-label">存储</span>
-                    <span class="sysreq-value" id="sysMinStorage">接口未提供</span>
-                  </li>
+                <ul class="sysreq-list" id="sysMinList">
+                  <!-- 最低配置项将填充这里 -->
                 </ul>
               </div>
 
-              <!-- 推荐配置说明：不造数据，只说明来源 -->
-              <div class="sysreq-column sysreq-column--muted">
+              <!-- 推荐配置 -->
+              <div class="sysreq-column sysreq-column--recommended">
                 <div class="sysreq-title">推荐配置</div>
-                <div class="sysreq-placeholder">
-                  FreeToGame API 当前仅提供
-                  <strong>minimum_system_requirements（最低配置）</strong>，
-                  未提供官方推荐配置。
-                  <br />本项目不虚构推荐配置，以保证数据真实可信。
-                </div>
+                <ul class="sysreq-list" id="sysRecommendedList">
+                  <!-- 推荐配置项将填充这里 -->
+                </ul>
               </div>
             </div>
 
@@ -196,140 +174,125 @@
 
 <script src="common.js"></script>
 <script>
-  // 初始化通用逻辑（导航高亮）
-  initCommon();
+// 初始化通用逻辑（导航高亮）
+initCommon();
 
-  const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("id"); // 优先用 id 精确定位
-  const gameName = params.get("name");
+const params = new URLSearchParams(window.location.search);
+const gameId = params.get("id"); // 优先用 id 精确定位
+const gameName = params.get("name");
 
-  // 顶部元素
-  const breadcrumbNameEl = document.getElementById("breadcrumbName");
-  const titleEl = document.getElementById("gameTitle");
-  const platformEl = document.getElementById("gamePlatform");
-  const coverEl = document.getElementById("gameCover");
-  const scoreEl = document.getElementById("gameScore");
-  const devEl = document.getElementById("gameDeveloper");
-  const pubEl = document.getElementById("gamePublisher");
-  const dateEl = document.getElementById("gameReleaseDate");
-  const tagEl = document.getElementById("gameTag");
-  const descEl = document.getElementById("gameDescription");
-  const urlEl = document.getElementById("gameUrl");
-  const profileEl = document.getElementById("gameProfileUrl");
+// 顶部元素
+const breadcrumbNameEl = document.getElementById("breadcrumbName");
+const titleEl = document.getElementById("gameTitle");
+const platformEl = document.getElementById("gamePlatform");
+const coverEl = document.getElementById("gameCover");
+const scoreEl = document.getElementById("gameScore");
+const devEl = document.getElementById("gameDeveloper");
+const pubEl = document.getElementById("gamePublisher");
+const dateEl = document.getElementById("gameReleaseDate");
+const tagEl = document.getElementById("gameTag");
+const descEl = document.getElementById("gameDescription");
+const urlEl = document.getElementById("gameUrl");
+const profileEl = document.getElementById("gameProfileUrl");
 
-  // 下方“基础信息”区域
-  const devMetaEl = document.getElementById("gameDeveloperMeta");
-  const pubMetaEl = document.getElementById("gamePublisherMeta");
-  const releaseMetaEl = document.getElementById("gameReleaseMeta");
-  const platformMetaEl = document.getElementById("gamePlatformMeta");
-  const scoreMetaEl = document.getElementById("gameScoreMeta");
+// 下方“基础信息”区域
+const devMetaEl = document.getElementById("gameDeveloperMeta");
+const pubMetaEl = document.getElementById("gamePublisherMeta");
+const releaseMetaEl = document.getElementById("gameReleaseMeta");
+const platformMetaEl = document.getElementById("gamePlatformMeta");
+const scoreMetaEl = document.getElementById("gameScoreMeta");
 
-  // 系统配置 DOM
-  const sysMinOsEl = document.getElementById("sysMinOs");
-  const sysMinCpuEl = document.getElementById("sysMinCpu");
-  const sysMinRamEl = document.getElementById("sysMinRam");
-  const sysMinGpuEl = document.getElementById("sysMinGpu");
-  const sysMinStorageEl = document.getElementById("sysMinStorage");
+// 系统配置 DOM
+const sysMinListEl = document.getElementById("sysMinList");
+const sysRecommendedListEl = document.getElementById("sysRecommendedList");
 
-  // 安全设置文本
-  function safeSetText(el, text) {
-    if (el) el.textContent = text;
+// 安全设置文本
+function safeSetText(el, text) {
+  if (el) el.textContent = text;
+}
+
+if (!gameId && !gameName) {
+  safeSetText(breadcrumbNameEl, "未指定");
+  safeSetText(titleEl, "未指定游戏名称");
+  safeSetText(
+    descEl,
+    "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。"
+  );
+} else {
+  safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
+  safeSetText(
+    titleEl,
+    "正在加载：" + (gameName || ("ID " + gameId))
+  );
+}
+
+// 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
+function findGame(data) {
+  const all = []
+    .concat(data.hot || [], data.score || [], data.new || [], data.discount || []);
+
+  let found = null;
+
+  if (gameId) {
+    found = all.find((g) => String(g.id) === String(gameId));
   }
-
-  if (!gameId && !gameName) {
-    safeSetText(breadcrumbNameEl, "未指定");
-    safeSetText(titleEl, "未指定游戏名称");
-    safeSetText(
-      descEl,
-      "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。"
-    );
-  } else {
-    safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
-    safeSetText(
-      titleEl,
-      "正在加载：" + (gameName || ("ID " + gameId))
-    );
+  if (!found && gameName) {
+    found = all.find((g) => g.name === gameName);
   }
+  return found;
+}
 
-  // 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
-  function findGame(data) {
-    const all = []
-      .concat(data.hot || [], data.score || [], data.new || [], data.discount || []);
+// 填充最低配置的函数
+function fillMinSysReq(sys) {
+  const fallback = "接口未提供";
 
-    let found = null;
-
-    if (gameId) {
-      found = all.find((g) => String(g.id) === String(gameId));
-    }
-    if (!found && gameName) {
-      found = all.find((g) => g.name === gameName);
-    }
-    return found;
-  }
-
-  function fillSysReq(sys) {
-    const fallback = "接口未提供";
-    if (!sys) {
-      safeSetText(sysMinOsEl, fallback);
-      safeSetText(sysMinCpuEl, fallback);
-      safeSetText(sysMinRamEl, fallback);
-      safeSetText(sysMinGpuEl, fallback);
-      safeSetText(sysMinStorageEl, fallback);
-      return;
-    }
-    safeSetText(sysMinOsEl, sys.os || fallback);
-    safeSetText(sysMinCpuEl, sys.processor || fallback);
-    safeSetText(sysMinRamEl, sys.memory || fallback);
-    safeSetText(sysMinGpuEl, sys.graphics || fallback);
-    safeSetText(sysMinStorageEl, sys.storage || fallback);
-  }
-
-  // 获取推荐配置的元素
-  const sysRecommendedListEl = document.getElementById("sysRecommendedList");
-
-  // 处理从 Steam 获取的推荐配置数据
-  function fillRecommendedSysReq(sys) {
-    const fallback = "接口未提供";
-    
-    // 如果没有推荐配置，显示一条说明信息
-    if (!sys) {
-      sysRecommendedListEl.innerHTML = `
-        <li>
-          <span class="sysreq-label">推荐配置</span>
-          <span class="sysreq-value">目前未提供推荐配置。</span>
-        </li>
-      `;
-      return;
-    }
-
-    // 填充推荐配置项
-    sysRecommendedListEl.innerHTML = `
-      <li>
-        <span class="sysreq-label">系统</span>
-        <span class="sysreq-value">${sys.os || fallback}</span>
-      </li>
-      <li>
-        <span class="sysreq-label">处理器</span>
-        <span class="sysreq-value">${sys.processor || fallback}</span>
-      </li>
-      <li>
-        <span class="sysreq-label">内存</span>
-        <span class="sysreq-value">${sys.memory || fallback}</span>
-      </li>
-      <li>
-        <span class="sysreq-label">显卡</span>
-        <span class="sysreq-value">${sys.graphics || fallback}</span>
-      </li>
-      <li>
-        <span class="sysreq-label">存储</span>
-        <span class="sysreq-value">${sys.storage || fallback}</span>
-      </li>
+  if (!sys) {
+    sysMinListEl.innerHTML = `
+      <li><span class="sysreq-label">系统</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">内存</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">存储</span><span class="sysreq-value">${fallback}</span></li>
     `;
+    return;
   }
 
-  // 从 Steam 获取推荐配置并填充
-  async function fetchSteamRecommendedSysReq(gameTitle) {
-    // 使用提供的 Steam 配置
+  sysMinListEl.innerHTML = `
+    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
+    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
+    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
+    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
+    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
+  `;
+}
+
+// 填充推荐配置的函数
+function fillRecommendedSysReq(sys) {
+  const fallback = "接口未提供";
+
+  if (!sys) {
+    sysRecommendedListEl.innerHTML = `
+      <li><span class="sysreq-label">系统</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">内存</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${fallback}</span></li>
+      <li><span class="sysreq-label">存储</span><span class="sysreq-value">${fallback}</span></li>
+    `;
+    return;
+  }
+
+  sysRecommendedListEl.innerHTML = `
+    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
+    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
+    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
+    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
+    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
+  `;
+}
+
+// 获取 Steam 推荐配置并填充
+async function fetchSteamRecommendedSysReq(gameTitle) {
+  try {
     const steamReq = await fetchSteamRequirementsForTitles([gameTitle]);
 
     if (steamReq && steamReq.has(gameTitle)) {
@@ -339,34 +302,46 @@
       console.log(`Steam 未提供推荐配置：${gameTitle}`);
       fillRecommendedSysReq(null);
     }
+  } catch (err) {
+    console.error("从 Steam 获取推荐配置时出错：", err);
+    // 错误处理：显示无法连接 Steam API 的提示
+    fillRecommendedSysReq(null);
+    sysRecommendedListEl.innerHTML = `
+      <li>
+        <span class="sysreq-label">推荐配置</span>
+        <span class="sysreq-value">无法连接到 Steam API，推荐配置无法加载。</span>
+      </li>
+    `;
   }
+}
 
-  function loadDetail() {
-    if (!gameId && !gameName) return;
+// 加载详情并填充最低配置和推荐配置
+function loadDetail() {
+  if (!gameId && !gameName) return;
 
-    fetch("ranking.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        const game = findGame(data);
-        
-        if (!game) return;
+  fetch("ranking.json")
+    .then((res) => {
+      if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
+      return res.json();
+    })
+    .then((data) => {
+      const game = findGame(data);
+      
+      if (!game) return;
 
-        // 填充系统配置
-        const sysMin = game.systemRequirements?.minimum;
-        fillSysReq(sysMin);
+      // 填充最低配置
+      const sysMin = game.systemRequirements?.minimum;
+      fillMinSysReq(sysMin);
 
-        // 获取推荐配置
-        fetchSteamRecommendedSysReq(game.name);
-      })
-      .catch((err) => {
-        console.error("加载详情失败：", err);
-      });
-  }
+      // 获取推荐配置
+      fetchSteamRecommendedSysReq(game.name);
+    })
+    .catch((err) => {
+      console.error("加载详情失败：", err);
+    });
+}
 
-  loadDetail();
+loadDetail();
 </script>
 </body>
 </html>
