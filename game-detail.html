@@ -137,11 +137,14 @@
 
 <script src="common.js"></script>
 <script>
+  // 初始化通用逻辑（导航高亮）
   initCommon();
 
   const params = new URLSearchParams(window.location.search);
+  const gameId = params.get("id");   // 新增：优先用 id
   const gameName = params.get("name");
 
+  // 顶部元素
   const breadcrumbNameEl = document.getElementById("breadcrumbName");
   const titleEl = document.getElementById("gameTitle");
   const platformEl = document.getElementById("gamePlatform");
@@ -155,31 +158,45 @@
   const urlEl = document.getElementById("gameUrl");
   const profileEl = document.getElementById("gameProfileUrl");
 
-  // 下方信息块里的镜像字段
+  // 下方“基础信息”区域
   const devMetaEl = document.getElementById("gameDeveloperMeta");
   const pubMetaEl = document.getElementById("gamePublisherMeta");
   const releaseMetaEl = document.getElementById("gameReleaseMeta");
   const platformMetaEl = document.getElementById("gamePlatformMeta");
   const scoreMetaEl = document.getElementById("gameScoreMeta");
 
-  if (!gameName) {
-    breadcrumbNameEl.textContent = "未指定";
-    titleEl.textContent = "未指定游戏名称";
-    platformEl.textContent = "";
-    descEl.textContent = "URL 中没有携带 name 参数，无法识别要查看的游戏。";
-  } else {
-    breadcrumbNameEl.textContent = gameName;
-    titleEl.textContent = `正在加载：${gameName}`;
+  // 一个小工具：防止元素没找到时报错
+  function safeSetText(el, text) {
+    if (el) el.textContent = text;
   }
 
-  function findGame(data, name) {
+  if (!gameId && !gameName) {
+    safeSetText(breadcrumbNameEl, "未指定");
+    safeSetText(titleEl, "未指定游戏名称");
+    safeSetText(descEl, "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。");
+  } else {
+    safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
+    safeSetText(titleEl, "正在加载：" + (gameName || ("ID " + gameId)));
+  }
+
+  // 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
+  function findGame(data) {
     const all = []
       .concat(data.hot || [], data.score || [], data.new || [], data.discount || []);
-    return all.find((g) => g.name === name);
+
+    let found = null;
+
+    if (gameId) {
+      found = all.find((g) => String(g.id) === String(gameId));
+    }
+    if (!found && gameName) {
+      found = all.find((g) => g.name === gameName);
+    }
+    return found;
   }
 
   function loadDetail() {
-    if (!gameName) return;
+    if (!gameId && !gameName) return;
 
     fetch("ranking.json")
       .then((res) => {
@@ -187,66 +204,82 @@
         return res.json();
       })
       .then((data) => {
-        const game = findGame(data, gameName);
+        const game = findGame(data);
+
         if (!game) {
-          titleEl.textContent = gameName;
-          platformEl.textContent = "";
-          descEl.textContent = "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。";
-          coverEl.style.display = "none";
+          safeSetText(titleEl, gameName || ("ID " + gameId));
+          safeSetText(platformEl, "");
+          safeSetText(descEl, "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。");
+          if (coverEl) coverEl.style.display = "none";
           return;
         }
 
-        // 标题 / 平台
-        breadcrumbNameEl.textContent = game.name;
-        titleEl.textContent = game.name;
-        platformEl.textContent = game.platform || "";
-        platformMetaEl.textContent = game.platform || "-";
+        // ===== 顶部主信息 =====
+        safeSetText(breadcrumbNameEl, game.name);
+        safeSetText(titleEl, game.name);
+        safeSetText(platformEl, game.platform || "");
+        if (platformMetaEl) platformMetaEl.textContent = game.platform || "-";
 
-        // 封面
-        coverEl.src = game.cover;
-        coverEl.alt = game.name + " 封面";
+        if (coverEl) {
+          coverEl.src = game.cover;
+          coverEl.alt = game.name + " 封面";
+        }
 
-        // 评分（项目内部模拟：在 update-ranking.mjs 中根据名次算出来）
+        // 评分（项目内部模拟）
         const score = Number(game.score) || 0;
         const scoreText = score ? score.toFixed(1) : "-";
-        scoreEl.textContent = scoreText;
-        scoreMetaEl.textContent = scoreText;
+        safeSetText(scoreEl, scoreText);
+        if (scoreMetaEl) scoreMetaEl.textContent = scoreText;
 
-        // 开发商 / 发行商 / 日期
+        // 开发商 / 发行商 / 日期（真实字段）
         const dev = game.developer || "未知";
         const pub = game.publisher || "未知";
         const releaseDate = game.releaseDate || "未知";
 
-        devEl.textContent = dev;
-        pubEl.textContent = pub;
-        dateEl.textContent = releaseDate;
+        safeSetText(devEl, dev);
+        safeSetText(pubEl, pub);
+        safeSetText(dateEl, releaseDate);
 
-        devMetaEl.textContent = dev;
-        pubMetaEl.textContent = pub;
-        releaseMetaEl.textContent = releaseDate;
+        if (devMetaEl) devMetaEl.textContent = dev;
+        if (pubMetaEl) pubMetaEl.textContent = pub;
+        if (releaseMetaEl) releaseMetaEl.textContent = releaseDate;
 
         // 标签 / 简介
         const tag = game.tag || "暂无标签";
-        tagEl.textContent = tag;
+        safeSetText(tagEl, tag);
 
-        descEl.textContent =
+        safeSetText(
+          descEl,
           game.description ||
-          game.short_description ||
-          "暂无简介（原 API 未提供详细介绍）。";
+            game.short_description ||
+            "暂无简介（原 API 未提供详细介绍）。"
+        );
 
-        // 外链
-        if (game.gameUrl) {
+        // 官网 / FreeToGame 链接
+        if (game.gameUrl && urlEl) {
           urlEl.href = game.gameUrl;
-        } else {
+          urlEl.style.display = "inline-flex";
+        } else if (urlEl) {
           urlEl.style.display = "none";
         }
 
-        if (game.profileUrl) {
+        if (game.profileUrl && profileEl) {
           profileEl.href = game.profileUrl;
-        } else {
+          profileEl.style.display = "inline-flex";
+        } else if (profileEl) {
           profileEl.style.display = "none";
         }
       })
       .catch((err) => {
         console.error("加载详情失败：", err);
-        descEl.text
+        safeSetText(
+          descEl,
+          "加载详情失败，请稍后再试（可以检查 ranking.json 是否存在且格式正确）。"
+        );
+      });
+  }
+
+  loadDetail();
+</script>
+</body>
+</html>
