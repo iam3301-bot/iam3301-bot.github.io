@@ -18,11 +18,10 @@
           <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
         </div>
       </a>
-
       <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜</a>
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="game-library.html" class="nav-link">游戏库</a>
+        <a href="ranking.html" class="nav-link">排行榜</a>
       </nav>
     </div>
   </header>
@@ -313,6 +312,37 @@ async function fetchSteamRecommendedSysReq(gameTitle) {
       </li>
     `;
   }
+}
+
+// 获取 Steam 推荐配置的标题
+async function searchSteamAppIdByName(gameTitle) {
+  if (!gameTitle) return null;
+
+  const params = new URLSearchParams({
+    term: gameTitle,
+    cc: "us",
+    l: "en"
+  });
+
+  const url = `https://store.steampowered.com/api/storesearch?${params.toString()}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (data && data.items && data.items.length > 0) {
+    const first = data.items[0];
+    return first.id; // 返回 appid
+  }
+
+  return null;
+}
+
+// 获取 Steam 配置
+async function fetchSteamRequirements(appId) {
+  const url = `https://store.steampowered.com/api/appdetails?appids=${appId}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const pcReq = data[appId].data.pc_requirements;
+  return pcReq;
 }
 
 // 获取 Steam 推荐配置的标题
