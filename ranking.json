@@ -1,850 +1,1690 @@
 {
   "hot": [
     {
+      "id": 615,
       "name": "Arena Breakout: Infinite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg",
       "score": 9.3,
       "tag": "热度第 1",
-      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg"
+      "description": "A free-to-play tactical extraction shooter.",
+      "releaseDate": "2025-09-16",
+      "publisher": "MoreFun Studios",
+      "developer": "MoreFun Studios",
+      "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
     },
     {
+      "id": 618,
       "name": "skate.",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
       "score": 9.25,
       "tag": "焦点热门",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg"
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate"
     },
     {
+      "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
       "score": 9.200000000000001,
       "tag": "焦点热门",
-      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg"
+      "description": "A free-to-play battle royale game built with Battlefield DNA.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Electronic Arts",
+      "developer": "Battlefield Studios",
+      "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
     },
     {
+      "id": 516,
       "name": "PUBG: BATTLEGROUNDS",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/516/thumbnail.jpg",
       "score": 9.15,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/516/thumbnail.jpg"
+      "description": "Get into the action in one of the longest running battle royale games PUBG Battlegrounds.",
+      "releaseDate": "2022-01-12",
+      "publisher": "KRAFTON, Inc.",
+      "developer": "KRAFTON, Inc.",
+      "gameUrl": "https://www.freetogame.com/open/pubg",
+      "profileUrl": "https://www.freetogame.com/pubg"
     },
     {
+      "id": 608,
       "name": "Odin: Valhalla Rising",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
       "score": 9.100000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg"
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
     },
     {
+      "id": 466,
       "name": "Valorant",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
       "score": 9.05,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg"
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant"
     },
     {
+      "id": 475,
       "name": "Genshin Impact",
       "platform": "PC (Windows) · Action RPG",
+      "cover": "https://www.freetogame.com/g/475/thumbnail.jpg",
       "score": 9,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/475/thumbnail.jpg"
+      "description": "If you’ve been looking for a game to scratch that open-world action RPG itch, one with perhaps a bit of Asian flair, then you’re going to want to check out miHoYo’s Genshin Impact.",
+      "releaseDate": "2020-09-28",
+      "publisher": "miHoYo",
+      "developer": "miHoYo",
+      "gameUrl": "https://www.freetogame.com/open/genshin-impact",
+      "profileUrl": "https://www.freetogame.com/genshin-impact"
     },
     {
+      "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "PC (Windows) · Racing",
+      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
       "score": 8.950000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg"
+      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
+      "releaseDate": "2015-09-15",
+      "publisher": "Microsoft",
+      "developer": "Turn 10",
+      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex"
     },
     {
+      "id": 626,
       "name": "Where Winds Meet",
       "platform": "PC (Windows) · RPG",
+      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg",
       "score": 8.9,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg"
+      "description": "A free-to-play open-world ARPG set in tenth-century China.",
+      "releaseDate": "2025-11-14",
+      "publisher": "Everstone Studio",
+      "developer": "NetEase Games",
+      "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
+      "profileUrl": "https://www.freetogame.com/where-winds-meet"
     },
     {
+      "id": 623,
       "name": "Raven2",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
       "score": 8.850000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg"
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2"
     },
     {
+      "id": 540,
       "name": "Overwatch 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
       "score": 8.8,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg"
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2"
     },
     {
+      "id": 508,
       "name": "Enlisted",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
       "score": 8.75,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg"
+      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
+      "releaseDate": "2021-04-08",
+      "publisher": "Gaijin Entertainment",
+      "developer": "Darkflow Software",
+      "gameUrl": "https://www.freetogame.com/open/enlisted",
+      "profileUrl": "https://www.freetogame.com/enlisted"
     },
     {
+      "id": 452,
       "name": "Call of Duty: Warzone",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
       "score": 8.700000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/452/thumbnail.jpg"
+      "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
+      "releaseDate": "2020-03-10",
+      "publisher": "Activision",
+      "developer": "Infinity Ward",
+      "gameUrl": "https://www.freetogame.com/open/call-of-duty-warzone",
+      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone"
     },
     {
+      "id": 5,
       "name": "Crossout",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
       "score": 8.65,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg"
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout"
     },
     {
+      "id": 599,
       "name": "Marvel Rivals",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
       "score": 8.600000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg"
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals"
     },
     {
+      "id": 523,
       "name": "Fall Guys",
       "platform": "PC (Windows) · Battle Royale",
+      "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
       "score": 8.55,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/523/thumbnail.jpg"
+      "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
+      "releaseDate": "2020-08-04",
+      "publisher": "Mediatonic",
+      "developer": "Mediatonic",
+      "gameUrl": "https://www.freetogame.com/open/fall-guys",
+      "profileUrl": "https://www.freetogame.com/fall-guys"
     },
     {
+      "id": 511,
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
       "score": 8.5,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg"
+      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
+      "releaseDate": "2021-06-09",
+      "publisher": "Sega",
+      "developer": "Sega",
+      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis"
     },
     {
+      "id": 57,
       "name": "Fortnite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
       "score": 8.450000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg"
+      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
+      "releaseDate": "2017-09-26",
+      "publisher": "Epic Games",
+      "developer": "Epic Games",
+      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale"
     },
     {
+      "id": 560,
       "name": "Palia",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/560/thumbnail.jpg",
       "score": 8.4,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/560/thumbnail.jpg"
+      "description": "A cozy MMO with homebuilding and some adventure.",
+      "releaseDate": "2023-08-10",
+      "publisher": "Singularity Six",
+      "developer": "Singularity Six",
+      "gameUrl": "https://www.freetogame.com/open/palia",
+      "profileUrl": "https://www.freetogame.com/palia"
     },
     {
+      "id": 625,
       "name": "Superball",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
       "score": 8.350000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg"
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball"
     },
     {
+      "id": 590,
       "name": "Throne And Liberty",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
       "score": 8.3,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg"
+      "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
+      "releaseDate": "2024-10-01",
+      "publisher": "Amazon Games",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
     },
     {
+      "id": 517,
       "name": "Lost Ark",
       "platform": "PC (Windows) · ARPG",
+      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg",
       "score": 8.25,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg"
+      "description": "Smilegate’s free-to-play multiplayer ARPG is a massive adventure filled with lands waiting to be explored, people waiting to be met, and an ancient evil waiting to be destroyed.",
+      "releaseDate": "2022-02-11",
+      "publisher": "Amazon Games",
+      "developer": "Smilegate RPG",
+      "gameUrl": "https://www.freetogame.com/open/lost-ark",
+      "profileUrl": "https://www.freetogame.com/lost-ark"
     },
     {
+      "id": 9,
       "name": "World of Warships",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
       "score": 8.200000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg"
+      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
+      "releaseDate": "2015-07-02",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
+      "profileUrl": "https://www.freetogame.com/world-of-warships"
     },
     {
+      "id": 11,
       "name": "Neverwinter",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/11/thumbnail.jpg",
       "score": 8.15,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/11/thumbnail.jpg"
+      "description": "A free-to-play 3D action MMORPG based on the acclaimed Dungeons & Dragons fantasy roleplaying game. ",
+      "releaseDate": "2013-12-06",
+      "publisher": "Perfect World Entertainment",
+      "developer": "Cryptic Studios",
+      "gameUrl": "https://www.freetogame.com/open/neverwinter",
+      "profileUrl": "https://www.freetogame.com/neverwinter"
     },
     {
+      "id": 24,
       "name": "Counter-Strike 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/24/thumbnail.jpg",
       "score": 8.100000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/24/thumbnail.jpg"
+      "description": "The popular multiplayer shooter from Valve.",
+      "releaseDate": "2012-08-21",
+      "publisher": "Valve",
+      "developer": "Valve",
+      "gameUrl": "https://www.freetogame.com/open/counter-strike-2",
+      "profileUrl": "https://www.freetogame.com/counter-strike-2"
     },
     {
+      "id": 588,
       "name": "Vigor",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
       "score": 8.05,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg"
+      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
+      "releaseDate": "2024-09-18",
+      "publisher": "Bohemia Interactive ",
+      "developer": "Bohemia Interactive",
+      "gameUrl": "https://www.freetogame.com/open/vigor",
+      "profileUrl": "https://www.freetogame.com/vigor"
     },
     {
+      "id": 621,
       "name": "2XKO",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
       "score": 8,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg"
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko"
     },
     {
+      "id": 521,
       "name": "Diablo Immortal",
       "platform": "PC (Windows) · MMOARPG",
+      "cover": "https://www.freetogame.com/g/521/thumbnail.jpg",
       "score": 7.950000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/521/thumbnail.jpg"
+      "description": "Built for mobile and also released on PC, Diablo Immortal fills in the gaps between Diablo II and III in an MMOARPG environment.",
+      "releaseDate": "2022-06-02",
+      "publisher": "Blizzard Entertainment",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/diablo-immortal",
+      "profileUrl": "https://www.freetogame.com/diablo-immortal"
     },
     {
+      "id": 212,
       "name": "Brawlhalla",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/212/thumbnail.jpg",
       "score": 7.9,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/212/thumbnail.jpg"
+      "description": "A free-to-play 2D platform fighter inspired by the Smash Bros.",
+      "releaseDate": "2015-11-03",
+      "publisher": "Blue Mammoth Games",
+      "developer": "Blue Mammoth Games",
+      "gameUrl": "https://www.freetogame.com/open/brawlhalla",
+      "profileUrl": "https://www.freetogame.com/brawlhalla"
     },
     {
+      "id": 584,
       "name": "Once Human",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg"
+      "description": "A post-apocalyptic open-world survival game from Starry Studio.",
+      "releaseDate": "2024-07-09",
+      "publisher": "Starry Studio",
+      "developer": "Starry Studio",
+      "gameUrl": "https://www.freetogame.com/open/once-human",
+      "profileUrl": "https://www.freetogame.com/once-human"
     }
   ],
   "score": [
     {
+      "id": 615,
       "name": "Arena Breakout: Infinite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg",
       "score": 9.3,
       "tag": "热度第 1",
-      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg"
+      "description": "A free-to-play tactical extraction shooter.",
+      "releaseDate": "2025-09-16",
+      "publisher": "MoreFun Studios",
+      "developer": "MoreFun Studios",
+      "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
     },
     {
+      "id": 618,
       "name": "skate.",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
       "score": 9.25,
       "tag": "焦点热门",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg"
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate"
     },
     {
+      "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
       "score": 9.200000000000001,
       "tag": "焦点热门",
-      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg"
+      "description": "A free-to-play battle royale game built with Battlefield DNA.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Electronic Arts",
+      "developer": "Battlefield Studios",
+      "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
     },
     {
+      "id": 516,
       "name": "PUBG: BATTLEGROUNDS",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/516/thumbnail.jpg",
       "score": 9.15,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/516/thumbnail.jpg"
+      "description": "Get into the action in one of the longest running battle royale games PUBG Battlegrounds.",
+      "releaseDate": "2022-01-12",
+      "publisher": "KRAFTON, Inc.",
+      "developer": "KRAFTON, Inc.",
+      "gameUrl": "https://www.freetogame.com/open/pubg",
+      "profileUrl": "https://www.freetogame.com/pubg"
     },
     {
+      "id": 608,
       "name": "Odin: Valhalla Rising",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
       "score": 9.100000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg"
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
     },
     {
+      "id": 466,
       "name": "Valorant",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
       "score": 9.05,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg"
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant"
     },
     {
+      "id": 475,
       "name": "Genshin Impact",
       "platform": "PC (Windows) · Action RPG",
+      "cover": "https://www.freetogame.com/g/475/thumbnail.jpg",
       "score": 9,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/475/thumbnail.jpg"
+      "description": "If you’ve been looking for a game to scratch that open-world action RPG itch, one with perhaps a bit of Asian flair, then you’re going to want to check out miHoYo’s Genshin Impact.",
+      "releaseDate": "2020-09-28",
+      "publisher": "miHoYo",
+      "developer": "miHoYo",
+      "gameUrl": "https://www.freetogame.com/open/genshin-impact",
+      "profileUrl": "https://www.freetogame.com/genshin-impact"
     },
     {
+      "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "PC (Windows) · Racing",
+      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
       "score": 8.950000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg"
+      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
+      "releaseDate": "2015-09-15",
+      "publisher": "Microsoft",
+      "developer": "Turn 10",
+      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex"
     },
     {
+      "id": 626,
       "name": "Where Winds Meet",
       "platform": "PC (Windows) · RPG",
+      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg",
       "score": 8.9,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg"
+      "description": "A free-to-play open-world ARPG set in tenth-century China.",
+      "releaseDate": "2025-11-14",
+      "publisher": "Everstone Studio",
+      "developer": "NetEase Games",
+      "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
+      "profileUrl": "https://www.freetogame.com/where-winds-meet"
     },
     {
+      "id": 623,
       "name": "Raven2",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
       "score": 8.850000000000001,
       "tag": "高人气",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg"
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2"
     },
     {
+      "id": 540,
       "name": "Overwatch 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
       "score": 8.8,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg"
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2"
     },
     {
+      "id": 508,
       "name": "Enlisted",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
       "score": 8.75,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg"
+      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
+      "releaseDate": "2021-04-08",
+      "publisher": "Gaijin Entertainment",
+      "developer": "Darkflow Software",
+      "gameUrl": "https://www.freetogame.com/open/enlisted",
+      "profileUrl": "https://www.freetogame.com/enlisted"
     },
     {
+      "id": 452,
       "name": "Call of Duty: Warzone",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
       "score": 8.700000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/452/thumbnail.jpg"
+      "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
+      "releaseDate": "2020-03-10",
+      "publisher": "Activision",
+      "developer": "Infinity Ward",
+      "gameUrl": "https://www.freetogame.com/open/call-of-duty-warzone",
+      "profileUrl": "https://www.freetogame.com/call-of-duty-warzone"
     },
     {
+      "id": 5,
       "name": "Crossout",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
       "score": 8.65,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg"
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout"
     },
     {
+      "id": 599,
       "name": "Marvel Rivals",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
       "score": 8.600000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg"
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals"
     },
     {
+      "id": 523,
       "name": "Fall Guys",
       "platform": "PC (Windows) · Battle Royale",
+      "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
       "score": 8.55,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/523/thumbnail.jpg"
+      "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
+      "releaseDate": "2020-08-04",
+      "publisher": "Mediatonic",
+      "developer": "Mediatonic",
+      "gameUrl": "https://www.freetogame.com/open/fall-guys",
+      "profileUrl": "https://www.freetogame.com/fall-guys"
     },
     {
+      "id": 511,
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
       "score": 8.5,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg"
+      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
+      "releaseDate": "2021-06-09",
+      "publisher": "Sega",
+      "developer": "Sega",
+      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis"
     },
     {
+      "id": 57,
       "name": "Fortnite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
       "score": 8.450000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg"
+      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
+      "releaseDate": "2017-09-26",
+      "publisher": "Epic Games",
+      "developer": "Epic Games",
+      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale"
     },
     {
+      "id": 560,
       "name": "Palia",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/560/thumbnail.jpg",
       "score": 8.4,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/560/thumbnail.jpg"
+      "description": "A cozy MMO with homebuilding and some adventure.",
+      "releaseDate": "2023-08-10",
+      "publisher": "Singularity Six",
+      "developer": "Singularity Six",
+      "gameUrl": "https://www.freetogame.com/open/palia",
+      "profileUrl": "https://www.freetogame.com/palia"
     },
     {
+      "id": 625,
       "name": "Superball",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
       "score": 8.350000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg"
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball"
     },
     {
+      "id": 590,
       "name": "Throne And Liberty",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
       "score": 8.3,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg"
+      "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
+      "releaseDate": "2024-10-01",
+      "publisher": "Amazon Games",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
     },
     {
+      "id": 517,
       "name": "Lost Ark",
       "platform": "PC (Windows) · ARPG",
+      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg",
       "score": 8.25,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg"
+      "description": "Smilegate’s free-to-play multiplayer ARPG is a massive adventure filled with lands waiting to be explored, people waiting to be met, and an ancient evil waiting to be destroyed.",
+      "releaseDate": "2022-02-11",
+      "publisher": "Amazon Games",
+      "developer": "Smilegate RPG",
+      "gameUrl": "https://www.freetogame.com/open/lost-ark",
+      "profileUrl": "https://www.freetogame.com/lost-ark"
     },
     {
+      "id": 9,
       "name": "World of Warships",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
       "score": 8.200000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg"
+      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
+      "releaseDate": "2015-07-02",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
+      "profileUrl": "https://www.freetogame.com/world-of-warships"
     },
     {
+      "id": 11,
       "name": "Neverwinter",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/11/thumbnail.jpg",
       "score": 8.15,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/11/thumbnail.jpg"
+      "description": "A free-to-play 3D action MMORPG based on the acclaimed Dungeons & Dragons fantasy roleplaying game. ",
+      "releaseDate": "2013-12-06",
+      "publisher": "Perfect World Entertainment",
+      "developer": "Cryptic Studios",
+      "gameUrl": "https://www.freetogame.com/open/neverwinter",
+      "profileUrl": "https://www.freetogame.com/neverwinter"
     },
     {
+      "id": 24,
       "name": "Counter-Strike 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/24/thumbnail.jpg",
       "score": 8.100000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/24/thumbnail.jpg"
+      "description": "The popular multiplayer shooter from Valve.",
+      "releaseDate": "2012-08-21",
+      "publisher": "Valve",
+      "developer": "Valve",
+      "gameUrl": "https://www.freetogame.com/open/counter-strike-2",
+      "profileUrl": "https://www.freetogame.com/counter-strike-2"
     },
     {
+      "id": 588,
       "name": "Vigor",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
       "score": 8.05,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg"
+      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
+      "releaseDate": "2024-09-18",
+      "publisher": "Bohemia Interactive ",
+      "developer": "Bohemia Interactive",
+      "gameUrl": "https://www.freetogame.com/open/vigor",
+      "profileUrl": "https://www.freetogame.com/vigor"
     },
     {
+      "id": 621,
       "name": "2XKO",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
       "score": 8,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg"
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko"
     },
     {
+      "id": 521,
       "name": "Diablo Immortal",
       "platform": "PC (Windows) · MMOARPG",
+      "cover": "https://www.freetogame.com/g/521/thumbnail.jpg",
       "score": 7.950000000000001,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/521/thumbnail.jpg"
+      "description": "Built for mobile and also released on PC, Diablo Immortal fills in the gaps between Diablo II and III in an MMOARPG environment.",
+      "releaseDate": "2022-06-02",
+      "publisher": "Blizzard Entertainment",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/diablo-immortal",
+      "profileUrl": "https://www.freetogame.com/diablo-immortal"
     },
     {
+      "id": 212,
       "name": "Brawlhalla",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/212/thumbnail.jpg",
       "score": 7.9,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/212/thumbnail.jpg"
+      "description": "A free-to-play 2D platform fighter inspired by the Smash Bros.",
+      "releaseDate": "2015-11-03",
+      "publisher": "Blue Mammoth Games",
+      "developer": "Blue Mammoth Games",
+      "gameUrl": "https://www.freetogame.com/open/brawlhalla",
+      "profileUrl": "https://www.freetogame.com/brawlhalla"
     },
     {
+      "id": 584,
       "name": "Once Human",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg"
+      "description": "A post-apocalyptic open-world survival game from Starry Studio.",
+      "releaseDate": "2024-07-09",
+      "publisher": "Starry Studio",
+      "developer": "Starry Studio",
+      "gameUrl": "https://www.freetogame.com/open/once-human",
+      "profileUrl": "https://www.freetogame.com/once-human"
     }
   ],
   "new": [
     {
+      "id": 626,
       "name": "Where Winds Meet",
       "platform": "PC (Windows) · RPG",
+      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg",
       "score": 9,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg"
+      "description": "A free-to-play open-world ARPG set in tenth-century China.",
+      "releaseDate": "2025-11-14",
+      "publisher": "Everstone Studio",
+      "developer": "NetEase Games",
+      "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
+      "profileUrl": "https://www.freetogame.com/where-winds-meet"
     },
     {
+      "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
       "score": 8.95,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg"
+      "description": "A free-to-play battle royale game built with Battlefield DNA.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Electronic Arts",
+      "developer": "Battlefield Studios",
+      "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
     },
     {
+      "id": 625,
       "name": "Superball",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
       "score": 8.9,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg"
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball"
     },
     {
+      "id": 623,
       "name": "Raven2",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
       "score": 8.85,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg"
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2"
     },
     {
+      "id": 622,
       "name": "Blue Protocol: Star Resonance",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/622/thumbnail.jpg",
       "score": 8.8,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/622/thumbnail.jpg"
+      "description": "A free-to-play open-world anime MMORPG. ",
+      "releaseDate": "2025-10-09",
+      "publisher": "A Plus",
+      "developer": "Shanghai Bokura Networkd Technology",
+      "gameUrl": "https://www.freetogame.com/open/blue-protocol-star-resonance",
+      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance"
     },
     {
+      "id": 621,
       "name": "2XKO",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
       "score": 8.75,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg"
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko"
     },
     {
+      "id": 619,
       "name": "Blade & Soul Heroes",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/619/thumbnail.jpg",
       "score": 8.7,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/619/thumbnail.jpg"
+      "description": "A free-to-play collectible action MMORPG set in the Blade & Soul universe.",
+      "releaseDate": "2025-09-24",
+      "publisher": "NCSoft",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
+      "profileUrl": "https://www.freetogame.com/blade-soul-heroes"
     },
     {
+      "id": 616,
       "name": "Warborne Above Ashes",
       "platform": "PC (Windows) · MMO",
+      "cover": "https://www.freetogame.com/g/616/thumbnail.jpg",
       "score": 8.65,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/616/thumbnail.jpg"
+      "description": "A free-to-play PvP-centric MMO.",
+      "releaseDate": "2025-09-19",
+      "publisher": "Qooland ",
+      "developer": "Qooland",
+      "gameUrl": "https://www.freetogame.com/open/warborne-above-ashes",
+      "profileUrl": "https://www.freetogame.com/warborne-above-ashes"
     },
     {
+      "id": 615,
       "name": "Arena Breakout: Infinite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg",
       "score": 8.6,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg"
+      "description": "A free-to-play tactical extraction shooter.",
+      "releaseDate": "2025-09-16",
+      "publisher": "MoreFun Studios",
+      "developer": "MoreFun Studios",
+      "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
     },
     {
+      "id": 618,
       "name": "skate.",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
       "score": 8.55,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg"
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate"
     },
     {
+      "id": 617,
       "name": "Eterspire",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/617/thumbnail.jpg",
       "score": 8.5,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/617/thumbnail.jpg"
+      "description": "A free-to-play, cross-platform MMORPG.",
+      "releaseDate": "2025-09-15",
+      "publisher": "Stonehollow Workshop",
+      "developer": "Stonehollow Workshop",
+      "gameUrl": "https://www.freetogame.com/open/eterspire",
+      "profileUrl": "https://www.freetogame.com/eterspire"
     },
     {
+      "id": 614,
       "name": "Dungeon Stalker",
       "platform": "PC (Windows) · Dungeon Crawler",
+      "cover": "https://www.freetogame.com/g/614/thumbnail.jpg",
       "score": 8.45,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/614/thumbnail.jpg"
+      "description": "A free-to-play dungeon crawler with survival elements.",
+      "releaseDate": "2025-08-13",
+      "publisher": "OneUniverse",
+      "developer": "OneUniverse",
+      "gameUrl": "https://www.freetogame.com/open/dungeon-stalker",
+      "profileUrl": "https://www.freetogame.com/dungeon-stalker"
     },
     {
+      "id": 613,
       "name": "Dfiance",
       "platform": "PC (Windows) · Card Game",
+      "cover": "https://www.freetogame.com/g/613/thumbnail.jpg",
       "score": 8.4,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/613/thumbnail.jpg"
+      "description": "A free-to-play tactical card game.",
+      "releaseDate": "2025-08-04",
+      "publisher": "Dfiance",
+      "developer": "Dfiance",
+      "gameUrl": "https://www.freetogame.com/open/dfiance",
+      "profileUrl": "https://www.freetogame.com/dfiance"
     },
     {
+      "id": 612,
       "name": "Terminull Brigade",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/612/thumbnail.jpg",
       "score": 8.35,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/612/thumbnail.jpg"
+      "description": "A free-to-play third-person looter-shooter with customizable characters.",
+      "releaseDate": "2025-07-29",
+      "publisher": "Pew Pew Games",
+      "developer": "Pew Pew Games",
+      "gameUrl": "https://www.freetogame.com/open/terminull-brigade",
+      "profileUrl": "https://www.freetogame.com/terminull-brigade"
     },
     {
+      "id": 611,
       "name": "Mecha BREAK",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/611/thumbnail.jpg",
       "score": 8.3,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/611/thumbnail.jpg"
+      "description": "A team-based third-person shooter featuring mechs.",
+      "releaseDate": "2025-07-01",
+      "publisher": "Amazing Seasun Games",
+      "developer": "Amazing Seasun Games",
+      "gameUrl": "https://www.freetogame.com/open/mecha-break",
+      "profileUrl": "https://www.freetogame.com/mecha-break"
     },
     {
+      "id": 609,
       "name": "Crystal Of Atlan",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/609/thumbnail.jpg",
       "score": 8.25,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/609/thumbnail.jpg"
+      "description": "A magicpunk MMORPG from Nuverse.",
+      "releaseDate": "2025-05-26",
+      "publisher": "Skystone Games",
+      "developer": "Nuverse",
+      "gameUrl": "https://www.freetogame.com/open/crystal-of-atlan",
+      "profileUrl": "https://www.freetogame.com/crystal-of-atlan"
     },
     {
+      "id": 610,
       "name": "Splitgate 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/610/thumbnail.jpg",
       "score": 8.2,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/610/thumbnail.jpg"
+      "description": "A free-to-play shooter using portals.",
+      "releaseDate": "2025-05-22",
+      "publisher": "1047 Games",
+      "developer": "1047 Games",
+      "gameUrl": "https://www.freetogame.com/open/splitgate-2",
+      "profileUrl": "https://www.freetogame.com/splitgate-2"
     },
     {
+      "id": 607,
       "name": "The Lost Glitches",
       "platform": "PC (Windows) · Card Game",
+      "cover": "https://www.freetogame.com/g/607/thumbnail.jpg",
       "score": 8.15,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/607/thumbnail.jpg"
+      "description": "A cyberpunk RPG trading card game from Honig Studios.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Honig Studios GmbH",
+      "developer": "Mimunga LLC",
+      "gameUrl": "https://www.freetogame.com/open/the-lost-glitches",
+      "profileUrl": "https://www.freetogame.com/the-lost-glitches"
     },
     {
+      "id": 608,
       "name": "Odin: Valhalla Rising",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
       "score": 8.1,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg"
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
     },
     {
+      "id": 606,
       "name": "Steel Hunters",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/606/thumbnail.jpg",
       "score": 8.05,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/606/thumbnail.jpg"
+      "description": "A post-apocalyptic extraction shooter with giant mechs.",
+      "releaseDate": "2025-04-02",
+      "publisher": "Wargaming ",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/steel-hunters",
+      "profileUrl": "https://www.freetogame.com/steel-hunters"
     },
     {
+      "id": 604,
       "name": "FragPunk",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/604/thumbnail.jpg",
       "score": 8,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/604/thumbnail.jpg"
+      "description": "A free-to-play 5v5 hero shooter that uses cards to modify matches.",
+      "releaseDate": "2025-03-06",
+      "publisher": "Bad Guitar Studio",
+      "developer": "Bad Guitar Studio",
+      "gameUrl": "https://www.freetogame.com/open/fragpunk",
+      "profileUrl": "https://www.freetogame.com/fragpunk"
     },
     {
+      "id": 603,
       "name": "War Robots: Frontiers",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/603/thumbnail.jpg",
       "score": 7.95,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/603/thumbnail.jpg"
+      "description": "A multiplayer mech game set in a planetary system light years from Earth.",
+      "releaseDate": "2025-03-04",
+      "publisher": "My.games",
+      "developer": "My.games",
+      "gameUrl": "https://www.freetogame.com/open/war-robots-frontiers",
+      "profileUrl": "https://www.freetogame.com/war-robots-frontiers"
     },
     {
+      "id": 599,
       "name": "Marvel Rivals",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
       "score": 7.9,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg"
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals"
     },
     {
+      "id": 601,
       "name": "Delta Force",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/601/thumbnail.jpg",
       "score": 7.85,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/601/thumbnail.jpg"
+      "description": "A free-to-play team-based tactical shooter.",
+      "releaseDate": "2024-12-04",
+      "publisher": "TiMi Studio Group",
+      "developer": "Team Jade",
+      "gameUrl": "https://www.freetogame.com/open/delta-force",
+      "profileUrl": "https://www.freetogame.com/delta-force"
     },
     {
+      "id": 597,
       "name": "Strinova",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/597/thumbnail.jpg",
       "score": 7.8,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/597/thumbnail.jpg"
+      "description": "A third-person tactical shooter that features the unique mechanic of allowing players to switch between three-dimensional and two-dimensional forms.",
+      "releaseDate": "2024-11-21",
+      "publisher": "iDreamSky",
+      "developer": "iDreamSky",
+      "gameUrl": "https://www.freetogame.com/open/strinova",
+      "profileUrl": "https://www.freetogame.com/strinova"
     },
     {
+      "id": 598,
       "name": "SUPERVIVE",
       "platform": "PC (Windows) · MOBA",
+      "cover": "https://www.freetogame.com/g/598/thumbnail.jpg",
       "score": 7.75,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/598/thumbnail.jpg"
+      "description": "Combine MOBAs, battle royales, and hero shooters into one fast paced game hand you have SUPERVIVE.",
+      "releaseDate": "2024-11-20",
+      "publisher": "Theorycraft Games",
+      "developer": "Theorycraft Games",
+      "gameUrl": "https://www.freetogame.com/open/supervive",
+      "profileUrl": "https://www.freetogame.com/supervive"
     },
     {
+      "id": 595,
       "name": "Brighter Shores",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/595/thumbnail.jpg",
       "score": 7.7,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/595/thumbnail.jpg"
+      "description": "A point-and-click MMORPG from RuneScape's creator, Andrew Gower.",
+      "releaseDate": "2024-11-06",
+      "publisher": "Fen Research LTD",
+      "developer": "Fen Research LTD",
+      "gameUrl": "https://www.freetogame.com/open/brighter-shores",
+      "profileUrl": "https://www.freetogame.com/brighter-shores"
     },
     {
+      "id": 593,
       "name": "Return Alive",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
       "score": 7.65,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg"
+      "description": "A free-to-play top-down tactical shooter.",
+      "releaseDate": "2024-10-23",
+      "publisher": "KOG",
+      "developer": "KOG",
+      "gameUrl": "https://www.freetogame.com/open/return-alive",
+      "profileUrl": "https://www.freetogame.com/return-alive"
     },
     {
+      "id": 592,
       "name": "Starborne: Frontiers",
       "platform": "PC (Windows) · Strategy",
+      "cover": "https://www.freetogame.com/g/592/thumbnail.jpg",
       "score": 7.6,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/592/thumbnail.jpg"
+      "description": "A tactical autobattler set 400 years in the future.",
+      "releaseDate": "2024-10-14",
+      "publisher": "Solid Clouds hf.",
+      "developer": "Solid Clouds hf.",
+      "gameUrl": "https://www.freetogame.com/open/starborne-frontiers",
+      "profileUrl": "https://www.freetogame.com/starborne-frontiers"
     },
     {
+      "id": 590,
       "name": "Throne And Liberty",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
       "score": 7.55,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg"
+      "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
+      "releaseDate": "2024-10-01",
+      "publisher": "Amazon Games",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
     }
   ],
   "discount": [
     {
+      "id": 626,
       "name": "Where Winds Meet",
       "platform": "PC (Windows) · RPG",
+      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg",
       "score": 9,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/626/thumbnail.jpg"
+      "description": "A free-to-play open-world ARPG set in tenth-century China.",
+      "releaseDate": "2025-11-14",
+      "publisher": "Everstone Studio",
+      "developer": "NetEase Games",
+      "gameUrl": "https://www.freetogame.com/open/where-winds-meet",
+      "profileUrl": "https://www.freetogame.com/where-winds-meet"
     },
     {
+      "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
       "score": 8.95,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/624/thumbnail.jpg"
+      "description": "A free-to-play battle royale game built with Battlefield DNA.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Electronic Arts",
+      "developer": "Battlefield Studios",
+      "gameUrl": "https://www.freetogame.com/open/battlefield-redsec",
+      "profileUrl": "https://www.freetogame.com/battlefield-redsec"
     },
     {
+      "id": 625,
       "name": "Superball",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
       "score": 8.9,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg"
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball"
     },
     {
+      "id": 623,
       "name": "Raven2",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
       "score": 8.85,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg"
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2"
     },
     {
+      "id": 622,
       "name": "Blue Protocol: Star Resonance",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/622/thumbnail.jpg",
       "score": 8.8,
       "tag": "新作速看",
-      "cover": "https://www.freetogame.com/g/622/thumbnail.jpg"
+      "description": "A free-to-play open-world anime MMORPG. ",
+      "releaseDate": "2025-10-09",
+      "publisher": "A Plus",
+      "developer": "Shanghai Bokura Networkd Technology",
+      "gameUrl": "https://www.freetogame.com/open/blue-protocol-star-resonance",
+      "profileUrl": "https://www.freetogame.com/blue-protocol-star-resonance"
     },
     {
+      "id": 621,
       "name": "2XKO",
       "platform": "PC (Windows) · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
       "score": 8.75,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg"
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko"
     },
     {
+      "id": 619,
       "name": "Blade & Soul Heroes",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/619/thumbnail.jpg",
       "score": 8.7,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/619/thumbnail.jpg"
+      "description": "A free-to-play collectible action MMORPG set in the Blade & Soul universe.",
+      "releaseDate": "2025-09-24",
+      "publisher": "NCSoft",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
+      "profileUrl": "https://www.freetogame.com/blade-soul-heroes"
     },
     {
+      "id": 616,
       "name": "Warborne Above Ashes",
       "platform": "PC (Windows) · MMO",
+      "cover": "https://www.freetogame.com/g/616/thumbnail.jpg",
       "score": 8.65,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/616/thumbnail.jpg"
+      "description": "A free-to-play PvP-centric MMO.",
+      "releaseDate": "2025-09-19",
+      "publisher": "Qooland ",
+      "developer": "Qooland",
+      "gameUrl": "https://www.freetogame.com/open/warborne-above-ashes",
+      "profileUrl": "https://www.freetogame.com/warborne-above-ashes"
     },
     {
+      "id": 615,
       "name": "Arena Breakout: Infinite",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg",
       "score": 8.6,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/615/thumbnail.jpg"
+      "description": "A free-to-play tactical extraction shooter.",
+      "releaseDate": "2025-09-16",
+      "publisher": "MoreFun Studios",
+      "developer": "MoreFun Studios",
+      "gameUrl": "https://www.freetogame.com/open/arena-breakout-infinite",
+      "profileUrl": "https://www.freetogame.com/arena-breakout-infinite"
     },
     {
+      "id": 618,
       "name": "skate.",
       "platform": "PC (Windows) · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
       "score": 8.55,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg"
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate"
     },
     {
+      "id": 617,
       "name": "Eterspire",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/617/thumbnail.jpg",
       "score": 8.5,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/617/thumbnail.jpg"
+      "description": "A free-to-play, cross-platform MMORPG.",
+      "releaseDate": "2025-09-15",
+      "publisher": "Stonehollow Workshop",
+      "developer": "Stonehollow Workshop",
+      "gameUrl": "https://www.freetogame.com/open/eterspire",
+      "profileUrl": "https://www.freetogame.com/eterspire"
     },
     {
+      "id": 614,
       "name": "Dungeon Stalker",
       "platform": "PC (Windows) · Dungeon Crawler",
+      "cover": "https://www.freetogame.com/g/614/thumbnail.jpg",
       "score": 8.45,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/614/thumbnail.jpg"
+      "description": "A free-to-play dungeon crawler with survival elements.",
+      "releaseDate": "2025-08-13",
+      "publisher": "OneUniverse",
+      "developer": "OneUniverse",
+      "gameUrl": "https://www.freetogame.com/open/dungeon-stalker",
+      "profileUrl": "https://www.freetogame.com/dungeon-stalker"
     },
     {
+      "id": 613,
       "name": "Dfiance",
       "platform": "PC (Windows) · Card Game",
+      "cover": "https://www.freetogame.com/g/613/thumbnail.jpg",
       "score": 8.4,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/613/thumbnail.jpg"
+      "description": "A free-to-play tactical card game.",
+      "releaseDate": "2025-08-04",
+      "publisher": "Dfiance",
+      "developer": "Dfiance",
+      "gameUrl": "https://www.freetogame.com/open/dfiance",
+      "profileUrl": "https://www.freetogame.com/dfiance"
     },
     {
+      "id": 612,
       "name": "Terminull Brigade",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/612/thumbnail.jpg",
       "score": 8.35,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/612/thumbnail.jpg"
+      "description": "A free-to-play third-person looter-shooter with customizable characters.",
+      "releaseDate": "2025-07-29",
+      "publisher": "Pew Pew Games",
+      "developer": "Pew Pew Games",
+      "gameUrl": "https://www.freetogame.com/open/terminull-brigade",
+      "profileUrl": "https://www.freetogame.com/terminull-brigade"
     },
     {
+      "id": 611,
       "name": "Mecha BREAK",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/611/thumbnail.jpg",
       "score": 8.3,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/611/thumbnail.jpg"
+      "description": "A team-based third-person shooter featuring mechs.",
+      "releaseDate": "2025-07-01",
+      "publisher": "Amazing Seasun Games",
+      "developer": "Amazing Seasun Games",
+      "gameUrl": "https://www.freetogame.com/open/mecha-break",
+      "profileUrl": "https://www.freetogame.com/mecha-break"
     },
     {
+      "id": 609,
       "name": "Crystal Of Atlan",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/609/thumbnail.jpg",
       "score": 8.25,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/609/thumbnail.jpg"
+      "description": "A magicpunk MMORPG from Nuverse.",
+      "releaseDate": "2025-05-26",
+      "publisher": "Skystone Games",
+      "developer": "Nuverse",
+      "gameUrl": "https://www.freetogame.com/open/crystal-of-atlan",
+      "profileUrl": "https://www.freetogame.com/crystal-of-atlan"
     },
     {
+      "id": 610,
       "name": "Splitgate 2",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/610/thumbnail.jpg",
       "score": 8.2,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/610/thumbnail.jpg"
+      "description": "A free-to-play shooter using portals.",
+      "releaseDate": "2025-05-22",
+      "publisher": "1047 Games",
+      "developer": "1047 Games",
+      "gameUrl": "https://www.freetogame.com/open/splitgate-2",
+      "profileUrl": "https://www.freetogame.com/splitgate-2"
     },
     {
+      "id": 607,
       "name": "The Lost Glitches",
       "platform": "PC (Windows) · Card Game",
+      "cover": "https://www.freetogame.com/g/607/thumbnail.jpg",
       "score": 8.15,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/607/thumbnail.jpg"
+      "description": "A cyberpunk RPG trading card game from Honig Studios.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Honig Studios GmbH",
+      "developer": "Mimunga LLC",
+      "gameUrl": "https://www.freetogame.com/open/the-lost-glitches",
+      "profileUrl": "https://www.freetogame.com/the-lost-glitches"
     },
     {
+      "id": 608,
       "name": "Odin: Valhalla Rising",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
       "score": 8.1,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg"
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising"
     },
     {
+      "id": 606,
       "name": "Steel Hunters",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/606/thumbnail.jpg",
       "score": 8.05,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/606/thumbnail.jpg"
+      "description": "A post-apocalyptic extraction shooter with giant mechs.",
+      "releaseDate": "2025-04-02",
+      "publisher": "Wargaming ",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/steel-hunters",
+      "profileUrl": "https://www.freetogame.com/steel-hunters"
     },
     {
+      "id": 604,
       "name": "FragPunk",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/604/thumbnail.jpg",
       "score": 8,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/604/thumbnail.jpg"
+      "description": "A free-to-play 5v5 hero shooter that uses cards to modify matches.",
+      "releaseDate": "2025-03-06",
+      "publisher": "Bad Guitar Studio",
+      "developer": "Bad Guitar Studio",
+      "gameUrl": "https://www.freetogame.com/open/fragpunk",
+      "profileUrl": "https://www.freetogame.com/fragpunk"
     },
     {
+      "id": 603,
       "name": "War Robots: Frontiers",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/603/thumbnail.jpg",
       "score": 7.95,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/603/thumbnail.jpg"
+      "description": "A multiplayer mech game set in a planetary system light years from Earth.",
+      "releaseDate": "2025-03-04",
+      "publisher": "My.games",
+      "developer": "My.games",
+      "gameUrl": "https://www.freetogame.com/open/war-robots-frontiers",
+      "profileUrl": "https://www.freetogame.com/war-robots-frontiers"
     },
     {
+      "id": 599,
       "name": "Marvel Rivals",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
       "score": 7.9,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg"
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals"
     },
     {
+      "id": 601,
       "name": "Delta Force",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/601/thumbnail.jpg",
       "score": 7.85,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/601/thumbnail.jpg"
+      "description": "A free-to-play team-based tactical shooter.",
+      "releaseDate": "2024-12-04",
+      "publisher": "TiMi Studio Group",
+      "developer": "Team Jade",
+      "gameUrl": "https://www.freetogame.com/open/delta-force",
+      "profileUrl": "https://www.freetogame.com/delta-force"
     },
     {
+      "id": 597,
       "name": "Strinova",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/597/thumbnail.jpg",
       "score": 7.8,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/597/thumbnail.jpg"
+      "description": "A third-person tactical shooter that features the unique mechanic of allowing players to switch between three-dimensional and two-dimensional forms.",
+      "releaseDate": "2024-11-21",
+      "publisher": "iDreamSky",
+      "developer": "iDreamSky",
+      "gameUrl": "https://www.freetogame.com/open/strinova",
+      "profileUrl": "https://www.freetogame.com/strinova"
     },
     {
+      "id": 598,
       "name": "SUPERVIVE",
       "platform": "PC (Windows) · MOBA",
+      "cover": "https://www.freetogame.com/g/598/thumbnail.jpg",
       "score": 7.75,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/598/thumbnail.jpg"
+      "description": "Combine MOBAs, battle royales, and hero shooters into one fast paced game hand you have SUPERVIVE.",
+      "releaseDate": "2024-11-20",
+      "publisher": "Theorycraft Games",
+      "developer": "Theorycraft Games",
+      "gameUrl": "https://www.freetogame.com/open/supervive",
+      "profileUrl": "https://www.freetogame.com/supervive"
     },
     {
+      "id": 595,
       "name": "Brighter Shores",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/595/thumbnail.jpg",
       "score": 7.7,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/595/thumbnail.jpg"
+      "description": "A point-and-click MMORPG from RuneScape's creator, Andrew Gower.",
+      "releaseDate": "2024-11-06",
+      "publisher": "Fen Research LTD",
+      "developer": "Fen Research LTD",
+      "gameUrl": "https://www.freetogame.com/open/brighter-shores",
+      "profileUrl": "https://www.freetogame.com/brighter-shores"
     },
     {
+      "id": 593,
       "name": "Return Alive",
       "platform": "PC (Windows) · Shooter",
+      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
       "score": 7.65,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg"
+      "description": "A free-to-play top-down tactical shooter.",
+      "releaseDate": "2024-10-23",
+      "publisher": "KOG",
+      "developer": "KOG",
+      "gameUrl": "https://www.freetogame.com/open/return-alive",
+      "profileUrl": "https://www.freetogame.com/return-alive"
     },
     {
+      "id": 592,
       "name": "Starborne: Frontiers",
       "platform": "PC (Windows) · Strategy",
+      "cover": "https://www.freetogame.com/g/592/thumbnail.jpg",
       "score": 7.6,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/592/thumbnail.jpg"
+      "description": "A tactical autobattler set 400 years in the future.",
+      "releaseDate": "2024-10-14",
+      "publisher": "Solid Clouds hf.",
+      "developer": "Solid Clouds hf.",
+      "gameUrl": "https://www.freetogame.com/open/starborne-frontiers",
+      "profileUrl": "https://www.freetogame.com/starborne-frontiers"
     },
     {
+      "id": 590,
       "name": "Throne And Liberty",
       "platform": "PC (Windows) · MMORPG",
+      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
       "score": 7.55,
       "tag": "最近上线",
-      "cover": "https://www.freetogame.com/g/590/thumbnail.jpg"
+      "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
+      "releaseDate": "2024-10-01",
+      "publisher": "Amazon Games",
+      "developer": "NCSoft",
+      "gameUrl": "https://www.freetogame.com/open/throne-and-liberty",
+      "profileUrl": "https://www.freetogame.com/throne-and-liberty"
     }
   ]
 }
