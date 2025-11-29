@@ -1,0 +1,9 @@
+{
+  "Arena Breakout: Infinite": {
+    "os": "64-bit Windows 10 or later",
+    "processor": "Intel Core i5-7500 / AMD Ryzen 5 1400",
+    "memory": "12 GB RAM",
+    "graphics": "NVIDIA GTX 960 2GB / AMD RX 5500 / Intel Arc A380",
+    "storage": "70 GB available space"
+  }
+}
