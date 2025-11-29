@@ -28,55 +28,107 @@
 
   <main class="main main--single">
     <section>
-      <article class="card" id="detailCard">
-        <div class="card-header">
+      <article class="card detail-card">
+        <!-- 顶部标题 + 返回 -->
+        <div class="detail-header-bar">
           <div>
-            <div class="card-title" id="gameTitle">游戏名称加载中...</div>
-            <div class="card-subtitle" id="gamePlatform">平台信息加载中...</div>
+            <div class="detail-breadcrumb">游戏详情 / <span id="breadcrumbName">加载中...</span></div>
           </div>
           <button class="btn-secondary" onclick="history.back()">← 返回上一页</button>
         </div>
 
-        <div class="detail-layout">
-          <div class="detail-cover">
-            <img id="gameCover" src="" alt="游戏封面" />
+        <!-- 视觉主区域（封面 + 标题 + 大号评分 + 标签） -->
+        <div class="detail-hero">
+          <div class="detail-hero-left">
+            <div class="detail-cover-large">
+              <img id="gameCover" src="" alt="游戏封面" />
+            </div>
           </div>
-          <div class="detail-main">
-            <div class="detail-row">
-              <span class="detail-label">评分：</span>
-              <span id="gameScore" class="detail-score">N/A</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">开发商：</span>
-              <span id="gameDeveloper">N/A</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">发行商：</span>
-              <span id="gamePublisher">N/A</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">发售日期：</span>
-              <span id="gameReleaseDate">N/A</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">标签：</span>
-              <span id="gameTag">N/A</span>
+          <div class="detail-hero-right">
+            <div class="detail-title-row">
+              <div class="detail-title-block">
+                <h1 id="gameTitle" class="detail-title">游戏名称加载中...</h1>
+                <div id="gamePlatform" class="detail-platform">平台信息加载中...</div>
+              </div>
+              <div class="detail-score-card">
+                <div class="detail-score-label">游盒热度评分</div>
+                <div class="detail-score-main">
+                  <span id="gameScore" class="detail-score-value">-</span>
+                  <span class="detail-score-outof">/ 10</span>
+                </div>
+                <div class="detail-score-sub">基于排行榜位置模拟</div>
+              </div>
             </div>
 
-            <div class="detail-desc">
-              <div class="detail-desc-title">简介</div>
-              <p id="gameDescription">游戏描述加载中...</p>
+            <div class="detail-tag-row">
+              <span class="pill" id="gameTag">标签加载中...</span>
+              <span class="pill pill-soft">
+                发售：<span id="gameReleaseDate">未知</span>
+              </span>
+              <span class="pill pill-soft">
+                开发：<span id="gameDeveloper">未知</span>
+              </span>
+              <span class="pill pill-soft">
+                发行：<span id="gamePublisher">未知</span>
+              </span>
             </div>
+
+            <p id="gameDescription" class="detail-hero-desc">
+              游戏简介加载中...
+            </p>
 
             <div class="detail-links">
               <a id="gameUrl" href="#" target="_blank" rel="noopener" class="btn-primary">
                 前往游戏官网 / 启动平台
               </a>
               <a id="gameProfileUrl" href="#" target="_blank" rel="noopener" class="btn-link">
-                查看 FreeToGame 页面
+                查看 FreeToGame 详情页
               </a>
             </div>
           </div>
+        </div>
+
+        <!-- 下方信息区：用信息块做成“面板”感觉 -->
+        <div class="detail-info-grid">
+          <section class="detail-section">
+            <h2 class="detail-section-title">基础信息</h2>
+            <div class="detail-meta-list">
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">开发商</span>
+                <span class="detail-meta-value" id="gameDeveloperMeta">未知</span>
+              </div>
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">发行商</span>
+                <span class="detail-meta-value" id="gamePublisherMeta">未知</span>
+              </div>
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">发售日期</span>
+                <span class="detail-meta-value" id="gameReleaseMeta">未知</span>
+              </div>
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">平台 / 类型</span>
+                <span class="detail-meta-value" id="gamePlatformMeta">-</span>
+              </div>
+              <div class="detail-meta-row">
+                <span class="detail-meta-label">推荐指数</span>
+                <span class="detail-meta-value">
+                  <span id="gameScoreMeta">-</span> / 10（项目内部模拟评分）
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="detail-section detail-section--secondary">
+            <h2 class="detail-section-title">游盒提示</h2>
+            <p class="detail-section-text">
+              本页面数据来自 FreeToGame API，同步到本地
+              <code>ranking.json</code>，由前端静态网页实时读取展示，示范了
+              “静态站点 + 真实在线数据” 的前后端分离方案。
+            </p>
+            <p class="detail-section-text">
+              评分为本项目根据榜单位置计算的“热度评分”，并非官方媒体评分，仅用于课程展示。
+            </p>
+          </section>
         </div>
       </article>
     </section>
@@ -90,6 +142,7 @@
   const params = new URLSearchParams(window.location.search);
   const gameName = params.get("name");
 
+  const breadcrumbNameEl = document.getElementById("breadcrumbName");
   const titleEl = document.getElementById("gameTitle");
   const platformEl = document.getElementById("gamePlatform");
   const coverEl = document.getElementById("gameCover");
@@ -102,11 +155,20 @@
   const urlEl = document.getElementById("gameUrl");
   const profileEl = document.getElementById("gameProfileUrl");
 
+  // 下方信息块里的镜像字段
+  const devMetaEl = document.getElementById("gameDeveloperMeta");
+  const pubMetaEl = document.getElementById("gamePublisherMeta");
+  const releaseMetaEl = document.getElementById("gameReleaseMeta");
+  const platformMetaEl = document.getElementById("gamePlatformMeta");
+  const scoreMetaEl = document.getElementById("gameScoreMeta");
+
   if (!gameName) {
+    breadcrumbNameEl.textContent = "未指定";
     titleEl.textContent = "未指定游戏名称";
     platformEl.textContent = "";
     descEl.textContent = "URL 中没有携带 name 参数，无法识别要查看的游戏。";
   } else {
+    breadcrumbNameEl.textContent = gameName;
     titleEl.textContent = `正在加载：${gameName}`;
   }
 
@@ -134,21 +196,45 @@
           return;
         }
 
+        // 标题 / 平台
+        breadcrumbNameEl.textContent = game.name;
         titleEl.textContent = game.name;
         platformEl.textContent = game.platform || "";
+        platformMetaEl.textContent = game.platform || "-";
+
+        // 封面
         coverEl.src = game.cover;
         coverEl.alt = game.name + " 封面";
 
+        // 评分（项目内部模拟：在 update-ranking.mjs 中根据名次算出来）
         const score = Number(game.score) || 0;
-        scoreEl.textContent = score ? score.toFixed(1) : "-";
+        const scoreText = score ? score.toFixed(1) : "-";
+        scoreEl.textContent = scoreText;
+        scoreMetaEl.textContent = scoreText;
 
-        devEl.textContent = game.developer || "未知";
-        pubEl.textContent = game.publisher || "未知";
-        dateEl.textContent = game.releaseDate || "未知";
-        tagEl.textContent = game.tag || "暂无";
+        // 开发商 / 发行商 / 日期
+        const dev = game.developer || "未知";
+        const pub = game.publisher || "未知";
+        const releaseDate = game.releaseDate || "未知";
 
-        descEl.textContent = game.description || "暂无简介（原 API 未提供详细介绍）";
+        devEl.textContent = dev;
+        pubEl.textContent = pub;
+        dateEl.textContent = releaseDate;
 
+        devMetaEl.textContent = dev;
+        pubMetaEl.textContent = pub;
+        releaseMetaEl.textContent = releaseDate;
+
+        // 标签 / 简介
+        const tag = game.tag || "暂无标签";
+        tagEl.textContent = tag;
+
+        descEl.textContent =
+          game.description ||
+          game.short_description ||
+          "暂无简介（原 API 未提供详细介绍）。";
+
+        // 外链
         if (game.gameUrl) {
           urlEl.href = game.gameUrl;
         } else {
@@ -163,11 +249,4 @@
       })
       .catch((err) => {
         console.error("加载详情失败：", err);
-        descEl.textContent = "加载详情失败，请稍后再试。";
-      });
-  }
-
-  loadDetail();
-</script>
-</body>
-</html>
+        descEl.text
