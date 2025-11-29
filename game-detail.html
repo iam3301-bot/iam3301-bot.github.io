@@ -109,6 +109,7 @@
 
         <!-- 下方信息区 -->
         <div class="detail-info-grid">
+          <!-- 左：基础信息 -->
           <section class="detail-section">
             <h2 class="detail-section-title">基础信息</h2>
             <div class="detail-meta-list">
@@ -137,15 +138,54 @@
             </div>
           </section>
 
+          <!-- 右：系统配置（最低 + 推荐说明） -->
           <section class="detail-section detail-section--secondary">
-            <h2 class="detail-section-title">游盒提示</h2>
-            <p class="detail-section-text">
-              本页面数据来自 FreeToGame API，同步到本地
-              <code>ranking.json</code>，由前端静态网页实时读取展示，示范了
-              “静态站点 + 真实在线数据” 的前后端分离方案。
-            </p>
-            <p class="detail-section-text">
-              评分为本项目根据榜单位置计算的“热度评分”，并非官方媒体评分，仅用于课程展示。
+            <h2 class="detail-section-title">系统配置（来自 FreeToGame）</h2>
+
+            <div class="sysreq-grid">
+              <!-- 最低配置 -->
+              <div class="sysreq-column">
+                <div class="sysreq-title">最低配置</div>
+                <ul class="sysreq-list">
+                  <li>
+                    <span class="sysreq-label">系统</span>
+                    <span class="sysreq-value" id="sysMinOs">接口未提供</span>
+                  </li>
+                  <li>
+                    <span class="sysreq-label">处理器</span>
+                    <span class="sysreq-value" id="sysMinCpu">接口未提供</span>
+                  </li>
+                  <li>
+                    <span class="sysreq-label">内存</span>
+                    <span class="sysreq-value" id="sysMinRam">接口未提供</span>
+                  </li>
+                  <li>
+                    <span class="sysreq-label">显卡</span>
+                    <span class="sysreq-value" id="sysMinGpu">接口未提供</span>
+                  </li>
+                  <li>
+                    <span class="sysreq-label">存储</span>
+                    <span class="sysreq-value" id="sysMinStorage">接口未提供</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 推荐配置说明：不造数据，只说明来源 -->
+              <div class="sysreq-column sysreq-column--muted">
+                <div class="sysreq-title">推荐配置</div>
+                <div class="sysreq-placeholder">
+                  FreeToGame API 当前仅提供
+                  <strong>minimum_system_requirements（最低配置）</strong>，
+                  未提供官方推荐配置。
+                  <br />本项目不虚构推荐配置，以保证数据真实可信。
+                </div>
+              </div>
+            </div>
+
+            <p class="detail-section-text sysreq-note">
+              以上最低配置数据直接来自 FreeToGame API 的
+              <code>minimum_system_requirements</code> 字段；若某项仍显示“接口未提供”，
+              表示该游戏在接口中没有给出对应配置。
             </p>
           </section>
         </div>
@@ -184,6 +224,13 @@
   const platformMetaEl = document.getElementById("gamePlatformMeta");
   const scoreMetaEl = document.getElementById("gameScoreMeta");
 
+  // 系统配置 DOM
+  const sysMinOsEl = document.getElementById("sysMinOs");
+  const sysMinCpuEl = document.getElementById("sysMinCpu");
+  const sysMinRamEl = document.getElementById("sysMinRam");
+  const sysMinGpuEl = document.getElementById("sysMinGpu");
+  const sysMinStorageEl = document.getElementById("sysMinStorage");
+
   // 安全设置文本
   function safeSetText(el, text) {
     if (el) el.textContent = text;
@@ -220,6 +267,23 @@
     return found;
   }
 
+  function fillSysReq(sys) {
+    const fallback = "接口未提供";
+    if (!sys) {
+      safeSetText(sysMinOsEl, fallback);
+      safeSetText(sysMinCpuEl, fallback);
+      safeSetText(sysMinRamEl, fallback);
+      safeSetText(sysMinGpuEl, fallback);
+      safeSetText(sysMinStorageEl, fallback);
+      return;
+    }
+    safeSetText(sysMinOsEl, sys.os || fallback);
+    safeSetText(sysMinCpuEl, sys.processor || fallback);
+    safeSetText(sysMinRamEl, sys.memory || fallback);
+    safeSetText(sysMinGpuEl, sys.graphics || fallback);
+    safeSetText(sysMinStorageEl, sys.storage || fallback);
+  }
+
   function loadDetail() {
     if (!gameId && !gameName) return;
 
@@ -239,6 +303,7 @@
             "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。"
           );
           if (coverEl) coverEl.style.display = "none";
+          fillSysReq(null);
           return;
         }
 
@@ -297,6 +362,13 @@
         } else if (profileEl) {
           profileEl.style.display = "none";
         }
+
+        // 系统配置（真实 minimum_system_requirements）
+        const sys =
+          game.systemRequirements ||
+          game.minimum_system_requirements ||
+          null;
+        fillSysReq(sys);
       })
       .catch((err) => {
         console.error("加载详情失败：", err);
@@ -304,6 +376,7 @@
           descEl,
           "加载详情失败，请稍后再试（可以检查 ranking.json 是否存在且格式正确）。"
         );
+        fillSysReq(null);
       });
   }
 
@@ -311,3 +384,4 @@
 </script>
 </body>
 </html>
+
