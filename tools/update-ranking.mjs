@@ -1,14 +1,4 @@
 // tools/update-ranking.mjs
-// ------------------------------------------------------------
-// 1. 从 FreeToGame API 获取热门 / 新品列表
-// 2. 对每个游戏调用 FreeToGame /game?id=xxx 拿详细数据
-// 3. 用 Steam Store API 尝试补全系统配置：
-//      - https://store.steampowered.com/api/storesearch
-//      - https://store.steampowered.com/api/appdetails?appids=APP_ID
-// 4. 再读取本地 sysreq-overrides.json 手动覆盖（从任何官网拷来的真实数据）
-// 5. 生成 ranking.json，供前端排行榜 & 详情页使用
-// ------------------------------------------------------------
-
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -113,8 +103,7 @@ async function fetchSteamRequirements(appId) {
     cc: 'us',
     l: 'en',
   });
-  const url = `${STEAM_APPDETAILS_URL}?${params.toString()}`;
-  const json = await fetchJson(url);
+  const json = await fetchJson(`${STEAM_APPDETAILS_URL}?${params.toString()}`);
 
   const entry = json[appId];
   if (!entry?.success || !entry?.data?.pc_requirements) return null;
