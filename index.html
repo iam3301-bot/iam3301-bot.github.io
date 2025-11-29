@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 首页</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- 你的主样式文件 -->
   <link rel="stylesheet" href="index.css" />
 </head>
 <body data-current-page="home">
@@ -43,15 +44,18 @@
     </div>
   </header>
 
+  <!-- 主体 -->
   <main class="main">
     <section>
-      <!-- 顶部简介 -->
+      <!-- 顶部介绍 -->
       <div class="card">
         <div class="page-title">发现好游戏</div>
-        <div class="page-intro">从排行榜和类型开始逛逛，看看最近大家都在玩什么。</div>
+        <div class="page-intro">
+          从热门榜、评分榜和类型开始逛逛，看看最近大家都在玩什么。
+        </div>
       </div>
 
-      <!-- 热门游戏排行榜（可滚动 + 持续加载 + 封面图） -->
+      <!-- 首页热门排行榜卡片 -->
       <article class="card">
         <header class="card-header">
           <div class="card-title">
@@ -66,7 +70,7 @@
           </div>
         </header>
         <div class="card-subtitle">
-            
+          列表支持滚动，当滚动到底部会持续加载更多（数据来自 <code>ranking.json</code>）。
         </div>
         <ol class="ranking-list ranking-list--scroll" id="rankingList"></ol>
         <div id="rankingHint" style="font-size:11px;color:var(--text-soft);margin-top:4px;">
@@ -79,11 +83,11 @@
         <header class="card-header">
           <div class="card-title">
             <span class="dot"></span>
-            <span>按类型浏览游戏</span>
+            <span>按类型快速找游戏</span>
           </div>
         </header>
         <div class="card-subtitle">
-          常见类型 / 标签一键进入对应列表页
+          常见类型 / 标签一键跳转到游戏库页面（带类型参数）。
         </div>
         <div class="category-grid" id="categoryGrid">
           <div class="category-chip is-active" data-category="all">
@@ -122,9 +126,10 @@
       </article>
     </section>
 
+    <!-- 右侧侧栏 -->
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">当前平台热度</div>
+        <div class="sidebar-title">平台热度（示例）</div>
         <div class="sidebar-item">
           <span class="label">Steam</span><span class="value">🔥 87</span>
         </div>
@@ -140,7 +145,7 @@
       </div>
 
       <div class="sidebar-card">
-        <div class="sidebar-title">正在打折</div>
+        <div class="sidebar-title">正在打折（示例）</div>
         <div class="sidebar-item">
           <span class="label">赛博朋克 2077</span><span class="value">-50%</span>
         </div>
@@ -153,14 +158,19 @@
       </div>
     </aside>
   </main>
+
+  <footer class="footer">
+    GameBox 游盒 · 课程结课项目示例 · 首页排行榜从 ranking.json 加载数据
+  </footer>
 </div>
 
+<!-- 通用脚本 -->
 <script src="common.js"></script>
 <script>
-  // 通用初始化
+  // 初始化导航高亮 / 登录状态等
   initCommon();
 
-  // DOM 引用
+  // ====== DOM 元素 ======
   const rankingListEl = document.getElementById("rankingList");
   const rankingTabsEl = document.getElementById("rankingTabs");
   const rankingLoadedEl = document.getElementById("rankingLoaded");
@@ -168,11 +178,12 @@
 
   const PAGE_SIZE = 5;
 
-  // 从 JSON 里读进来的数据放这里
+  // 会从 ranking.json 填充
   let rankingData = { hot: [], score: [], new: [], discount: [] };
   const loadedCount = { hot: 0, score: 0, new: 0, discount: 0 };
   let currentType = "hot";
 
+  // 更新右下角计数
   function updateCounter() {
     const total = (rankingData[currentType] || []).length;
     const loaded = loadedCount[currentType] || 0;
@@ -180,6 +191,7 @@
     rankingTotalEl.textContent = total;
   }
 
+  // 追加一批游戏项
   function appendItems(type) {
     const data = rankingData[type] || [];
     const start = loadedCount[type] || 0;
@@ -189,6 +201,8 @@
 
     for (let i = start; i < end; i++) {
       const item = data[i];
+      const score = Number(item.score) || 0;
+
       const li = document.createElement("li");
       li.className = "ranking-item";
       li.innerHTML = `
@@ -199,14 +213,20 @@
           </div>
           <div class="ranking-info">
             <div class="ranking-name">${item.name}</div>
-            <div class="ranking-meta">${item.platform}</div>
+            <div class="ranking-meta">${item.platform || ""}</div>
           </div>
         </div>
         <div class="ranking-score">
-          <span class="value">${item.score.toFixed(1)}</span>
-          <div><span class="tag">${item.tag}</span></div>
+          <span class="value">${score.toFixed(1)}</span>
+          <div><span class="tag">${item.tag || ""}</span></div>
         </div>
       `;
+      // 示例点击跳转：如果是艾尔登法环就去详情页
+      li.addEventListener("click", () => {
+        if (item.name && item.name.indexOf("艾尔登") !== -1) {
+          window.location.href = "game-detail.html";
+        }
+      });
       rankingListEl.appendChild(li);
     }
 
@@ -214,6 +234,7 @@
     updateCounter();
   }
 
+  // 切换榜单类型
   function resetAndRender(type) {
     currentType = type;
     rankingListEl.innerHTML = "";
@@ -221,7 +242,7 @@
     appendItems(type);
   }
 
-  // 滚动到底部继续加载
+  // 滚动到底再加载
   rankingListEl.addEventListener("scroll", () => {
     const el = rankingListEl;
     if (el.scrollTop + el.clientHeight >= el.scrollHeight - 4) {
@@ -241,24 +262,28 @@
     resetAndRender(type);
   });
 
-  // 🔑 关键：从本仓库的 data/ranking.json 加载数据（GitHub Pages 也支持）
+  // 从当前仓库根目录的 ranking.json 加载数据
   function loadRankingFromJson() {
     fetch("ranking.json")
       .then((res) => res.json())
       .then((data) => {
-        rankingData = data || rankingData;
+        // 兼容：如果某些字段没写也不会报错
+        rankingData.hot = data.hot || [];
+        rankingData.score = data.score || [];
+        rankingData.new = data.new || [];
+        rankingData.discount = data.discount || [];
         resetAndRender("hot");
       })
       .catch((err) => {
-        console.error("加载 ranking.json 失败：", err);
+        console.error("加载 ranking.json 失败:", err);
         rankingListEl.innerHTML =
-          '<li style="font-size:12px;color:var(--text-muted);padding:4px 0;">排行榜数据加载失败，请检查 data/ranking.json 是否存在。</li>';
+          '<li style="font-size:12px;color:var(--text-muted);padding:4px 0;">排行榜数据加载失败，请检查 ranking.json 是否存在且格式正确。</li>';
       });
   }
 
   loadRankingFromJson();
 
-  // 分类点击跳转（保持原来的逻辑）
+  // 类型点击：带参数跳转到游戏库
   document.getElementById("categoryGrid").addEventListener("click", (e) => {
     const chip = e.target.closest(".category-chip");
     if (!chip) return;
@@ -272,6 +297,6 @@
     }
   });
 </script>
-
 </body>
 </html>
+
