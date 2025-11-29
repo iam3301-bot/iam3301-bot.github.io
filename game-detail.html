@@ -8,6 +8,7 @@
 </head>
 <body data-current-page="detail">
 <div class="page">
+  <!-- 顶部导航 -->
   <header class="header">
     <div class="header-inner">
       <a href="index.html" class="logo">
@@ -26,13 +27,14 @@
     </div>
   </header>
 
+  <!-- 主体 -->
   <main class="main main--single">
     <section>
       <article class="card detail-card">
         <!-- 顶部标题 + 返回 -->
         <div class="detail-header-bar">
-          <div>
-            <div class="detail-breadcrumb">游戏详情 / <span id="breadcrumbName">加载中...</span></div>
+          <div class="detail-breadcrumb">
+            游戏详情 / <span id="breadcrumbName">加载中...</span>
           </div>
           <button class="btn-secondary" onclick="history.back()">← 返回上一页</button>
         </div>
@@ -44,12 +46,14 @@
               <img id="gameCover" src="" alt="游戏封面" />
             </div>
           </div>
+
           <div class="detail-hero-right">
             <div class="detail-title-row">
               <div class="detail-title-block">
                 <h1 id="gameTitle" class="detail-title">游戏名称加载中...</h1>
                 <div id="gamePlatform" class="detail-platform">平台信息加载中...</div>
               </div>
+
               <div class="detail-score-card">
                 <div class="detail-score-label">游盒热度评分</div>
                 <div class="detail-score-main">
@@ -78,17 +82,32 @@
             </p>
 
             <div class="detail-links">
-              <a id="gameUrl" href="#" target="_blank" rel="noopener" class="btn-primary">
-                前往游戏官网 / 启动平台
+              <a
+                id="gameUrl"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="detail-btn detail-btn-main"
+              >
+                <span>前往游戏官网 / 启动平台</span>
+                <span class="detail-btn-icon">↗</span>
               </a>
-              <a id="gameProfileUrl" href="#" target="_blank" rel="noopener" class="btn-link">
-                查看 FreeToGame 详情页
+
+              <a
+                id="gameProfileUrl"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="detail-btn detail-btn-ghost"
+              >
+                <span>查看 FreeToGame 详情页</span>
+                <span class="detail-btn-icon">↗</span>
               </a>
             </div>
           </div>
         </div>
 
-        <!-- 下方信息区：用信息块做成“面板”感觉 -->
+        <!-- 下方信息区 -->
         <div class="detail-info-grid">
           <section class="detail-section">
             <h2 class="detail-section-title">基础信息</h2>
@@ -141,7 +160,7 @@
   initCommon();
 
   const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("id");   // 新增：优先用 id
+  const gameId = params.get("id"); // 优先用 id 精确定位
   const gameName = params.get("name");
 
   // 顶部元素
@@ -165,7 +184,7 @@
   const platformMetaEl = document.getElementById("gamePlatformMeta");
   const scoreMetaEl = document.getElementById("gameScoreMeta");
 
-  // 一个小工具：防止元素没找到时报错
+  // 安全设置文本
   function safeSetText(el, text) {
     if (el) el.textContent = text;
   }
@@ -173,10 +192,16 @@
   if (!gameId && !gameName) {
     safeSetText(breadcrumbNameEl, "未指定");
     safeSetText(titleEl, "未指定游戏名称");
-    safeSetText(descEl, "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。");
+    safeSetText(
+      descEl,
+      "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。"
+    );
   } else {
     safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
-    safeSetText(titleEl, "正在加载：" + (gameName || ("ID " + gameId)));
+    safeSetText(
+      titleEl,
+      "正在加载：" + (gameName || ("ID " + gameId))
+    );
   }
 
   // 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
@@ -209,7 +234,10 @@
         if (!game) {
           safeSetText(titleEl, gameName || ("ID " + gameId));
           safeSetText(platformEl, "");
-          safeSetText(descEl, "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。");
+          safeSetText(
+            descEl,
+            "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。"
+          );
           if (coverEl) coverEl.style.display = "none";
           return;
         }
