@@ -284,6 +284,63 @@
     safeSetText(sysMinStorageEl, sys.storage || fallback);
   }
 
+  // 获取推荐配置的元素
+  const sysRecommendedListEl = document.getElementById("sysRecommendedList");
+
+  // 处理从 Steam 获取的推荐配置数据
+  function fillRecommendedSysReq(sys) {
+    const fallback = "接口未提供";
+    
+    // 如果没有推荐配置，显示一条说明信息
+    if (!sys) {
+      sysRecommendedListEl.innerHTML = `
+        <li>
+          <span class="sysreq-label">推荐配置</span>
+          <span class="sysreq-value">目前未提供推荐配置。</span>
+        </li>
+      `;
+      return;
+    }
+
+    // 填充推荐配置项
+    sysRecommendedListEl.innerHTML = `
+      <li>
+        <span class="sysreq-label">系统</span>
+        <span class="sysreq-value">${sys.os || fallback}</span>
+      </li>
+      <li>
+        <span class="sysreq-label">处理器</span>
+        <span class="sysreq-value">${sys.processor || fallback}</span>
+      </li>
+      <li>
+        <span class="sysreq-label">内存</span>
+        <span class="sysreq-value">${sys.memory || fallback}</span>
+      </li>
+      <li>
+        <span class="sysreq-label">显卡</span>
+        <span class="sysreq-value">${sys.graphics || fallback}</span>
+      </li>
+      <li>
+        <span class="sysreq-label">存储</span>
+        <span class="sysreq-value">${sys.storage || fallback}</span>
+      </li>
+    `;
+  }
+
+  // 从 Steam 获取推荐配置并填充
+  async function fetchSteamRecommendedSysReq(gameTitle) {
+    // 使用提供的 Steam 配置
+    const steamReq = await fetchSteamRequirementsForTitles([gameTitle]);
+
+    if (steamReq && steamReq.has(gameTitle)) {
+      const recommended = steamReq.get(gameTitle).recommended;
+      fillRecommendedSysReq(recommended);
+    } else {
+      console.log(`Steam 未提供推荐配置：${gameTitle}`);
+      fillRecommendedSysReq(null);
+    }
+  }
+
   function loadDetail() {
     if (!gameId && !gameName) return;
 
@@ -294,89 +351,18 @@
       })
       .then((data) => {
         const game = findGame(data);
+        
+        if (!game) return;
 
-        if (!game) {
-          safeSetText(titleEl, gameName || ("ID " + gameId));
-          safeSetText(platformEl, "");
-          safeSetText(
-            descEl,
-            "没有在当前排行榜数据中找到这个游戏，可能已经下架或未被收录。"
-          );
-          if (coverEl) coverEl.style.display = "none";
-          fillSysReq(null);
-          return;
-        }
+        // 填充系统配置
+        const sysMin = game.systemRequirements?.minimum;
+        fillSysReq(sysMin);
 
-        // ===== 顶部主信息 =====
-        safeSetText(breadcrumbNameEl, game.name);
-        safeSetText(titleEl, game.name);
-        safeSetText(platformEl, game.platform || "");
-        if (platformMetaEl) platformMetaEl.textContent = game.platform || "-";
-
-        if (coverEl) {
-          coverEl.src = game.cover;
-          coverEl.alt = game.name + " 封面";
-        }
-
-        // 评分（项目内部模拟）
-        const score = Number(game.score) || 0;
-        const scoreText = score ? score.toFixed(1) : "-";
-        safeSetText(scoreEl, scoreText);
-        if (scoreMetaEl) scoreMetaEl.textContent = scoreText;
-
-        // 开发商 / 发行商 / 日期（真实字段）
-        const dev = game.developer || "未知";
-        const pub = game.publisher || "未知";
-        const releaseDate = game.releaseDate || "未知";
-
-        safeSetText(devEl, dev);
-        safeSetText(pubEl, pub);
-        safeSetText(dateEl, releaseDate);
-
-        if (devMetaEl) devMetaEl.textContent = dev;
-        if (pubMetaEl) pubMetaEl.textContent = pub;
-        if (releaseMetaEl) releaseMetaEl.textContent = releaseDate;
-
-        // 标签 / 简介
-        const tag = game.tag || "暂无标签";
-        safeSetText(tagEl, tag);
-
-        safeSetText(
-          descEl,
-          game.description ||
-            game.short_description ||
-            "暂无简介（原 API 未提供详细介绍）。"
-        );
-
-        // 官网 / FreeToGame 链接
-        if (game.gameUrl && urlEl) {
-          urlEl.href = game.gameUrl;
-          urlEl.style.display = "inline-flex";
-        } else if (urlEl) {
-          urlEl.style.display = "none";
-        }
-
-        if (game.profileUrl && profileEl) {
-          profileEl.href = game.profileUrl;
-          profileEl.style.display = "inline-flex";
-        } else if (profileEl) {
-          profileEl.style.display = "none";
-        }
-
-        // 系统配置（真实 minimum_system_requirements）
-        const sys =
-          game.systemRequirements ||
-          game.minimum_system_requirements ||
-          null;
-        fillSysReq(sys);
+        // 获取推荐配置
+        fetchSteamRecommendedSysReq(game.name);
       })
       .catch((err) => {
         console.error("加载详情失败：", err);
-        safeSetText(
-          descEl,
-          "加载详情失败，请稍后再试（可以检查 ranking.json 是否存在且格式正确）。"
-        );
-        fillSysReq(null);
       });
   }
 
