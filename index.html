@@ -243,7 +243,7 @@
 
   // 🔑 关键：从本仓库的 data/ranking.json 加载数据（GitHub Pages 也支持）
   function loadRankingFromJson() {
-    fetch("data/ranking.json")
+    fetch("ranking.json")
       .then((res) => res.json())
       .then((data) => {
         rankingData = data || rankingData;
