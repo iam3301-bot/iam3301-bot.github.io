@@ -1,0 +1,31 @@
+{
+  "hot": [
+    {
+      "name": "艾尔登法环",
+      "platform": "Steam · ACT RPG",
+      "score": 9.4,
+      "tag": "热度第 1",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Elden+Ring"
+    },
+    {
+      "name": "原神",
+      "platform": "PC / 移动 · 开放世界",
+      "score": 8.8,
+      "tag": "在线人数高",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Genshin"
+    }
+    // ... 后面继续写几条就行
+  ],
+  "score": [
+    {
+      "name": "巫师 3：狂猎",
+      "platform": "Steam · RPG",
+      "score": 9.7,
+      "tag": "神作殿堂",
+      "cover": "https://placehold.co/250x140/38bdf8/020617?text=Witcher+3"
+    }
+    // ...
+  ],
+  "new": [],
+  "discount": []
+}
