@@ -215,9 +215,16 @@
       // 点击整行，跳转到详情页，携带 name 参数
       li.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
+
+  // 优先用真实 id 精确定位，防止名字有空格/大小写差异
+        if (item.id != null) {
+          url.searchParams.set("id", item.id);
+        }
         url.searchParams.set("name", item.name);
+        
         window.location.href = url.toString();
       });
+
 
       rankingListEl.appendChild(li);
     }
