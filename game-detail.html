@@ -18,10 +18,11 @@
           <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
         </div>
       </a>
+
       <nav class="nav-main">
-        <a href="index.html" class="nav-link">首页</a>
-        <a href="game-library.html" class="nav-link">游戏库</a>
-        <a href="ranking.html" class="nav-link">排行榜</a>
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜</a>
       </nav>
     </div>
   </header>
@@ -318,21 +319,16 @@ async function fetchSteamRecommendedSysReq(gameTitle) {
 async function searchSteamAppIdByName(gameTitle) {
   if (!gameTitle) return null;
 
-  const params = new URLSearchParams({
-    term: gameTitle,
-    cc: "us",
-    l: "en"
-  });
+  const steamSearchUrl = `https://store.steampowered.com/api/storesearch?term=${encodeURIComponent(gameTitle)}&cc=us&l=en`;
 
-  const url = `https://store.steampowered.com/api/storesearch?${params.toString()}`;
-  const response = await fetch(url);
+  // 请求自己的代理服务器
+  const proxyUrl = "http://localhost:3000/api/steam?term=" + encodeURIComponent(gameTitle);
+  const response = await fetch(proxyUrl);
   const data = await response.json();
 
   if (data && data.items && data.items.length > 0) {
-    const first = data.items[0];
-    return first.id; // 返回 appid
+    return data.items[0].id;  // 返回 appId
   }
-
   return null;
 }
 
