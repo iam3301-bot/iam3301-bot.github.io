@@ -1359,3 +1359,190 @@ header .btn-secondary {
   color: #6b7280;
   margin-top: 16px;
 }
+
+/* 整体页面 */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #1b1e2d;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* 卡片 */
+.detail-card {
+  background-color: #212736;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;  /* 左侧2:右侧1 */
+  gap: 20px;
+}
+
+/* 左侧详情 */
+.detail-hero-left {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detail-cover-large img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.detail-hero-right {
+  padding: 0 10px;
+}
+
+/* 标题和评分 */
+.detail-title-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.detail-title-block h1 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ffd700;
+  margin: 0;
+}
+
+.detail-score-card {
+  background: #333;
+  padding: 10px;
+  border-radius: 6px;
+  width: 120px;
+  text-align: center;
+}
+
+.detail-score-label {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.detail-score-main {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.detail-score-sub {
+  font-size: 12px;
+  color: #888;
+}
+
+/* 标签和基本信息 */
+.detail-tag-row {
+  margin: 20px 0;
+}
+
+.pill {
+  background-color: #333;
+  border-radius: 12px;
+  padding: 5px 12px;
+  margin: 5px;
+  font-size: 14px;
+  color: #bbb;
+  display: inline-block;
+}
+
+.pill-soft {
+  background-color: #444;
+}
+
+.detail-links a {
+  background-color: #3498db;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.detail-links a:hover {
+  background-color: #2980b9;
+}
+
+/* 基础信息 */
+.detail-info-grid {
+  display: flex;
+  gap: 30px;
+}
+
+.detail-section {
+  background-color: #2c3e50;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.detail-section-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 15px;
+}
+
+.detail-meta-list {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.detail-meta-row {
+  margin-bottom: 10px;
+}
+
+.detail-meta-label {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.detail-meta-value {
+  color: #fff;
+  margin-left: 10px;
+}
+
+/* 系统配置 */
+.sysreq-grid {
+  display: flex;
+  gap: 40px;
+}
+
+.sysreq-column {
+  width: 50%;
+}
+
+.sysreq-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+
+.sysreq-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sysreq-list li {
+  margin-bottom: 10px;
+}
+
+.sysreq-label {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.sysreq-list span {
+  margin-left: 10px;
+  color: #fff;
+}
