@@ -75,6 +75,7 @@
               <option value="indie">独立 / Indie</option>
               <option value="multiplayer">多人联机</option>
               <option value="casual">休闲 / 轻度</option>
+              <option value="card">卡牌</option>
             </select>
           </div>
 
@@ -135,77 +136,338 @@
 
   const gameData = [
     {
-      id: "elden-ring",
-      name: "艾尔登法环",
-      type: "rpg",
-      platforms: ["steam", "pc"],
-      price: 298,
-      rating: 9.4,
-      tags: ["魂类", "开放世界", "单机"],
-    },
-    {
-      id: "genshin",
-      name: "原神",
-      type: "rpg",
-      platforms: ["pc", "mobile", "ps"],
-      price: 0,
-      rating: 8.8,
-      tags: ["开放世界", "联机", "免费"],
-    },
-    {
-      id: "hollow-knight",
-      name: "空洞骑士",
-      type: "indie",
-      platforms: ["steam", "switch", "pc"],
-      price: 48,
-      rating: 9.6,
-      tags: ["独立", "类银河战士恶魔城"],
-    },
-    {
-      id: "cp2077",
-      name: "赛博朋克 2077",
-      type: "rpg",
-      platforms: ["steam", "ps"],
-      price: 298,
-      rating: 8.7,
-      tags: ["科幻", "单机", "开放世界"],
-    },
-    {
-      id: "mh-rise",
-      name: "怪物猎人：崛起",
-      type: "action",
-      platforms: ["switch", "pc"],
-      price: 268,
-      rating: 8.5,
-      tags: ["动作", "狩猎", "联机"],
-    },
-    {
-      id: "stardew",
-      name: "星露谷物语",
-      type: "casual",
-      platforms: ["steam", "switch", "mobile"],
-      price: 36,
-      rating: 9.3,
-      tags: ["独立", "休闲", "农场"],
-    },
-    {
-      id: "lol",
-      name: "英雄联盟",
-      type: "multiplayer",
-      platforms: ["pc"],
-      price: 0,
-      rating: 8.3,
-      tags: ["MOBA", "联机", "免费"],
-    },
-    {
-      id: "slay-the-spire",
-      name: "杀戮尖塔",
-      type: "strategy",
-      platforms: ["steam", "switch", "mobile"],
-      price: 80,
-      rating: 9.0,
-      tags: ["卡牌", "Roguelike", "独立"],
-    },
+    id: "elden-ring",
+    name: "艾尔登法环",
+    platforms: ["steam", "ps"],
+    type: "rpg",
+    tags: ["魂类", "开放世界"],
+    price: 298,
+    rating: 9.4
+  },
+  {
+    id: "genshin",
+    name: "原神",
+    platforms: ["pc", "mobile", "ps"],
+    type: "rpg",
+    tags: ["开放世界", "抽卡"],
+    price: 0,
+    rating: 10
+  },
+  {
+    id: "cs2",
+    name: "CS2",
+    platforms: ["steam"],
+    type: "multiplayer",
+    tags: ["FPS", "竞技"],
+    price: 0,
+    rating: 8.6
+  },
+  {
+    id: "mh-world",
+    name: "怪物猎人：世界",
+    platforms: ["steam", "ps"],
+    type: "action",
+    tags: ["刷刷刷", "合作"],
+    price: 248,
+    rating: 8.5
+  },
+  {
+    id: "hollow-knight",
+    name: "空洞骑士",
+    platforms: ["steam", "switch"],
+    type: "indie",
+    tags: ["类银河战士恶魔城", "硬核"],
+    price: 48,
+    rating: 9.6
+  },
+  {
+    id: "cp2077",
+    name: "赛博朋克 2077",
+    platforms: ["steam", "ps"],
+    type: "rpg",
+    tags: ["开放世界", "科幻"],
+    price: 298,
+    rating: 8.7
+  },
+  {
+    id: "mh-rise",
+    name: "怪物猎人：崛起",
+    platforms: ["steam", "switch"],
+    type: "action",
+    tags: ["刷刷刷", "合作"],
+    price: 268,
+    rating: 8.5
+  },
+  {
+    id: "fake-strategy",
+    name: "虚构策略：银河棋局",
+    platforms: ["pc"],
+    type: "strategy",
+    tags: ["SLG", "回合制"],
+    price: 88,
+    rating: 8.2
+  },
+  {
+    id: "fake-casual",
+    name: "下班之后：小镇时光",
+    platforms: ["mobile"],
+    type: "casual",
+    tags: ["休闲", "模拟经营"],
+    price: 0,
+    rating: 7.9
+  },
+  {
+    id: "stardew-valley",
+    name: "星露谷物语",
+    platforms: ["steam", "switch"],
+    type: "indie",
+    tags:["休闲", "模拟经营"],
+    price: 48,
+    rating: 9.8
+  },
+  {
+    id: "cuphead",
+    name: "茶杯头",
+    platforms: ["steam", "switch"],
+    type: "indie",
+    tags: ["魂类"],
+    price: 68,
+    rating: 9.7
+  },
+  {
+    id: "ygo-md",
+    name: "游戏王：大师决斗",
+    platforms: ["steam", "switch"],
+    type: "card game",
+    tags: ["卡牌", "策略"],
+    price: 0,
+    rating: 8.4
+  },
+  {
+    id: "warframe",
+    name: "星际战甲",
+    platforms: ["steam"],
+    type: "action",
+    tags: ["第三人称射击", "跑酷", "科幻", "刷刷刷"],
+    price: 0,
+    rating: 9.0
+  },
+  {
+    id: "dota-2",
+    name: "DOTA2",
+    platforms: ["steam"],
+    type: "strategy",
+    tags: ["策略", "多人联机"],
+    price: 0,
+    rating: 8.9
+  },
+  {
+    id: "fortnite",
+    name: "堡垒之夜",
+    platforms: ["ps", "switch"],
+    type: "shooter",
+    tags: ["吃鸡", "建造", "多人联机"],
+    price: 0,
+    rating: 8.1
+  },
+  {
+    id: "fall-guys",
+    name: "糖豆人",
+    platforms: ["steam", "ps", "switch"],
+    type: "party",
+    tags: ["休闲", "竞技", "多人乱斗"],
+    price: 0,
+    rating: 7.9
+  },
+  {
+    id: "team-fortress-2",
+    name: "绝地要塞2",
+    platforms: ["steam"],
+    type: "shooter",
+    tags: ["团队战", "FPS", "经典"],
+    price: 0,
+    rating: 8.8
+  },
+  {
+    id: "rocket-league",
+    name: "火箭联盟",
+    platforms: ["steam", "ps", "switch"],
+    type: "sports",
+    tags: ["多人联机", "竞技", "足球 + 赛车"],
+    price: 0,
+    rating: 8.7
+  },
+  {
+    id: "destiny-2",
+    name: "命运2",
+    platforms: ["steam", "ps"],
+    type: "shooter",
+    tags: ["FPS", "科幻", "合作"],
+    price: 0,
+    rating: 8.2
+  },
+  {
+    id: "paladins",
+    name: "枪火游侠",
+    platforms: ["steam", "ps", "switch"],
+    type: "shooter",
+    tags: ["英雄射击", "多人联机"],
+    price: 0,
+    rating: 7.8
+  },
+  {
+    id: "brawlhalla",
+    name: "乱斗英雄",
+    platforms: ["steam", "ps", "switch"],
+    type: "fighting",
+    tags: ["格斗", "多人对战", "休闲"],
+    price: 0,
+    rating: 8.3
+  },
+  {
+    id: "war-thunder",
+    name: "战争雷霆",
+    platforms: ["steam", "ps"],
+    type: "simulation",
+    tags: ["载具战斗", "军事", "多人联机"],
+    price: 0,
+    rating: 8.1
+  },
+  {
+    id: "path-of-exile",
+    name: "流放之路",
+    platforms: ["steam", "ps"],
+    type: "arpg",
+    tags: ["刷刷刷", "暗黑风", "深度养成"],
+    price: 0,
+    rating: 8.9
+  },
+  {
+    id: "pokemon-unite",
+    name: "宝可梦大集结",
+    platforms: ["switch"],
+    type: "moba",
+    tags: ["MOBA", "宝可梦", "团队竞技"],
+    price: 0,
+    rating: 8.0
+  },
+  {
+    id: "god-of-war",
+    name: "战神4",
+    platforms: ["steam", "ps"],
+    type: "action",
+    tags: ["剧情", "动作", "北欧神话"],
+    price: 39.99,
+    rating: 9.6
+  },
+  {
+    id: "zelda-totk",
+    name: "塞尔达传说：王国之泪",
+    platforms: ["switch"],
+    type: "adventure",
+    tags: ["开放世界", "解谜", "探索"],
+    price: 69.99,
+    rating: 9.8
+  },
+  {
+    id: "red-dead-redemption-2",
+    name: "荒野大镖客2",
+    platforms: ["steam", "ps"],
+    type: "action",
+    tags: ["开放世界", "西部", "剧情"],
+    price: 59.99,
+    rating: 9.7
+  },
+  {
+    id: "hades",
+    name: "黑帝斯",
+    platforms: ["steam", "switch", "ps"],
+    type: "roguelike",
+    tags: ["肉鸽", "动作", "独立游戏"],
+    price: 24.99,
+    rating: 9.0
+  },
+  {
+    id: "apex-legends",
+    name: "Apex Legends",
+    platforms: ["steam", "ps", "switch"],
+    type: "shooter",
+    tags: ["吃鸡", "多人联机", "FPS"],
+    price: 0,
+    rating: 8.6
+  },
+  {
+    id: "lol",
+    name: "英雄联盟",
+    platforms: ["pc"],
+    type: "multiplayer",
+    tags: ["MOBA", "联机", "免费"],
+    price: 0,
+    rating: 8.3
+  },
+  {
+    id: "slay-the-spire",
+    name: "杀戮尖塔",
+    platforms: ["steam", "switch", "mobile"],
+    type: "strategy",
+    tags: ["卡牌", "Roguelike", "独立"],
+    price: 80,
+    rating: 9.0
+  },
+  {
+    id: "lolm",
+    name: "英雄联盟手游",
+    platforms: ["mobile"],
+    type: "multiplayer",
+    tags: ["MOBA", "联机", "免费"],
+    price: 0,
+    rating: 8.3
+  },
+   {
+    id: "honor-king",
+    name: "王者荣耀",
+    platforms: ["mobile"],
+    type: "multiplayer",
+    tags: ["MOBA", "联机", "免费"],
+    price: 0,
+    rating: 5.9
+  },
+  {
+    id: "snap",
+    name: "漫威终极逆转",
+    platforms: ["steam", "mobile","pc"],
+    type: "card game",
+    tags: ["卡牌", "策略"],
+    price: 0,
+    rating: 7.6
+  },
+   {
+    id: "Arknights",
+    name: "明日方舟",
+    platforms: ["mobile"],
+    type: "card game",
+    tags: ["卡牌", "策略"],
+    price: 0,
+    rating: 9.0
+  },
+  {
+    id: "beng",
+    name: "崩坏三",
+    platforms: ["mobile","pc"],
+    type: "action",
+    tags: ["动作"],
+    price: 0,
+    rating: 8.0
+  },
+   {
+    id: "mc",
+    name: "我的世界",
+    platforms: ["mobile","pc"],
+    type: "rpg",
+    tags: ["角色扮演"],
+    price: 0,
+    rating: 8.0
+  },
   ];
 
   const libSearch = document.getElementById("libSearch");
@@ -214,7 +476,11 @@
   const libPlatforms = document.getElementById("libPlatforms");
   const libList = document.getElementById("libList");
   const libResultCount = document.getElementById("libResultCount");
-
+  
+  gameData.forEach(g => {
+  g.cover = `../images/covers/${g.id}.jpg`;
+});
+  
   function getSelectedPlatforms() {
     return Array.from(libPlatforms.querySelectorAll("input[type=checkbox]:checked")).map(
       (el) => el.value
@@ -265,7 +531,7 @@
       const div = document.createElement("div");
       div.className = "game-card";
       div.innerHTML = `
-        <div class="game-cover"></div>
+        <div class="game-cover" style="background-image: url('${g.cover}')"></div>
         <div class="game-info">
           <div class="game-name">${g.name}</div>
           <div class="game-meta">
