@@ -72,7 +72,7 @@
           列表支持滚动，当滚动到底部会持续加载更多（数据来自 <code>ranking.json</code>）。
         </div>
         <ol class="ranking-list ranking-list--scroll" id="rankingList"></ol>
-        <div id="rankingHint" style="font-size:11px;color:var(--text-soft);margin-top:4px;">
+        <div id="rankingHint" class="ranking-hint">
           已加载 <span id="rankingLoaded">0</span> / <span id="rankingTotal">0</span> 款
         </div>
       </article>
@@ -159,13 +159,11 @@
   </main>
 </div>
 
-<!-- 通用脚本 -->
 <script src="common.js"></script>
 <script>
-  // 初始化导航高亮 / 登录状态等
+  // 初始化通用逻辑（导航高亮等）
   initCommon();
 
-  // ====== DOM 元素 ======
   const rankingListEl = document.getElementById("rankingList");
   const rankingTabsEl = document.getElementById("rankingTabs");
   const rankingLoadedEl = document.getElementById("rankingLoaded");
@@ -173,12 +171,10 @@
 
   const PAGE_SIZE = 5;
 
-  // 会从 ranking.json 填充
   let rankingData = { hot: [], score: [], new: [], discount: [] };
   const loadedCount = { hot: 0, score: 0, new: 0, discount: 0 };
   let currentType = "hot";
 
-  // 更新右下角计数
   function updateCounter() {
     const total = (rankingData[currentType] || []).length;
     const loaded = loadedCount[currentType] || 0;
@@ -186,7 +182,6 @@
     rankingTotalEl.textContent = total;
   }
 
-  // 追加一批游戏项
   function appendItems(type) {
     const data = rankingData[type] || [];
     const start = loadedCount[type] || 0;
@@ -216,12 +211,14 @@
           <div><span class="tag">${item.tag || ""}</span></div>
         </div>
       `;
-      // 示例点击跳转：如果是艾尔登法环就去详情页
+
+      // 点击整行，跳转到详情页，携带 name 参数
       li.addEventListener("click", () => {
-        if (item.name && item.name.indexOf("艾尔登") !== -1) {
-          window.location.href = "game-detail.html";
-        }
+        const url = new URL("game-detail.html", window.location.href);
+        url.searchParams.set("name", item.name);
+        window.location.href = url.toString();
       });
+
       rankingListEl.appendChild(li);
     }
 
@@ -229,7 +226,6 @@
     updateCounter();
   }
 
-  // 切换榜单类型
   function resetAndRender(type) {
     currentType = type;
     rankingListEl.innerHTML = "";
@@ -257,12 +253,14 @@
     resetAndRender(type);
   });
 
-  // 从当前仓库根目录的 ranking.json 加载数据
+  // 从 ranking.json 加载数据（GitHub Actions 会定时更新这个文件）
   function loadRankingFromJson() {
     fetch("ranking.json")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
+        return res.json();
+      })
       .then((data) => {
-        // 兼容：如果某些字段没写也不会报错
         rankingData.hot = data.hot || [];
         rankingData.score = data.score || [];
         rankingData.new = data.new || [];
@@ -272,13 +270,13 @@
       .catch((err) => {
         console.error("加载 ranking.json 失败:", err);
         rankingListEl.innerHTML =
-          '<li style="font-size:12px;color:var(--text-muted);padding:4px 0;">排行榜数据加载失败，请检查 ranking.json 是否存在且格式正确。</li>';
+          '<li class="ranking-error">排行榜数据加载失败，请检查 ranking.json 是否存在且格式正确。</li>';
       });
   }
 
   loadRankingFromJson();
 
-  // 类型点击：带参数跳转到游戏库
+  // 类型点击：带参数跳转到游戏库（你可以以后在 game-library.html 里读 URL 参数）
   document.getElementById("categoryGrid").addEventListener("click", (e) => {
     const chip = e.target.closest(".category-chip");
     if (!chip) return;
