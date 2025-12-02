@@ -2402,10 +2402,8 @@ mark {
 
 .detail-info-grid {
   margin-top: 20px;
-  display: grid;
-  grid-template-columns: minmax(220px, 0.25fr) minmax(600px, 1.75fr);
-  gap: 32px;
-  align-items: start;
+  display: block;
+  width: 100%;
 }
 
 .detail-section {
