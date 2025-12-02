@@ -173,6 +173,7 @@
 </div>
 
 <script src="common.js"></script>
+<script src="steam-api.js"></script>
 <script>
 // 初始化通用逻辑（导航高亮）
 initCommon();
@@ -257,146 +258,82 @@ function fillMinSysReq(sys) {
     return;
   }
 
-  sysMinListEl.innerHTML = `
-    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
-    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
-    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
-    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
-    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
-  `;
+  // 使用 textContent 而不是 innerHTML 来防止 XSS
+  const createListItem = (label, value) => {
+    const li = document.createElement('li');
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'sysreq-label';
+    labelSpan.textContent = label;
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'sysreq-value';
+    valueSpan.textContent = value || fallback;
+    li.appendChild(labelSpan);
+    li.appendChild(valueSpan);
+    return li;
+  };
+
+  sysMinListEl.innerHTML = '';
+  sysMinListEl.appendChild(createListItem('系统', sys.os));
+  sysMinListEl.appendChild(createListItem('处理器', sys.processor));
+  sysMinListEl.appendChild(createListItem('内存', sys.memory));
+  sysMinListEl.appendChild(createListItem('显卡', sys.graphics));
+  sysMinListEl.appendChild(createListItem('存储', sys.storage));
 }
 
 // 填充推荐配置的函数
 function fillRecommendedSysReq(sys) {
-  const fallback = "接口未提供";
+  const fallback = "暂无推荐配置";
 
   if (!sys) {
     sysRecommendedListEl.innerHTML = `
-      <li><span class="sysreq-label">系统</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">内存</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">存储</span><span class="sysreq-value">${fallback}</span></li>
+      <li style="text-align: center; padding: 20px; color: var(--text-soft);">
+        <span>${fallback}</span><br>
+        <span style="font-size: 11px; opacity: 0.8;">推荐配置需要从 Steam 获取，可能无法获取到数据</span>
+      </li>
     `;
     return;
   }
 
-  sysRecommendedListEl.innerHTML = `
-    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
-    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
-    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
-    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
-    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
-  `;
+  // 使用 textContent 而不是 innerHTML 来防止 XSS
+  const createListItem = (label, value) => {
+    const li = document.createElement('li');
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'sysreq-label';
+    labelSpan.textContent = label;
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'sysreq-value';
+    valueSpan.textContent = value || fallback;
+    li.appendChild(labelSpan);
+    li.appendChild(valueSpan);
+    return li;
+  };
+
+  sysRecommendedListEl.innerHTML = '';
+  sysRecommendedListEl.appendChild(createListItem('系统', sys.os));
+  sysRecommendedListEl.appendChild(createListItem('处理器', sys.processor));
+  sysRecommendedListEl.appendChild(createListItem('内存', sys.memory));
+  sysRecommendedListEl.appendChild(createListItem('显卡', sys.graphics));
+  sysRecommendedListEl.appendChild(createListItem('存储', sys.storage));
 }
 
-// 解析 Steam HTML 格式的系统配置
-function parseSteamRequirements(htmlString) {
-  if (!htmlString || typeof htmlString !== 'string') return null;
-  
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, 'text/html');
-  const text = doc.body.textContent || '';
-  
-  const result = {};
-  
-  // 提取操作系统
-  const osMatch = text.match(/OS[:\s]*([^\n]+)/i);
-  if (osMatch) result.os = osMatch[1].trim();
-  
-  // 提取处理器
-  const procMatch = text.match(/Processor[:\s]*([^\n]+)/i);
-  if (procMatch) result.processor = procMatch[1].trim();
-  
-  // 提取内存
-  const memMatch = text.match(/Memory[:\s]*([^\n]+)/i);
-  if (memMatch) result.memory = memMatch[1].trim();
-  
-  // 提取显卡
-  const gpuMatch = text.match(/Graphics[:\s]*([^\n]+)/i);
-  if (gpuMatch) result.graphics = gpuMatch[1].trim();
-  
-  // 提取存储
-  const storMatch = text.match(/Storage[:\s]*([^\n]+)/i);
-  if (storMatch) result.storage = storMatch[1].trim();
-  
-  return Object.keys(result).length > 0 ? result : null;
-}
-
-// 获取 Steam 推荐配置并填充
+// 获取 Steam 推荐配置并填充（使用新的 steamAPI 工具类）
 async function fetchSteamRecommendedSysReq(gameTitle) {
   try {
-    const appId = await searchSteamAppIdByName(gameTitle);
+    console.log(`正在获取 ${gameTitle} 的推荐配置...`);
     
-    if (!appId) {
-      console.log(`Steam 未找到游戏：${gameTitle}`);
-      fillRecommendedSysReq(null);
-      return;
-    }
+    // 使用全局 steamAPI 实例（已从 steam-api.js 加载）
+    const requirements = await window.steamAPI.getRecommendedRequirements(gameTitle);
     
-    const pcReq = await fetchSteamRequirements(appId);
-    
-    if (pcReq && pcReq.recommended) {
-      const parsed = parseSteamRequirements(pcReq.recommended);
-      fillRecommendedSysReq(parsed);
+    if (requirements) {
+      console.log(`✅ 成功获取 ${gameTitle} 的推荐配置`);
+      fillRecommendedSysReq(requirements);
     } else {
-      console.log(`Steam 未提供推荐配置：${gameTitle}`);
+      console.log(`ℹ️ ${gameTitle} 无推荐配置数据`);
       fillRecommendedSysReq(null);
     }
   } catch (err) {
-    console.error("从 Steam 获取推荐配置时出错：", err);
+    console.error(`❌ 从 Steam 获取推荐配置时出错:`, err);
     fillRecommendedSysReq(null);
-  }
-}
-
-// 获取 Steam 推荐配置的标题
-async function searchSteamAppIdByName(gameTitle) {
-  if (!gameTitle) return null;
-
-  try {
-    // 请求自己的代理服务器
-    const proxyUrl = "http://localhost:3000/api/steam?term=" + encodeURIComponent(gameTitle);
-    const response = await fetch(proxyUrl);
-    
-    if (!response.ok) {
-      console.warn(`Steam 搜索失败: ${response.status}`);
-      return null;
-    }
-    
-    const data = await response.json();
-
-    if (data && data.items && data.items.length > 0) {
-      return data.items[0].id;  // 返回 appId
-    }
-    return null;
-  } catch (err) {
-    console.warn(`Steam 搜索异常: ${err.message}`);
-    return null;
-  }
-}
-
-// 获取 Steam 配置
-async function fetchSteamRequirements(appId) {
-  if (!appId) return null;
-  
-  try {
-    const proxyUrl = `http://localhost:3000/api/steam/appdetails?appid=${appId}`;
-    const response = await fetch(proxyUrl);
-    
-    if (!response.ok) {
-      console.warn(`Steam 详情获取失败: ${response.status}`);
-      return null;
-    }
-    
-    const data = await response.json();
-    
-    if (data && data[appId] && data[appId].success && data[appId].data) {
-      return data[appId].data.pc_requirements;
-    }
-    return null;
-  } catch (err) {
-    console.warn(`Steam 详情异常: ${err.message}`);
-    return null;
   }
 }
 
@@ -423,46 +360,57 @@ function loadDetail() {
         return;
       }
 
-      // 填充基本信息
+      // 填充基本信息 - 兼容不同的字段名
       safeSetText(breadcrumbNameEl, game.name);
       safeSetText(titleEl, game.name);
       safeSetText(platformEl, game.platform || "PC");
       safeSetText(devEl, game.developer || "未知");
       safeSetText(pubEl, game.publisher || "未知");
-      safeSetText(dateEl, game.release_date || "未知");
-      safeSetText(tagEl, game.genre || "游戏");
-      safeSetText(descEl, game.short_description || "暂无游戏简介");
+      safeSetText(dateEl, game.releaseDate || game.release_date || "未知");
+      safeSetText(tagEl, game.tag || game.genre || "游戏");
+      safeSetText(descEl, game.description || game.short_description || "暂无游戏简介");
       
-      // 填充元信息区域
+      // 填充元信息区域 - 兼容不同的字段名
       safeSetText(devMetaEl, game.developer || "未知");
       safeSetText(pubMetaEl, game.publisher || "未知");
-      safeSetText(releaseMetaEl, game.release_date || "未知");
-      safeSetText(platformMetaEl, `${game.platform || "PC"} / ${game.genre || "未分类"}`);
+      safeSetText(releaseMetaEl, game.releaseDate || game.release_date || "未知");
+      
+      // 解析 platform 字段，可能包含类型信息（如 "Windows · Shooter"）
+      const platformParts = (game.platform || "PC").split('·').map(p => p.trim());
+      const platformName = platformParts[0] || "PC";
+      const genreFromPlatform = platformParts[1] || game.genre || "未分类";
+      safeSetText(platformMetaEl, `${platformName} / ${genreFromPlatform}`);
       
       // 评分
       const score = Number(game.score) || 0;
       safeSetText(scoreEl, score.toFixed(1));
       safeSetText(scoreMetaEl, score.toFixed(1));
       
-      // 封面图
-      if (game.thumbnail) {
-        coverEl.src = game.thumbnail;
+      // 封面图 - 兼容 cover 和 thumbnail
+      const coverUrl = game.cover || game.thumbnail;
+      if (coverUrl) {
+        coverEl.src = coverUrl;
         coverEl.alt = game.name + " 封面";
+        // 添加图片错误处理
+        handleImageError(coverEl);
       }
       
-      // 外链
-      if (game.game_url) {
-        urlEl.href = game.game_url;
+      // 外链 - 兼容不同的字段名
+      const gameUrl = game.gameUrl || game.game_url;
+      const profileUrl = game.profileUrl || game.freetogame_profile_url;
+      
+      if (gameUrl) {
+        urlEl.href = gameUrl;
       }
-      if (game.freetogame_profile_url) {
-        profileEl.href = game.freetogame_profile_url;
+      if (profileUrl) {
+        profileEl.href = profileUrl;
       }
 
-      // 填充最低配置
-      const sysMin = game.minimum_system_requirements;
+      // 填充最低配置（使用 ranking.json 中的 systemRequirements）
+      const sysMin = game.systemRequirements || game.minimum_system_requirements;
       fillMinSysReq(sysMin);
 
-      // 获取推荐配置（异步）
+      // 尝试获取 Steam 推荐配置（可选，可能失败）
       fetchSteamRecommendedSysReq(game.name);
     })
     .catch((err) => {
