@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="cyberpunk-styles.css" />
 </head>
 <body data-current-page="library" class="cyberpunk-theme">
 <div class="page">
@@ -125,7 +126,7 @@
           </div>
           <div class="chip" id="libResultCount">共 0 款</div>
         </header>
-        <div id="libList" class="game-list"></div>
+        <div id="libList" class="game-list ranking-list--scroll" style="max-height: 800px; overflow-y: auto;"></div>
       </div>
     </section>
 
@@ -248,22 +249,29 @@
   }
 
   // 加载更多游戏
-  function loadMoreGames() {
+  async function loadMoreGames() {
     const start = currentPage * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     const pageGames = filteredGames.slice(start, end);
 
     if (pageGames.length === 0) return;
 
-    pageGames.forEach(game => {
+    // 使用游戏自带的thumbnail封面（已包含真实Steam封面）
+    pageGames.forEach((game, index) => {
       const card = document.createElement("div");
       card.className = "game-card";
       card.style.cursor = "pointer";
 
-      // 生成封面
-      const coverHtml = game.thumbnail 
-        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
-        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+      // 使用游戏封面（真实Steam封面或SVG后备封面）
+      let coverHtml;
+      if (game.thumbnail) {
+        coverHtml = `<img src="${game.thumbnail}" alt="${game.name}" 
+          style="width: 100%; height: 100%; object-fit: cover;" 
+          onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`;
+      } else {
+        // 默认封面
+        coverHtml = '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+      }
 
       const priceText = game.price === 0 ? '<span style="color: var(--success);">免费</span>' : `¥${game.price}`;
       const ratingColor = game.rating >= 9 ? 'var(--success)' : game.rating >= 8 ? 'var(--accent)' : 'var(--text)';
