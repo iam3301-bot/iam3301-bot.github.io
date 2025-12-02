@@ -109,7 +109,7 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="enhanced-game-api.js"></script>
+<script src="mega-game-database.js"></script>
 <script src="news-api.js"></script>
 <script>
   initCommon();
@@ -149,7 +149,7 @@
 
       // 并行加载所有数据
       const [games, news] = await Promise.all([
-        window.enhancedGameAPI.getAllGames(),
+        window.megaGameDB.getAllGames(),
         window.newsAPI.getAllNews()
       ]);
 

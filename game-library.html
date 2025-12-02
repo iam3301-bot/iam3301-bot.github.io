@@ -155,7 +155,7 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="enhanced-game-api.js"></script>
+<script src="mega-game-database.js"></script>
 <script>
   initCommon();
 
@@ -178,7 +178,7 @@
     try {
       libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载游戏数据...</div>';
       
-      allGamesData = await window.enhancedGameAPI.getAllGames();
+      allGamesData = await window.megaGameDB.getAllGames();
       isDataLoaded = true;
       
       console.log(`✅ 成功加载 ${allGamesData.length} 款游戏`);
