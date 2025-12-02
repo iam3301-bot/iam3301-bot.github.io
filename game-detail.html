@@ -258,37 +258,62 @@ function fillMinSysReq(sys) {
     return;
   }
 
-  sysMinListEl.innerHTML = `
-    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
-    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
-    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
-    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
-    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
-  `;
+  // 使用 textContent 而不是 innerHTML 来防止 XSS
+  const createListItem = (label, value) => {
+    const li = document.createElement('li');
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'sysreq-label';
+    labelSpan.textContent = label;
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'sysreq-value';
+    valueSpan.textContent = value || fallback;
+    li.appendChild(labelSpan);
+    li.appendChild(valueSpan);
+    return li;
+  };
+
+  sysMinListEl.innerHTML = '';
+  sysMinListEl.appendChild(createListItem('系统', sys.os));
+  sysMinListEl.appendChild(createListItem('处理器', sys.processor));
+  sysMinListEl.appendChild(createListItem('内存', sys.memory));
+  sysMinListEl.appendChild(createListItem('显卡', sys.graphics));
+  sysMinListEl.appendChild(createListItem('存储', sys.storage));
 }
 
 // 填充推荐配置的函数
 function fillRecommendedSysReq(sys) {
-  const fallback = "接口未提供";
+  const fallback = "暂无推荐配置";
 
   if (!sys) {
     sysRecommendedListEl.innerHTML = `
-      <li><span class="sysreq-label">系统</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">内存</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">存储</span><span class="sysreq-value">${fallback}</span></li>
+      <li style="text-align: center; padding: 20px; color: var(--text-soft);">
+        <span>${fallback}</span><br>
+        <span style="font-size: 11px; opacity: 0.8;">推荐配置需要从 Steam 获取，可能无法获取到数据</span>
+      </li>
     `;
     return;
   }
 
-  sysRecommendedListEl.innerHTML = `
-    <li><span class="sysreq-label">系统</span><span class="sysreq-value">${sys.os || fallback}</span></li>
-    <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${sys.processor || fallback}</span></li>
-    <li><span class="sysreq-label">内存</span><span class="sysreq-value">${sys.memory || fallback}</span></li>
-    <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${sys.graphics || fallback}</span></li>
-    <li><span class="sysreq-label">存储</span><span class="sysreq-value">${sys.storage || fallback}</span></li>
-  `;
+  // 使用 textContent 而不是 innerHTML 来防止 XSS
+  const createListItem = (label, value) => {
+    const li = document.createElement('li');
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'sysreq-label';
+    labelSpan.textContent = label;
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'sysreq-value';
+    valueSpan.textContent = value || fallback;
+    li.appendChild(labelSpan);
+    li.appendChild(valueSpan);
+    return li;
+  };
+
+  sysRecommendedListEl.innerHTML = '';
+  sysRecommendedListEl.appendChild(createListItem('系统', sys.os));
+  sysRecommendedListEl.appendChild(createListItem('处理器', sys.processor));
+  sysRecommendedListEl.appendChild(createListItem('内存', sys.memory));
+  sysRecommendedListEl.appendChild(createListItem('显卡', sys.graphics));
+  sysRecommendedListEl.appendChild(createListItem('存储', sys.storage));
 }
 
 // 获取 Steam 推荐配置并填充（使用新的 steamAPI 工具类）
@@ -370,11 +395,11 @@ function loadDetail() {
         profileEl.href = game.freetogame_profile_url;
       }
 
-      // 填充最低配置
-      const sysMin = game.minimum_system_requirements;
+      // 填充最低配置（使用 ranking.json 中的 systemRequirements）
+      const sysMin = game.systemRequirements || game.minimum_system_requirements;
       fillMinSysReq(sysMin);
 
-      // 获取推荐配置（异步）
+      // 尝试获取 Steam 推荐配置（可选，可能失败）
       fetchSteamRecommendedSysReq(game.name);
     })
     .catch((err) => {

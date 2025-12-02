@@ -18,18 +18,25 @@ class SteamAPI {
         priority: 1
       },
       {
-        name: 'Public CORS Proxy 1',
-        baseUrl: 'https://api.allorigins.win/raw?url=',
+        name: 'CORS Anywhere (Heroku)',
+        baseUrl: 'https://cors-anywhere.herokuapp.com/',
         enabled: true,
         priority: 2,
-        urlWrapper: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+        urlWrapper: (url) => `https://cors-anywhere.herokuapp.com/${url}`
       },
       {
-        name: 'Public CORS Proxy 2',
-        baseUrl: 'https://corsproxy.io/?',
+        name: 'ThingProxy',
+        baseUrl: 'https://thingproxy.freeboard.io/fetch/',
         enabled: true,
         priority: 3,
-        urlWrapper: (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`
+        urlWrapper: (url) => `https://thingproxy.freeboard.io/fetch/${url}`
+      },
+      {
+        name: 'AllOrigins',
+        baseUrl: 'https://api.allorigins.win/raw?url=',
+        enabled: true,
+        priority: 4,
+        urlWrapper: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
       },
       {
         name: 'Direct Steam API',
