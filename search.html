@@ -106,9 +106,10 @@
   </main>
 </div>
 
+
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="game-api.js"></script>
+<script src="enhanced-game-api.js"></script>
 <script src="news-api.js"></script>
 <script>
   initCommon();
@@ -142,24 +143,25 @@
   // 加载所有数据
   async function loadAllData() {
     try {
-      // 显示加载中
       searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🎮 加载中...</div>';
       searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">📰 加载中...</div>';
       searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">💬 加载中...</div>';
 
       // 并行加载所有数据
       const [games, news] = await Promise.all([
-        window.gameAPI.getAllGames(),
+        window.enhancedGameAPI.getAllGames(),
         window.newsAPI.getAllNews()
       ]);
 
       gamesData = games.map(g => ({
-        name: g.title,
-        desc: `${g.genre} · ${g.platform} · ${g.publisher}`,
-        url: `game-detail.html?id=${g.id}&name=${encodeURIComponent(g.title)}`,
+        name: g.title || g.name,
+        desc: `${g.genre} · ${g.platform.split(',')[0].trim()} · ${g.publisher}`,
+        url: `game-detail.html?id=${g.id}&name=${encodeURIComponent(g.name)}`,
         cover: g.thumbnail,
         genre: g.genre,
         publisher: g.publisher,
+        rating: g.rating,
+        price: g.price,
         short_description: g.short_description
       }));
 
@@ -175,7 +177,7 @@
       // 生成社区帖子数据
       postsData = generatePostsData();
 
-      console.log(`✅ 数据加载完成：${gamesData.length} 游戏，${newsData.length} 新闻，${postsData.length} 帖子`);
+      console.log(`✅ 搜索数据加载完成：${gamesData.length} 游戏，${newsData.length} 新闻，${postsData.length} 帖子`);
       isDataLoaded = true;
       performSearch();
     } catch (err) {
@@ -192,13 +194,12 @@
     const topics = [
       "新手入门指南", "配置推荐", "通关心得", "彩蛋发现", 
       "隐藏Boss攻略", "速通技巧", "MOD推荐", "联机组队",
-      "剧情讨论", "结局解析", "人物分析", "世界观探讨",
-      "截图分享", "视频攻略", "直播回放", "比赛集锦"
+      "剧情讨论", "结局解析", "人物分析", "世界观探讨"
     ];
     
     const posts = [];
-    gamesData.slice(0, 100).forEach(game => {
-      for (let i = 0; i < 10; i++) {
+    gamesData.slice(0, 200).forEach(game => {
+      for (let i = 0; i < 5; i++) {
         const board = boards[Math.floor(Math.random() * boards.length)];
         const topic = topics[Math.floor(Math.random() * topics.length)];
         posts.push({
@@ -244,7 +245,7 @@
       return text.includes(kw);
     });
 
-    console.log(`🔍 搜索结果：${filteredGames.length} 游戏，${filteredNews.length} 新闻，${filteredPosts.length} 帖子`);
+    console.log(`🔍 搜索"${kw}"结果：${filteredGames.length} 游戏，${filteredNews.length} 新闻，${filteredPosts.length} 帖子`);
 
     // 重置分页并渲染
     gamesPage = 0;
@@ -275,18 +276,36 @@
       const div = document.createElement("div");
       div.className = "search-item";
       div.style.cursor = "pointer";
+      
+      const coverImg = g.cover 
+        ? `<img src="${g.cover}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'" />` 
+        : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">🎮</div>';
+      
+      const priceTag = g.price === 0 ? '<span style="color:var(--success);">免费</span>' : `¥${g.price}`;
+      
       div.innerHTML = `
         <div style="display:flex;gap:12px;align-items:center;">
-          <div style="width:60px;height:60px;border-radius:8px;overflow:hidden;flex-shrink:0;">
-            ${g.cover ? `<img src="${g.cover}" style="width:100%;height:100%;object-fit:cover;" />` : '🎮'}
+          <div style="width:80px;height:80px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#1a1a2e;">
+            ${coverImg}
           </div>
           <div style="flex:1;">
             <div class="search-title">🎮 ${g.name}</div>
             <div class="search-excerpt">${g.desc}</div>
+            <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;">
+              <span style="color:var(--accent);">⭐ ${g.rating}</span>
+              <span>${priceTag}</span>
+            </div>
           </div>
         </div>
       `;
       div.addEventListener("click", () => window.location.href = g.url);
+      div.addEventListener("mouseenter", () => {
+        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
+        div.style.transition = "all 0.3s ease";
+      });
+      div.addEventListener("mouseleave", () => {
+        div.style.backgroundColor = "";
+      });
       searchGames.appendChild(div);
     });
 
@@ -314,6 +333,13 @@
         <div class="search-excerpt">${n.summary}</div>
       `;
       div.addEventListener("click", () => window.location.href = n.url);
+      div.addEventListener("mouseenter", () => {
+        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
+        div.style.transition = "all 0.3s ease";
+      });
+      div.addEventListener("mouseleave", () => {
+        div.style.backgroundColor = "";
+      });
       searchNews.appendChild(div);
     });
 
@@ -340,6 +366,13 @@
         <div class="search-meta">👤 ${p.author} · 💬 ${p.replies} 回复 · 👁️ ${p.views} 浏览</div>
       `;
       div.addEventListener("click", () => window.location.href = p.url);
+      div.addEventListener("mouseenter", () => {
+        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
+        div.style.transition = "all 0.3s ease";
+      });
+      div.addEventListener("mouseleave", () => {
+        div.style.backgroundColor = "";
+      });
       searchPosts.appendChild(div);
     });
 

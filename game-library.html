@@ -152,560 +152,187 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+
+<script src="common.js"></script>
+<script src="cyber-effects.js"></script>
+<script src="enhanced-game-api.js"></script>
 <script>
   initCommon();
 
-  // 从 ranking.json 加载真实游戏数据
-  let gameData = [];
+  // 分页和筛选状态
+  let allGamesData = [];
+  let filteredGames = [];
+  let currentPage = 0;
+  const PAGE_SIZE = 20;
   let isDataLoaded = false;
-
-  // 加载并处理游戏数据
-  function loadGameData() {
-    fetch("ranking.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        // 合并所有分类的游戏数据
-        const allGames = [
-          ...(data.hot || []),
-          ...(data.score || []),
-          ...(data.new || []),
-          ...(data.discount || [])
-        ];
-        
-        // 去重（基于游戏ID）
-        const seen = new Set();
-        gameData = allGames.filter(game => {
-          if (seen.has(game.id)) return false;
-          seen.add(game.id);
-          return true;
-        }).map(game => {
-          // 转换数据格式以适配筛选逻辑
-          const platformInfo = (game.platform || "PC").split("·").map(p => p.trim());
-          const platformName = platformInfo[0].toLowerCase();
-          const genreName = (platformInfo[1] || game.tag || "").toLowerCase();
-          
-          // 映射平台
-          let platforms = [];
-          if (platformName.includes("windows") || platformName.includes("pc")) {
-            platforms.push("pc");
-          }
-          if (platformName.includes("steam")) {
-            platforms.push("steam");
-          }
-          
-          // 映射类型
-          let type = "action";
-          if (genreName.includes("rpg") || genreName.includes("role")) {
-            type = "rpg";
-          } else if (genreName.includes("strategy") || genreName.includes("moba")) {
-            type = "strategy";
-          } else if (genreName.includes("card")) {
-            type = "card";
-          } else if (genreName.includes("casual") || genreName.includes("sports")) {
-            type = "casual";
-          } else if (genreName.includes("shooter") || genreName.includes("action")) {
-            type = "action";
-          }
-          
-          return {
-            id: game.id,
-            name: game.name,
-            platforms: platforms.length > 0 ? platforms : ["pc"],
-            type: type,
-            tags: [game.tag || genreName || "游戏"],
-            price: 0, // 免费游戏
-            rating: game.score || 0,
-            cover: game.cover
-          };
-        });
-        
-        isDataLoaded = true;
-        renderList();
-      })
-      .catch((err) => {
-        console.error("加载游戏数据失败:", err);
-        libList.innerHTML = `
-          <div style="font-size:12px;color:var(--danger);padding:20px;text-align:center;">
-            ❌ 游戏数据加载失败<br>
-            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span><br>
-            <button onclick="loadGameData()" style="margin-top: 10px;" class="btn btn-inline">重试</button>
-          </div>
-        `;
-      });
-  }
-
-  // 保留原有的示例数据作为fallback
-  const fallbackGameData = [
-    {
-    id: "elden-ring",
-    name: "艾尔登法环",
-    platforms: ["steam", "ps"],
-    type: "rpg",
-    tags: ["魂类", "开放世界"],
-    price: 298,
-    rating: 9.4
-  },
-  {
-    id: "genshin",
-    name: "原神",
-    platforms: ["pc", "mobile", "ps"],
-    type: "rpg",
-    tags: ["开放世界", "抽卡"],
-    price: 0,
-    rating: 10
-  },
-  {
-    id: "cs2",
-    name: "CS2",
-    platforms: ["steam"],
-    type: "multiplayer",
-    tags: ["FPS", "竞技"],
-    price: 0,
-    rating: 8.6
-  },
-  {
-    id: "mh-world",
-    name: "怪物猎人：世界",
-    platforms: ["steam", "ps"],
-    type: "action",
-    tags: ["刷刷刷", "合作"],
-    price: 248,
-    rating: 8.5
-  },
-  {
-    id: "hollow-knight",
-    name: "空洞骑士",
-    platforms: ["steam", "switch"],
-    type: "indie",
-    tags: ["类银河战士恶魔城", "硬核"],
-    price: 48,
-    rating: 9.6
-  },
-  {
-    id: "cp2077",
-    name: "赛博朋克 2077",
-    platforms: ["steam", "ps"],
-    type: "rpg",
-    tags: ["开放世界", "科幻"],
-    price: 298,
-    rating: 8.7
-  },
-  {
-    id: "mh-rise",
-    name: "怪物猎人：崛起",
-    platforms: ["steam", "switch"],
-    type: "action",
-    tags: ["刷刷刷", "合作"],
-    price: 268,
-    rating: 8.5
-  },
-  {
-    id: "fake-strategy",
-    name: "虚构策略：银河棋局",
-    platforms: ["pc"],
-    type: "strategy",
-    tags: ["SLG", "回合制"],
-    price: 88,
-    rating: 8.2
-  },
-  {
-    id: "fake-casual",
-    name: "下班之后：小镇时光",
-    platforms: ["mobile"],
-    type: "casual",
-    tags: ["休闲", "模拟经营"],
-    price: 0,
-    rating: 7.9
-  },
-  {
-    id: "stardew-valley",
-    name: "星露谷物语",
-    platforms: ["steam", "switch"],
-    type: "indie",
-    tags:["休闲", "模拟经营"],
-    price: 48,
-    rating: 9.8
-  },
-  {
-    id: "cuphead",
-    name: "茶杯头",
-    platforms: ["steam", "switch"],
-    type: "indie",
-    tags: ["魂类"],
-    price: 68,
-    rating: 9.7
-  },
-  {
-    id: "ygo-md",
-    name: "游戏王：大师决斗",
-    platforms: ["steam", "switch"],
-    type: "card game",
-    tags: ["卡牌", "策略"],
-    price: 0,
-    rating: 8.4
-  },
-  {
-    id: "warframe",
-    name: "星际战甲",
-    platforms: ["steam"],
-    type: "action",
-    tags: ["第三人称射击", "跑酷", "科幻", "刷刷刷"],
-    price: 0,
-    rating: 9.0
-  },
-  {
-    id: "dota-2",
-    name: "DOTA2",
-    platforms: ["steam"],
-    type: "strategy",
-    tags: ["策略", "多人联机"],
-    price: 0,
-    rating: 8.9
-  },
-  {
-    id: "fortnite",
-    name: "堡垒之夜",
-    platforms: ["ps", "switch"],
-    type: "shooter",
-    tags: ["吃鸡", "建造", "多人联机"],
-    price: 0,
-    rating: 8.1
-  },
-  {
-    id: "fall-guys",
-    name: "糖豆人",
-    platforms: ["steam", "ps", "switch"],
-    type: "party",
-    tags: ["休闲", "竞技", "多人乱斗"],
-    price: 0,
-    rating: 7.9
-  },
-  {
-    id: "team-fortress-2",
-    name: "绝地要塞2",
-    platforms: ["steam"],
-    type: "shooter",
-    tags: ["团队战", "FPS", "经典"],
-    price: 0,
-    rating: 8.8
-  },
-  {
-    id: "rocket-league",
-    name: "火箭联盟",
-    platforms: ["steam", "ps", "switch"],
-    type: "sports",
-    tags: ["多人联机", "竞技", "足球 + 赛车"],
-    price: 0,
-    rating: 8.7
-  },
-  {
-    id: "destiny-2",
-    name: "命运2",
-    platforms: ["steam", "ps"],
-    type: "shooter",
-    tags: ["FPS", "科幻", "合作"],
-    price: 0,
-    rating: 8.2
-  },
-  {
-    id: "paladins",
-    name: "枪火游侠",
-    platforms: ["steam", "ps", "switch"],
-    type: "shooter",
-    tags: ["英雄射击", "多人联机"],
-    price: 0,
-    rating: 7.8
-  },
-  {
-    id: "brawlhalla",
-    name: "乱斗英雄",
-    platforms: ["steam", "ps", "switch"],
-    type: "fighting",
-    tags: ["格斗", "多人对战", "休闲"],
-    price: 0,
-    rating: 8.3
-  },
-  {
-    id: "war-thunder",
-    name: "战争雷霆",
-    platforms: ["steam", "ps"],
-    type: "simulation",
-    tags: ["载具战斗", "军事", "多人联机"],
-    price: 0,
-    rating: 8.1
-  },
-  {
-    id: "path-of-exile",
-    name: "流放之路",
-    platforms: ["steam", "ps"],
-    type: "arpg",
-    tags: ["刷刷刷", "暗黑风", "深度养成"],
-    price: 0,
-    rating: 8.9
-  },
-  {
-    id: "pokemon-unite",
-    name: "宝可梦大集结",
-    platforms: ["switch"],
-    type: "moba",
-    tags: ["MOBA", "宝可梦", "团队竞技"],
-    price: 0,
-    rating: 8.0
-  },
-  {
-    id: "god-of-war",
-    name: "战神4",
-    platforms: ["steam", "ps"],
-    type: "action",
-    tags: ["剧情", "动作", "北欧神话"],
-    price: 39.99,
-    rating: 9.6
-  },
-  {
-    id: "zelda-totk",
-    name: "塞尔达传说：王国之泪",
-    platforms: ["switch"],
-    type: "adventure",
-    tags: ["开放世界", "解谜", "探索"],
-    price: 69.99,
-    rating: 9.8
-  },
-  {
-    id: "red-dead-redemption-2",
-    name: "荒野大镖客2",
-    platforms: ["steam", "ps"],
-    type: "action",
-    tags: ["开放世界", "西部", "剧情"],
-    price: 59.99,
-    rating: 9.7
-  },
-  {
-    id: "hades",
-    name: "黑帝斯",
-    platforms: ["steam", "switch", "ps"],
-    type: "roguelike",
-    tags: ["肉鸽", "动作", "独立游戏"],
-    price: 24.99,
-    rating: 9.0
-  },
-  {
-    id: "apex-legends",
-    name: "Apex Legends",
-    platforms: ["steam", "ps", "switch"],
-    type: "shooter",
-    tags: ["吃鸡", "多人联机", "FPS"],
-    price: 0,
-    rating: 8.6
-  },
-  {
-    id: "lol",
-    name: "英雄联盟",
-    platforms: ["pc"],
-    type: "multiplayer",
-    tags: ["MOBA", "联机", "免费"],
-    price: 0,
-    rating: 8.3
-  },
-  {
-    id: "slay-the-spire",
-    name: "杀戮尖塔",
-    platforms: ["steam", "switch", "mobile"],
-    type: "strategy",
-    tags: ["卡牌", "Roguelike", "独立"],
-    price: 80,
-    rating: 9.0
-  },
-  {
-    id: "lolm",
-    name: "英雄联盟手游",
-    platforms: ["mobile"],
-    type: "multiplayer",
-    tags: ["MOBA", "联机", "免费"],
-    price: 0,
-    rating: 8.3
-  },
-   {
-    id: "honor-king",
-    name: "王者荣耀",
-    platforms: ["mobile"],
-    type: "multiplayer",
-    tags: ["MOBA", "联机", "免费"],
-    price: 0,
-    rating: 5.9
-  },
-  {
-    id: "snap",
-    name: "漫威终极逆转",
-    platforms: ["steam", "mobile","pc"],
-    type: "card game",
-    tags: ["卡牌", "策略"],
-    price: 0,
-    rating: 7.6
-  },
-   {
-    id: "Arknights",
-    name: "明日方舟",
-    platforms: ["mobile"],
-    type: "card game",
-    tags: ["卡牌", "策略"],
-    price: 0,
-    rating: 9.0
-  },
-  {
-    id: "beng",
-    name: "崩坏三",
-    platforms: ["mobile","pc"],
-    type: "action",
-    tags: ["动作"],
-    price: 0,
-    rating: 8.0
-  },
-   {
-    id: "mc",
-    name: "我的世界",
-    platforms: ["mobile","pc"],
-    type: "rpg",
-    tags: ["角色扮演"],
-    price: 0,
-    rating: 8.0
-  },
-  ];
 
   const libSearch = document.getElementById("libSearch");
   const libType = document.getElementById("libType");
   const libPrice = document.getElementById("libPrice");
-  const libPlatforms = document.getElementById("libPlatforms");
+  const libPlatforms = document.querySelectorAll('input[name="libPlatform"]');
   const libList = document.getElementById("libList");
-  const libResultCount = document.getElementById("libResultCount");
-  
+  const libCount = document.getElementById("libCount");
+
+  // 加载所有游戏数据
+  async function loadAllGames() {
+    try {
+      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载游戏数据...</div>';
+      
+      allGamesData = await window.enhancedGameAPI.getAllGames();
+      isDataLoaded = true;
+      
+      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏`);
+      applyFiltersAndRender();
+    } catch (error) {
+      console.error("❌ 加载失败:", error);
+      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger);">❌ 游戏数据加载失败，请刷新页面重试</div>';
+    }
+  }
+
+  // 获取选中的平台
   function getSelectedPlatforms() {
-    return Array.from(libPlatforms.querySelectorAll("input[type=checkbox]:checked")).map(
-      (el) => el.value
-    );
+    const checked = Array.from(libPlatforms).filter(cb => cb.checked).map(cb => cb.value);
+    return checked.length > 0 ? checked : null;
   }
 
-  function matchesFilters(game, keyword, type, price, platforms) {
-    const kw = keyword.trim().toLowerCase();
-    if (kw) {
-      const text = (game.name + " " + game.tags.join(" ")).toLowerCase();
-      if (!text.includes(kw)) return false;
-    }
-
-    if (type !== "all" && game.type !== type) return false;
-
-    if (platforms.length) {
-      const hit = game.platforms.some((p) => platforms.includes(p));
-      if (!hit) return false;
-    }
-
-    if (price === "free" && game.price !== 0) return false;
-    if (price === "low" && !(game.price > 0 && game.price <= 100)) return false;
-    if (price === "high" && !(game.price > 100)) return false;
-
-    return true;
-  }
-
-  function renderList() {
+  // 应用筛选条件
+  function applyFiltersAndRender() {
     if (!isDataLoaded) {
-      libList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🎮 正在加载游戏数据...</div>';
-      libResultCount.textContent = `共 0 款`;
+      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载...</div>';
       return;
     }
 
-    const keyword = libSearch.value;
-    const type = libType.value;
-    const price = libPrice.value;
-    const platforms = getSelectedPlatforms();
+    const nameKw = libSearch.value.trim().toLowerCase();
+    const typeVal = libType.value;
+    const priceVal = libPrice.value;
+    const platformsVal = getSelectedPlatforms();
 
-    const filtered = gameData.filter((g) =>
-      matchesFilters(g, keyword, type, price, platforms)
-    );
+    // 筛选游戏
+    filteredGames = allGamesData.filter(game => {
+      // 名称搜索
+      if (nameKw && !game.name.toLowerCase().includes(nameKw) && 
+          !game.short_description.toLowerCase().includes(nameKw)) {
+        return false;
+      }
 
+      // 类型筛选
+      if (typeVal !== "all" && !game.genre.toLowerCase().includes(typeVal.toLowerCase())) {
+        return false;
+      }
+
+      // 价格筛选
+      if (priceVal === "free" && game.price !== 0) return false;
+      if (priceVal === "paid" && game.price === 0) return false;
+
+      // 平台筛选
+      if (platformsVal) {
+        const gamePlatforms = game.platform.toLowerCase();
+        const matchesPlatform = platformsVal.some(p => gamePlatforms.includes(p.toLowerCase()));
+        if (!matchesPlatform) return false;
+      }
+
+      return true;
+    });
+
+    // 排序：高评分优先
+    filteredGames.sort((a, b) => b.rating - a.rating);
+
+    // 重置列表
+    currentPage = 0;
     libList.innerHTML = "";
-    libResultCount.textContent = `共 ${filtered.length} 款`;
+    libCount.textContent = `共 ${filteredGames.length} 款`;
 
-    if (!filtered.length) {
-      libList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🎮 没有找到符合条件的游戏，可以尝试放宽筛选条件。</div>';
+    if (filteredGames.length === 0) {
+      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🔍 未找到符合条件的游戏</div>';
       return;
     }
 
-    // 按评分从高到低排序
-    filtered.sort((a, b) => b.rating - a.rating);
+    // 加载第一页
+    loadMoreGames();
+  }
 
-    filtered.forEach((g) => {
-      const div = document.createElement("div");
-      div.className = "game-card";
-      div.style.cursor = "pointer";
-      
-      // 使用真实封面图或默认图标
-      const coverHtml = g.cover 
-        ? `<img src="${g.cover}" alt="${g.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:32px;\\'>🎮</div>';" />`
-        : '<div style="display: flex; align-items: center; justify-content: center; font-size: 32px; height: 100%;">🎮</div>';
-      
-      div.innerHTML = `
-        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020;">${coverHtml}</div>
-        <div class="game-info">
-          <div class="game-name">${g.name}</div>
-          <div class="game-meta">
-            类型：${g.type.toUpperCase()} · 平台：${g.platforms.join("/")} · ⭐ ${g.rating.toFixed(1)}
+  // 加载更多游戏
+  function loadMoreGames() {
+    const start = currentPage * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const pageGames = filteredGames.slice(start, end);
+
+    if (pageGames.length === 0) return;
+
+    pageGames.forEach(game => {
+      const card = document.createElement("div");
+      card.className = "game-card";
+      card.style.cursor = "pointer";
+
+      // 生成封面
+      const coverHtml = game.thumbnail 
+        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
+        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+
+      const priceText = game.price === 0 ? '<span style="color: var(--success);">免费</span>' : `¥${game.price}`;
+      const ratingColor = game.rating >= 9 ? 'var(--success)' : game.rating >= 8 ? 'var(--accent)' : 'var(--text)';
+
+      card.innerHTML = `
+        <div class="game-cover">${coverHtml}</div>
+        <div class="game-title">${game.name}</div>
+        <div class="game-meta">
+          ${game.genre} · ${game.platform.split(',')[0].trim()}
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div style="color: ${ratingColor}; font-weight: 700;">
+            ⭐ ${game.rating}
           </div>
-          <div class="game-footer">
-            ${
-              g.price === 0
-                ? '<span class="tag tag--accent">💰 免费</span>'
-                : `<span class="tag">💵 ¥${g.price}</span>`
-            }
-            ${g.tags.map((t) => `<span class="tag">${t}</span>`).join("")}
+          <div style="font-weight: 600;">
+            ${priceText}
           </div>
         </div>
       `;
-      
-      // 添加悬停效果
-      div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateY(-2px)";
-        div.style.transition = "all 0.3s ease";
+
+      // 悬停效果
+      card.addEventListener("mouseenter", () => {
+        card.style.transform = "translateY(-4px)";
+        card.style.boxShadow = "0 8px 24px rgba(56, 189, 248, 0.3)";
+        card.style.transition = "all 0.3s ease";
       });
-      
-      div.addEventListener("mouseleave", () => {
-        div.style.transform = "translateY(0)";
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "translateY(0)";
+        card.style.boxShadow = "";
       });
-      
-      div.addEventListener("click", () => {
-        // 跳转到游戏详情页，携带游戏名称
+
+      // 点击跳转
+      card.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
-        url.searchParams.set("name", g.name);
-        if (g.id) {
-          url.searchParams.set("id", g.id);
-        }
+        url.searchParams.set("id", game.id);
+        url.searchParams.set("name", game.name);
         window.location.href = url.toString();
       });
-      
-      libList.appendChild(div);
+
+      libList.appendChild(card);
     });
+
+    currentPage++;
   }
 
-  libSearch.addEventListener("input", renderList);
-  libType.addEventListener("change", renderList);
-  libPrice.addEventListener("change", renderList);
-  libPlatforms.addEventListener("change", renderList);
+  // 无限滚动
+  libList.addEventListener("scroll", () => {
+    const scrollTop = libList.scrollTop;
+    const scrollHeight = libList.scrollHeight;
+    const clientHeight = libList.clientHeight;
 
-  // 如果是从首页分类跳转而来，处理 URL 参数 cat
-  const params = new URLSearchParams(window.location.search);
-  const cat = params.get("cat");
-  if (cat) {
-    if (cat === "action" || cat === "rpg" || cat === "strategy" || cat === "indie" || cat === "multiplayer" || cat === "casual") {
-      libType.value = cat;
-    } else if (cat === "free") {
-      libPrice.value = "free";
+    if (scrollHeight - scrollTop - clientHeight < 100) {
+      loadMoreGames();
     }
-  }
+  });
 
-  // 加载真实游戏数据
-  loadGameData();
+  // 监听筛选条件变化
+  libSearch.addEventListener("input", applyFiltersAndRender);
+  libType.addEventListener("change", applyFiltersAndRender);
+  libPrice.addEventListener("change", applyFiltersAndRender);
+  libPlatforms.forEach(cb => cb.addEventListener("change", applyFiltersAndRender));
+
+  // 初始加载
+  loadAllGames();
 </script>
 </body>
 </html>

@@ -124,16 +124,15 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="game-api.js"></script>
+<script src="enhanced-game-api.js"></script>
 <script>
   initCommon();
 
-  // 数据源：从 ranking.json + FreeToGame API 混合加载
   let allGamesData = [];
-  let dataLoaded = false;
+  let filteredGames = [];
   let currentPage = 0;
   const PAGE_SIZE = 20;
-  let currentFilteredList = [];
+  let isDataLoaded = false;
 
   const rankType = document.getElementById("rankType");
   const rankPlatform = document.getElementById("rankPlatform");
@@ -142,188 +141,148 @@
   const rankCount = document.getElementById("rankCount");
 
   // 加载所有游戏数据
-  async function loadAllData() {
+  async function loadAllGames() {
     try {
-      // 1. 加载 ranking.json
-      const rankRes = await fetch("ranking.json");
-      if (!rankRes.ok) throw new Error("HTTP 状态码 " + rankRes.status);
-      const rankData = await rankRes.json();
+      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载排行榜数据...</li>';
       
-      const rankingGames = [
-        ...(rankData.hot || []).map(g => ({...g, source: "ranking", board: "hot"})),
-        ...(rankData.score || []).map(g => ({...g, source: "ranking", board: "score"})),
-        ...(rankData.new || []).map(g => ({...g, source: "ranking", board: "new"})),
-      ];
+      allGamesData = await window.enhancedGameAPI.getAllGames();
+      isDataLoaded = true;
       
-      // 2. 加载 FreeToGame API
-      const apiGames = await window.gameAPI.getAllGames();
-      const apiGamesFormatted = apiGames.map(g => ({
-        id: g.id,
-        name: g.title,
-        platform: g.platform === "PC (Windows)" ? "Windows" : g.platform,
-        cover: g.thumbnail,
-        score: Math.random() * 2 + 7, // 7-9分随机评分
-        tag: g.genre,
-        genre: g.genre,
-        description: g.short_description,
-        releaseDate: g.release_date,
-        publisher: g.publisher,
-        developer: g.developer,
-        gameUrl: g.game_url,
-        profileUrl: g.freetogame_profile_url,
-        source: "api",
-        board: "hot" // 默认归类为热门
-      }));
-      
-      // 3. 合并数据并去重
-      const combined = [...rankingGames, ...apiGamesFormatted];
-      const seen = new Set();
-      allGamesData = combined.filter(g => {
-        const key = (g.id || g.name).toString().toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      
-      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏数据`);
-      dataLoaded = true;
+      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏到排行榜`);
       applyFiltersAndRender();
-    } catch (err) {
-      console.error("加载数据失败:", err);
-      rankList.innerHTML = `
-        <li style="text-align: center; color: var(--danger); padding: 20px;">
-          ❌ 排行榜数据加载失败<br>
-          <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
-        </li>
-      `;
+    } catch (error) {
+      console.error("❌ 加载失败:", error);
+      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--danger);">❌ 排行榜数据加载失败</li>';
     }
   }
 
-  // 应用筛选条件
+  // 应用筛选和渲染
   function applyFiltersAndRender() {
-    if (!dataLoaded) {
-      rankList.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">🎮 正在加载排行榜数据...</li>';
+    if (!isDataLoaded) {
+      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载...</li>';
       return;
     }
 
     const type = rankType.value; // score / hot / new
-    const plat = rankPlatform.value;
-    const kw = rankSearch.value.trim().toLowerCase();
+    const platform = rankPlatform.value;
+    const keyword = rankSearch.value.trim().toLowerCase();
 
-    // 根据榜单类型筛选
-    let sourceData = allGamesData;
-    if (type === "score") {
-      sourceData = allGamesData.filter(g => g.board === "score" || (g.source === "api" && g.score >= 8));
-    } else if (type === "hot") {
-      sourceData = allGamesData.filter(g => g.board === "hot" || g.source === "api");
-    } else if (type === "new") {
-      sourceData = allGamesData.filter(g => g.board === "new" || (g.source === "api" && new Date(g.releaseDate) > new Date("2023-01-01")));
-    }
+    // 筛选游戏
+    filteredGames = allGamesData.filter(game => {
+      // 平台筛选
+      if (platform !== "all" && !game.platform.toLowerCase().includes(platform.toLowerCase())) {
+        return false;
+      }
 
-    // 应用平台和关键词筛选
-    currentFilteredList = sourceData.filter(item => {
-      if (plat !== "all") {
-        const itemPlatform = (item.platform || "").toLowerCase();
-        if (!itemPlatform.includes(plat.toLowerCase())) return false;
+      // 关键词搜索
+      if (keyword) {
+        const searchText = `${game.name} ${game.genre} ${game.publisher} ${game.short_description}`.toLowerCase();
+        if (!searchText.includes(keyword)) return false;
       }
-      
-      if (kw) {
-        const searchText = [
-          item.name || "",
-          item.description || item.short_description || "",
-          item.genre || item.tag || "",
-          item.developer || ""
-        ].join(" ").toLowerCase();
-        if (!searchText.includes(kw)) return false;
-      }
-      
+
       return true;
     });
 
-    // 排序：优先 ranking.json 数据，然后按评分降序
-    currentFilteredList.sort((a, b) => {
-      if (a.source === "ranking" && b.source === "api") return -1;
-      if (a.source === "api" && b.source === "ranking") return 1;
-      return (b.score || 0) - (a.score || 0);
-    });
+    // 根据榜单类型排序
+    if (type === "score") {
+      // 评分榜：高评分优先
+      filteredGames.sort((a, b) => b.rating - a.rating);
+    } else if (type === "hot") {
+      // 热度榜：混合评分和免费游戏
+      filteredGames.sort((a, b) => {
+        if (a.price === 0 && b.price !== 0) return -1;
+        if (a.price !== 0 && b.price === 0) return 1;
+        return b.rating - a.rating;
+      });
+    } else if (type === "new") {
+      // 新品榜：最新年份优先
+      filteredGames.sort((a, b) => {
+        if (b.year !== a.year) return b.year - a.year;
+        return b.rating - a.rating;
+      });
+    }
 
-    // 重置分页并渲染
+    // 重置列表
     currentPage = 0;
     rankList.innerHTML = "";
-    rankCount.textContent = `共 ${currentFilteredList.length} 款`;
-    
-    if (!currentFilteredList.length) {
-      rankList.innerHTML = '<li style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🔍 暂无符合条件的游戏。</li>';
+    rankCount.textContent = `共 ${filteredGames.length} 款`;
+
+    if (filteredGames.length === 0) {
+      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 未找到符合条件的游戏</li>';
       return;
     }
-    
+
     loadMoreItems();
   }
 
   // 加载更多项目
   function loadMoreItems() {
-    const startIdx = currentPage * PAGE_SIZE;
-    const endIdx = startIdx + PAGE_SIZE;
-    const pageItems = currentFilteredList.slice(startIdx, endIdx);
-    
-    if (!pageItems.length) return;
-    
-    pageItems.forEach((item, localIdx) => {
-      const globalIdx = startIdx + localIdx;
-      const score = Number(item.score) || 0;
+    const start = currentPage * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const pageItems = filteredGames.slice(start, end);
+
+    if (pageItems.length === 0) return;
+
+    pageItems.forEach((game, localIdx) => {
+      const globalIdx = start + localIdx;
       const li = document.createElement("li");
       li.className = "ranking-item";
       li.style.cursor = "pointer";
-      
-      const coverImage = item.cover || item.thumbnail || "";
-      const coverHtml = coverImage 
-        ? `<img src="${coverImage}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;\\'>🎮</div>'" />` 
-        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🎮</div>';
-      
+
+      // 封面图
+      const coverHtml = game.thumbnail
+        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
+        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+
+      // 排名样式
+      const rankClass = globalIdx === 0 ? "ranking-pos--top1" : "";
+      const medalIcon = globalIdx === 0 ? "🥇" : globalIdx === 1 ? "🥈" : globalIdx === 2 ? "🥉" : "";
+
       li.innerHTML = `
-        <div class="ranking-pos ${globalIdx === 0 ? "ranking-pos--top1" : ""}">${globalIdx + 1}</div>
+        <div class="ranking-pos ${rankClass}">${medalIcon}${globalIdx + 1}</div>
         <div class="ranking-game">
           <div class="ranking-cover">${coverHtml}</div>
           <div class="ranking-info">
-            <div class="ranking-name">${item.name || "未知游戏"}</div>
-            <div class="ranking-meta">${item.genre || item.tag || ""} · ${item.platform || "PC"}</div>
+            <div class="ranking-name">${game.name}</div>
+            <div class="ranking-meta">${game.genre} · ${game.platform.split(',')[0].trim()}</div>
           </div>
         </div>
         <div class="ranking-score">
-          <span class="value">${score.toFixed(1)}</span>
-          <div><span class="tag">${item.source === "ranking" ? "精选" : item.tag || item.genre || "游戏"}</span></div>
+          <span class="value">${game.rating.toFixed(1)}</span>
+          <div><span class="tag">${game.price === 0 ? "免费" : game.genre}</span></div>
         </div>
       `;
-      
+
+      // 悬停效果
       li.addEventListener("mouseenter", () => {
         li.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
         li.style.transition = "all 0.3s ease";
       });
-      
+
       li.addEventListener("mouseleave", () => {
         li.style.backgroundColor = "";
       });
-      
+
+      // 点击跳转
       li.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
-        if (item.id) url.searchParams.set("id", item.id);
-        url.searchParams.set("name", item.name);
+        url.searchParams.set("id", game.id);
+        url.searchParams.set("name", game.name);
         window.location.href = url.toString();
       });
-      
+
       rankList.appendChild(li);
     });
-    
+
     currentPage++;
   }
 
-  // 无限滚动监听
+  // 无限滚动
   rankList.addEventListener("scroll", () => {
     const scrollTop = rankList.scrollTop;
     const scrollHeight = rankList.scrollHeight;
     const clientHeight = rankList.clientHeight;
-    
-    // 距离底部 100px 时加载更多
+
     if (scrollHeight - scrollTop - clientHeight < 100) {
       loadMoreItems();
     }
@@ -335,7 +294,7 @@
   rankSearch.addEventListener("input", applyFiltersAndRender);
 
   // 初始加载
-  loadAllData();
+  loadAllGames();
 </script>
 </body>
 </html>
