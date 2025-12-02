@@ -161,6 +161,20 @@ a {
 /* Corner decorations removed per user request */
 
 /* ========== 🌧️ Cyberpunk Matrix Rain Effect ========== */
+/* HTML-based matrix canvas - should not take up space */
+#matrix-canvas,
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  display: none;
+}
+
 .matrix-rain {
   position: fixed;
   top: 0;
@@ -202,6 +216,20 @@ a {
 }
 
 /* ========== ⚡ Floating Particles ========== */
+/* HTML-based particles container - should not take up space */
+#particles-container,
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  display: none;
+}
+
 .cyber-particles {
   position: fixed;
   top: 0;
