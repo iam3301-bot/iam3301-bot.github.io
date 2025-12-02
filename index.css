@@ -823,6 +823,10 @@ a:not(.nav-link):not(.btn):hover::after {
   gap: 16px;
 }
 
+.main--single {
+  max-width: 1400px;
+}
+
 .main > section {
   flex: 3;
   display: flex;
@@ -1833,7 +1837,9 @@ mark {
   clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
   position: relative;
   padding: 28px 32px !important;
-  overflow: hidden;
+  overflow: visible;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cyber-sysreq-section::before {
@@ -2711,6 +2717,8 @@ header .btn-secondary {
   grid-template-columns: 1fr 1fr;
   gap: 22px;
   margin-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sysreq-column {
