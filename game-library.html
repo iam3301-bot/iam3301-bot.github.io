@@ -220,11 +220,29 @@
       // 价格筛选
       if (priceVal === "free" && game.price !== 0) return false;
       if (priceVal === "paid" && game.price === 0) return false;
+      if (priceVal === "low" && game.price >= 100) return false; // 100元以下
+      if (priceVal === "high" && game.price < 100) return false; // 100元以上
 
       // 平台筛选
       if (platformsVal) {
         const gamePlatforms = game.platform.toLowerCase();
-        const matchesPlatform = platformsVal.some(p => gamePlatforms.includes(p.toLowerCase()));
+        const matchesPlatform = platformsVal.some(p => {
+          const platform = p.toLowerCase();
+          // Steam 和 PC 视为相同
+          if (platform === 'steam' || platform === 'pc') {
+            return gamePlatforms.includes('pc') || gamePlatforms.includes('steam');
+          }
+          // PS系列
+          if (platform === 'ps') {
+            return gamePlatforms.includes('ps4') || gamePlatforms.includes('ps5') || gamePlatforms.includes('playstation');
+          }
+          // Xbox系列
+          if (platform === 'xbox') {
+            return gamePlatforms.includes('xbox');
+          }
+          // 其他平台直接匹配
+          return gamePlatforms.includes(platform);
+        });
         if (!matchesPlatform) return false;
       }
 
