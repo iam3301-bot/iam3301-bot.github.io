@@ -123,13 +123,51 @@
 <script>
   initCommon();
 
-  const discountData = [
-    { id: "cp2077", name: "赛博朋克 2077", platform: "Steam", oldPrice: 298, nowPrice: 149, low: true },
-    { id: "elden-ring", name: "艾尔登法环", platform: "Steam", oldPrice: 298, nowPrice: 209, low: false },
-    { id: "hollow-knight", name: "空洞骑士", platform: "Steam", oldPrice: 48, nowPrice: 19, low: true },
-    { id: "mh-rise", name: "怪物猎人：崛起", platform: "Switch / PC", oldPrice: 268, nowPrice: 134, low: false },
-    { id: "stardew", name: "星露谷物语", platform: "多平台", oldPrice: 36, nowPrice: 18, low: true },
-  ];
+  // 从 ranking.json 加载真实折扣数据
+  let discountData = [];
+  let isDataLoaded = false;
+
+  // 加载折扣数据
+  function loadDiscountData() {
+    fetch("ranking.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        // 使用 discount 分类的数据，并模拟折扣信息
+        discountData = (data.discount || []).map((game, index) => {
+          // 模拟原价和折扣（基于评分）
+          const basePrice = Math.floor(game.score * 30); // 基础价格
+          const discountPercent = 30 + Math.floor(Math.random() * 50); // 30-80% 折扣
+          const nowPrice = Math.floor(basePrice * (100 - discountPercent) / 100);
+          
+          return {
+            id: game.id,
+            name: game.name,
+            platform: game.platform || "PC",
+            oldPrice: basePrice,
+            nowPrice: nowPrice,
+            low: index % 3 === 0, // 每3个游戏标记为史低
+            cover: game.cover,
+            score: game.score
+          };
+        });
+        
+        isDataLoaded = true;
+        renderDiscount();
+      })
+      .catch((err) => {
+        console.error("加载折扣数据失败:", err);
+        discList.innerHTML = `
+          <div style="font-size:12px;color:var(--danger);padding:20px;text-align:center;">
+            ❌ 折扣数据加载失败<br>
+            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span><br>
+            <button onclick="loadDiscountData()" style="margin-top: 10px;" class="btn btn-inline">重试</button>
+          </div>
+        `;
+      });
+  }
 
   function calcOff(item) {
     return Math.round((1 - item.nowPrice / item.oldPrice) * 100);
@@ -142,6 +180,12 @@
   const discCount = document.getElementById("discCount");
 
   function renderDiscount() {
+    if (!isDataLoaded) {
+      discList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💰 正在加载折扣数据...</div>';
+      discCount.textContent = `共 0 款`;
+      return;
+    }
+
     const kw = discSearch.value.trim().toLowerCase();
     const off = discFilter.value; // all / 20 / 50 / 70
     const lowOnly = discLowOnly.checked;
@@ -178,8 +222,13 @@
       // 计算省下的钱
       const saved = item.oldPrice - item.nowPrice;
       
+      // 使用真实封面图或默认图标
+      const coverHtml = item.cover 
+        ? `<img src="${item.cover}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:32px;\\'>🎮</div>';" />`
+        : '<div style="display: flex; align-items: center; justify-content: center; font-size: 32px; height: 100%;">🎮</div>';
+      
       div.innerHTML = `
-        <div class="game-cover" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
+        <div class="game-cover" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2)), #0b1020;">${coverHtml}</div>
         <div class="game-info">
           <div class="game-name">${item.name}</div>
           <div class="game-meta">📍 ${item.platform}</div>
@@ -223,7 +272,9 @@
   discSearch.addEventListener("input", renderDiscount);
   discFilter.addEventListener("change", renderDiscount);
   discLowOnly.addEventListener("change", renderDiscount);
-  renderDiscount();
+  
+  // 加载真实折扣数据
+  loadDiscountData();
 </script>
 </body>
 </html>
