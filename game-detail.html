@@ -90,6 +90,9 @@
               <span class="pill pill-soft">
                 发行：<span id="gamePublisher">未知</span>
               </span>
+              <span class="pill pill-soft">
+                平台：<span id="gamePlatformTag">未知</span>
+              </span>
             </div>
 
             <p id="gameDescription" class="detail-hero-desc">
@@ -182,6 +185,7 @@ const tagEl = document.getElementById("gameTag");
 const descEl = document.getElementById("gameDescription");
 const urlEl = document.getElementById("gameUrl");
 const profileEl = document.getElementById("gameProfileUrl");
+const platformTagEl = document.getElementById("gamePlatformTag");
 
 // 下方“基础信息”区域
 const devMetaEl = document.getElementById("gameDeveloperMeta");
@@ -356,6 +360,7 @@ function loadDetail() {
       safeSetText(dateEl, game.releaseDate || game.release_date || "未知");
       safeSetText(tagEl, game.tag || game.genre || "游戏");
       safeSetText(descEl, game.description || game.short_description || "暂无游戏简介");
+      safeSetText(platformTagEl, game.platform || "PC (Windows)");
       
       // 填充元信息区域 - 兼容不同的字段名
       safeSetText(devMetaEl, game.developer || "未知");
@@ -386,11 +391,17 @@ function loadDetail() {
       const gameUrl = game.gameUrl || game.game_url;
       const profileUrl = game.profileUrl || game.freetogame_profile_url;
       
-      if (gameUrl) {
+      if (gameUrl && gameUrl !== '#') {
         urlEl.href = gameUrl;
+        urlEl.style.display = '';
+      } else {
+        urlEl.style.display = 'none';
       }
-      if (profileUrl) {
+      if (profileUrl && profileUrl !== '#') {
         profileEl.href = profileUrl;
+        profileEl.style.display = '';
+      } else {
+        profileEl.style.display = 'none';
       }
 
       // 填充最低配置（使用 ranking.json 中的 systemRequirements）
