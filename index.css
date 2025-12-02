@@ -1705,6 +1705,7 @@ mark {
   border: 2px solid var(--cyber-cyan);
   box-shadow: var(--shadow-neon-cyan), inset 0 0 40px rgba(85, 234, 212, 0.1);
   animation: border-pulse 3s infinite;
+  min-height: 380px;
 }
 
 .cyber-glow-box::before {
@@ -1840,6 +1841,7 @@ mark {
   overflow: visible;
   width: 100%;
   box-sizing: border-box;
+  min-height: 380px;
 }
 
 .cyber-sysreq-section::before {
@@ -2733,7 +2735,7 @@ header .btn-secondary {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-height: 550px;
+  min-height: 100%;
   height: 100%;
 }
 
