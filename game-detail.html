@@ -360,39 +360,50 @@ function loadDetail() {
         return;
       }
 
-      // 填充基本信息
+      // 填充基本信息 - 兼容不同的字段名
       safeSetText(breadcrumbNameEl, game.name);
       safeSetText(titleEl, game.name);
       safeSetText(platformEl, game.platform || "PC");
       safeSetText(devEl, game.developer || "未知");
       safeSetText(pubEl, game.publisher || "未知");
-      safeSetText(dateEl, game.release_date || "未知");
-      safeSetText(tagEl, game.genre || "游戏");
-      safeSetText(descEl, game.short_description || "暂无游戏简介");
+      safeSetText(dateEl, game.releaseDate || game.release_date || "未知");
+      safeSetText(tagEl, game.tag || game.genre || "游戏");
+      safeSetText(descEl, game.description || game.short_description || "暂无游戏简介");
       
-      // 填充元信息区域
+      // 填充元信息区域 - 兼容不同的字段名
       safeSetText(devMetaEl, game.developer || "未知");
       safeSetText(pubMetaEl, game.publisher || "未知");
-      safeSetText(releaseMetaEl, game.release_date || "未知");
-      safeSetText(platformMetaEl, `${game.platform || "PC"} / ${game.genre || "未分类"}`);
+      safeSetText(releaseMetaEl, game.releaseDate || game.release_date || "未知");
+      
+      // 解析 platform 字段，可能包含类型信息（如 "Windows · Shooter"）
+      const platformParts = (game.platform || "PC").split('·').map(p => p.trim());
+      const platformName = platformParts[0] || "PC";
+      const genreFromPlatform = platformParts[1] || game.genre || "未分类";
+      safeSetText(platformMetaEl, `${platformName} / ${genreFromPlatform}`);
       
       // 评分
       const score = Number(game.score) || 0;
       safeSetText(scoreEl, score.toFixed(1));
       safeSetText(scoreMetaEl, score.toFixed(1));
       
-      // 封面图
-      if (game.thumbnail) {
-        coverEl.src = game.thumbnail;
+      // 封面图 - 兼容 cover 和 thumbnail
+      const coverUrl = game.cover || game.thumbnail;
+      if (coverUrl) {
+        coverEl.src = coverUrl;
         coverEl.alt = game.name + " 封面";
+        // 添加图片错误处理
+        handleImageError(coverEl);
       }
       
-      // 外链
-      if (game.game_url) {
-        urlEl.href = game.game_url;
+      // 外链 - 兼容不同的字段名
+      const gameUrl = game.gameUrl || game.game_url;
+      const profileUrl = game.profileUrl || game.freetogame_profile_url;
+      
+      if (gameUrl) {
+        urlEl.href = gameUrl;
       }
-      if (game.freetogame_profile_url) {
-        profileEl.href = game.freetogame_profile_url;
+      if (profileUrl) {
+        profileEl.href = profileUrl;
       }
 
       // 填充最低配置（使用 ranking.json 中的 systemRequirements）
