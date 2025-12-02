@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 游戏库</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Cyberpunk Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
 </head>
-<body data-current-page="library">
+<body data-current-page="library" class="cyberpunk-theme">
 <div class="page">
   <header class="header">
     <div class="header-inner">
@@ -41,6 +45,17 @@
       </div>
     </div>
   </header>
+
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
 
   <main class="main">
     <section>
@@ -131,6 +146,7 @@
 </div>
 
 <script src="common.js"></script>
+<script src="cyber-effects.js"></script>
 <script>
   initCommon();
 
