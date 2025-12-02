@@ -2403,7 +2403,7 @@ mark {
 .detail-info-grid {
   margin-top: 20px;
   display: grid;
-  grid-template-columns: minmax(240px, 0.3fr) minmax(550px, 1.7fr);
+  grid-template-columns: minmax(220px, 0.25fr) minmax(600px, 1.75fr);
   gap: 32px;
   align-items: start;
 }
