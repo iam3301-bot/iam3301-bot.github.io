@@ -310,14 +310,22 @@
     currentPage++;
   }
 
-  // 无限滚动
-  libList.addEventListener("scroll", () => {
-    const scrollTop = libList.scrollTop;
-    const scrollHeight = libList.scrollHeight;
-    const clientHeight = libList.clientHeight;
+  // 无限滚动 - 监听窗口滚动
+  let isLoading = false;
+  window.addEventListener("scroll", () => {
+    if (isLoading) return;
+    
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
 
-    if (scrollHeight - scrollTop - clientHeight < 100) {
-      loadMoreGames();
+    // 当距离底部小于500px时加载更多
+    if (scrollHeight - scrollTop - clientHeight < 500) {
+      if (currentPage * PAGE_SIZE < filteredGames.length) {
+        isLoading = true;
+        loadMoreGames();
+        setTimeout(() => { isLoading = false; }, 100);
+      }
     }
   });
 
