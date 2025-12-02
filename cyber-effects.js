@@ -204,8 +204,21 @@ function animatePageLoad() {
   window.addEventListener('load', () => {
     setTimeout(() => {
       hideLoading();
-    }, 800);
+      hideHTMLLoadingOverlay();
+    }, 500);
   });
+}
+
+// Hide the HTML-based loading overlay
+function hideHTMLLoadingOverlay() {
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    // Remove from DOM after animation
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 500);
+  }
 }
 
 // ========== Glitch Text Effect ==========
@@ -310,7 +323,15 @@ function initCyberEffects() {
   // Page load animation
   if (document.readyState === 'loading') {
     animatePageLoad();
+  } else {
+    // If page already loaded, hide overlay immediately
+    hideHTMLLoadingOverlay();
   }
+  
+  // Also ensure overlay is hidden after a short delay
+  setTimeout(() => {
+    hideHTMLLoadingOverlay();
+  }, 1000);
   
   // Apply glitch to titles (optional)
   // applyGlitchEffect('.page-title');
