@@ -14,7 +14,7 @@
 <div class="page">
   <header class="header">
     <div class="header-inner">
-      <a href="home.html" class="logo">
+      <a href="index.html" class="logo">
         <div class="logo-mark">G</div>
         <div>
           <div>GameBox 游盒</div>
@@ -71,17 +71,6 @@
           </div>
           <button class="btn btn-primary btn-inline" id="btnFakePost">发布新帖（示例）</button>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div class="form">
           <div class="form-row">
             <label>版块</label>
@@ -106,17 +95,6 @@
           </div>
           <div class="chip" id="postCount">共 0 帖</div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div id="postList" class="news-list"></div>
       </div>
     </section>
@@ -199,29 +177,62 @@
       return true;
     });
 
+    // 按热度（回复数+点赞数）排序
+    list.sort((a, b) => ((b.replies + b.likes) - (a.replies + a.likes)));
+
     postList.innerHTML = "";
     postCount.textContent = `共 ${list.length} 帖`;
 
     if (!list.length) {
       postList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);">暂无符合条件的帖子。</div>';
+        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💬 暂无符合条件的帖子。</div>';
       return;
     }
 
-    list.forEach((p) => {
+    list.forEach((p, idx) => {
       const div = document.createElement("div");
       div.className = "news-card";
+      div.style.cursor = "pointer";
+      
+      // 根据版块添加图标
+      let boardIcon = "💬";
+      let boardText = "综合";
+      if (p.board === "guide") {
+        boardIcon = "📚";
+        boardText = "攻略";
+      } else if (p.board === "shot") {
+        boardIcon = "📷";
+        boardText = "截图";
+      }
+      
+      // 热门标记
+      const isHot = (p.replies + p.likes) > 100;
+      const hotBadge = isHot ? '<span style="color: #ef4444; font-weight: bold; margin-left: 8px;">🔥 热门</span>' : '';
+      
       div.innerHTML = `
-        <div class="news-title">${p.title}</div>
-        <div class="news-meta">${p.game} · ${
-        p.board === "guide" ? "攻略" : p.board === "shot" ? "截图" : "综合"
-      }</div>
-        <div class="news-excerpt">回复：${p.replies} · 点赞：${p.likes}</div>
+        <div class="news-title">${boardIcon} ${p.title}${hotBadge}</div>
+        <div class="news-meta">🎮 ${p.game} · ${boardText}</div>
+        <div class="news-excerpt" style="display: flex; gap: 16px; align-items: center;">
+          <span>💬 ${p.replies} 回复</span>
+          <span>👍 ${p.likes} 点赞</span>
+        </div>
       `;
+      
+      // 添加悬停效果
+      div.addEventListener("mouseenter", () => {
+        div.style.transform = "translateX(4px)";
+        div.style.borderLeft = "3px solid var(--accent)";
+        div.style.transition = "all 0.3s ease";
+      });
+      
+      div.addEventListener("mouseleave", () => {
+        div.style.transform = "translateX(0)";
+        div.style.borderLeft = "";
+      });
+      
       div.addEventListener("click", () => {
-        if (p.id === "elden-newbie") {
-          window.location.href = "post-detail.html";
-        }
+        // 跳转到帖子详情页
+        window.location.href = `post-detail.html?id=${p.id}`;
       });
       postList.appendChild(div);
     });

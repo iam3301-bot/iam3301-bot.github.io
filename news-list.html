@@ -70,17 +70,6 @@
             <span class="dot"></span><span>筛选</span>
           </div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div class="form">
           <div class="form-row">
             <label>类型</label>
@@ -105,17 +94,6 @@
           </div>
           <div class="chip" id="newsCount">共 0 条</div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div id="newsList" class="news-list"></div>
       </div>
     </section>
@@ -210,24 +188,48 @@
 
     if (!list.length) {
       newsList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);">暂无符合条件的资讯。</div>';
+        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 暂无符合条件的资讯。</div>';
       return;
     }
 
     list.forEach((n) => {
       const div = document.createElement("div");
       div.className = "news-card";
+      div.style.cursor = "pointer";
+      
+      // 添加类型图标
+      let typeIcon = "📰";
+      let typeText = "";
+      if (n.type === "update") {
+        typeIcon = "🔄";
+        typeText = "更新 / 版本";
+      } else if (n.type === "new") {
+        typeIcon = "🎮";
+        typeText = "新作 / 发售";
+      } else {
+        typeIcon = "🎉";
+        typeText = "活动 / 赛事";
+      }
+      
       div.innerHTML = `
-        <div class="news-title">${n.title}</div>
-        <div class="news-meta">${n.game} · ${n.date} · ${
-        n.type === "update" ? "更新 / 版本" : n.type === "new" ? "新作 / 发售" : "活动 / 赛事"
-      }</div>
+        <div class="news-title">${typeIcon} ${n.title}</div>
+        <div class="news-meta">🎯 ${n.game} · 📅 ${n.date} · ${typeText}</div>
         <div class="news-excerpt">${n.summary}</div>
       `;
+      
+      // 添加悬停效果
+      div.addEventListener("mouseenter", () => {
+        div.style.transform = "translateX(4px)";
+        div.style.transition = "all 0.3s ease";
+      });
+      
+      div.addEventListener("mouseleave", () => {
+        div.style.transform = "translateX(0)";
+      });
+      
       div.addEventListener("click", () => {
-        if (n.id === "elden-dlc") {
-          window.location.href = "news-detail.html";
-        }
+        // 跳转到资讯详情页
+        window.location.href = `news-detail.html?id=${n.id}`;
       });
       newsList.appendChild(div);
     });

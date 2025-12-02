@@ -68,17 +68,6 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>列表类型</span></div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
           <button class="btn btn-primary btn-inline" id="tabOwned">已拥有</button>
           <button class="btn btn-inline" id="tabWish">想玩</button>
@@ -96,17 +85,6 @@
           <div class="card-title"><span class="dot"></span><span>我的列表</span></div>
           <div class="chip" id="myCount">共 0 款</div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div id="myList" class="game-list"></div>
       </div>
     </section>
@@ -176,31 +154,69 @@
     myCountEl.textContent = `共 ${list.length} 款`;
 
     if (!list.length) {
+      const emptyIcon = currentType === "owned" ? "📦" : "⭐";
+      const emptyText = currentType === "owned" 
+        ? "当前列表为空，去游戏详情页标记"已拥有"吧！" 
+        : "当前想玩列表为空，去游戏详情页标记"想玩"吧！";
       myListEl.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);">当前列表为空，可以去游戏详情页试试标记按钮。</div>';
+        `<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">${emptyIcon} ${emptyText}</div>`;
       return;
     }
 
-    list.forEach((g) => {
+    list.forEach((g, idx) => {
       const div = document.createElement("div");
       div.className = "game-card";
+      div.style.cursor = "pointer";
+      
+      const statusIcon = currentType === "owned" ? "✅" : "⭐";
+      const statusText = currentType === "owned" ? "已拥有" : "想玩";
+      
       div.innerHTML = `
+        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
         <div class="game-info">
-          <div class="game-name">${g.name}</div>
-          <div class="game-meta">ID：${g.id}</div>
+          <div class="game-name">${statusIcon} ${g.name}</div>
+          <div class="game-meta">ID: ${g.id} · ${statusText}</div>
           <div class="game-footer">
-            <span class="tag">来源：本地记录</span>
-            <button class="btn btn-inline btn-ghost">查看详情</button>
+            <span class="tag">📂 本地记录</span>
+            <button class="btn btn-inline" style="font-size: 11px;">查看详情</button>
+            <button class="btn btn-inline btn-ghost remove-btn" data-id="${g.id}" style="font-size: 11px;">移除</button>
           </div>
         </div>
       `;
-      div.querySelector("button").addEventListener("click", () => {
-        if (g.id === "elden-ring") {
-          window.location.href = "game-detail.html";
-        } else {
-          alert("当前 Demo 只有《艾尔登法环》做了详情页示例。");
+      
+      // 查看详情按钮
+      div.querySelector(".btn:not(.remove-btn)").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const url = new URL("game-detail.html", window.location.href);
+        url.searchParams.set("name", g.name);
+        if (g.id) {
+          url.searchParams.set("id", g.id);
+        }
+        window.location.href = url.toString();
+      });
+      
+      // 移除按钮
+      div.querySelector(".remove-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm(`确定要从${statusText}列表中移除《${g.name}》吗？`)) {
+          const key = currentType === "owned" ? "ownedGames" : "wishlistGames";
+          const currentList = getList(key);
+          const newList = currentList.filter(id => id !== g.id);
+          localStorage.setItem(key, JSON.stringify(newList));
+          renderMyList();
         }
       });
+      
+      // 添加悬停效果
+      div.addEventListener("mouseenter", () => {
+        div.style.transform = "translateY(-2px)";
+        div.style.transition = "all 0.3s ease";
+      });
+      
+      div.addEventListener("mouseleave", () => {
+        div.style.transform = "translateY(0)";
+      });
+      
       myListEl.appendChild(div);
     });
   }

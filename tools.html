@@ -69,17 +69,6 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>配置 vs 画质估算（示例）</span></div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div class="form">
           <div class="form-row">
             <label for="cfgCpu">CPU 档次</label>
@@ -107,17 +96,6 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>通关时间估算（示例）</span></div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div class="form">
           <div class="form-row">
             <label for="timeTotal">游戏总时长（小时，示例）</label>
@@ -137,17 +115,6 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>今晚玩什么？</span></div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">
           随机从一个示例游戏池中选一款，当作今晚的推荐。
         </div>
@@ -182,18 +149,27 @@
     const cpu = cfgCpu.value;
     const gpu = cfgGpu.value;
     let text = "";
+    let emoji = "";
 
     if (cpu === "low" && gpu === "low") {
-      text = "推荐 720p 或 1080p 低画质，适当关闭特效。";
+      emoji = "💻";
+      text = "推荐 720p 或 1080p 低画质，适当关闭特效。建议玩独立游戏或较老的 3A 游戏。";
     } else if (gpu === "high" && cpu === "high") {
-      text = "大部分 3A 在 2K 分辨率下中高甚至最高画质都没问题。";
+      emoji = "🚀";
+      text = "大部分 3A 在 2K 分辨率下中高甚至最高画质都没问题。可以尝试光追和 DLSS 等特效。";
     } else if (gpu === "mid" && cpu !== "low") {
-      text = "1080p 中高画质比较合适，部分游戏可以尝试 2K 中画质。";
+      emoji = "⚡";
+      text = "1080p 中高画质比较合适，部分游戏可以尝试 2K 中画质。适合大部分主流游戏。";
     } else {
-      text = "大多数情况建议 1080p 中画质，关闭极端特效。";
+      emoji = "🎮";
+      text = "大多数情况建议 1080p 中画质，关闭极端特效。可以流畅运行多数游戏。";
     }
 
-    cfgResult.textContent = "示例估算结果：" + text;
+    cfgResult.innerHTML = `<strong style="color: var(--accent);">${emoji} 估算结果：</strong>${text}`;
+    cfgResult.style.padding = "10px";
+    cfgResult.style.background = "rgba(56, 189, 248, 0.05)";
+    cfgResult.style.borderRadius = "6px";
+    cfgResult.style.color = "var(--text-main)";
   });
 
   // 通关时间
@@ -206,11 +182,27 @@
     const total = parseFloat(timeTotal.value);
     const daily = parseFloat(timeDaily.value);
     if (!total || !daily || total <= 0 || daily <= 0) {
-      timeResult.textContent = "请正确填写总时长和每日游戏时间。";
+      timeResult.innerHTML = "⚠️ 请正确填写总时长和每日游戏时间。";
+      timeResult.style.color = "var(--danger)";
       return;
     }
     const days = Math.ceil(total / daily);
-    timeResult.textContent = `如果每天玩约 ${daily} 小时，大概要 ${days} 天可以通关（示例估算）。`;
+    const weeks = Math.ceil(days / 7);
+    let tip = "";
+    
+    if (days <= 7) {
+      tip = "💪 一周内搞定！加油！";
+    } else if (days <= 30) {
+      tip = `📅 约 ${weeks} 周，慢慢享受游戏乐趣吧！`;
+    } else {
+      tip = "⏰ 这是个长期工程，记得劳逸结合哦！";
+    }
+    
+    timeResult.innerHTML = `<strong style="color: var(--accent);">⏱️ 预计通关时间：</strong>每天玩 ${daily} 小时，大概需要 <strong>${days} 天</strong>。${tip}`;
+    timeResult.style.padding = "10px";
+    timeResult.style.background = "rgba(56, 189, 248, 0.05)";
+    timeResult.style.borderRadius = "6px";
+    timeResult.style.color = "var(--text-main)";
   });
 
   // 随机今晚玩什么
@@ -226,10 +218,36 @@
     "原神",
   ];
 
+  // 添加抽取动画效果
+  let isRolling = false;
+  
   randBtn.addEventListener("click", () => {
-    const idx = Math.floor(Math.random() * randPool.length);
-    const game = randPool[idx];
-    randResult.textContent = `今晚不如试试：${game}`;
+    if (isRolling) return;
+    
+    isRolling = true;
+    randBtn.textContent = "抽取中...";
+    randBtn.disabled = true;
+    
+    let count = 0;
+    const rollInterval = setInterval(() => {
+      const idx = Math.floor(Math.random() * randPool.length);
+      randResult.innerHTML = `<span style="font-size: 16px; color: var(--text-muted);">🎲 ${randPool[idx]}</span>`;
+      count++;
+      
+      if (count >= 10) {
+        clearInterval(rollInterval);
+        const finalIdx = Math.floor(Math.random() * randPool.length);
+        const game = randPool[finalIdx];
+        randResult.innerHTML = `<strong style="color: var(--accent); font-size: 18px;">🎮 今晚不如试试：${game}</strong>`;
+        randResult.style.padding = "15px";
+        randResult.style.background = "rgba(56, 189, 248, 0.1)";
+        randResult.style.borderRadius = "6px";
+        randResult.style.border = "1px solid var(--accent)";
+        randBtn.textContent = "再抽一次";
+        randBtn.disabled = false;
+        isRolling = false;
+      }
+    }, 100);
   });
 </script>
 </body>

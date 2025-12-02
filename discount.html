@@ -70,17 +70,6 @@
             <span class="dot"></span><span>筛选条件</span>
           </div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div class="form">
           <div class="form-row">
             <label for="discSearch">按名称搜索</label>
@@ -111,17 +100,6 @@
           </div>
           <div class="chip" id="discCount">共 0 款</div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div id="discList" class="game-list"></div>
       </div>
     </section>
@@ -187,7 +165,7 @@
 
     if (!list.length) {
       discList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);">当前条件下没有折扣游戏。</div>';
+        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💰 当前条件下没有折扣游戏。</div>';
       return;
     }
 
@@ -195,22 +173,48 @@
       const offVal = calcOff(item);
       const div = document.createElement("div");
       div.className = "game-card";
+      div.style.cursor = "pointer";
+      
+      // 计算省下的钱
+      const saved = item.oldPrice - item.nowPrice;
+      
       div.innerHTML = `
+        <div class="game-cover" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
         <div class="game-info">
           <div class="game-name">${item.name}</div>
-          <div class="game-meta">${item.platform}</div>
+          <div class="game-meta">📍 ${item.platform}</div>
           <div class="game-footer">
-            <span class="tag">原价：¥${item.oldPrice}</span>
-            <span class="tag tag--accent">现价：¥${item.nowPrice}</span>
-            <span class="tag tag--danger">-${offVal}%</span>
-            ${item.low ? '<span class="tag tag--accent">史低</span>' : ""}
+            <span class="tag" style="text-decoration: line-through; opacity: 0.6;">原价 ¥${item.oldPrice}</span>
+            <span class="tag tag--accent" style="font-size: 14px; font-weight: bold;">现价 ¥${item.nowPrice}</span>
+            <span class="tag tag--danger" style="font-weight: bold;">-${offVal}%</span>
+            ${item.low ? '<span class="tag" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; font-weight: bold;">🔥 史低</span>' : ""}
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+            💰 省 ¥${saved} ${item.low ? "· 历史最低价，建议入手！" : ""}
           </div>
         </div>
       `;
+      
+      // 添加悬停效果
+      div.addEventListener("mouseenter", () => {
+        div.style.transform = "translateY(-2px)";
+        div.style.boxShadow = "0 4px 12px rgba(239, 68, 68, 0.3)";
+        div.style.transition = "all 0.3s ease";
+      });
+      
+      div.addEventListener("mouseleave", () => {
+        div.style.transform = "translateY(0)";
+        div.style.boxShadow = "";
+      });
+      
       div.addEventListener("click", () => {
-        if (item.id === "elden-ring") {
-          window.location.href = "game-detail.html";
+        // 跳转到游戏详情页
+        const url = new URL("game-detail.html", window.location.href);
+        if (item.id) {
+          url.searchParams.set("id", item.id);
         }
+        url.searchParams.set("name", item.name);
+        window.location.href = url.toString();
       });
       discList.appendChild(div);
     });
