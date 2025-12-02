@@ -755,7 +755,7 @@
   }
 
   /**
-   * 获取所有游戏
+   * 获取所有游戏（优先使用真实 Steam 数据）
    */
   async function getAllGames() {
     // 检查缓存
@@ -764,14 +764,29 @@
       return cachedGames;
     }
 
-    console.log("🔄 生成超大型游戏数据库...");
-    const games = generateMegaGameDatabase();
+    let games = [];
+
+    // 1. 优先使用真实 Steam 游戏数据
+    if (window.realSteamGames) {
+      console.log("🔄 加载真实 Steam 游戏数据...");
+      games = window.realSteamGames.generateRealGameDatabase();
+      
+      // 2. 如果 Steam API 服务可用，获取真实评分
+      if (window.steamAPI && games.length > 0) {
+        console.log("🔄 从 Steam API 获取真实评分...");
+        games = await window.realSteamGames.enrichGameData(games);
+      }
+    } else {
+      // 降级方案：使用生成的数据
+      console.log("⚠️ 真实 Steam 数据不可用，使用生成数据");
+      games = generateMegaGameDatabase();
+    }
     
     // 更新缓存
     cachedGames = games;
     cacheTime = Date.now();
     
-    console.log(`✅ 成功生成 ${games.length} 款游戏数据`);
+    console.log(`✅ 成功加载 ${games.length} 款游戏数据`);
     return games;
   }
 
