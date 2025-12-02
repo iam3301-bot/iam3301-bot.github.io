@@ -1598,6 +1598,434 @@ mark {
   }
 }
 
+/* ========================================
+   🎮 GAME DETAIL PAGE - CYBERPUNK 2077 STYLE
+   ======================================== */
+
+/* Hero section with cyberpunk glow */
+.cyber-glow-box {
+  position: relative;
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+  border: 2px solid var(--cyber-cyan);
+  box-shadow: var(--shadow-neon-cyan), inset 0 0 40px rgba(85, 234, 212, 0.1);
+  animation: border-pulse 3s infinite;
+}
+
+.cyber-glow-box::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--cyber-yellow), var(--cyber-pink), var(--cyber-cyan), var(--cyber-yellow));
+  background-size: 300% 300%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: gradient-shift 4s ease infinite;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.cyber-glow-box:hover::before {
+  opacity: 0.3;
+}
+
+/* Score card with cyberpunk styling */
+.cyber-score-card {
+  background: linear-gradient(135deg, rgba(255, 211, 0, 0.15) 0%, rgba(255, 61, 148, 0.1) 100%);
+  border: 2px solid var(--cyber-yellow);
+  box-shadow: var(--shadow-neon-yellow), inset 0 0 30px rgba(255, 211, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: score-pulse 2s ease-in-out infinite;
+}
+
+.cyber-score-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 211, 0, 0.2) 0%, transparent 70%);
+  animation: rotate-glow 8s linear infinite;
+}
+
+.detail-score-value {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  text-shadow: 0 0 20px var(--cyber-yellow), 0 0 40px var(--cyber-yellow);
+  position: relative;
+  z-index: 1;
+}
+
+/* Info section with tech styling */
+.cyber-info-section {
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(30, 0, 40, 0.85) 100%);
+  border: 2px solid var(--cyber-pink);
+  box-shadow: var(--shadow-neon-pink), inset 0 0 30px rgba(255, 61, 148, 0.08);
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  position: relative;
+}
+
+.cyber-info-section::after {
+  content: '// BASIC INFO';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px;
+  color: var(--cyber-pink);
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+
+.detail-meta-row {
+  padding: 12px 16px;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.detail-meta-row:hover {
+  background: rgba(255, 61, 148, 0.1);
+  border-left-color: var(--cyber-pink);
+  box-shadow: inset 0 0 20px rgba(255, 61, 148, 0.15);
+}
+
+.detail-meta-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  color: var(--cyber-cyan);
+  text-shadow: 0 0 10px var(--cyber-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+.detail-meta-value {
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* System requirements section */
+.cyber-sysreq-section {
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(0, 30, 30, 0.85) 100%);
+  border: 2px solid var(--cyber-cyan);
+  box-shadow: var(--shadow-neon-cyan), inset 0 0 30px rgba(85, 234, 212, 0.08);
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  position: relative;
+}
+
+.cyber-sysreq-section::after {
+  content: '// SYSTEM SPECS';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px;
+  color: var(--cyber-cyan);
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+
+.sysreq-column {
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(85, 234, 212, 0.3);
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.sysreq-column:hover {
+  border-color: var(--cyber-cyan);
+  box-shadow: var(--shadow-neon-cyan);
+  transform: translateY(-2px);
+}
+
+.sysreq-column--recommended {
+  border-color: rgba(255, 211, 0, 0.3);
+}
+
+.sysreq-column--recommended:hover {
+  border-color: var(--cyber-yellow);
+  box-shadow: var(--shadow-neon-yellow);
+}
+
+.sysreq-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--cyber-cyan);
+  text-shadow: 0 0 15px var(--cyber-cyan);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.sysreq-column--recommended .sysreq-title {
+  color: var(--cyber-yellow);
+  text-shadow: 0 0 15px var(--cyber-yellow);
+}
+
+.sysreq-list li {
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 2px solid var(--cyber-cyan);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.sysreq-list li:hover {
+  background: rgba(85, 234, 212, 0.1);
+  border-left-width: 4px;
+  box-shadow: inset 0 0 15px rgba(85, 234, 212, 0.1);
+  transform: translateX(4px);
+}
+
+.sysreq-column--recommended .sysreq-list li {
+  border-left-color: var(--cyber-yellow);
+}
+
+.sysreq-column--recommended .sysreq-list li:hover {
+  background: rgba(255, 211, 0, 0.1);
+  box-shadow: inset 0 0 15px rgba(255, 211, 0, 0.1);
+}
+
+.sysreq-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  color: var(--cyber-cyan);
+  text-shadow: 0 0 8px var(--cyber-cyan);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sysreq-column--recommended .sysreq-label {
+  color: var(--cyber-yellow);
+  text-shadow: 0 0 8px var(--cyber-yellow);
+}
+
+.sysreq-value {
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* Detail buttons with cyberpunk effects */
+.detail-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(85, 234, 212, 0.2) 0%, rgba(85, 234, 212, 0.05) 100%);
+  border: 2px solid var(--cyber-cyan);
+  box-shadow: var(--shadow-neon-cyan);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: all 0.3s ease;
+}
+
+.detail-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(85, 234, 212, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.detail-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-neon-cyan), 0 8px 24px rgba(85, 234, 212, 0.3);
+  background: linear-gradient(135deg, rgba(85, 234, 212, 0.3) 0%, rgba(85, 234, 212, 0.1) 100%);
+}
+
+.detail-btn:hover::before {
+  left: 100%;
+}
+
+.detail-btn-main {
+  border-color: var(--cyber-yellow);
+  box-shadow: var(--shadow-neon-yellow);
+  background: linear-gradient(135deg, rgba(255, 211, 0, 0.2) 0%, rgba(255, 211, 0, 0.05) 100%);
+}
+
+.detail-btn-main:hover {
+  box-shadow: var(--shadow-neon-yellow), 0 8px 24px rgba(255, 211, 0, 0.3);
+  background: linear-gradient(135deg, rgba(255, 211, 0, 0.3) 0%, rgba(255, 211, 0, 0.1) 100%);
+}
+
+.detail-btn-main::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 211, 0, 0.4), transparent);
+}
+
+/* Detail cover with neon glow */
+.detail-cover-large {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--cyber-pink);
+  box-shadow: var(--shadow-neon-pink), inset 0 0 40px rgba(255, 61, 148, 0.15);
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  transition: all 0.4s ease;
+}
+
+.detail-cover-large:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-neon-pink), 0 0 60px rgba(255, 61, 148, 0.4), inset 0 0 60px rgba(255, 61, 148, 0.2);
+}
+
+.detail-cover-large img {
+  transition: transform 0.4s ease;
+}
+
+.detail-cover-large:hover img {
+  transform: scale(1.05);
+}
+
+/* Breadcrumb with cyberpunk style */
+.detail-breadcrumb {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+  color: var(--cyber-cyan);
+  text-shadow: 0 0 10px var(--cyber-cyan);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* Detail title with glow */
+.detail-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  text-shadow: 0 0 20px var(--cyber-yellow), 0 0 40px var(--cyber-yellow), 0 0 60px var(--cyber-yellow);
+  animation: text-glow 2s ease-in-out infinite;
+}
+
+/* Pills with cyberpunk styling */
+.detail-tag-row .pill {
+  background: linear-gradient(135deg, rgba(255, 61, 148, 0.2) 0%, rgba(255, 61, 148, 0.05) 100%);
+  border: 1px solid var(--cyber-pink);
+  box-shadow: 0 0 10px rgba(255, 61, 148, 0.3);
+  font-family: 'Rajdhani', sans-serif;
+  text-shadow: 0 0 8px var(--cyber-pink);
+  transition: all 0.3s ease;
+}
+
+.detail-tag-row .pill:hover {
+  background: linear-gradient(135deg, rgba(255, 61, 148, 0.3) 0%, rgba(255, 61, 148, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(255, 61, 148, 0.5);
+  transform: translateY(-2px);
+}
+
+.detail-tag-row .pill-soft {
+  background: linear-gradient(135deg, rgba(85, 234, 212, 0.15) 0%, rgba(85, 234, 212, 0.03) 100%);
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 8px rgba(85, 234, 212, 0.2);
+  text-shadow: 0 0 6px var(--cyber-cyan);
+}
+
+.detail-tag-row .pill-soft:hover {
+  background: linear-gradient(135deg, rgba(85, 234, 212, 0.25) 0%, rgba(85, 234, 212, 0.08) 100%);
+  box-shadow: 0 0 16px rgba(85, 234, 212, 0.4);
+}
+
+/* Section titles */
+.detail-section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  color: var(--cyber-cyan);
+  text-shadow: 0 0 15px var(--cyber-cyan), 0 0 30px var(--cyber-cyan);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.detail-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyber-cyan), transparent);
+  box-shadow: 0 0 10px var(--cyber-cyan);
+}
+
+.cyber-info-section .detail-section-title {
+  color: var(--cyber-pink);
+  text-shadow: 0 0 15px var(--cyber-pink), 0 0 30px var(--cyber-pink);
+}
+
+.cyber-info-section .detail-section-title::after {
+  background: linear-gradient(90deg, var(--cyber-pink), transparent);
+  box-shadow: 0 0 10px var(--cyber-pink);
+}
+
+/* Animations for detail page */
+@keyframes border-pulse {
+  0%, 100% { border-color: var(--cyber-cyan); }
+  50% { border-color: rgba(85, 234, 212, 0.5); }
+}
+
+@keyframes score-pulse {
+  0%, 100% { 
+    box-shadow: var(--shadow-neon-yellow), inset 0 0 30px rgba(255, 211, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 211, 0, 0.6), inset 0 0 40px rgba(255, 211, 0, 0.2);
+  }
+}
+
+@keyframes rotate-glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 0 0 20px var(--cyber-yellow), 0 0 40px var(--cyber-yellow);
+  }
+  50% {
+    text-shadow: 0 0 30px var(--cyber-yellow), 0 0 60px var(--cyber-yellow), 0 0 80px var(--cyber-yellow);
+  }
+}
+
+/* Responsive adjustments for detail page */
+@media (max-width: 960px) {
+  .detail-hero {
+    flex-direction: column;
+  }
+  
+  .detail-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sysreq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cyber-glow-box {
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  
+  .detail-title {
+    font-size: 24px;
+  }
+  
+  .detail-score-card {
+    padding: 16px;
+  }
+  
+  .cyber-info-section, .cyber-sysreq-section {
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+}
+
 .ranking-list--scroll {
   max-height: 260px;
   overflow-y: auto;
