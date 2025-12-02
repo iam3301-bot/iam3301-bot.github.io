@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
+  <script src="game-api.js"></script>
 </head>
 <body data-current-page="library" class="cyberpunk-theme">
 <div class="page">
@@ -138,7 +139,11 @@
         </div>
         <div class="sidebar-item">
           <span class="label">数据来源</span>
-          <span class="value">示例假数据</span>
+          <span class="value">FreeToGame API</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">游戏总数</span>
+          <span class="value" id="totalGamesCount">加载中...</span>
         </div>
       </div>
     </aside>
