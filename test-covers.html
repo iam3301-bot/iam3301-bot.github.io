@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>封面唯一性测试</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #0a0a0a;
+      color: #fff;
+    }
+    .game-card {
+      display: inline-block;
+      width: 230px;
+      margin: 10px;
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #00ffff;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .game-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .game-card h4 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+      color: #00ffff;
+    }
+    .game-card p {
+      font-size: 12px;
+      color: #aaa;
+      margin: 5px 0;
+    }
+    .stats {
+      padding: 20px;
+      background: #1a1a1a;
+      border: 2px solid #00ffff;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .stats h2 {
+      color: #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="stats">
+    <h2>📊 游戏数据库统计</h2>
+    <p id="totalGames">总游戏数: 加载中...</p>
+    <p id="uniqueCovers">唯一封面数: 加载中...</p>
+    <p id="duplicates">重复封面数: 加载中...</p>
+  </div>
+
+  <h2>🎮 前20款游戏封面展示</h2>
+  <div id="gameList"></div>
+
+  <script src="mega-game-database.js"></script>
+  <script>
+    const games = window.megaGameDB.getAllGames();
+    
+    // 统计唯一性
+    const covers = new Map();
+    let duplicates = 0;
+    games.forEach(g => {
+      if (covers.has(g.thumbnail)) {
+        duplicates++;
+      } else {
+        covers.set(g.thumbnail, g.name);
+      }
+    });
+    
+    // 显示统计
+    document.getElementById('totalGames').textContent = `总游戏数: ${games.length}`;
+    document.getElementById('uniqueCovers').textContent = `唯一封面数: ${covers.size}`;
+    document.getElementById('duplicates').textContent = `重复封面数: ${duplicates}`;
+    
+    if (duplicates === 0) {
+      document.getElementById('duplicates').innerHTML = '重复封面数: <span style="color: #00ff00; font-weight: bold;">0 ✅ 完美！</span>';
+    } else {
+      document.getElementById('duplicates').innerHTML = `重复封面数: <span style="color: #ff0000; font-weight: bold;">${duplicates} ❌</span>`;
+    }
+    
+    // 显示前20款游戏
+    const gameList = document.getElementById('gameList');
+    games.slice(0, 20).forEach((game, index) => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.innerHTML = `
+        <img src="${game.thumbnail}" alt="${game.name}" onerror="this.style.border='2px solid red'">
+        <h4>${index + 1}. ${game.name}</h4>
+        <p>Steam ID: ${game.steamAppId || 'N/A'}</p>
+        <p>评分: ${game.rating}/100</p>
+      `;
+      gameList.appendChild(card);
+    });
+  </script>
+</body>
+</html>
