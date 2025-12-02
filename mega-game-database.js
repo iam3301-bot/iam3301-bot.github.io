@@ -630,25 +630,31 @@
     return steamGameCoversMap['default'];
   }
 
-  function generateThumbnail(category, index, gameName) {
-    // 优先通过游戏名称精确匹配Steam封面
-    if (gameName) {
-      return matchGameCover(gameName);
+  // 简单的字符串哈希函数
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
     }
+    return Math.abs(hash);
+  }
 
-    // 降级方案：生成SVG封面
-    const gradients = [
-      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-      'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-      'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-      'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
-      'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-      'linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%)'
-    ];
+  // 生成唯一SVG封面（基于游戏名称哈希）
+  function generateUniqueSVG(gameName, category, index) {
+    // 使用游戏名称生成唯一哈希值
+    const hash = hashCode(gameName);
+    
+    // 基于哈希值生成唯一的颜色
+    const hue1 = hash % 360;
+    const hue2 = (hash + 180) % 360;
+    const saturation = 60 + (hash % 30);
+    const lightness1 = 45 + (hash % 15);
+    const lightness2 = 35 + (hash % 20);
+    
+    const color1 = `hsl(${hue1}, ${saturation}%, ${lightness1}%)`;
+    const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
     
     const categoryEmojis = {
       'RPG': '🎮', 'JRPG': '⚔️', 'Action-RPG': '🗡️', 'Souls-like': '💀',
@@ -669,21 +675,35 @@
     };
     
     const emoji = categoryEmojis[category] || '🎮';
-    const gradient = gradients[index % gradients.length];
     
-    // 返回data URI格式的SVG图片
+    // 基于哈希值决定渐变角度
+    const angle = 135 + (hash % 90);
+    
+    // 生成唯一的SVG封面
     const svg = `<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="grad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:rgb(102,126,234);stop-opacity:1" />
-          <stop offset="100%" style="stop-color:rgb(118,75,162);stop-opacity:1" />
+        <linearGradient id="grad${hash}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:${color1};stop-opacity:1" />
+          <stop offset="100%" style="stop-color:${color2};stop-opacity:1" />
         </linearGradient>
       </defs>
-      <rect width="300" height="400" fill="url(#grad${index})"/>
+      <rect width="300" height="400" fill="url(#grad${hash})"/>
       <text x="150" y="220" font-size="120" text-anchor="middle">${emoji}</text>
     </svg>`;
     
     return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+  }
+
+  // 生成游戏封面（每个游戏都有唯一封面）
+  function generateThumbnail(category, index, gameName, platform, price) {
+    if (!gameName) {
+      return generateUniqueSVG('default' + index, category, index);
+    }
+
+    // 策略：使用游戏名称 + 平台 + 价格作为唯一标识
+    // 确保每个游戏（即使是同系列的不同版本）都有独特的封面
+    const uniqueId = `${gameName}-${platform}-${price}`;
+    return generateUniqueSVG(uniqueId, category, index);
   }
 
   /**
@@ -724,7 +744,7 @@
           price: price,
           year: Math.max(2000, year),
           tags: tags,
-          thumbnail: generateThumbnail(category, gameIndex, fullName),
+          thumbnail: generateThumbnail(category, gameIndex, fullName, platform, price),
           short_description: `${fullName} - ${category} 类游戏，${tags.join("、")}`,
           releaseDate: `${Math.max(2000, year)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
         });
