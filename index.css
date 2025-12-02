@@ -2763,7 +2763,7 @@ header .btn-secondary {
 .sysreq-list li {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 14px;
   padding: 16px 20px;
   background: rgba(0, 0, 0, 0.4);
@@ -2796,8 +2796,9 @@ header .btn-secondary {
   flex-shrink: 0;
   text-transform: none;
   letter-spacing: 0;
-  line-height: 1.8;
+  line-height: 1.4;
   padding-right: 16px;
+  white-space: nowrap;
 }
 
 .sysreq-label::before {
@@ -2811,9 +2812,11 @@ header .btn-secondary {
   color: rgba(255, 255, 255, 0.95);
   text-align: right;
   flex: 1;
-  line-height: 1.8;
+  line-height: 1.4;
   font-weight: 400;
-  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding-left: 16px;
 }
 
