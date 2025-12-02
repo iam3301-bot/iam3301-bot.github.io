@@ -2733,7 +2733,7 @@ header .btn-secondary {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-height: 400px;
+  min-height: 550px;
   height: 100%;
 }
 
