@@ -418,50 +418,100 @@
   /**
    * 生成游戏封面 - 使用渐变色和emoji
    */
-  // 真实Steam游戏封面库 - 使用公开CDN
-  const steamGameCovers = {
-    'RPG': [
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg', // Red Dead Redemption 2
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg', // Cyberpunk 2077
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg', // The Witcher 3
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg', // Elden Ring
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/489830/header.jpg', // Skyrim
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg', // Baldur's Gate 3
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1942280/header.jpg', // Starfield
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1203220/header.jpg', // Persona 5 Royal
-    ],
-    'ACTION': [
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg', // GTA V
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg', // Spider-Man
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/header.jpg', // Horizon Zero Dawn
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg', // Palworld
-    ],
-    'SHOOTER': [
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg', // CS:GO
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg', // Apex Legends
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg', // PUBG
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg', // Rainbow Six Siege
-    ],
-    'STRATEGY': [
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg', // Dota 2
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1466860/header.jpg', // Total War
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/813780/header.jpg', // Age of Empires
-    ],
-    'default': [
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg', // Baldur's Gate 3
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/header.jpg', // Black Myth Wukong
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg', // Elden Ring
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg', // The Witcher 3
-      'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg', // Cyberpunk 2077
-    ]
+  // 真实Steam游戏封面库 - 通过游戏关键词精确匹配
+  const steamGameCoversMap = {
+    // RPG游戏
+    'elder scrolls': 'https://cdn.cloudflare.steamstatic.com/steam/apps/489830/header.jpg', // Skyrim
+    'skyrim': 'https://cdn.cloudflare.steamstatic.com/steam/apps/489830/header.jpg',
+    'oblivion': 'https://cdn.cloudflare.steamstatic.com/steam/apps/22330/header.jpg',
+    'morrowind': 'https://cdn.cloudflare.steamstatic.com/steam/apps/22320/header.jpg',
+    'witcher': 'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg', // The Witcher 3
+    'cyberpunk': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg', // Cyberpunk 2077
+    'elden ring': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg',
+    'dark souls': 'https://cdn.cloudflare.steamstatic.com/steam/apps/447040/header.jpg',
+    'bloodborne': 'https://cdn.cloudflare.steamstatic.com/steam/apps/447040/header.jpg', // 用Dark Souls代替
+    'sekiro': 'https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg',
+    'fallout': 'https://cdn.cloudflare.steamstatic.com/steam/apps/377160/header.jpg', // Fallout 4
+    'baldur': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg', // Baldur's Gate 3
+    'starfield': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1716740/header.jpg',
+    'persona': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/header.jpg', // Persona 5 Royal
+    'final fantasy': 'https://cdn.cloudflare.steamstatic.com/steam/apps/39140/header.jpg', // FF XIV
+    'dragon age': 'https://cdn.cloudflare.steamstatic.com/steam/apps/47810/header.jpg',
+    'mass effect': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1328670/header.jpg',
+    'diablo': 'https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg', // Diablo IV
+    'monster hunter': 'https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg', // MH World
+    'red dead': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg', // RDR2
+    
+    // Action游戏
+    'gta': 'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg', // GTA V
+    'grand theft auto': 'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg',
+    'spider': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg', // Spider-Man
+    'horizon': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/header.jpg', // Horizon Zero Dawn
+    'god of war': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg',
+    'assassin': 'https://cdn.cloudflare.steamstatic.com/steam/apps/812140/header.jpg', // AC Valhalla
+    'far cry': 'https://cdn.cloudflare.steamstatic.com/steam/apps/552520/header.jpg',
+    'palworld': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg',
+    'dying light': 'https://cdn.cloudflare.steamstatic.com/steam/apps/534380/header.jpg',
+    'ghost of tsushima': 'https://cdn.cloudflare.steamstatic.com/steam/apps/2215430/header.jpg',
+    
+    // Shooter游戏
+    'counter-strike': 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg', // CS:GO
+    'cs:go': 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg',
+    'apex': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg', // Apex Legends
+    'pubg': 'https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg',
+    'call of duty': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg',
+    'valorant': 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg', // 用CS代替
+    'rainbow six': 'https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg',
+    'battlefield': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1517290/header.jpg',
+    'overwatch': 'https://cdn.cloudflare.steamstatic.com/steam/apps/2357570/header.jpg',
+    
+    // Strategy游戏
+    'dota': 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg', // Dota 2
+    'league of legends': 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg', // 用Dota代替
+    'total war': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1142710/header.jpg',
+    'age of empires': 'https://cdn.cloudflare.steamstatic.com/steam/apps/813780/header.jpg',
+    'civilization': 'https://cdn.cloudflare.steamstatic.com/steam/apps/289070/header.jpg',
+    'starcraft': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1142710/header.jpg', // 用Total War代替
+    
+    // Simulation游戏
+    'minecraft': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1788050/header.jpg', // Minecraft Dungeons
+    'cities skylines': 'https://cdn.cloudflare.steamstatic.com/steam/apps/255710/header.jpg',
+    'euro truck': 'https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg',
+    'farming simulator': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1248130/header.jpg',
+    'microsoft flight': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1250410/header.jpg',
+    
+    // Sports & Racing
+    'fifa': 'https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/header.jpg',
+    'nba 2k': 'https://cdn.cloudflare.steamstatic.com/steam/apps/2338770/header.jpg',
+    'forza': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg',
+    'need for speed': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1262540/header.jpg',
+    
+    // 默认封面池（用于没有匹配的游戏）
+    'default': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg'
   };
 
-  function generateThumbnail(category, index) {
-    // 优先使用真实Steam游戏封面
-    const categoryCovers = steamGameCovers[category] || steamGameCovers['default'];
-    if (categoryCovers && categoryCovers.length > 0) {
-      const coverIndex = index % categoryCovers.length;
-      return categoryCovers[coverIndex];
+  // 从游戏名称中提取关键词并匹配封面
+  function matchGameCover(gameName) {
+    if (!gameName) return steamGameCoversMap['default'];
+    
+    const lowerName = gameName.toLowerCase();
+    
+    // 按关键词优先级匹配
+    for (const [keyword, cover] of Object.entries(steamGameCoversMap)) {
+      if (keyword === 'default') continue;
+      if (lowerName.includes(keyword)) {
+        return cover;
+      }
+    }
+    
+    // 没有匹配时返回默认封面
+    return steamGameCoversMap['default'];
+  }
+
+  function generateThumbnail(category, index, gameName) {
+    // 优先通过游戏名称精确匹配Steam封面
+    if (gameName) {
+      return matchGameCover(gameName);
     }
 
     // 降级方案：生成SVG封面
@@ -552,7 +602,7 @@
           price: price,
           year: Math.max(2000, year),
           tags: tags,
-          thumbnail: generateThumbnail(category, gameIndex),
+          thumbnail: generateThumbnail(category, gameIndex, fullName),
           short_description: `${fullName} - ${category} 类游戏，${tags.join("、")}`,
           releaseDate: `${Math.max(2000, year)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
         });

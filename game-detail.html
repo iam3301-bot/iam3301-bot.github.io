@@ -164,6 +164,7 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="steam-api.js"></script>
+<script src="mega-game-database.js"></script>
 <script>
 // 初始化通用逻辑（导航高亮）
 initCommon();
@@ -218,21 +219,7 @@ if (!gameId && !gameName) {
   );
 }
 
-// 在 ranking.json 中查找对应游戏：优先用 id，找不到再按 name
-function findGame(data) {
-  const all = []
-    .concat(data.hot || [], data.score || [], data.new || [], data.discount || []);
-
-  let found = null;
-
-  if (gameId) {
-    found = all.find((g) => String(g.id) === String(gameId));
-  }
-  if (!found && gameName) {
-    found = all.find((g) => g.name === gameName);
-  }
-  return found;
-}
+// 游戏数据现在从 mega-game-database.js 加载
 
 // 填充最低配置的函数
 function fillMinSysReq(sys) {
@@ -328,96 +315,82 @@ async function fetchSteamRecommendedSysReq(gameTitle) {
   }
 }
 
-function loadDetail() {
+async function loadDetail() {
   if (!gameId && !gameName) return;
 
   // 显示加载提示
   sysMinListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
   sysRecommendedListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
 
-  fetch("ranking.json")
-    .then((res) => {
-      if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-      return res.json();
-    })
-    .then((data) => {
-      const game = findGame(data);
-
-      if (!game) {
-        safeSetText(titleEl, "游戏未找到");
-        safeSetText(descEl, "在排行榜数据中找不到该游戏，请返回重新选择。");
-        sysMinListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
-        sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
-        return;
+  try {
+    // 从mega-game-database.js获取游戏数据
+    const allGames = await window.megaGameDB.getAllGames();
+    
+    // 根据ID或名称查找游戏
+    let game = null;
+    if (gameId) {
+      // 注意：mega-game-database生成的游戏没有id字段，需要用索引
+      const index = parseInt(gameId) - 1;
+      if (index >= 0 && index < allGames.length) {
+        game = allGames[index];
+        game.id = index + 1; // 添加id字段
       }
+    }
+    if (!game && gameName) {
+      game = allGames.find(g => g.name === gameName || g.title === gameName);
+    }
 
-      // 填充基本信息 - 兼容不同的字段名
-      safeSetText(breadcrumbNameEl, game.name);
-      safeSetText(titleEl, game.name);
-      safeSetText(platformEl, game.platform || "PC");
-      safeSetText(devEl, game.developer || "未知");
-      safeSetText(pubEl, game.publisher || "未知");
-      safeSetText(dateEl, game.releaseDate || game.release_date || "未知");
-      safeSetText(tagEl, game.tag || game.genre || "游戏");
-      safeSetText(descEl, game.description || game.short_description || "暂无游戏简介");
-      safeSetText(platformTagEl, game.platform || "PC (Windows)");
-      
-      // 填充元信息区域 - 兼容不同的字段名
-      safeSetText(devMetaEl, game.developer || "未知");
-      safeSetText(pubMetaEl, game.publisher || "未知");
-      safeSetText(releaseMetaEl, game.releaseDate || game.release_date || "未知");
-      
-      // 解析 platform 字段，可能包含类型信息（如 "Windows · Shooter"）
-      const platformParts = (game.platform || "PC").split('·').map(p => p.trim());
-      const platformName = platformParts[0] || "PC";
-      const genreFromPlatform = platformParts[1] || game.genre || "未分类";
-      safeSetText(platformMetaEl, `${platformName} / ${genreFromPlatform}`);
-      
-      // 评分
-      const score = Number(game.score) || 0;
-      safeSetText(scoreEl, score.toFixed(1));
-      safeSetText(scoreMetaEl, score.toFixed(1));
-      
-      // 封面图 - 兼容 cover 和 thumbnail
-      const coverUrl = game.cover || game.thumbnail;
-      if (coverUrl) {
-        coverEl.src = coverUrl;
-        coverEl.alt = game.name + " 封面";
-        // 添加图片错误处理
-        handleImageError(coverEl);
-      }
-      
-      // 外链 - 兼容不同的字段名
-      const gameUrl = game.gameUrl || game.game_url;
-      const profileUrl = game.profileUrl || game.freetogame_profile_url;
-      
-      if (gameUrl && gameUrl !== '#') {
-        urlEl.href = gameUrl;
-        urlEl.style.display = '';
-      } else {
-        urlEl.style.display = 'none';
-      }
-      if (profileUrl && profileUrl !== '#') {
-        profileEl.href = profileUrl;
-        profileEl.style.display = '';
-      } else {
-        profileEl.style.display = 'none';
-      }
+    if (!game) {
+      safeSetText(titleEl, "游戏未找到");
+      safeSetText(descEl, "在游戏库中找不到该游戏，请返回重新选择。");
+      sysMinListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+      sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+      return;
+    }
 
-      // 填充最低配置（使用 ranking.json 中的 systemRequirements）
-      const sysMin = game.systemRequirements || game.minimum_system_requirements;
-      fillMinSysReq(sysMin);
+    // 填充基本信息 - 使用mega-game-database的字段
+    safeSetText(breadcrumbNameEl, game.name || game.title);
+    safeSetText(titleEl, game.name || game.title);
+    safeSetText(platformEl, game.platform || "PC");
+    safeSetText(devEl, game.developer || "未知");
+    safeSetText(pubEl, game.publisher || "未知");
+    safeSetText(dateEl, game.releaseDate || "未知");
+    safeSetText(tagEl, game.genre || game.category || "游戏");
+    safeSetText(descEl, game.short_description || "暂无游戏简介");
+    safeSetText(platformTagEl, game.platform || "PC (Windows)");
+    
+    // 评分
+    const score = Number(game.rating) || 0;
+    safeSetText(scoreEl, score.toFixed(1));
+    
+    // 封面图
+    const coverUrl = game.thumbnail;
+    if (coverUrl) {
+      coverEl.src = coverUrl;
+      coverEl.alt = (game.name || game.title) + " 封面";
+      coverEl.onerror = function() {
+        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOnJnYigxMDIsMTI2LDIzNCk7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjpyZ2IoMTE4LDc1LDE2Mik7c3RvcC1vcGFjaXR5OjEiIC8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9InVybCgjZ3JhZCkiLz48dGV4dCB4PSIxNTAiIHk9IjIyMCIgZm9udC1zaXplPSIxMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfjonuPC90ZXh0Pjwvc3ZnPg==';
+      };
+    }
+    
+    // 隐藏外部链接（mega-game-database没有这些字段）
+    urlEl.style.display = 'none';
+    profileEl.style.display = 'none';
 
-      // 尝试获取 Steam 推荐配置（可选，可能失败）
-      fetchSteamRecommendedSysReq(game.name);
-    })
-    .catch((err) => {
-      console.error("加载详情失败：", err);
-      safeSetText(titleEl, "加载失败");
-      safeSetText(descEl, "无法加载游戏数据，请检查网络连接或稍后重试。错误: " + err.message);
-      sysMinListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
-      sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
-    });
+    // mega-game-database没有系统配置数据，显示提示
+    fillMinSysReq(null);
+    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📊 系统配置数据正在开发中</li>';
+
+    // 尝试获取 Steam 推荐配置（可选，可能失败）
+    fetchSteamRecommendedSysReq(game.name || game.title);
+    
+  } catch (err) {
+    console.error("加载详情失败：", err);
+    safeSetText(titleEl, "加载失败");
+    safeSetText(descEl, "无法加载游戏数据，请检查网络连接或稍后重试。错误: " + err.message);
+    sysMinListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
+    sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
+  }
 }
 
 loadDetail();
