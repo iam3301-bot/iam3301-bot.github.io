@@ -103,22 +103,37 @@
   </main>
 </div>
 
+
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="enhanced-game-api.js"></script>
 <script>
   initCommon();
 
-  const gameNameMap = {
-    "elden-ring": "艾尔登法环",
-    "genshin": "原神",
-    "hollow-knight": "空洞骑士",
-    "cp2077": "赛博朋克 2077",
-    "mh-rise": "怪物猎人：崛起",
-    "stardew": "星露谷物语",
-    "slay-the-spire": "杀戮尖塔",
-    "lol": "英雄联盟",
-  };
+  const myListEl = document.getElementById("myList");
+  const myCountEl = document.getElementById("myCount");
+  const mySearchEl = document.getElementById("mySearch");
+  const tabOwned = document.getElementById("tabOwned");
+  const tabWish = document.getElementById("tabWish");
 
+  let currentType = "owned"; // owned / wish
+  let allGamesData = [];
+  let isDataLoaded = false;
+
+  // 加载游戏数据
+  async function loadGamesData() {
+    try {
+      allGamesData = await window.enhancedGameAPI.getAllGames();
+      isDataLoaded = true;
+      console.log(`✅ 游戏数据加载完成：${allGamesData.length} 款`);
+      renderMyList();
+    } catch (error) {
+      console.error("❌ 加载游戏数据失败:", error);
+      myListEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 数据加载失败</div>';
+    }
+  }
+
+  // 获取列表
   function getList(key) {
     try {
       const raw = localStorage.getItem(key);
@@ -129,41 +144,75 @@
     }
   }
 
-  const myListEl = document.getElementById("myList");
-  const myCountEl = document.getElementById("myCount");
-  const mySearchEl = document.getElementById("mySearch");
-  const tabOwned = document.getElementById("tabOwned");
-  const tabWish = document.getElementById("tabWish");
-
-  let currentType = "owned"; // owned / wish
-
-  function renderMyList() {
-    const kw = mySearchEl.value.trim().toLowerCase();
-    const ids = currentType === "owned" ? getList("ownedGames") : getList("wishlistGames");
-
-    let list = ids.map((id) => ({
-      id,
-      name: gameNameMap[id] || ("未知游戏 (" + id + ")"),
-    }));
-
-    if (kw) {
-      list = list.filter((g) => g.name.toLowerCase().includes(kw));
+  // 保存列表
+  function saveList(key, list) {
+    try {
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch (error) {
+      console.error("保存失败:", error);
     }
+  }
 
-    myListEl.innerHTML = "";
-    myCountEl.textContent = `共 ${list.length} 款`;
+  // 根据ID查找游戏
+  function findGameById(id) {
+    return allGamesData.find(g => g.id === id || g.name.toLowerCase() === id.toLowerCase());
+  }
 
-    if (!list.length) {
-      const emptyIcon = currentType === "owned" ? "📦" : "⭐";
-      const emptyText = currentType === "owned" 
-        ? "当前列表为空，去游戏详情页标记"已拥有"吧！" 
-        : "当前想玩列表为空，去游戏详情页标记"想玩"吧！";
-      myListEl.innerHTML =
-        `<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">${emptyIcon} ${emptyText}</div>`;
+  // 移除游戏
+  function removeGame(id, type) {
+    const key = type === "owned" ? "ownedGames" : "wishlistGames";
+    const list = getList(key);
+    const newList = list.filter(gid => gid !== id);
+    saveList(key, newList);
+    renderMyList();
+  }
+
+  // 渲染我的游戏列表
+  function renderMyList() {
+    if (!isDataLoaded) {
+      myListEl.innerHTML = '<div style="grid-column: 1/-1; padding:20px;text-align:center;color:var(--text-muted);">🎮 正在加载游戏数据...</div>';
       return;
     }
 
-    list.forEach((g, idx) => {
+    const kw = mySearchEl.value.trim().toLowerCase();
+    const ids = currentType === "owned" ? getList("ownedGames") : getList("wishlistGames");
+
+    // 根据ID查找完整游戏信息
+    let games = ids.map(id => {
+      const game = findGameById(id);
+      return game || {
+        id: id,
+        name: `未知游戏 (${id})`,
+        genre: "Unknown",
+        platform: "PC",
+        rating: 0,
+        price: 0,
+        thumbnail: ""
+      };
+    });
+
+    // 搜索过滤
+    if (kw) {
+      games = games.filter(g => 
+        g.name.toLowerCase().includes(kw) || 
+        g.genre.toLowerCase().includes(kw)
+      );
+    }
+
+    myListEl.innerHTML = "";
+    myCountEl.textContent = `共 ${games.length} 款`;
+
+    if (!games.length) {
+      const emptyIcon = currentType === "owned" ? "📦" : "⭐";
+      const emptyText = currentType === "owned" 
+        ? "当前列表为空，去游戏详情页标记\"已拥有\"吧！" 
+        : "当前想玩列表为空，去游戏详情页标记\"想玩\"吧！";
+      myListEl.innerHTML =
+        `<div style="grid-column: 1/-1; font-size:12px;color:var(--text-muted);padding:40px;text-align:center;">${emptyIcon}<br><br>${emptyText}</div>`;
+      return;
+    }
+
+    games.forEach(game => {
       const div = document.createElement("div");
       div.className = "game-card";
       div.style.cursor = "pointer";
@@ -171,75 +220,79 @@
       const statusIcon = currentType === "owned" ? "✅" : "⭐";
       const statusText = currentType === "owned" ? "已拥有" : "想玩";
       
+      // 封面图
+      const coverHtml = game.thumbnail
+        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
+        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+      
       div.innerHTML = `
-        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
-        <div class="game-info">
-          <div class="game-name">${statusIcon} ${g.name}</div>
-          <div class="game-meta">ID: ${g.id} · ${statusText}</div>
-          <div class="game-footer">
-            <span class="tag">📂 本地记录</span>
-            <button class="btn btn-inline" style="font-size: 11px;">查看详情</button>
-            <button class="btn btn-inline btn-ghost remove-btn" data-id="${g.id}" style="font-size: 11px;">移除</button>
+        <div class="game-cover">${coverHtml}</div>
+        <div class="game-title">${statusIcon} ${game.name}</div>
+        <div class="game-meta">${game.genre} · ${game.platform.split(',')[0].trim()}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div style="color: var(--accent); font-weight: 600;">
+            ⭐ ${game.rating.toFixed(1)}
           </div>
+          <button class="btn-remove" data-id="${game.id}" style="padding: 4px 12px; font-size: 11px; background: var(--danger); color: white; border: none; border-radius: 4px; cursor: pointer;">
+            移除
+          </button>
         </div>
       `;
       
-      // 查看详情按钮
-      div.querySelector(".btn:not(.remove-btn)").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const url = new URL("game-detail.html", window.location.href);
-        url.searchParams.set("name", g.name);
-        if (g.id) {
-          url.searchParams.set("id", g.id);
-        }
-        window.location.href = url.toString();
-      });
-      
-      // 移除按钮
-      div.querySelector(".remove-btn").addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (confirm(`确定要从${statusText}列表中移除《${g.name}》吗？`)) {
-          const key = currentType === "owned" ? "ownedGames" : "wishlistGames";
-          const currentList = getList(key);
-          const newList = currentList.filter(id => id !== g.id);
-          localStorage.setItem(key, JSON.stringify(newList));
-          renderMyList();
-        }
-      });
-      
-      // 添加悬停效果
+      // 悬停效果
       div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateY(-2px)";
+        div.style.transform = "translateY(-4px)";
+        div.style.boxShadow = "0 8px 24px rgba(56, 189, 248, 0.3)";
         div.style.transition = "all 0.3s ease";
       });
       
       div.addEventListener("mouseleave", () => {
         div.style.transform = "translateY(0)";
+        div.style.boxShadow = "";
+      });
+      
+      // 点击跳转
+      div.addEventListener("click", (e) => {
+        // 如果点击的是移除按钮，不跳转
+        if (e.target.classList.contains("btn-remove")) {
+          e.stopPropagation();
+          const gameId = e.target.getAttribute("data-id");
+          if (confirm(`确定要从${statusText}列表中移除《${game.name}》吗？`)) {
+            removeGame(gameId, currentType);
+          }
+          return;
+        }
+        
+        const url = new URL("game-detail.html", window.location.href);
+        url.searchParams.set("id", game.id);
+        url.searchParams.set("name", game.name);
+        window.location.href = url.toString();
       });
       
       myListEl.appendChild(div);
     });
   }
 
-  mySearchEl.addEventListener("input", renderMyList);
-
+  // Tab 切换
   tabOwned.addEventListener("click", () => {
     currentType = "owned";
-    tabOwned.classList.add("btn-primary");
-    tabWish.classList.remove("btn-primary");
+    tabOwned.classList.add("active");
+    tabWish.classList.remove("active");
     renderMyList();
   });
 
   tabWish.addEventListener("click", () => {
     currentType = "wish";
-    tabWish.classList.add("btn-primary");
-    tabOwned.classList.remove("btn-primary");
+    tabWish.classList.add("active");
+    tabOwned.classList.remove("active");
     renderMyList();
   });
 
-  // 默认选中“已拥有”
-  tabOwned.classList.add("btn-primary");
-  renderMyList();
+  // 搜索
+  mySearchEl.addEventListener("input", renderMyList);
+
+  // 初始化
+  loadGamesData();
 </script>
 </body>
 </html>
