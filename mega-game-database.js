@@ -418,7 +418,53 @@
   /**
    * 生成游戏封面 - 使用渐变色和emoji
    */
+  // 真实Steam游戏封面库 - 使用公开CDN
+  const steamGameCovers = {
+    'RPG': [
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg', // Red Dead Redemption 2
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg', // Cyberpunk 2077
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg', // The Witcher 3
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg', // Elden Ring
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/489830/header.jpg', // Skyrim
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg', // Baldur's Gate 3
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1942280/header.jpg', // Starfield
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1203220/header.jpg', // Persona 5 Royal
+    ],
+    'ACTION': [
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg', // GTA V
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg', // Spider-Man
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/header.jpg', // Horizon Zero Dawn
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg', // Palworld
+    ],
+    'SHOOTER': [
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg', // CS:GO
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg', // Apex Legends
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg', // PUBG
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg', // Rainbow Six Siege
+    ],
+    'STRATEGY': [
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg', // Dota 2
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1466860/header.jpg', // Total War
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/813780/header.jpg', // Age of Empires
+    ],
+    'default': [
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg', // Baldur's Gate 3
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/header.jpg', // Black Myth Wukong
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg', // Elden Ring
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg', // The Witcher 3
+      'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg', // Cyberpunk 2077
+    ]
+  };
+
   function generateThumbnail(category, index) {
+    // 优先使用真实Steam游戏封面
+    const categoryCovers = steamGameCovers[category] || steamGameCovers['default'];
+    if (categoryCovers && categoryCovers.length > 0) {
+      const coverIndex = index % categoryCovers.length;
+      return categoryCovers[coverIndex];
+    }
+
+    // 降级方案：生成SVG封面
     const gradients = [
       'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
