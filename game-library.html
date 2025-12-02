@@ -150,7 +150,90 @@
 <script>
   initCommon();
 
-  const gameData = [
+  // 从 ranking.json 加载真实游戏数据
+  let gameData = [];
+  let isDataLoaded = false;
+
+  // 加载并处理游戏数据
+  function loadGameData() {
+    fetch("ranking.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        // 合并所有分类的游戏数据
+        const allGames = [
+          ...(data.hot || []),
+          ...(data.score || []),
+          ...(data.new || []),
+          ...(data.discount || [])
+        ];
+        
+        // 去重（基于游戏ID）
+        const seen = new Set();
+        gameData = allGames.filter(game => {
+          if (seen.has(game.id)) return false;
+          seen.add(game.id);
+          return true;
+        }).map(game => {
+          // 转换数据格式以适配筛选逻辑
+          const platformInfo = (game.platform || "PC").split("·").map(p => p.trim());
+          const platformName = platformInfo[0].toLowerCase();
+          const genreName = (platformInfo[1] || game.tag || "").toLowerCase();
+          
+          // 映射平台
+          let platforms = [];
+          if (platformName.includes("windows") || platformName.includes("pc")) {
+            platforms.push("pc");
+          }
+          if (platformName.includes("steam")) {
+            platforms.push("steam");
+          }
+          
+          // 映射类型
+          let type = "action";
+          if (genreName.includes("rpg") || genreName.includes("role")) {
+            type = "rpg";
+          } else if (genreName.includes("strategy") || genreName.includes("moba")) {
+            type = "strategy";
+          } else if (genreName.includes("card")) {
+            type = "card";
+          } else if (genreName.includes("casual") || genreName.includes("sports")) {
+            type = "casual";
+          } else if (genreName.includes("shooter") || genreName.includes("action")) {
+            type = "action";
+          }
+          
+          return {
+            id: game.id,
+            name: game.name,
+            platforms: platforms.length > 0 ? platforms : ["pc"],
+            type: type,
+            tags: [game.tag || genreName || "游戏"],
+            price: 0, // 免费游戏
+            rating: game.score || 0,
+            cover: game.cover
+          };
+        });
+        
+        isDataLoaded = true;
+        renderList();
+      })
+      .catch((err) => {
+        console.error("加载游戏数据失败:", err);
+        libList.innerHTML = `
+          <div style="font-size:12px;color:var(--danger);padding:20px;text-align:center;">
+            ❌ 游戏数据加载失败<br>
+            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span><br>
+            <button onclick="loadGameData()" style="margin-top: 10px;" class="btn btn-inline">重试</button>
+          </div>
+        `;
+      });
+  }
+
+  // 保留原有的示例数据作为fallback
+  const fallbackGameData = [
     {
     id: "elden-ring",
     name: "艾尔登法环",
@@ -493,10 +576,6 @@
   const libList = document.getElementById("libList");
   const libResultCount = document.getElementById("libResultCount");
   
-  gameData.forEach(g => {
-  g.cover = `../images/covers/${g.id}.jpg`;
-});
-  
   function getSelectedPlatforms() {
     return Array.from(libPlatforms.querySelectorAll("input[type=checkbox]:checked")).map(
       (el) => el.value
@@ -525,6 +604,12 @@
   }
 
   function renderList() {
+    if (!isDataLoaded) {
+      libList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🎮 正在加载游戏数据...</div>';
+      libResultCount.textContent = `共 0 款`;
+      return;
+    }
+
     const keyword = libSearch.value;
     const type = libType.value;
     const price = libPrice.value;
@@ -550,8 +635,14 @@
       const div = document.createElement("div");
       div.className = "game-card";
       div.style.cursor = "pointer";
+      
+      // 使用真实封面图或默认图标
+      const coverHtml = g.cover 
+        ? `<img src="${g.cover}" alt="${g.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:32px;\\'>🎮</div>';" />`
+        : '<div style="display: flex; align-items: center; justify-content: center; font-size: 32px; height: 100%;">🎮</div>';
+      
       div.innerHTML = `
-        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
+        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020;">${coverHtml}</div>
         <div class="game-info">
           <div class="game-name">${g.name}</div>
           <div class="game-meta">
@@ -608,7 +699,8 @@
     }
   }
 
-  renderList();
+  // 加载真实游戏数据
+  loadGameData();
 </script>
 </body>
 </html>
