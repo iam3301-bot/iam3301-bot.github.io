@@ -1759,6 +1759,7 @@ mark {
   box-shadow: var(--shadow-neon-pink), inset 0 0 30px rgba(255, 61, 148, 0.08);
   clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
   position: relative;
+  padding: 20px 22px !important;
 }
 
 .cyber-info-section::after {
@@ -1773,32 +1774,36 @@ mark {
   letter-spacing: 2px;
 }
 
-.detail-meta-row {
-  padding: 12px 16px;
+.cyber-info-section .detail-meta-row {
+  padding: 10px 14px;
   border-left: 3px solid transparent;
   transition: all 0.3s ease;
+  margin-bottom: 3px;
+  border-radius: 4px;
 }
 
-.detail-meta-row:hover {
+.cyber-info-section .detail-meta-row:hover {
   background: rgba(255, 61, 148, 0.1);
   border-left-color: var(--cyber-pink);
   box-shadow: inset 0 0 20px rgba(255, 61, 148, 0.15);
 }
 
-.detail-meta-label {
+.cyber-info-section .detail-meta-label {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   color: var(--cyber-cyan);
   text-shadow: 0 0 10px var(--cyber-cyan);
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 13px;
+  font-size: 12px;
+  min-width: 90px;
 }
 
-.detail-meta-value {
+.cyber-info-section .detail-meta-value {
   font-family: 'Rajdhani', sans-serif;
   color: var(--text);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 /* System requirements section */
@@ -1808,6 +1813,7 @@ mark {
   box-shadow: var(--shadow-neon-cyan), inset 0 0 30px rgba(85, 234, 212, 0.08);
   clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
   position: relative;
+  padding: 24px 26px !important;
 }
 
 .cyber-sysreq-section::after {
@@ -1825,7 +1831,7 @@ mark {
 .sysreq-column {
   background: rgba(10, 10, 10, 0.5);
   border: 1px solid rgba(85, 234, 212, 0.3);
-  padding: 20px;
+  padding: 22px;
   border-radius: 8px;
   position: relative;
   transition: all 0.3s ease;
@@ -1862,19 +1868,24 @@ mark {
   text-shadow: 0 0 15px var(--cyber-yellow);
 }
 
-.sysreq-list li {
-  padding: 10px 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border-left: 2px solid var(--cyber-cyan);
-  margin-bottom: 8px;
+.cyber-sysreq-section .sysreq-list li {
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--cyber-cyan);
+  margin-bottom: 10px;
   transition: all 0.3s ease;
+  border-radius: 4px;
 }
 
-.sysreq-list li:hover {
+.cyber-sysreq-section .sysreq-list li:hover {
   background: rgba(85, 234, 212, 0.1);
   border-left-width: 4px;
   box-shadow: inset 0 0 15px rgba(85, 234, 212, 0.1);
-  transform: translateX(4px);
+  transform: translateX(3px);
+}
+
+.cyber-sysreq-section .sysreq-list li:last-child {
+  margin-bottom: 0;
 }
 
 .sysreq-column--recommended .sysreq-list li {
@@ -1886,14 +1897,16 @@ mark {
   box-shadow: inset 0 0 15px rgba(255, 211, 0, 0.1);
 }
 
-.sysreq-label {
+.cyber-sysreq-section .sysreq-label {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   color: var(--cyber-cyan);
   text-shadow: 0 0 8px var(--cyber-cyan);
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  min-width: 60px;
+  flex-shrink: 0;
 }
 
 .sysreq-column--recommended .sysreq-label {
@@ -1901,10 +1914,13 @@ mark {
   text-shadow: 0 0 8px var(--cyber-yellow);
 }
 
-.sysreq-value {
+.cyber-sysreq-section .sysreq-value {
   font-family: 'Rajdhani', sans-serif;
   color: var(--text);
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  flex: 1;
+  font-weight: 400;
 }
 
 /* Detail buttons with cyberpunk effects */
@@ -2332,13 +2348,13 @@ mark {
 .detail-info-grid {
   margin-top: 16px;
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 16px;
 }
 
 .detail-section {
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 16px 18px;
   background: rgba(15, 23, 42, 0.98);
   border: 1px solid rgba(30, 64, 175, 0.65);
 }
@@ -2349,9 +2365,9 @@ mark {
 }
 
 .detail-section-title {
-  margin: 0 0 6px;
-  font-size: 13px;
-  font-weight: 600;
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .detail-section-text {
@@ -2365,23 +2381,34 @@ mark {
 .detail-meta-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .detail-meta-row {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  font-size: 12px;
+  gap: 12px;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.detail-meta-row:hover {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .detail-meta-label {
   color: var(--text-soft);
+  font-weight: 500;
+  min-width: 80px;
 }
 
 .detail-meta-value {
   color: var(--text-main);
   text-align: right;
+  flex: 1;
+  font-weight: 400;
 }
 
 /* 适配小屏 */
@@ -2614,13 +2641,13 @@ header .btn-secondary {
 .sysreq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 20px;
   margin-top: 16px;
 }
 
 .sysreq-column {
   background-color: #1f2a3a;
-  padding: 20px;
+  padding: 24px;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   font-size: 14px;
@@ -2632,10 +2659,12 @@ header .btn-secondary {
 }
 
 .sysreq-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .sysreq-list {
@@ -2647,30 +2676,48 @@ header .btn-secondary {
 .sysreq-list li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 8px 0;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sysreq-list li:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.sysreq-list li:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom-color: rgba(56, 189, 248, 0.2);
 }
 
 .sysreq-label {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 600;
+  min-width: 70px;
+  flex-shrink: 0;
 }
 
 .sysreq-label::before {
-  content: "⚙️";
-  font-size: 18px;
+  content: "▸";
+  font-size: 14px;
+  color: var(--cyber-cyan);
 }
 
 .sysreq-value {
-  font-size: 14px;
+  font-size: 13px;
   color: #e5e7eb;
-  text-align: right;
-  max-width: 60%;
+  text-align: left;
+  flex: 1;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 .sysreq-placeholder {
