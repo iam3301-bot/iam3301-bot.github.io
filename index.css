@@ -1706,6 +1706,8 @@ mark {
   box-shadow: var(--shadow-neon-cyan), inset 0 0 40px rgba(85, 234, 212, 0.1);
   animation: border-pulse 3s infinite;
   min-height: 380px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cyber-glow-box::before {
@@ -1840,6 +1842,7 @@ mark {
   padding: 28px 32px !important;
   overflow: visible;
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   min-height: 380px;
 }
