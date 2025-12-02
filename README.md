@@ -158,24 +158,25 @@ on:
 2. 选择 "Update ranking data" workflow
 3. 点击 "Run workflow"
 
-### Steam API 代理服务器
+### Steam API 配置
 
-如果需要获取 Steam 推荐配置，需要运行代理服务器：
+**🎉 好消息：现在无需本地服务器！**
 
-```bash
-# 启动服务器
-npm run dev
+项目已经集成了公共 CORS 代理，开箱即用。如果需要更稳定的方案，可以选择部署 Cloudflare Workers。
 
-# 服务器运行在 http://localhost:3000
-# 端点：
-#   - /api/steam?term=游戏名        # 搜索游戏
-#   - /api/steam/appdetails?appid=ID # 获取详情
-```
+详细配置说明请查看：**[DEPLOYMENT.md](DEPLOYMENT.md)**
 
-**为什么需要代理？**
-- Steam API 不支持跨域访问（CORS）
-- 代理服务器解决跨域问题
-- 仅在开发环境需要
+#### 快速开始
+
+1. **默认方案**（推荐用于测试）
+   - 无需任何配置
+   - 直接使用，已内置公共代理
+   - 自动故障转移
+
+2. **Cloudflare Worker**（推荐用于生产）
+   - 参考 [DEPLOYMENT.md](DEPLOYMENT.md) 部署指南
+   - 10 分钟一次性配置
+   - 免费且稳定
 
 ### 系统配置覆盖
 
@@ -201,6 +202,21 @@ npm run dev
   }
 }
 ```
+
+## 🌐 Steam API 集成方案
+
+本项目实现了**无需本地服务器**的 Steam API 调用，所有访问 GitHub Pages 的用户都可以使用。
+
+### 默认方案：公共 CORS 代理 ✅
+- **开箱即用**，无需任何配置
+- 使用 `allorigins.win` 和 `corsproxy.io`
+- 自动故障转移机制
+
+### 推荐方案：Cloudflare Workers（可选）🌟  
+- 更稳定、更快速
+- 完全免费（每天 100,000 次请求）
+- 10分钟一次性配置
+- **详见 [DEPLOYMENT.md](DEPLOYMENT.md) 部署指南**
 
 ## 🎯 设计特点
 
@@ -241,8 +257,17 @@ npm run dev
 
 ## 📝 更新日志
 
+### v2.0.0 (2024-12-02) 🚀
+- ✨ **重大更新：无需本地服务器！**
+- ✅ 添加公共 CORS 代理支持（默认启用）
+- ✅ 添加 Cloudflare Workers 支持（可选）
+- ✅ 实现智能故障转移机制
+- ✅ 创建独立的 Steam API 工具类
+- ✅ 添加详细的部署文档 (DEPLOYMENT.md)
+- ✅ 优化错误处理和日志输出
+
 ### v1.1.0 (2024-12-02)
-- ✅ 添加 Steam API 代理服务器
+- ✅ 添加 Steam API 代理服务器（已废弃，改用新方案）
 - ✅ 优化错误处理和加载状态
 - ✅ 清理重复 CSS（减少 555 行）
 - ✅ 添加 XSS 防护
