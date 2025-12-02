@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "update:ranking": "node tools/update-ranking.mjs"
+    "update:ranking": "node tools/update-ranking.mjs",
+    "dev": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {}
 }

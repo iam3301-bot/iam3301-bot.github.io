@@ -262,6 +262,9 @@
 
   // 从 ranking.json 加载数据（GitHub Actions 会定时更新这个文件）
   function loadRankingFromJson() {
+    // 显示加载状态
+    rankingListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">🎮 正在加载排行榜数据...</li>';
+    
     fetch("ranking.json")
       .then((res) => {
         if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
@@ -272,12 +275,29 @@
         rankingData.score = data.score || [];
         rankingData.new = data.new || [];
         rankingData.discount = data.discount || [];
+        
+        // 检查是否有数据
+        const hasData = rankingData.hot.length > 0 || 
+                       rankingData.score.length > 0 || 
+                       rankingData.new.length > 0 || 
+                       rankingData.discount.length > 0;
+        
+        if (!hasData) {
+          rankingListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">暂无排行榜数据</li>';
+          return;
+        }
+        
         resetAndRender("hot");
       })
       .catch((err) => {
         console.error("加载 ranking.json 失败:", err);
-        rankingListEl.innerHTML =
-          '<li class="ranking-error">排行榜数据加载失败，请检查 ranking.json 是否存在且格式正确。</li>';
+        rankingListEl.innerHTML = `
+          <li style="text-align: center; color: var(--danger); padding: 20px;">
+            ❌ 排行榜数据加载失败<br>
+            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span><br>
+            <button onclick="loadRankingFromJson()" style="margin-top: 10px;" class="btn btn-inline">重试</button>
+          </li>
+        `;
       });
   }
 
