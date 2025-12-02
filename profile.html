@@ -79,17 +79,6 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>数据概览</span></div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:13px;">
           <div style="flex:1;min-width:140px;">
             <div class="sidebar-title">游戏记录</div>
@@ -160,15 +149,25 @@
       `欢迎回来，<strong>${name}</strong>。这是一个用于课程展示的前端 Demo 用户中心。`;
   }
 
+  
+  // 美化数据展示区域
+  document.getElementById("statOwned").style.color = "var(--accent)";
+  document.getElementById("statWish").style.color = "var(--accent)";
+
   if (ownedCount === 0 && wishCount === 0) {
-    profileSummary.textContent =
-      "还没有记录任何游戏，可以去游戏详情页试试“标记为已拥有 / 加入想玩清单”的按钮。";
+    profileSummary.innerHTML =
+      "📝 还没有记录任何游戏，可以去<a href='game-library.html' style='color: var(--accent);'>游戏库</a>或<a href='ranking.html' style='color: var(--accent);'>排行榜</a>找找感兴趣的游戏，然后在详情页标记它们。";
   } else {
     const who = currentUser
       ? (currentUser.nickname || currentUser.username || "你")
       : "你";
-    profileSummary.textContent =
-      `${who} 当前已记录 ${ownedCount} 款已拥有游戏，${wishCount} 款想玩的游戏。`;
+    
+    let emoji = "🎮";
+    if (ownedCount >= 10) emoji = "🏆";
+    else if (ownedCount >= 5) emoji = "⭐";
+    
+    profileSummary.innerHTML =
+      `${emoji} ${who} 当前已记录 <strong style="color: var(--accent);">${ownedCount}</strong> 款已拥有游戏，<strong style="color: var(--accent);">${wishCount}</strong> 款想玩的游戏。`;
   }
 </script>
 </body>

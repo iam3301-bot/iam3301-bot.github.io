@@ -539,37 +539,55 @@
 
     if (!filtered.length) {
       libList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);">没有找到符合条件的游戏，可以尝试放宽筛选条件。</div>';
+        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🎮 没有找到符合条件的游戏，可以尝试放宽筛选条件。</div>';
       return;
     }
+
+    // 按评分从高到低排序
+    filtered.sort((a, b) => b.rating - a.rating);
 
     filtered.forEach((g) => {
       const div = document.createElement("div");
       div.className = "game-card";
+      div.style.cursor = "pointer";
       div.innerHTML = `
-        <div class="game-cover" style="background-image: url('${g.cover}')"></div>
+        <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
         <div class="game-info">
           <div class="game-name">${g.name}</div>
           <div class="game-meta">
-            类型：${g.type.toUpperCase()} · 平台：${g.platforms.join("/")} · 评分：${g.rating.toFixed(
-        1
-      )}
+            类型：${g.type.toUpperCase()} · 平台：${g.platforms.join("/")} · ⭐ ${g.rating.toFixed(1)}
           </div>
           <div class="game-footer">
             ${
               g.price === 0
-                ? '<span class="tag tag--accent">免费</span>'
-                : `<span class="tag">价格：¥${g.price}</span>`
+                ? '<span class="tag tag--accent">💰 免费</span>'
+                : `<span class="tag">💵 ¥${g.price}</span>`
             }
             ${g.tags.map((t) => `<span class="tag">${t}</span>`).join("")}
           </div>
         </div>
       `;
-      div.addEventListener("click", () => {
-        if (g.id === "elden-ring") {
-          window.location.href = "game-detail.html";
-        }
+      
+      // 添加悬停效果
+      div.addEventListener("mouseenter", () => {
+        div.style.transform = "translateY(-2px)";
+        div.style.transition = "all 0.3s ease";
       });
+      
+      div.addEventListener("mouseleave", () => {
+        div.style.transform = "translateY(0)";
+      });
+      
+      div.addEventListener("click", () => {
+        // 跳转到游戏详情页，携带游戏名称
+        const url = new URL("game-detail.html", window.location.href);
+        url.searchParams.set("name", g.name);
+        if (g.id) {
+          url.searchParams.set("id", g.id);
+        }
+        window.location.href = url.toString();
+      });
+      
       libList.appendChild(div);
     });
   }
