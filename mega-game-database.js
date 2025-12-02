@@ -418,35 +418,45 @@
   /**
    * 生成游戏系列
    */
-  function generateGameSeries(seriesName, variants, category, tags, basePrice) {
+  function generateGameSeries(seriesName, variants, category, tags, targetCount) {
     const games = [];
-    const platforms = ["PC", "PS5", "Xbox Series X", "Switch", "PS4", "Xbox One"];
-    const publishers = ["EA", "Ubisoft", "Activision", "Microsoft", "Sony", "Nintendo", "Square Enix", "Capcom", "Bandai Namco", "SEGA"];
+    const platforms = ["PC", "PS5", "Xbox Series X", "Switch", "PS4", "Xbox One", "PC (Steam)", "PC (Epic)", "PC (GOG)"];
+    const publishers = ["EA", "Ubisoft", "Activision", "Microsoft", "Sony", "Nintendo", "Square Enix", "Capcom", "Bandai Namco", "SEGA", "2K Games", "Take-Two", "Bethesda", "CD Projekt", "Rockstar"];
+    const editions = ["", "Standard Edition", "Deluxe Edition", "Ultimate Edition", "Gold Edition", "Complete Edition", "GOTY Edition", "Definitive Edition", "Remastered", "Enhanced Edition"];
     
-    variants.forEach((variant, index) => {
-      const fullName = `${seriesName}: ${variant}`;
-      const year = 2024 - Math.floor(index / 2);
-      const rating = (8 + Math.random() * 2).toFixed(1);
-      const price = basePrice ? basePrice * (0.7 + Math.random() * 0.6) : Math.floor(Math.random() * 400) + 49;
-      const platform = platforms[Math.floor(Math.random() * platforms.length)];
-      const publisher = publishers[Math.floor(Math.random() * publishers.length)];
-      
-      games.push({
-        name: fullName,
-        title: fullName,
-        genre: category,
-        category: category,
-        platform: platform,
-        publisher: publisher,
-        developer: publisher,
-        rating: parseFloat(rating),
-        price: Math.floor(price),
-        year: year,
-        tags: tags,
-        thumbnail: "",
-        short_description: `${fullName} - ${category} 类游戏，${tags.join("、")}`,
-        releaseDate: `${year}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
-      });
+    // 计算每个variant需要生成多少个版本
+    const versionsPerVariant = Math.ceil(targetCount / variants.length);
+    
+    variants.forEach((variant, variantIndex) => {
+      // 为每个variant生成多个版本和平台
+      for (let i = 0; i < versionsPerVariant && games.length < targetCount; i++) {
+        const edition = i < editions.length ? editions[i] : "";
+        const baseName = `${seriesName}: ${variant}`;
+        const fullName = edition ? `${baseName} - ${edition}` : baseName;
+        const year = 2024 - Math.floor(variantIndex / 2) - Math.floor(i / 3);
+        const rating = (7.5 + Math.random() * 2.5).toFixed(1);
+        const basePrice = Math.floor(Math.random() * 350) + 50;
+        const price = Math.floor(basePrice * (0.8 + Math.random() * 0.4));
+        const platform = platforms[i % platforms.length];
+        const publisher = publishers[Math.floor(Math.random() * publishers.length)];
+        
+        games.push({
+          name: fullName,
+          title: fullName,
+          genre: category,
+          category: category,
+          platform: platform,
+          publisher: publisher,
+          developer: publisher,
+          rating: parseFloat(rating),
+          price: price,
+          year: Math.max(2000, year),
+          tags: tags,
+          thumbnail: "",
+          short_description: `${fullName} - ${category} 类游戏，${tags.join("、")}`,
+          releaseDate: `${Math.max(2000, year)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
+        });
+      }
     });
     
     return games;
