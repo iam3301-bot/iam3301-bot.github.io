@@ -1830,9 +1830,9 @@ mark {
   background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(0, 40, 40, 0.9) 100%);
   border: 3px solid var(--cyber-cyan);
   box-shadow: var(--shadow-neon-cyan), inset 0 0 40px rgba(85, 234, 212, 0.1);
-  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
   position: relative;
-  padding: 22px 26px !important;
+  padding: 28px 32px !important;
   overflow: hidden;
 }
 
@@ -1864,7 +1864,7 @@ mark {
 .cyber-sysreq-section .sysreq-column {
   background: rgba(0, 0, 0, 0.4) !important;
   border: 2px solid rgba(85, 234, 212, 0.3) !important;
-  padding: 22px !important;
+  padding: 26px !important;
   border-radius: 10px !important;
   position: relative;
   transition: all 0.3s ease;
@@ -1890,14 +1890,14 @@ mark {
 .cyber-sysreq-section .sysreq-title {
   font-family: 'Orbitron', sans-serif !important;
   font-weight: 700 !important;
-  font-size: 15px !important;
+  font-size: 17px !important;
   color: var(--cyber-cyan) !important;
   text-shadow: 0 0 15px var(--cyber-cyan);
-  margin-bottom: 14px !important;
-  padding-bottom: 9px !important;
+  margin-bottom: 18px !important;
+  padding-bottom: 12px !important;
   border-bottom: 2px solid rgba(85, 234, 212, 0.4) !important;
   text-transform: uppercase !important;
-  letter-spacing: 1.8px !important;
+  letter-spacing: 2px !important;
 }
 
 .cyber-sysreq-section .sysreq-column--recommended .sysreq-title {
@@ -1907,10 +1907,10 @@ mark {
 }
 
 .cyber-sysreq-section .sysreq-list li {
-  padding: 10px 13px !important;
+  padding: 13px 16px !important;
   background: rgba(0, 0, 0, 0.45) !important;
   border-left: 3px solid var(--cyber-cyan) !important;
-  margin-bottom: 8px !important;
+  margin-bottom: 11px !important;
   transition: all 0.3s ease;
   border-radius: 6px !important;
 }
@@ -1940,12 +1940,12 @@ mark {
   font-weight: 600 !important;
   color: var(--cyber-cyan) !important;
   text-shadow: 0 0 10px var(--cyber-cyan);
-  font-size: 10px !important;
+  font-size: 12px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.9px !important;
-  min-width: 58px !important;
+  letter-spacing: 1px !important;
+  min-width: 70px !important;
   flex-shrink: 0;
-  line-height: 1.5 !important;
+  line-height: 1.6 !important;
 }
 
 .cyber-sysreq-section .sysreq-column--recommended .sysreq-label {
@@ -1954,7 +1954,7 @@ mark {
 }
 
 .cyber-sysreq-section .sysreq-label::before {
-  font-size: 12px !important;
+  font-size: 15px !important;
 }
 
 .sysreq-column--recommended .sysreq-label {
@@ -1965,8 +1965,8 @@ mark {
 .cyber-sysreq-section .sysreq-value {
   font-family: 'Rajdhani', sans-serif !important;
   color: var(--text-main) !important;
-  font-size: 11px !important;
-  line-height: 1.6 !important;
+  font-size: 13px !important;
+  line-height: 1.8 !important;
   flex: 1;
   font-weight: 500 !important;
   text-align: right !important;
@@ -2706,13 +2706,13 @@ header .btn-secondary {
 .sysreq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 22px;
   margin-top: 0;
 }
 
 .sysreq-column {
   background: rgba(0, 0, 0, 0.35);
-  padding: 24px;
+  padding: 28px;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   font-size: 14px;
@@ -2738,12 +2738,12 @@ header .btn-secondary {
 
 .sysreq-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--cyber-cyan);
   text-shadow: 0 0 15px var(--cyber-cyan);
-  margin-bottom: 16px;
-  padding-bottom: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 2px solid rgba(85, 234, 212, 0.35);
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -2759,8 +2759,8 @@ header .btn-secondary {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 9px;
-  padding: 11px 14px;
+  margin-bottom: 12px;
+  padding: 14px 16px;
   background: rgba(0, 0, 0, 0.45);
   border-left: 3px solid var(--cyber-cyan);
   border-radius: 6px;
@@ -2780,23 +2780,23 @@ header .btn-secondary {
 
 .sysreq-label {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--cyber-cyan);
   text-shadow: 0 0 8px var(--cyber-cyan);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-weight: 600;
-  min-width: 62px;
+  min-width: 75px;
   flex-shrink: 0;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .sysreq-label::before {
   content: "▸";
-  font-size: 14px;
+  font-size: 16px;
   color: var(--cyber-yellow);
   text-shadow: 0 0 10px var(--cyber-yellow);
   flex-shrink: 0;
@@ -2804,11 +2804,11 @@ header .btn-secondary {
 
 .sysreq-value {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-main);
   text-align: right;
   flex: 1;
-  line-height: 1.6;
+  line-height: 1.8;
   font-weight: 500;
   word-break: break-word;
 }
