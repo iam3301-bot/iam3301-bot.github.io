@@ -2720,6 +2720,7 @@ header .btn-secondary {
   width: 100%;
   box-sizing: border-box;
   align-items: stretch;
+  grid-auto-rows: 1fr;
 }
 
 .sysreq-column {
@@ -2733,6 +2734,7 @@ header .btn-secondary {
   display: flex;
   flex-direction: column;
   min-height: 400px;
+  height: 100%;
 }
 
 .sysreq-column:hover {
