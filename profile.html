@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 用户中心</title>
+  <!-- Cyberpunk Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
 </head>
-<body data-current-page="profile">
+<body data-current-page="profile" class="cyberpunk-theme">
 <div class="page">
   <header class="header">
     <div class="header-inner">
@@ -39,6 +43,17 @@
       </div>
     </div>
   </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
 
   <main class="main">
     <section>
@@ -64,6 +79,17 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>数据概览</span></div>
         </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:13px;">
           <div style="flex:1;min-width:140px;">
             <div class="sidebar-title">游戏记录</div>
@@ -97,6 +123,7 @@
 </div>
 
 <script src="common.js"></script>
+<script src="cyber-effects.js"></script>
 <script>
   initCommon();
 

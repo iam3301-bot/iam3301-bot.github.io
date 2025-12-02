@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 工具中心</title>
+  <!-- Cyberpunk Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
 </head>
-<body data-current-page="tools">
+<body data-current-page="tools" class="cyberpunk-theme">
 <div class="page">
   <header class="header">
     <div class="header-inner">
@@ -39,6 +43,17 @@
       </div>
     </div>
   </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
 
   <main class="main">
     <section>
@@ -54,6 +69,17 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>配置 vs 画质估算（示例）</span></div>
         </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
         <div class="form">
           <div class="form-row">
             <label for="cfgCpu">CPU 档次</label>
@@ -81,6 +107,17 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>通关时间估算（示例）</span></div>
         </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
         <div class="form">
           <div class="form-row">
             <label for="timeTotal">游戏总时长（小时，示例）</label>
@@ -100,6 +137,17 @@
         <header class="card-header">
           <div class="card-title"><span class="dot"></span><span>今晚玩什么？</span></div>
         </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="cyberpunk-loader">
+      <div class="loader-hexagon"></div>
+      <div class="loader-text">LOADING...</div>
+    </div>
+  </div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">
           随机从一个示例游戏池中选一款，当作今晚的推荐。
         </div>
@@ -120,6 +168,7 @@
 </div>
 
 <script src="common.js"></script>
+<script src="cyber-effects.js"></script>
 <script>
   initCommon();
 
