@@ -506,7 +506,7 @@ a:not(.nav-link):not(.btn):hover::after {
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 16px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   gap: 18px;
@@ -725,7 +725,7 @@ a:not(.nav-link):not(.btn):hover::after {
   flex: 1;
   max-width: 1200px;
   width: 100%;
-  margin: 16px auto 24px;
+  margin: 0 auto 24px;
   padding: 0 16px;
   display: flex;
   gap: 16px;
@@ -735,14 +735,14 @@ a:not(.nav-link):not(.btn):hover::after {
   flex: 3;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .main > aside {
   flex: 1.5;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* Cards */
@@ -752,7 +752,7 @@ a:not(.nav-link):not(.btn):hover::after {
   border-radius: 0;
   border: 2px solid var(--border-subtle);
   border-left: 4px solid var(--cyber-yellow);
-  padding: 20px 24px;
+  padding: 16px 20px;
   box-shadow: var(--shadow-card);
   position: relative;
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
@@ -885,9 +885,9 @@ a:not(.nav-link):not(.btn):hover::after {
 }
 
 .page-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 900;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-pink) 50%, var(--cyber-cyan) 100%);
