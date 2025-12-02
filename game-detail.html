@@ -290,28 +290,62 @@ function fillRecommendedSysReq(sys) {
   `;
 }
 
+// 解析 Steam HTML 格式的系统配置
+function parseSteamRequirements(htmlString) {
+  if (!htmlString || typeof htmlString !== 'string') return null;
+  
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const text = doc.body.textContent || '';
+  
+  const result = {};
+  
+  // 提取操作系统
+  const osMatch = text.match(/OS[:\s]*([^\n]+)/i);
+  if (osMatch) result.os = osMatch[1].trim();
+  
+  // 提取处理器
+  const procMatch = text.match(/Processor[:\s]*([^\n]+)/i);
+  if (procMatch) result.processor = procMatch[1].trim();
+  
+  // 提取内存
+  const memMatch = text.match(/Memory[:\s]*([^\n]+)/i);
+  if (memMatch) result.memory = memMatch[1].trim();
+  
+  // 提取显卡
+  const gpuMatch = text.match(/Graphics[:\s]*([^\n]+)/i);
+  if (gpuMatch) result.graphics = gpuMatch[1].trim();
+  
+  // 提取存储
+  const storMatch = text.match(/Storage[:\s]*([^\n]+)/i);
+  if (storMatch) result.storage = storMatch[1].trim();
+  
+  return Object.keys(result).length > 0 ? result : null;
+}
+
 // 获取 Steam 推荐配置并填充
 async function fetchSteamRecommendedSysReq(gameTitle) {
   try {
-    const steamReq = await fetchSteamRequirementsForTitles([gameTitle]);
-
-    if (steamReq && steamReq.has(gameTitle)) {
-      const recommended = steamReq.get(gameTitle).recommended;
-      fillRecommendedSysReq(recommended);
+    const appId = await searchSteamAppIdByName(gameTitle);
+    
+    if (!appId) {
+      console.log(`Steam 未找到游戏：${gameTitle}`);
+      fillRecommendedSysReq(null);
+      return;
+    }
+    
+    const pcReq = await fetchSteamRequirements(appId);
+    
+    if (pcReq && pcReq.recommended) {
+      const parsed = parseSteamRequirements(pcReq.recommended);
+      fillRecommendedSysReq(parsed);
     } else {
       console.log(`Steam 未提供推荐配置：${gameTitle}`);
       fillRecommendedSysReq(null);
     }
   } catch (err) {
     console.error("从 Steam 获取推荐配置时出错：", err);
-    // 错误处理：显示无法连接 Steam API 的提示
     fillRecommendedSysReq(null);
-    sysRecommendedListEl.innerHTML = `
-      <li>
-        <span class="sysreq-label">推荐配置</span>
-        <span class="sysreq-value">无法连接到 Steam API，推荐配置无法加载。</span>
-      </li>
-    `;
   }
 }
 
@@ -319,70 +353,59 @@ async function fetchSteamRecommendedSysReq(gameTitle) {
 async function searchSteamAppIdByName(gameTitle) {
   if (!gameTitle) return null;
 
-  const steamSearchUrl = `https://store.steampowered.com/api/storesearch?term=${encodeURIComponent(gameTitle)}&cc=us&l=en`;
+  try {
+    // 请求自己的代理服务器
+    const proxyUrl = "http://localhost:3000/api/steam?term=" + encodeURIComponent(gameTitle);
+    const response = await fetch(proxyUrl);
+    
+    if (!response.ok) {
+      console.warn(`Steam 搜索失败: ${response.status}`);
+      return null;
+    }
+    
+    const data = await response.json();
 
-  // 请求自己的代理服务器
-  const proxyUrl = "http://localhost:3000/api/steam?term=" + encodeURIComponent(gameTitle);
-  const response = await fetch(proxyUrl);
-  const data = await response.json();
-
-  if (data && data.items && data.items.length > 0) {
-    return data.items[0].id;  // 返回 appId
+    if (data && data.items && data.items.length > 0) {
+      return data.items[0].id;  // 返回 appId
+    }
+    return null;
+  } catch (err) {
+    console.warn(`Steam 搜索异常: ${err.message}`);
+    return null;
   }
-  return null;
 }
 
 // 获取 Steam 配置
 async function fetchSteamRequirements(appId) {
-  const url = `https://store.steampowered.com/api/appdetails?appids=${appId}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  const pcReq = data[appId].data.pc_requirements;
-  return pcReq;
-}
-
-// 获取 Steam 推荐配置的标题
-async function fetchSteamRequirementsForTitles(titles) {
-  const uniqueTitles = Array.from(new Set(titles.filter(Boolean)));
-  if (uniqueTitles.length === 0) return new Map();
-
-  console.log("尝试从 Steam 获取系统配置的游戏数：", uniqueTitles.length);
-
-  const steamResults = await Promise.all(
-    uniqueTitles.map(async (title) => {
-      try {
-        const appId = await searchSteamAppIdByName(title);
-        if (!appId) {
-          console.log(`Steam 未找到游戏：${title}`);
-          return null;
-        }
-        const req = await fetchSteamRequirements(appId);
-        if (!req) {
-          console.log(`Steam 返回无系统配置：${title} (appid=${appId})`);
-          return null;
-        }
-        console.log(`Steam 配置已获取：${title} (appid=${appId})`);
-        return { title, requirements: req };
-      } catch (err) {
-        console.warn(`获取 Steam 配置失败：${title}`, err.message);
-        return null;
-      }
-    })
-  );
-
-  // 过滤有效数据
-  const map = new Map();
-  steamResults.forEach((result) => {
-    if (result && result.title && result.requirements) {
-      map.set(result.title, result.requirements);
+  if (!appId) return null;
+  
+  try {
+    const proxyUrl = `http://localhost:3000/api/steam/appdetails?appid=${appId}`;
+    const response = await fetch(proxyUrl);
+    
+    if (!response.ok) {
+      console.warn(`Steam 详情获取失败: ${response.status}`);
+      return null;
     }
-  });
-
-  return map;
+    
+    const data = await response.json();
+    
+    if (data && data[appId] && data[appId].success && data[appId].data) {
+      return data[appId].data.pc_requirements;
+    }
+    return null;
+  } catch (err) {
+    console.warn(`Steam 详情异常: ${err.message}`);
+    return null;
+  }
 }
 
 function loadDetail() {
   if (!gameId && !gameName) return;
+
+  // 显示加载提示
+  sysMinListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
+  sysRecommendedListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
 
   fetch("ranking.json")
     .then((res) => {
@@ -392,17 +415,62 @@ function loadDetail() {
     .then((data) => {
       const game = findGame(data);
 
-      if (!game) return;
+      if (!game) {
+        safeSetText(titleEl, "游戏未找到");
+        safeSetText(descEl, "在排行榜数据中找不到该游戏，请返回重新选择。");
+        sysMinListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+        sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+        return;
+      }
+
+      // 填充基本信息
+      safeSetText(breadcrumbNameEl, game.name);
+      safeSetText(titleEl, game.name);
+      safeSetText(platformEl, game.platform || "PC");
+      safeSetText(devEl, game.developer || "未知");
+      safeSetText(pubEl, game.publisher || "未知");
+      safeSetText(dateEl, game.release_date || "未知");
+      safeSetText(tagEl, game.genre || "游戏");
+      safeSetText(descEl, game.short_description || "暂无游戏简介");
+      
+      // 填充元信息区域
+      safeSetText(devMetaEl, game.developer || "未知");
+      safeSetText(pubMetaEl, game.publisher || "未知");
+      safeSetText(releaseMetaEl, game.release_date || "未知");
+      safeSetText(platformMetaEl, `${game.platform || "PC"} / ${game.genre || "未分类"}`);
+      
+      // 评分
+      const score = Number(game.score) || 0;
+      safeSetText(scoreEl, score.toFixed(1));
+      safeSetText(scoreMetaEl, score.toFixed(1));
+      
+      // 封面图
+      if (game.thumbnail) {
+        coverEl.src = game.thumbnail;
+        coverEl.alt = game.name + " 封面";
+      }
+      
+      // 外链
+      if (game.game_url) {
+        urlEl.href = game.game_url;
+      }
+      if (game.freetogame_profile_url) {
+        profileEl.href = game.freetogame_profile_url;
+      }
 
       // 填充最低配置
-      const sysMin = game.systemRequirements?.minimum;
+      const sysMin = game.minimum_system_requirements;
       fillMinSysReq(sysMin);
 
-      // 获取推荐配置
+      // 获取推荐配置（异步）
       fetchSteamRecommendedSysReq(game.name);
     })
     .catch((err) => {
       console.error("加载详情失败：", err);
+      safeSetText(titleEl, "加载失败");
+      safeSetText(descEl, "无法加载游戏数据，请检查网络连接或稍后重试。错误: " + err.message);
+      sysMinListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
+      sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
     });
 }
 
