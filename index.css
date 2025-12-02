@@ -824,7 +824,7 @@ a:not(.nav-link):not(.btn):hover::after {
 }
 
 .main--single {
-  max-width: 1400px;
+  max-width: 1300px;
 }
 
 .main > section {
@@ -2769,7 +2769,7 @@ header .btn-secondary {
 .sysreq-list li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 14px;
   padding: 16px 20px;
   background: rgba(0, 0, 0, 0.4);
@@ -2797,12 +2797,12 @@ header .btn-secondary {
   text-shadow: none;
   display: inline-block;
   font-weight: 500;
-  min-width: 100px;
-  max-width: 100px;
+  min-width: 80px;
+  max-width: 80px;
   flex-shrink: 0;
   text-transform: none;
   letter-spacing: 0;
-  line-height: 1.4;
+  line-height: 1.6;
   padding-right: 16px;
   white-space: nowrap;
 }
@@ -2818,11 +2818,10 @@ header .btn-secondary {
   color: rgba(255, 255, 255, 0.95);
   text-align: right;
   flex: 1;
-  line-height: 1.4;
+  line-height: 1.6;
   font-weight: 400;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-word;
   padding-left: 16px;
 }
 
