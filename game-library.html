@@ -126,7 +126,7 @@
           </div>
           <div class="chip" id="libResultCount">共 0 款</div>
         </header>
-        <div id="libList" class="game-list ranking-list--scroll" style="max-height: 800px; overflow-y: auto;"></div>
+        <ol id="libList" class="ranking-list ranking-list--scroll" style="max-height: 800px; overflow-y: auto;"></ol>
       </div>
     </section>
 
@@ -240,7 +240,7 @@
     libCount.textContent = `共 ${filteredGames.length} 款`;
 
     if (filteredGames.length === 0) {
-      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🔍 未找到符合条件的游戏</div>';
+      libList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted); list-style: none;">🔍 未找到符合条件的游戏</li>';
       return;
     }
 
@@ -256,63 +256,60 @@
 
     if (pageGames.length === 0) return;
 
-    // 使用游戏自带的thumbnail封面（已包含真实Steam封面）
+    // 使用排行榜样式渲染游戏列表
     pageGames.forEach((game, index) => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-      card.style.cursor = "pointer";
+      const globalIdx = start + index;
+      const li = document.createElement("li");
+      li.className = "ranking-item";
+      li.style.cursor = "pointer";
 
-      // 使用游戏封面（真实Steam封面或SVG后备封面）
-      let coverHtml;
-      if (game.thumbnail) {
-        coverHtml = `<img src="${game.thumbnail}" alt="${game.name}" 
-          style="width: 100%; height: 100%; object-fit: cover;" 
-          onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`;
-      } else {
-        // 默认封面
-        coverHtml = '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
-      }
+      // 封面图
+      const coverHtml = game.thumbnail
+        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
+        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
 
-      const priceText = game.price === 0 ? '<span style="color: var(--success);">免费</span>' : `¥${game.price}`;
-      const ratingColor = game.rating >= 9 ? 'var(--success)' : game.rating >= 8 ? 'var(--accent)' : 'var(--text)';
+      // 排名样式
+      const rankClass = globalIdx === 0 ? "ranking-pos--top1" : "";
+      const medalIcon = globalIdx === 0 ? "🥇" : globalIdx === 1 ? "🥈" : globalIdx === 2 ? "🥉" : "";
 
-      card.innerHTML = `
-        <div class="game-cover">${coverHtml}</div>
-        <div class="game-title">${game.name}</div>
-        <div class="game-meta">
-          ${game.genre} · ${game.platform.split(',')[0].trim()}
+      // 类别标签
+      const categoryTag = game.genre.split(' ')[0]; // 取第一个类别
+      const categoryColor = game.rating >= 9.0 ? '#00ff00' : game.rating >= 8.0 ? '#00ccff' : '#ffaa00';
+
+      li.innerHTML = `
+        <div class="ranking-pos ${rankClass}">${medalIcon}${globalIdx + 1}</div>
+        <div class="ranking-game">
+          <div class="ranking-cover">${coverHtml}</div>
+          <div class="ranking-info">
+            <div class="ranking-name">${game.name}</div>
+            <div class="ranking-meta">${game.genre.toUpperCase()} · ${game.platform.split(',')[0].trim().toUpperCase()}</div>
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-          <div style="color: ${ratingColor}; font-weight: 700;">
-            ⭐ ${game.rating}
-          </div>
-          <div style="font-weight: 600;">
-            ${priceText}
-          </div>
+        <div class="ranking-score">
+          <span class="value" style="color: ${categoryColor};">${game.rating.toFixed(1)}</span>
+          <div><span class="tag" style="border-color: ${categoryColor}; color: ${categoryColor};">${categoryTag.toUpperCase()}</span></div>
         </div>
       `;
 
       // 悬停效果
-      card.addEventListener("mouseenter", () => {
-        card.style.transform = "translateY(-4px)";
-        card.style.boxShadow = "0 8px 24px rgba(56, 189, 248, 0.3)";
-        card.style.transition = "all 0.3s ease";
+      li.addEventListener("mouseenter", () => {
+        li.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
+        li.style.transition = "all 0.3s ease";
       });
 
-      card.addEventListener("mouseleave", () => {
-        card.style.transform = "translateY(0)";
-        card.style.boxShadow = "";
+      li.addEventListener("mouseleave", () => {
+        li.style.backgroundColor = "";
       });
 
       // 点击跳转
-      card.addEventListener("click", () => {
+      li.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
         url.searchParams.set("id", game.id);
         url.searchParams.set("name", game.name);
         window.location.href = url.toString();
       });
 
-      libList.appendChild(card);
+      libList.appendChild(li);
     });
 
     currentPage++;
