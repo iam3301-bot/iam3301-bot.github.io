@@ -82,7 +82,7 @@
             <span class="dot"></span><span>资讯匹配</span>
           </div>
         </header>
-        <div id="searchNews"></div>
+        <div id="searchNews" style="max-height: 400px; overflow-y: auto;"></div>
       </div>
 
       <div class="card">
@@ -91,7 +91,7 @@
             <span class="dot"></span><span>社区帖子匹配</span>
           </div>
         </header>
-        <div id="searchPosts"></div>
+        <div id="searchPosts" style="max-height: 400px; overflow-y: auto;"></div>
       </div>
     </section>
 
@@ -108,181 +108,265 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="game-api.js"></script>
+<script src="news-api.js"></script>
 <script>
   initCommon();
 
-  // --------- 搜索索引数据（简化版）---------
+  const searchKeyword = document.getElementById("searchKeyword");
+  const searchGames = document.getElementById("searchGames");
+  const searchNews = document.getElementById("searchNews");
+  const searchPosts = document.getElementById("searchPosts");
 
-  const gameIndex = [
-    {
-      name: "艾尔登法环",
-      desc: "魂类 开放世界 FromSoftware ARPG",
-      url: "game-detail.html"
-    },
-    {
-      name: "原神",
-      desc: "开放世界 抽卡 PC 手游",
-      url: "game-library.html"
-    },
-    {
-      name: "空洞骑士",
-      desc: "独立游戏 类银河战士恶魔城",
-      url: "game-library.html"
-    },
-    {
-      name: "赛博朋克 2077",
-      desc: "科幻 RPG 夜之城",
-      url: "game-library.html"
-    },
-    {
-      name: "怪物猎人：崛起",
-      desc: "动作 狩猎 多人联机",
-      url: "game-library.html"
-    }
-  ];
+  let gamesData = [];
+  let newsData = [];
+  let postsData = [];
+  let isDataLoaded = false;
 
-  const newsIndex = [
-    {
-      title: "《艾尔登法环》大型 DLC“黄金树之影”更新详情",
-      desc: "新增区域 Boss 武器 平衡性调整",
-      url: "news-detail.html"
-    },
-    {
-      title: "独立佳作《空洞骑士》续作测试情报曝光",
-      desc: "丝之歌 新敌人 关卡机制",
-      url: "news-list.html"
-    },
-    {
-      title: "《赛博朋克 2077》再度优化，低配置也能稳定 60 帧？",
-      desc: "旧显卡 优化 补丁",
-      url: "news-list.html"
-    }
-  ];
+  // 分页状态
+  let gamesPage = 0;
+  let newsPage = 0;
+  let postsPage = 0;
+  const PAGE_SIZE = 10;
+  
+  let filteredGames = [];
+  let filteredNews = [];
+  let filteredPosts = [];
 
-  const postIndex = [
-    {
-      title: "新手入门：如何在《艾尔登法环》中少死一点",
-      desc: "攻略 受苦 少死",
-      url: "post-detail.html"
-    },
-    {
-      title: "分享一下我今天刷到的《空洞骑士》神图",
-      desc: "截图 分享 小小成就",
-      url: "community.html"
-    },
-    {
-      title: "最近大家都在玩什么？来报个到",
-      desc: "综合 水帖 报到",
-      url: "community.html"
-    }
-  ];
-
-  // --------- 渲染逻辑 ---------
-
-  const params = new URLSearchParams(window.location.search);
-  const keywordRaw = (params.get("q") || "").trim();
-  const keyword = keywordRaw.toLowerCase();
-  document.getElementById("searchKeyword").textContent = keywordRaw || "（空）";
-
-  function highlight(text, kw) {
-    if (!kw) return text;
-    const reg = new RegExp("(" + kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
-    return text.replace(reg, "<mark>$1</mark>");
+  // 获取 URL 参数中的关键词
+  function getKeyword() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("q") || "";
   }
 
-  function renderSection(list, kw, containerId, type) {
-    const box = document.getElementById(containerId);
-    box.innerHTML = "";
+  // 加载所有数据
+  async function loadAllData() {
+    try {
+      // 显示加载中
+      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🎮 加载中...</div>';
+      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">📰 加载中...</div>';
+      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">💬 加载中...</div>';
+
+      // 并行加载所有数据
+      const [games, news] = await Promise.all([
+        window.gameAPI.getAllGames(),
+        window.newsAPI.getAllNews()
+      ]);
+
+      gamesData = games.map(g => ({
+        name: g.title,
+        desc: `${g.genre} · ${g.platform} · ${g.publisher}`,
+        url: `game-detail.html?id=${g.id}&name=${encodeURIComponent(g.title)}`,
+        cover: g.thumbnail,
+        genre: g.genre,
+        publisher: g.publisher,
+        short_description: g.short_description
+      }));
+
+      newsData = news.map(n => ({
+        title: n.title,
+        summary: n.summary,
+        url: `news-detail.html?id=${n.id}`,
+        game: n.game,
+        type: n.type,
+        date: n.date
+      }));
+
+      // 生成社区帖子数据
+      postsData = generatePostsData();
+
+      console.log(`✅ 数据加载完成：${gamesData.length} 游戏，${newsData.length} 新闻，${postsData.length} 帖子`);
+      isDataLoaded = true;
+      performSearch();
+    } catch (err) {
+      console.error("加载数据失败:", err);
+      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
+      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
+      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
+    }
+  }
+
+  // 生成社区帖子数据
+  function generatePostsData() {
+    const boards = ["综合讨论", "攻略心得", "截图分享", "求助问答"];
+    const topics = [
+      "新手入门指南", "配置推荐", "通关心得", "彩蛋发现", 
+      "隐藏Boss攻略", "速通技巧", "MOD推荐", "联机组队",
+      "剧情讨论", "结局解析", "人物分析", "世界观探讨",
+      "截图分享", "视频攻略", "直播回放", "比赛集锦"
+    ];
+    
+    const posts = [];
+    gamesData.slice(0, 100).forEach(game => {
+      for (let i = 0; i < 10; i++) {
+        const board = boards[Math.floor(Math.random() * boards.length)];
+        const topic = topics[Math.floor(Math.random() * topics.length)];
+        posts.push({
+          title: `【${board}】《${game.name}》${topic}`,
+          board: board,
+          author: `玩家${Math.floor(Math.random() * 10000)}`,
+          replies: Math.floor(Math.random() * 500),
+          views: Math.floor(Math.random() * 5000),
+          url: `post-detail.html?id=post-${posts.length}`
+        });
+      }
+    });
+    return posts;
+  }
+
+  // 执行搜索
+  function performSearch() {
+    if (!isDataLoaded) return;
+
+    const kw = getKeyword().trim().toLowerCase();
+    searchKeyword.textContent = kw || "（空）";
 
     if (!kw) {
-      box.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🔍 请输入关键字进行搜索。</div>';
+      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
+      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
+      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
       return;
     }
 
-    const results = list.filter(item => {
-      return (
-        (item.name && item.name.toLowerCase().includes(kw)) ||
-        (item.title && item.title.toLowerCase().includes(kw)) ||
-        (item.desc && item.desc.toLowerCase().includes(kw))
-      );
+    // 筛选数据
+    filteredGames = gamesData.filter(g => {
+      const text = `${g.name} ${g.desc} ${g.genre} ${g.publisher} ${g.short_description}`.toLowerCase();
+      return text.includes(kw);
     });
 
-    if (!results.length) {
-      box.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📭 没有找到匹配结果。</div>';
+    filteredNews = newsData.filter(n => {
+      const text = `${n.title} ${n.summary} ${n.game}`.toLowerCase();
+      return text.includes(kw);
+    });
+
+    filteredPosts = postsData.filter(p => {
+      const text = `${p.title} ${p.board}`.toLowerCase();
+      return text.includes(kw);
+    });
+
+    console.log(`🔍 搜索结果：${filteredGames.length} 游戏，${filteredNews.length} 新闻，${filteredPosts.length} 帖子`);
+
+    // 重置分页并渲染
+    gamesPage = 0;
+    newsPage = 0;
+    postsPage = 0;
+    
+    searchGames.innerHTML = "";
+    searchNews.innerHTML = "";
+    searchPosts.innerHTML = "";
+    
+    renderGames();
+    renderNews();
+    renderPosts();
+  }
+
+  // 渲染游戏结果
+  function renderGames() {
+    const startIdx = gamesPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = filteredGames.slice(startIdx, endIdx);
+
+    if (gamesPage === 0 && !filteredGames.length) {
+      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关游戏</div>';
       return;
     }
 
-    if (type === "game") {
-      results.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "game-card";
-        div.style.cursor = "pointer";
-        div.innerHTML = `
-          <div class="game-cover" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1)), #0b1020; display: flex; align-items: center; justify-content: center; font-size: 32px;">🎮</div>
-          <div class="game-info">
-            <div class="game-name">${highlight(item.name, kw)}</div>
-            <div class="game-meta">${highlight(item.desc, kw)}</div>
-            <div class="game-footer">
-              <span class="tag tag--accent">🔍 查看详情</span>
-            </div>
+    pageItems.forEach(g => {
+      const div = document.createElement("div");
+      div.className = "search-item";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="width:60px;height:60px;border-radius:8px;overflow:hidden;flex-shrink:0;">
+            ${g.cover ? `<img src="${g.cover}" style="width:100%;height:100%;object-fit:cover;" />` : '🎮'}
           </div>
-        `;
-        
-        // 添加悬停效果
-        div.addEventListener("mouseenter", () => {
-          div.style.transform = "translateY(-2px)";
-          div.style.transition = "all 0.3s ease";
-        });
-        
-        div.addEventListener("mouseleave", () => {
-          div.style.transform = "translateY(0)";
-        });
-        
-        div.addEventListener("click", () => {
-          window.location.href = item.url;
-        });
-        box.appendChild(div);
-      });
-    } else {
-      // 用 news-card 风格展示
-      results.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "news-card";
-        div.style.cursor = "pointer";
-        const title = item.title || item.name;
-        
-        // 根据类型添加图标
-        let typeIcon = "📰";
-        if (type === "post") {
-          typeIcon = "💬";
-        }
-        
-        div.innerHTML = `
-          <div class="news-title">${typeIcon} ${highlight(title, kw)}</div>
-          <div class="news-excerpt">${highlight(item.desc || "", kw)}</div>
-        `;
-        
-        // 添加悬停效果
-        div.addEventListener("mouseenter", () => {
-          div.style.transform = "translateX(4px)";
-          div.style.transition = "all 0.3s ease";
-        });
-        
-        div.addEventListener("mouseleave", () => {
-          div.style.transform = "translateX(0)";
-        });
-        
-        div.addEventListener("click", () => {
-          window.location.href = item.url;
-        });
-        box.appendChild(div);
-      });
-    }
+          <div style="flex:1;">
+            <div class="search-title">🎮 ${g.name}</div>
+            <div class="search-excerpt">${g.desc}</div>
+          </div>
+        </div>
+      `;
+      div.addEventListener("click", () => window.location.href = g.url);
+      searchGames.appendChild(div);
+    });
+
+    gamesPage++;
   }
 
-  renderSection(gameIndex, keyword, "searchGames", "game");
-  renderSection(newsIndex, keyword, "searchNews", "news");
-  renderSection(postIndex, keyword, "searchPosts", "post");
+  // 渲染新闻结果
+  function renderNews() {
+    const startIdx = newsPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = filteredNews.slice(startIdx, endIdx);
+
+    if (newsPage === 0 && !filteredNews.length) {
+      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关资讯</div>';
+      return;
+    }
+
+    pageItems.forEach(n => {
+      const div = document.createElement("div");
+      div.className = "search-item";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <div class="search-title">📰 ${n.title}</div>
+        <div class="search-meta">🎯 ${n.game} · 📅 ${n.date}</div>
+        <div class="search-excerpt">${n.summary}</div>
+      `;
+      div.addEventListener("click", () => window.location.href = n.url);
+      searchNews.appendChild(div);
+    });
+
+    newsPage++;
+  }
+
+  // 渲染帖子结果
+  function renderPosts() {
+    const startIdx = postsPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = filteredPosts.slice(startIdx, endIdx);
+
+    if (postsPage === 0 && !filteredPosts.length) {
+      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关帖子</div>';
+      return;
+    }
+
+    pageItems.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "search-item";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <div class="search-title">💬 ${p.title}</div>
+        <div class="search-meta">👤 ${p.author} · 💬 ${p.replies} 回复 · 👁️ ${p.views} 浏览</div>
+      `;
+      div.addEventListener("click", () => window.location.href = p.url);
+      searchPosts.appendChild(div);
+    });
+
+    postsPage++;
+  }
+
+  // 无限滚动
+  searchGames.addEventListener("scroll", () => {
+    if (searchGames.scrollHeight - searchGames.scrollTop - searchGames.clientHeight < 100) {
+      renderGames();
+    }
+  });
+
+  searchNews.addEventListener("scroll", () => {
+    if (searchNews.scrollHeight - searchNews.scrollTop - searchNews.clientHeight < 100) {
+      renderNews();
+    }
+  });
+
+  searchPosts.addEventListener("scroll", () => {
+    if (searchPosts.scrollHeight - searchPosts.scrollTop - searchPosts.clientHeight < 100) {
+      renderPosts();
+    }
+  });
+
+  // 初始化
+  loadAllData();
 </script>
 </body>
 </html>

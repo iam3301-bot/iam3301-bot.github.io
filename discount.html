@@ -100,7 +100,7 @@
           </div>
           <div class="chip" id="discCount">共 0 款</div>
         </header>
-        <div id="discList" class="game-list"></div>
+        <div id="discList" class="game-list" style="max-height: 600px; overflow-y: auto;"></div>
       </div>
     </section>
 
@@ -120,161 +120,203 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="game-api.js"></script>
 <script>
   initCommon();
 
-  // 从 ranking.json 加载真实折扣数据
-  let discountData = [];
+  // 数据源：从 ranking.json + FreeToGame API 混合加载
+  let allDiscountData = [];
   let isDataLoaded = false;
-
-  // 加载折扣数据
-  function loadDiscountData() {
-    fetch("ranking.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        // 使用 discount 分类的数据，并模拟折扣信息
-        discountData = (data.discount || []).map((game, index) => {
-          // 模拟原价和折扣（基于评分）
-          const basePrice = Math.floor(game.score * 30); // 基础价格
-          const discountPercent = 30 + Math.floor(Math.random() * 50); // 30-80% 折扣
-          const nowPrice = Math.floor(basePrice * (100 - discountPercent) / 100);
-          
-          return {
-            id: game.id,
-            name: game.name,
-            platform: game.platform || "PC",
-            oldPrice: basePrice,
-            nowPrice: nowPrice,
-            low: index % 3 === 0, // 每3个游戏标记为史低
-            cover: game.cover,
-            score: game.score
-          };
-        });
-        
-        isDataLoaded = true;
-        renderDiscount();
-      })
-      .catch((err) => {
-        console.error("加载折扣数据失败:", err);
-        discList.innerHTML = `
-          <div style="font-size:12px;color:var(--danger);padding:20px;text-align:center;">
-            ❌ 折扣数据加载失败<br>
-            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span><br>
-            <button onclick="loadDiscountData()" style="margin-top: 10px;" class="btn btn-inline">重试</button>
-          </div>
-        `;
-      });
-  }
-
-  function calcOff(item) {
-    return Math.round((1 - item.nowPrice / item.oldPrice) * 100);
-  }
+  let currentPage = 0;
+  const PAGE_SIZE = 15;
+  let currentFilteredList = [];
 
   const discSearch = document.getElementById("discSearch");
-  const discFilter = document.getElementById("discFilter");
-  const discLowOnly = document.getElementById("discLowOnly");
+  const discPercent = document.getElementById("discPercent");
+  const discHistLow = document.getElementById("discHistLow");
   const discList = document.getElementById("discList");
   const discCount = document.getElementById("discCount");
 
-  function renderDiscount() {
+  // 加载所有折扣数据
+  async function loadAllData() {
+    try {
+      discList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">🎮 正在加载折扣数据...</div>';
+
+      // 1. 加载 ranking.json 中的折扣数据
+      const rankRes = await fetch("ranking.json");
+      if (!rankRes.ok) throw new Error("HTTP 状态码 " + rankRes.status);
+      const rankData = await rankRes.json();
+      
+      const rankDiscounts = (rankData.discount || []).map((game, index) => {
+        const basePrice = 100 + Math.floor(Math.random() * 400);
+        const discountPercent = 20 + Math.floor(Math.random() * 60);
+        const currentPrice = (basePrice * (100 - discountPercent) / 100).toFixed(2);
+        const isHistLow = (index % 3 === 0);
+        
+        return {
+          ...game,
+          basePrice: basePrice,
+          currentPrice: parseFloat(currentPrice),
+          discountPercent: discountPercent,
+          isHistLow: isHistLow,
+          source: "ranking"
+        };
+      });
+
+      // 2. 加载 FreeToGame API 数据（免费游戏作为"100%折扣"）
+      const apiGames = await window.gameAPI.getAllGames();
+      const apiDiscounts = apiGames.slice(0, 200).map((game, index) => {
+        const basePrice = 50 + Math.floor(Math.random() * 200);
+        const discountPercent = 30 + Math.floor(Math.random() * 65);
+        const currentPrice = discountPercent === 100 ? 0 : (basePrice * (100 - discountPercent) / 100).toFixed(2);
+        const isHistLow = (index % 4 === 0);
+        
+        return {
+          id: game.id,
+          name: game.title,
+          platform: game.platform === "PC (Windows)" ? "Windows" : game.platform,
+          cover: game.thumbnail,
+          score: Math.random() * 2 + 7,
+          tag: game.genre,
+          basePrice: basePrice,
+          currentPrice: parseFloat(currentPrice),
+          discountPercent: discountPercent,
+          isHistLow: isHistLow,
+          source: "api"
+        };
+      });
+
+      // 3. 合并数据
+      allDiscountData = [...rankDiscounts, ...apiDiscounts];
+      
+      console.log(`✅ 成功加载 ${allDiscountData.length} 款折扣游戏`);
+      isDataLoaded = true;
+      applyFiltersAndRender();
+    } catch (err) {
+      console.error("加载折扣数据失败:", err);
+      discList.innerHTML = `
+        <div style="text-align: center; color: var(--danger); padding: 20px;">
+          ❌ 折扣数据加载失败<br>
+          <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
+        </div>
+      `;
+    }
+  }
+
+  // 应用筛选条件并渲染
+  function applyFiltersAndRender() {
     if (!isDataLoaded) {
-      discList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💰 正在加载折扣数据...</div>';
-      discCount.textContent = `共 0 款`;
+      discList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">🎮 正在加载折扣数据...</div>';
       return;
     }
 
     const kw = discSearch.value.trim().toLowerCase();
-    const off = discFilter.value; // all / 20 / 50 / 70
-    const lowOnly = discLowOnly.checked;
+    const minPercent = parseInt(discPercent.value) || 0;
+    const onlyHistLow = discHistLow.checked;
 
-    let list = discountData.filter((item) => {
-      if (kw) {
-        const text = (item.name + " " + item.platform).toLowerCase();
-        if (!text.includes(kw)) return false;
-      }
-      const offVal = calcOff(item);
-      if (off !== "all" && offVal < Number(off)) return false;
-      if (lowOnly && !item.low) return false;
+    currentFilteredList = allDiscountData.filter(item => {
+      if (kw && !item.name.toLowerCase().includes(kw)) return false;
+      if (item.discountPercent < minPercent) return false;
+      if (onlyHistLow && !item.isHistLow) return false;
       return true;
     });
 
-    // 按折扣力度从高到低
-    list.sort((a, b) => calcOff(b) - calcOff(a));
+    // 按折扣力度降序排序
+    currentFilteredList.sort((a, b) => b.discountPercent - a.discountPercent);
 
+    // 重置分页并渲染
+    currentPage = 0;
     discList.innerHTML = "";
-    discCount.textContent = `共 ${list.length} 款`;
+    discCount.textContent = `共 ${currentFilteredList.length} 款`;
 
-    if (!list.length) {
-      discList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💰 当前条件下没有折扣游戏。</div>';
+    if (!currentFilteredList.length) {
+      discList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🔍 暂无符合条件的折扣游戏。</div>';
       return;
     }
 
-    list.forEach((item) => {
-      const offVal = calcOff(item);
-      const div = document.createElement("div");
-      div.className = "game-card";
-      div.style.cursor = "pointer";
-      
-      // 计算省下的钱
-      const saved = item.oldPrice - item.nowPrice;
-      
-      // 使用真实封面图或默认图标
+    loadMoreItems();
+  }
+
+  // 加载更多项目
+  function loadMoreItems() {
+    const startIdx = currentPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = currentFilteredList.slice(startIdx, endIdx);
+    
+    if (!pageItems.length) return;
+
+    pageItems.forEach((item) => {
+      const gameCard = document.createElement("div");
+      gameCard.className = "game-card";
+      gameCard.style.cursor = "pointer";
+
       const coverHtml = item.cover 
-        ? `<img src="${item.cover}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:32px;\\'>🎮</div>';" />`
-        : '<div style="display: flex; align-items: center; justify-content: center; font-size: 32px; height: 100%;">🎮</div>';
-      
-      div.innerHTML = `
-        <div class="game-cover" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2)), #0b1020;">${coverHtml}</div>
-        <div class="game-info">
-          <div class="game-name">${item.name}</div>
-          <div class="game-meta">📍 ${item.platform}</div>
-          <div class="game-footer">
-            <span class="tag" style="text-decoration: line-through; opacity: 0.6;">原价 ¥${item.oldPrice}</span>
-            <span class="tag tag--accent" style="font-size: 14px; font-weight: bold;">现价 ¥${item.nowPrice}</span>
-            <span class="tag tag--danger" style="font-weight: bold;">-${offVal}%</span>
-            ${item.low ? '<span class="tag" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; font-weight: bold;">🔥 史低</span>' : ""}
+        ? `<img src="${item.cover}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;\\'>🎮</div>'" />` 
+        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px;">🎮</div>';
+
+      const histLowBadge = item.isHistLow ? '<div class="badge" style="background:var(--danger);margin-left:4px;">史低</div>' : '';
+
+      gameCard.innerHTML = `
+        <div class="game-cover">${coverHtml}</div>
+        <div class="game-title">${item.name || "未知游戏"}</div>
+        <div class="game-meta">
+          ${item.tag || item.genre || "游戏"} · ${item.platform || "PC"}
+        </div>
+        <div class="game-price" style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <div>
+            <span class="badge" style="background:var(--accent);">-${item.discountPercent}%</span>
+            ${histLowBadge}
           </div>
-          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-            💰 省 ¥${saved} ${item.low ? "· 历史最低价，建议入手！" : ""}
+          <div style="text-align:right;">
+            <div style="text-decoration:line-through;font-size:11px;opacity:0.6;">¥${item.basePrice}</div>
+            <div style="color:var(--accent);font-weight:700;font-size:16px;">¥${item.currentPrice}</div>
           </div>
         </div>
       `;
-      
-      // 添加悬停效果
-      div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateY(-2px)";
-        div.style.boxShadow = "0 4px 12px rgba(239, 68, 68, 0.3)";
-        div.style.transition = "all 0.3s ease";
+
+      gameCard.addEventListener("mouseenter", () => {
+        gameCard.style.transform = "translateY(-4px)";
+        gameCard.style.boxShadow = "0 8px 24px rgba(56, 189, 248, 0.3)";
+        gameCard.style.transition = "all 0.3s ease";
       });
-      
-      div.addEventListener("mouseleave", () => {
-        div.style.transform = "translateY(0)";
-        div.style.boxShadow = "";
+
+      gameCard.addEventListener("mouseleave", () => {
+        gameCard.style.transform = "translateY(0)";
+        gameCard.style.boxShadow = "";
       });
-      
-      div.addEventListener("click", () => {
-        // 跳转到游戏详情页
+
+      gameCard.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
-        if (item.id) {
-          url.searchParams.set("id", item.id);
-        }
+        if (item.id) url.searchParams.set("id", item.id);
         url.searchParams.set("name", item.name);
         window.location.href = url.toString();
       });
-      discList.appendChild(div);
+
+      discList.appendChild(gameCard);
     });
+
+    currentPage++;
   }
 
-  discSearch.addEventListener("input", renderDiscount);
-  discFilter.addEventListener("change", renderDiscount);
-  discLowOnly.addEventListener("change", renderDiscount);
-  
-  // 加载真实折扣数据
-  loadDiscountData();
+  // 无限滚动监听
+  discList.addEventListener("scroll", () => {
+    const scrollTop = discList.scrollTop;
+    const scrollHeight = discList.scrollHeight;
+    const clientHeight = discList.clientHeight;
+    
+    // 距离底部 100px 时加载更多
+    if (scrollHeight - scrollTop - clientHeight < 100) {
+      loadMoreItems();
+    }
+  });
+
+  // 监听筛选条件变化
+  discSearch.addEventListener("input", applyFiltersAndRender);
+  discPercent.addEventListener("change", applyFiltersAndRender);
+  discHistLow.addEventListener("change", applyFiltersAndRender);
+
+  // 初始加载
+  loadAllData();
 </script>
 </body>
 </html>
