@@ -1756,10 +1756,10 @@ mark {
 .cyber-info-section {
   background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(40, 0, 50, 0.9) 100%);
   border: 2px solid var(--cyber-pink);
-  box-shadow: var(--shadow-neon-pink), inset 0 0 30px rgba(255, 61, 148, 0.08);
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  box-shadow: var(--shadow-neon-pink), inset 0 0 25px rgba(255, 61, 148, 0.08);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
   position: relative;
-  padding: 18px 20px !important;
+  padding: 14px 16px !important;
   overflow: hidden;
 }
 
@@ -1789,11 +1789,11 @@ mark {
 }
 
 .cyber-info-section .detail-meta-row {
-  padding: 9px 12px !important;
-  border-left: 3px solid transparent !important;
+  padding: 7px 10px !important;
+  border-left: 2px solid transparent !important;
   transition: all 0.3s ease;
-  margin-bottom: 4px;
-  border-radius: 5px !important;
+  margin-bottom: 3px;
+  border-radius: 4px !important;
   background: rgba(0, 0, 0, 0.25) !important;
   position: relative;
   z-index: 5;
@@ -1810,19 +1810,19 @@ mark {
   font-family: 'Rajdhani', sans-serif !important;
   font-weight: 600 !important;
   color: var(--cyber-cyan) !important;
-  text-shadow: 0 0 10px var(--cyber-cyan);
+  text-shadow: 0 0 8px var(--cyber-cyan);
   text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  font-size: 11px !important;
-  min-width: 75px !important;
+  letter-spacing: 0.8px !important;
+  font-size: 10px !important;
+  min-width: 60px !important;
 }
 
 .cyber-info-section .detail-meta-value {
   font-family: 'Rajdhani', sans-serif !important;
   color: var(--text-main) !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   font-weight: 500 !important;
-  line-height: 1.5 !important;
+  line-height: 1.4 !important;
 }
 
 /* System requirements section */
@@ -1830,9 +1830,9 @@ mark {
   background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(0, 40, 40, 0.9) 100%);
   border: 3px solid var(--cyber-cyan);
   box-shadow: var(--shadow-neon-cyan), inset 0 0 40px rgba(85, 234, 212, 0.1);
-  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
   position: relative;
-  padding: 24px 28px !important;
+  padding: 22px 26px !important;
   overflow: hidden;
 }
 
@@ -1864,7 +1864,7 @@ mark {
 .cyber-sysreq-section .sysreq-column {
   background: rgba(0, 0, 0, 0.4) !important;
   border: 2px solid rgba(85, 234, 212, 0.3) !important;
-  padding: 24px !important;
+  padding: 22px !important;
   border-radius: 10px !important;
   position: relative;
   transition: all 0.3s ease;
@@ -1890,14 +1890,14 @@ mark {
 .cyber-sysreq-section .sysreq-title {
   font-family: 'Orbitron', sans-serif !important;
   font-weight: 700 !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
   color: var(--cyber-cyan) !important;
   text-shadow: 0 0 15px var(--cyber-cyan);
-  margin-bottom: 16px !important;
-  padding-bottom: 10px !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 9px !important;
   border-bottom: 2px solid rgba(85, 234, 212, 0.4) !important;
   text-transform: uppercase !important;
-  letter-spacing: 2px !important;
+  letter-spacing: 1.8px !important;
 }
 
 .cyber-sysreq-section .sysreq-column--recommended .sysreq-title {
@@ -1907,10 +1907,10 @@ mark {
 }
 
 .cyber-sysreq-section .sysreq-list li {
-  padding: 12px 15px !important;
+  padding: 10px 13px !important;
   background: rgba(0, 0, 0, 0.45) !important;
   border-left: 3px solid var(--cyber-cyan) !important;
-  margin-bottom: 9px !important;
+  margin-bottom: 8px !important;
   transition: all 0.3s ease;
   border-radius: 6px !important;
 }
@@ -1940,10 +1940,10 @@ mark {
   font-weight: 600 !important;
   color: var(--cyber-cyan) !important;
   text-shadow: 0 0 10px var(--cyber-cyan);
-  font-size: 11px !important;
+  font-size: 10px !important;
   text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  min-width: 65px !important;
+  letter-spacing: 0.9px !important;
+  min-width: 58px !important;
   flex-shrink: 0;
   line-height: 1.5 !important;
 }
@@ -1954,7 +1954,7 @@ mark {
 }
 
 .cyber-sysreq-section .sysreq-label::before {
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 .sysreq-column--recommended .sysreq-label {
@@ -1965,8 +1965,8 @@ mark {
 .cyber-sysreq-section .sysreq-value {
   font-family: 'Rajdhani', sans-serif !important;
   color: var(--text-main) !important;
-  font-size: 12px !important;
-  line-height: 1.7 !important;
+  font-size: 11px !important;
+  line-height: 1.6 !important;
   flex: 1;
   font-weight: 500 !important;
   text-align: right !important;
@@ -2398,14 +2398,14 @@ mark {
 .detail-info-grid {
   margin-top: 20px;
   display: grid;
-  grid-template-columns: minmax(280px, 0.55fr) minmax(450px, 1.45fr);
-  gap: 28px;
+  grid-template-columns: minmax(260px, 0.4fr) minmax(500px, 1.6fr);
+  gap: 32px;
   align-items: start;
 }
 
 .detail-section {
-  border-radius: 12px;
-  padding: 18px 20px;
+  border-radius: 10px;
+  padding: 16px 18px;
   background: rgba(15, 23, 42, 0.98);
   border: 1px solid rgba(30, 64, 175, 0.65);
   min-height: 100%;
@@ -2417,11 +2417,11 @@ mark {
 }
 
 .detail-section-title {
-  margin: 0 0 14px;
-  font-size: 16px;
+  margin: 0 0 12px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  padding-bottom: 10px;
+  letter-spacing: 0.3px;
+  padding-bottom: 8px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -2436,20 +2436,20 @@ mark {
 .detail-meta-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .detail-meta-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  padding: 10px 14px;
-  border-radius: 6px;
+  gap: 10px;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 5px;
   transition: all 0.2s ease;
   background: rgba(0, 0, 0, 0.2);
-  border-left: 3px solid transparent;
+  border-left: 2px solid transparent;
 }
 
 .detail-meta-row:hover {
@@ -2461,10 +2461,10 @@ mark {
 .detail-meta-label {
   color: var(--cyber-cyan);
   font-weight: 600;
-  min-width: 85px;
-  font-size: 12px;
+  min-width: 70px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .detail-meta-value {
@@ -2472,8 +2472,8 @@ mark {
   text-align: right;
   flex: 1;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 /* 适配小屏 */
@@ -2706,13 +2706,13 @@ header .btn-secondary {
 .sysreq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
   margin-top: 0;
 }
 
 .sysreq-column {
   background: rgba(0, 0, 0, 0.35);
-  padding: 26px;
+  padding: 24px;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   font-size: 14px;
@@ -2738,11 +2738,11 @@ header .btn-secondary {
 
 .sysreq-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--cyber-cyan);
   text-shadow: 0 0 15px var(--cyber-cyan);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(85, 234, 212, 0.35);
   text-transform: uppercase;
@@ -2759,8 +2759,8 @@ header .btn-secondary {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 10px;
-  padding: 13px 15px;
+  margin-bottom: 9px;
+  padding: 11px 14px;
   background: rgba(0, 0, 0, 0.45);
   border-left: 3px solid var(--cyber-cyan);
   border-radius: 6px;
@@ -2780,18 +2780,18 @@ header .btn-secondary {
 
 .sysreq-label {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--cyber-cyan);
   text-shadow: 0 0 8px var(--cyber-cyan);
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 600;
-  min-width: 70px;
+  min-width: 62px;
   flex-shrink: 0;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .sysreq-label::before {
@@ -2804,11 +2804,11 @@ header .btn-secondary {
 
 .sysreq-value {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-main);
   text-align: right;
   flex: 1;
-  line-height: 1.7;
+  line-height: 1.6;
   font-weight: 500;
   word-break: break-word;
 }
