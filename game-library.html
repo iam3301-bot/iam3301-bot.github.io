@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
-  <script src="game-api.js"></script>
 </head>
 <body data-current-page="library" class="cyberpunk-theme">
 <div class="page">
@@ -152,9 +151,6 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-
-<script src="common.js"></script>
-<script src="cyber-effects.js"></script>
 <script src="mega-game-database.js"></script>
 <script>
   initCommon();
@@ -171,7 +167,7 @@
   const libPrice = document.getElementById("libPrice");
   const libPlatforms = document.querySelectorAll('input[name="libPlatform"]');
   const libList = document.getElementById("libList");
-  const libCount = document.getElementById("libCount");
+  const libCount = document.getElementById("libResultCount");
 
   // 加载所有游戏数据
   async function loadAllGames() {
