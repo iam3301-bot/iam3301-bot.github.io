@@ -94,7 +94,7 @@
           </div>
           <div class="chip" id="newsCount">共 0 条</div>
         </header>
-        <div id="newsList" class="news-list"></div>
+        <div id="newsList" class="news-list" style="max-height: 600px; overflow-y: auto;"></div>
       </div>
     </section>
 
@@ -111,51 +111,15 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="news-api.js"></script>
 <script>
   initCommon();
 
-  const newsData = [
-    {
-      id: "elden-dlc",
-      title: "《艾尔登法环》大型 DLC“黄金树之影”情报（示例）",
-      game: "艾尔登法环",
-      type: "update", // update / new / event
-      date: "2025-03-01",
-      summary: "新增区域、Boss 与武器，平衡性调整等示例文字。",
-    },
-    {
-      id: "hollow-silk",
-      title: "《空洞骑士：丝之歌》测试内容曝光（示例）",
-      game: "空洞骑士",
-      type: "new",
-      date: "2025-02-15",
-      summary: "全新地图与敌人，战斗节奏更快，仍为示例数据。",
-    },
-    {
-      id: "cp2077-patch",
-      title: "《赛博朋克 2077》再次优化老显卡表现（示例）",
-      game: "赛博朋克 2077",
-      type: "update",
-      date: "2025-01-10",
-      summary: "增量补丁，提升中低端显卡在 1080P 下的帧率。",
-    },
-    {
-      id: "lol-tournament",
-      title: "英雄联盟校园赛春季赛报名开启（示例）",
-      game: "英雄联盟",
-      type: "event",
-      date: "2025-03-20",
-      summary: "面向在校学生的 LOL 赛事活动信息。",
-    },
-    {
-      id: "indie-fest",
-      title: "Steam 独立游戏节即将开启（示例）",
-      game: "多款独立游戏",
-      type: "event",
-      date: "2025-04-02",
-      summary: "大量独立游戏开启试玩与折扣，欢迎探索。",
-    },
-  ];
+  let allNewsData = [];
+  let dataLoaded = false;
+  let currentPage = 0;
+  const PAGE_SIZE = 15;
+  let currentFilteredList = [];
 
   const newsSearch = document.getElementById("newsSearch");
   const newsList = document.getElementById("newsList");
@@ -167,32 +131,71 @@
     return checked ? checked.value : "all";
   }
 
-  function renderNews() {
+  // 加载所有新闻数据
+  async function loadAllNews() {
+    try {
+      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 正在加载新闻数据...</div>';
+      
+      allNewsData = await window.newsAPI.getAllNews();
+      dataLoaded = true;
+      console.log(`✅ 成功加载 ${allNewsData.length} 条新闻`);
+      
+      applyFiltersAndRender();
+    } catch (err) {
+      console.error("加载新闻失败:", err);
+      newsList.innerHTML = `
+        <div style="text-align: center; color: var(--danger); padding: 20px;">
+          ❌ 新闻数据加载失败<br>
+          <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
+        </div>
+      `;
+    }
+  }
+
+  // 应用筛选条件并渲染
+  function applyFiltersAndRender() {
+    if (!dataLoaded) {
+      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 正在加载新闻数据...</div>';
+      return;
+    }
+
     const cat = getCurrentCat();
     const kw = newsSearch.value.trim().toLowerCase();
 
-    let list = newsData.filter((n) => {
+    currentFilteredList = allNewsData.filter((n) => {
       if (cat !== "all" && n.type !== cat) return false;
       if (kw) {
-        const text = (n.title + " " + n.game).toLowerCase();
+        const text = `${n.title} ${n.game} ${n.summary}`.toLowerCase();
         if (!text.includes(kw)) return false;
       }
       return true;
     });
 
-    // 简单按日期降序
-    list.sort((a, b) => (a.date < b.date ? 1 : -1));
+    // 按日期降序排序
+    currentFilteredList.sort((a, b) => b.date.localeCompare(a.date));
 
+    // 重置分页并渲染
+    currentPage = 0;
     newsList.innerHTML = "";
-    newsCount.textContent = `共 ${list.length} 条`;
+    newsCount.textContent = `共 ${currentFilteredList.length} 条`;
 
-    if (!list.length) {
-      newsList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 暂无符合条件的资讯。</div>';
+    if (!currentFilteredList.length) {
+      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 暂无符合条件的资讯。</div>';
       return;
     }
 
-    list.forEach((n) => {
+    loadMoreNews();
+  }
+
+  // 加载更多新闻
+  function loadMoreNews() {
+    const startIdx = currentPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = currentFilteredList.slice(startIdx, endIdx);
+    
+    if (!pageItems.length) return;
+
+    pageItems.forEach((n) => {
       const div = document.createElement("div");
       div.className = "news-card";
       div.style.cursor = "pointer";
@@ -202,18 +205,18 @@
       let typeText = "";
       if (n.type === "update") {
         typeIcon = "🔄";
-        typeText = "更新 / 版本";
+        typeText = "更新/版本";
       } else if (n.type === "new") {
         typeIcon = "🎮";
-        typeText = "新作 / 发售";
+        typeText = "新作/发售";
       } else {
         typeIcon = "🎉";
-        typeText = "活动 / 赛事";
+        typeText = "活动/赛事";
       }
       
       div.innerHTML = `
         <div class="news-title">${typeIcon} ${n.title}</div>
-        <div class="news-meta">🎯 ${n.game} · 📅 ${n.date} · ${typeText}</div>
+        <div class="news-meta">🎯 ${n.game} · 📅 ${n.date} · ${typeText} · 👁️ ${n.views || 0} · 💬 ${n.comments || 0}</div>
         <div class="news-excerpt">${n.summary}</div>
       `;
       
@@ -228,16 +231,33 @@
       });
       
       div.addEventListener("click", () => {
-        // 跳转到资讯详情页
         window.location.href = `news-detail.html?id=${n.id}`;
       });
+      
       newsList.appendChild(div);
     });
+    
+    currentPage++;
   }
 
-  newsSearch.addEventListener("input", renderNews);
-  newsCatsWrap.addEventListener("change", renderNews);
-  renderNews();
+  // 无限滚动监听
+  newsList.addEventListener("scroll", () => {
+    const scrollTop = newsList.scrollTop;
+    const scrollHeight = newsList.scrollHeight;
+    const clientHeight = newsList.clientHeight;
+    
+    // 距离底部 100px 时加载更多
+    if (scrollHeight - scrollTop - clientHeight < 100) {
+      loadMoreNews();
+    }
+  });
+
+  // 监听筛选条件变化
+  newsSearch.addEventListener("input", applyFiltersAndRender);
+  newsCatsWrap.addEventListener("change", applyFiltersAndRender);
+
+  // 初始加载
+  loadAllNews();
 </script>
 </body>
 </html>

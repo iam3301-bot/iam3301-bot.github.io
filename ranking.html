@@ -104,7 +104,7 @@
           </div>
           <div class="chip" id="rankCount">共 0 款</div>
         </header>
-        <ol class="ranking-list" id="rankList"></ol>
+        <ol class="ranking-list" id="rankList" style="max-height: 600px; overflow-y: auto;"></ol>
       </div>
     </section>
 
@@ -124,56 +124,16 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="game-api.js"></script>
 <script>
   initCommon();
 
-  // 从 ranking.json 加载真实数据
-  let rankingData = { hot: [], score: [], new: [], discount: [] };
-  let allGames = [];
+  // 数据源：从 ranking.json + FreeToGame API 混合加载
+  let allGamesData = [];
   let dataLoaded = false;
-
-  // 加载 ranking.json 数据
-  function loadRankingData() {
-    fetch("ranking.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP 状态码 " + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        rankingData.hot = data.hot || [];
-        rankingData.score = data.score || [];
-        rankingData.new = data.new || [];
-        rankingData.discount = data.discount || [];
-        
-        // 合并所有数据用于筛选
-        allGames = [
-          ...rankingData.hot.map(g => ({...g, board: "hot"})),
-          ...rankingData.score.map(g => ({...g, board: "score"})),
-          ...rankingData.new.map(g => ({...g, board: "new"})),
-        ];
-        
-        // 去重（基于游戏ID）
-        const seen = new Set();
-        allGames = allGames.filter(g => {
-          const key = g.id || g.name;
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        });
-        
-        dataLoaded = true;
-        renderRanking();
-      })
-      .catch((err) => {
-        console.error("加载 ranking.json 失败:", err);
-        rankList.innerHTML = `
-          <li style="text-align: center; color: var(--danger); padding: 20px;">
-            ❌ 排行榜数据加载失败<br>
-            <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
-          </li>
-        `;
-      });
-  }
+  let currentPage = 0;
+  const PAGE_SIZE = 20;
+  let currentFilteredList = [];
 
   const rankType = document.getElementById("rankType");
   const rankPlatform = document.getElementById("rankPlatform");
@@ -181,7 +141,66 @@
   const rankList = document.getElementById("rankList");
   const rankCount = document.getElementById("rankCount");
 
-  function renderRanking() {
+  // 加载所有游戏数据
+  async function loadAllData() {
+    try {
+      // 1. 加载 ranking.json
+      const rankRes = await fetch("ranking.json");
+      if (!rankRes.ok) throw new Error("HTTP 状态码 " + rankRes.status);
+      const rankData = await rankRes.json();
+      
+      const rankingGames = [
+        ...(rankData.hot || []).map(g => ({...g, source: "ranking", board: "hot"})),
+        ...(rankData.score || []).map(g => ({...g, source: "ranking", board: "score"})),
+        ...(rankData.new || []).map(g => ({...g, source: "ranking", board: "new"})),
+      ];
+      
+      // 2. 加载 FreeToGame API
+      const apiGames = await window.gameAPI.getAllGames();
+      const apiGamesFormatted = apiGames.map(g => ({
+        id: g.id,
+        name: g.title,
+        platform: g.platform === "PC (Windows)" ? "Windows" : g.platform,
+        cover: g.thumbnail,
+        score: Math.random() * 2 + 7, // 7-9分随机评分
+        tag: g.genre,
+        genre: g.genre,
+        description: g.short_description,
+        releaseDate: g.release_date,
+        publisher: g.publisher,
+        developer: g.developer,
+        gameUrl: g.game_url,
+        profileUrl: g.freetogame_profile_url,
+        source: "api",
+        board: "hot" // 默认归类为热门
+      }));
+      
+      // 3. 合并数据并去重
+      const combined = [...rankingGames, ...apiGamesFormatted];
+      const seen = new Set();
+      allGamesData = combined.filter(g => {
+        const key = (g.id || g.name).toString().toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      
+      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏数据`);
+      dataLoaded = true;
+      applyFiltersAndRender();
+    } catch (err) {
+      console.error("加载数据失败:", err);
+      rankList.innerHTML = `
+        <li style="text-align: center; color: var(--danger); padding: 20px;">
+          ❌ 排行榜数据加载失败<br>
+          <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
+        </li>
+      `;
+    }
+  }
+
+  // 应用筛选条件
+  function applyFiltersAndRender() {
     if (!dataLoaded) {
       rankList.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">🎮 正在加载排行榜数据...</li>';
       return;
@@ -191,30 +210,28 @@
     const plat = rankPlatform.value;
     const kw = rankSearch.value.trim().toLowerCase();
 
-    // 根据榜单类型选择数据源
-    let sourceData = [];
+    // 根据榜单类型筛选
+    let sourceData = allGamesData;
     if (type === "score") {
-      sourceData = rankingData.score || [];
+      sourceData = allGamesData.filter(g => g.board === "score" || (g.source === "api" && g.score >= 8));
     } else if (type === "hot") {
-      sourceData = rankingData.hot || [];
+      sourceData = allGamesData.filter(g => g.board === "hot" || g.source === "api");
     } else if (type === "new") {
-      sourceData = rankingData.new || [];
+      sourceData = allGamesData.filter(g => g.board === "new" || (g.source === "api" && new Date(g.releaseDate) > new Date("2023-01-01")));
     }
 
-    // 应用筛选条件
-    let list = sourceData.filter(item => {
-      // 平台筛选（尝试多个字段）
+    // 应用平台和关键词筛选
+    currentFilteredList = sourceData.filter(item => {
       if (plat !== "all") {
         const itemPlatform = (item.platform || "").toLowerCase();
         if (!itemPlatform.includes(plat.toLowerCase())) return false;
       }
       
-      // 关键词搜索
       if (kw) {
         const searchText = [
           item.name || "",
-          item.short_description || "",
-          item.genre || "",
+          item.description || item.short_description || "",
+          item.genre || item.tag || "",
           item.developer || ""
         ].join(" ").toLowerCase();
         if (!searchText.includes(kw)) return false;
@@ -223,29 +240,48 @@
       return true;
     });
 
-    rankList.innerHTML = "";
-    rankCount.textContent = `共 ${list.length} 款`;
+    // 排序：优先 ranking.json 数据，然后按评分降序
+    currentFilteredList.sort((a, b) => {
+      if (a.source === "ranking" && b.source === "api") return -1;
+      if (a.source === "api" && b.source === "ranking") return 1;
+      return (b.score || 0) - (a.score || 0);
+    });
 
-    if (!list.length) {
-      rankList.innerHTML =
-        '<li style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🔍 暂无符合条件的游戏。</li>';
+    // 重置分页并渲染
+    currentPage = 0;
+    rankList.innerHTML = "";
+    rankCount.textContent = `共 ${currentFilteredList.length} 款`;
+    
+    if (!currentFilteredList.length) {
+      rankList.innerHTML = '<li style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">🔍 暂无符合条件的游戏。</li>';
       return;
     }
+    
+    loadMoreItems();
+  }
 
-    list.forEach((item, idx) => {
+  // 加载更多项目
+  function loadMoreItems() {
+    const startIdx = currentPage * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageItems = currentFilteredList.slice(startIdx, endIdx);
+    
+    if (!pageItems.length) return;
+    
+    pageItems.forEach((item, localIdx) => {
+      const globalIdx = startIdx + localIdx;
       const score = Number(item.score) || 0;
       const li = document.createElement("li");
       li.className = "ranking-item";
       li.style.cursor = "pointer";
       
-      // 使用封面图片或默认图标
       const coverImage = item.cover || item.thumbnail || "";
       const coverHtml = coverImage 
-        ? `<img src="${coverImage}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" />` 
+        ? `<img src="${coverImage}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;\\'>🎮</div>'" />` 
         : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🎮</div>';
       
       li.innerHTML = `
-        <div class="ranking-pos ${idx === 0 ? "ranking-pos--top1" : ""}">${idx + 1}</div>
+        <div class="ranking-pos ${globalIdx === 0 ? "ranking-pos--top1" : ""}">${globalIdx + 1}</div>
         <div class="ranking-game">
           <div class="ranking-cover">${coverHtml}</div>
           <div class="ranking-info">
@@ -255,11 +291,10 @@
         </div>
         <div class="ranking-score">
           <span class="value">${score.toFixed(1)}</span>
-          <div><span class="tag">${item.tag || item.genre || "游戏"}</span></div>
+          <div><span class="tag">${item.source === "ranking" ? "精选" : item.tag || item.genre || "游戏"}</span></div>
         </div>
       `;
       
-      // 添加悬停效果
       li.addEventListener("mouseenter", () => {
         li.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
         li.style.transition = "all 0.3s ease";
@@ -270,24 +305,37 @@
       });
       
       li.addEventListener("click", () => {
-        // 跳转到游戏详情页
         const url = new URL("game-detail.html", window.location.href);
-        if (item.id) {
-          url.searchParams.set("id", item.id);
-        }
+        if (item.id) url.searchParams.set("id", item.id);
         url.searchParams.set("name", item.name);
         window.location.href = url.toString();
       });
+      
       rankList.appendChild(li);
     });
+    
+    currentPage++;
   }
 
-  rankType.addEventListener("change", renderRanking);
-  rankPlatform.addEventListener("change", renderRanking);
-  rankSearch.addEventListener("input", renderRanking);
+  // 无限滚动监听
+  rankList.addEventListener("scroll", () => {
+    const scrollTop = rankList.scrollTop;
+    const scrollHeight = rankList.scrollHeight;
+    const clientHeight = rankList.clientHeight;
+    
+    // 距离底部 100px 时加载更多
+    if (scrollHeight - scrollTop - clientHeight < 100) {
+      loadMoreItems();
+    }
+  });
 
-  // 加载数据
-  loadRankingData();
+  // 监听筛选条件变化
+  rankType.addEventListener("change", applyFiltersAndRender);
+  rankPlatform.addEventListener("change", applyFiltersAndRender);
+  rankSearch.addEventListener("input", applyFiltersAndRender);
+
+  // 初始加载
+  loadAllData();
 </script>
 </body>
 </html>
