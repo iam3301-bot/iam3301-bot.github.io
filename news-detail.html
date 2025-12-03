@@ -2,13 +2,172 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 艾尔登法环 DLC 情报</title>
+  <title>GameBox 游盒 - 资讯详情</title>
   <!-- Cyberpunk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 资讯详情页专属样式 */
+    .news-header-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid rgba(255, 211, 0, 0.2);
+    }
+    
+    .news-icon-large {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.2), rgba(255, 61, 148, 0.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      flex-shrink: 0;
+      border: 2px solid rgba(85, 234, 212, 0.3);
+      box-shadow: 0 0 20px rgba(85, 234, 212, 0.2);
+    }
+    
+    .news-meta-info {
+      flex: 1;
+    }
+    
+    .news-type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.2), rgba(255, 61, 148, 0.1));
+      border: 1px solid var(--cyber-yellow);
+      border-radius: 4px;
+      color: var(--cyber-yellow);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .news-meta-items {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .news-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .news-content-area {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.8;
+      margin: 24px 0;
+    }
+    
+    .news-content-area h3 {
+      font-size: 18px;
+      color: var(--cyber-yellow);
+      margin: 24px 0 12px;
+      font-weight: 700;
+    }
+    
+    .news-content-area h4 {
+      font-size: 16px;
+      color: var(--cyber-cyan);
+      margin: 20px 0 10px;
+      font-weight: 600;
+    }
+    
+    .news-content-area p {
+      margin-bottom: 14px;
+      text-align: justify;
+    }
+    
+    .news-content-area ul,
+    .news-content-area ol {
+      padding-left: 24px;
+      margin-bottom: 14px;
+    }
+    
+    .news-content-area li {
+      margin-bottom: 8px;
+    }
+    
+    .news-content-area strong {
+      color: var(--cyber-yellow);
+      font-weight: 600;
+    }
+    
+    .news-actions {
+      display: flex;
+      gap: 12px;
+      margin: 24px 0;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: rgba(85, 234, 212, 0.1);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+      background: rgba(85, 234, 212, 0.2);
+      border-color: var(--cyber-cyan);
+      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+    }
+    
+    .action-btn.active {
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.2));
+      border-color: var(--cyber-cyan);
+      color: var(--cyber-cyan);
+    }
+    
+    .related-news {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(85, 234, 212, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .related-news:hover {
+      border-color: rgba(85, 234, 212, 0.4);
+      transform: translateX(3px);
+      background: rgba(85, 234, 212, 0.05);
+    }
+    
+    .related-news-title {
+      font-size: 13px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    
+    .related-news-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body data-current-page="news" class="cyberpunk-theme">
 <div class="page">
@@ -58,46 +217,74 @@
   <main class="main">
     <section>
       <article class="card">
-        <div class="page-title">《艾尔登法环》DLC“黄金树之影”情报汇总（示例）</div>
-        <div class="page-intro">
-          游戏：艾尔登法环 · 类型：更新 / 版本 · 时间：2025-03-01（示例）
+        <div class="page-title" id="newsTitle">加载中...</div>
+        
+        <div class="news-header-info">
+          <div class="news-icon-large" id="newsIcon">📰</div>
+          <div class="news-meta-info">
+            <div class="news-type-badge" id="newsType">资讯</div>
+            <div class="news-meta-items">
+              <span class="news-meta-item">🎮 <span id="newsGame">--</span></span>
+              <span class="news-meta-item">📅 <span id="newsDate">--</span></span>
+              <span class="news-meta-item">👁️ <span id="newsViews">--</span> 浏览</span>
+              <span class="news-meta-item">💬 <span id="newsComments">--</span> 评论</span>
+            </div>
+          </div>
         </div>
-
-        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-top:10px;">
-          <p>
-            本文为课程项目示例资讯，不代表真实消息。主要用于展示资讯详情页的排版结构和信息层级。
-          </p>
-          <p>
-            在本次大型 DLC 中，玩家将前往“黄金树之影”笼罩的新区域，探索被遮蔽的历史与新的半神势力。
-            示例内容包括：新增地图、新 Boss、新武器与法术，以及一系列平衡性调整。
-          </p>
-          <h3 style="font-size:14px;margin-top:14px;">新增内容（示例）</h3>
-          <ul style="padding-left:18px;">
-            <li>全新大型区域，包含开放地表与多层地下遗迹。</li>
-            <li>若干全新 Boss 战，延续魂系高难度设计。</li>
-            <li>数十种新武器 / 战技 / 魔法，丰富玩家 Build 选择。</li>
-          </ul>
-          <h3 style="font-size:14px;margin-top:14px;">平衡性调整（示例）</h3>
-          <ul style="padding-left:18px;">
-            <li>部分武器与法术削弱或增强，用以优化 PVE 体验。</li>
-            <li>骑乘战斗与灵体召唤机制细节调整。</li>
-          </ul>
-          <p style="margin-top:10px;">
-            再次强调：以上内容为前端课程 Demo 文字示例，主要展示资讯页面的布局和排版效果。
-          </p>
+        
+        <div class="news-content-area" id="newsContent">
+          <p>正在加载资讯内容...</p>
+        </div>
+        
+        <div class="news-actions">
+          <button class="action-btn" id="btnLike">
+            <span>👍</span>
+            <span id="likeText">点赞</span>
+          </button>
+          <button class="action-btn" id="btnFavorite">
+            <span>⭐</span>
+            <span>收藏</span>
+          </button>
+          <button class="action-btn" id="btnShare">
+            <span>🔗</span>
+            <span>分享</span>
+          </button>
         </div>
       </article>
     </section>
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">相关链接（示例）</div>
+        <div class="sidebar-title">🔙 返回</div>
         <div class="sidebar-item">
-          <span class="label">游戏详情</span><span class="value"><a href="game-detail.html">艾尔登法环</a></span>
+          <span class="label">资讯列表</span>
+          <span class="value"><a href="news-list.html">返回列表</a></span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">📊 资讯信息</div>
+        <div class="sidebar-item">
+          <span class="label">游戏</span>
+          <span class="value" id="sidebarGame">--</span>
         </div>
         <div class="sidebar-item">
-          <span class="label">更多资讯</span><span class="value"><a href="news-list.html">返回列表</a></span>
+          <span class="label">类型</span>
+          <span class="value" id="sidebarType">--</span>
         </div>
+        <div class="sidebar-item">
+          <span class="label">发布日期</span>
+          <span class="value" id="sidebarDate">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">浏览次数</span>
+          <span class="value" id="sidebarViews">--</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">🔗 相关资讯</div>
+        <div id="relatedNews"></div>
       </div>
     </aside>
   </main>
@@ -105,8 +292,280 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="news-api.js"></script>
 <script>
   initCommon();
+
+  // 类型图标和名称映射
+  const typeIcons = {
+    'update': '🔄',
+    'new': '🎮',
+    'event': '🎉'
+  };
+  
+  const typeNames = {
+    'update': '更新/版本',
+    'new': '新作/发售',
+    'event': '活动/赛事'
+  };
+  
+  // 游戏图标映射
+  const gameIcons = {
+    '艾尔登法环': '⚔️',
+    '赛博朋克2077': '🌃',
+    '原神': '⚡',
+    '塞尔达传说': '🗡️',
+    'GTA 6': '🚗',
+    '博德之门3': '🎲',
+    '星空': '🌌',
+    '战神': '🏆',
+    '只狼': '🥷',
+    '空洞骑士': '🪲'
+  };
+
+  // 获取URL参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const newsId = urlParams.get('id');
+  
+  let currentNews = null;
+  let allNews = [];
+
+  // 生成详细内容
+  function generateDetailContent(news) {
+    const templates = {
+      'update': `
+        <h3>📋 更新概要</h3>
+        <p>本次更新为《${news.game}》带来了重要的改进和优化。${news.summary}</p>
+        
+        <h4>🔧 主要更新内容</h4>
+        <ul>
+          <li><strong>游戏平衡性调整</strong>：对部分角色/武器/技能进行了平衡性优化</li>
+          <li><strong>Bug修复</strong>：修复了若干影响游戏体验的已知问题</li>
+          <li><strong>性能优化</strong>：提升了游戏在各平台上的运行表现</li>
+          <li><strong>新增内容</strong>：加入了新的游戏元素和功能</li>
+        </ul>
+        
+        <h4>🎯 重点改动</h4>
+        <p>开发团队特别关注了玩家社区的反馈，针对性地改进了以下方面：</p>
+        <ol>
+          <li>优化了用户界面，提升操作便利性</li>
+          <li>加强了网络连接稳定性</li>
+          <li>改进了匹配机制算法</li>
+          <li>完善了新手引导系统</li>
+        </ol>
+        
+        <h4>📢 开发者留言</h4>
+        <p>我们会持续关注玩家的意见和建议，不断改进游戏体验。感谢各位玩家的支持！</p>
+        
+        <p><strong>更新时间：</strong>${news.date}<br>
+        <strong>更新大小：</strong>约 ${Math.floor(Math.random() * 5 + 1)}GB<br>
+        <strong>适用平台：</strong>PC / PlayStation / Xbox / Switch</p>
+      `,
+      
+      'new': `
+        <h3>🎮 游戏介绍</h3>
+        <p>${news.summary} 《${news.game}》即将为玩家带来全新的游戏体验。</p>
+        
+        <h4>✨ 游戏特色</h4>
+        <ul>
+          <li><strong>震撼画面</strong>：采用最新游戏引擎，打造电影级视觉效果</li>
+          <li><strong>深度剧情</strong>：精心编写的故事线，带来沉浸式体验</li>
+          <li><strong>丰富玩法</strong>：多样化的游戏机制，可玩性极高</li>
+          <li><strong>开放世界</strong>：广阔的探索空间，自由度极高</li>
+        </ul>
+        
+        <h4>🎯 核心玩法</h4>
+        <p>游戏提供了多种游戏模式供玩家选择：</p>
+        <ol>
+          <li><strong>剧情模式</strong>：跟随主线剧情，体验完整故事</li>
+          <li><strong>自由探索</strong>：在开放世界中自由冒险</li>
+          <li><strong>多人合作</strong>：与好友组队共同挑战</li>
+          <li><strong>竞技对战</strong>：与其他玩家一较高下</li>
+        </ol>
+        
+        <h4>📅 发售信息</h4>
+        <p><strong>发售日期：</strong>${news.date}<br>
+        <strong>首发平台：</strong>PC / PlayStation 5 / Xbox Series X|S<br>
+        <strong>预计价格：</strong>¥298 - ¥498<br>
+        <strong>支持语言：</strong>中文 / 英文 / 日文等多语言</p>
+        
+        <h4>🎁 预购奖励</h4>
+        <p>现在预购可获得独家限定内容：</p>
+        <ul>
+          <li>限定角色皮肤</li>
+          <li>特殊武器包</li>
+          <li>游戏原声音乐</li>
+          <li>数字艺术设定集</li>
+        </ul>
+      `,
+      
+      'event': `
+        <h3>🎉 活动详情</h3>
+        <p>${news.summary} 这是一次不容错过的精彩活动！</p>
+        
+        <h4>📋 活动内容</h4>
+        <ul>
+          <li><strong>活动主题</strong>：${news.game} 特别活动</li>
+          <li><strong>活动时间</strong>：${news.date} 起，持续14天</li>
+          <li><strong>参与方式</strong>：登录游戏即可自动参与</li>
+          <li><strong>奖励丰厚</strong>：完成任务可获得限定道具</li>
+        </ul>
+        
+        <h4>🎁 活动奖励</h4>
+        <p>参与活动可获得以下奖励：</p>
+        <ol>
+          <li><strong>限定皮肤</strong>：活动专属外观，仅此期间可获得</li>
+          <li><strong>游戏货币</strong>：大量游戏内货币奖励</li>
+          <li><strong>特殊称号</strong>：彰显玩家荣誉的限定称号</li>
+          <li><strong>稀有道具</strong>：提升游戏体验的珍贵物品</li>
+        </ol>
+        
+        <h4>📜 任务要求</h4>
+        <ul>
+          <li>完成每日签到任务</li>
+          <li>达成指定游戏目标</li>
+          <li>参与社区互动活动</li>
+          <li>邀请好友一起游玩</li>
+        </ul>
+        
+        <h4>⚠️ 注意事项</h4>
+        <p>• 活动期间限定，逾期奖励无法领取<br>
+        • 部分奖励需要完成特定任务才能解锁<br>
+        • 请及时关注官方公告，了解最新活动动态<br>
+        • 活动最终解释权归游戏开发商所有</p>
+      `
+    };
+    
+    return templates[news.type] || `<p>${news.summary}</p>`;
+  }
+
+  // 加载资讯详情
+  async function loadNewsDetail() {
+    try {
+      if (!newsId) {
+        throw new Error('未指定资讯ID');
+      }
+      
+      // 加载所有资讯
+      allNews = await window.newsAPI.getAllNews();
+      
+      // 查找对应资讯
+      currentNews = allNews.find(n => n.id === newsId);
+      
+      if (!currentNews) {
+        throw new Error('未找到对应资讯');
+      }
+      
+      // 渲染资讯内容
+      renderNews();
+      
+      // 渲染相关资讯
+      renderRelatedNews();
+      
+    } catch (err) {
+      console.error('加载资讯失败:', err);
+      document.getElementById('newsTitle').textContent = '资讯加载失败';
+      document.getElementById('newsContent').innerHTML = `
+        <div style="text-align: center; color: var(--danger); padding: 40px;">
+          ❌ ${err.message}<br>
+          <a href="news-list.html" style="color: var(--cyber-cyan); margin-top: 16px; display: inline-block;">返回资讯列表</a>
+        </div>
+      `;
+    }
+  }
+
+  // 渲染资讯内容
+  function renderNews() {
+    const typeIcon = typeIcons[currentNews.type] || '📰';
+    const typeName = typeNames[currentNews.type] || '资讯';
+    const gameIcon = gameIcons[currentNews.game] || '🎮';
+    
+    // 更新页面标题
+    document.title = `${currentNews.title} - GameBox 游盒`;
+    
+    // 主体内容
+    document.getElementById('newsTitle').textContent = currentNews.title;
+    document.getElementById('newsIcon').textContent = gameIcon;
+    document.getElementById('newsType').textContent = `${typeIcon} ${typeName}`;
+    document.getElementById('newsGame').textContent = currentNews.game;
+    document.getElementById('newsDate').textContent = currentNews.date;
+    document.getElementById('newsViews').textContent = currentNews.views.toLocaleString();
+    document.getElementById('newsComments').textContent = currentNews.comments;
+    
+    // 生成详细内容
+    document.getElementById('newsContent').innerHTML = generateDetailContent(currentNews);
+    
+    // 侧边栏
+    document.getElementById('sidebarGame').textContent = currentNews.game;
+    document.getElementById('sidebarType').textContent = typeName;
+    document.getElementById('sidebarDate').textContent = currentNews.date;
+    document.getElementById('sidebarViews').textContent = currentNews.views.toLocaleString();
+  }
+
+  // 渲染相关资讯
+  function renderRelatedNews() {
+    // 找到同游戏或同类型的资讯
+    const related = allNews
+      .filter(n => n.id !== currentNews.id && 
+                   (n.game === currentNews.game || n.type === currentNews.type))
+      .slice(0, 5);
+    
+    const container = document.getElementById('relatedNews');
+    
+    if (related.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">暂无相关资讯</div>';
+      return;
+    }
+    
+    container.innerHTML = related.map(news => `
+      <div class="related-news" onclick="window.location.href='news-detail.html?id=${news.id}'">
+        <div class="related-news-title">${typeIcons[news.type] || '📰'} ${news.title.substring(0, 40)}${news.title.length > 40 ? '...' : ''}</div>
+        <div class="related-news-meta">
+          🎮 ${news.game} · 📅 ${news.date}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 按钮功能
+  let liked = false;
+  let favorited = false;
+
+  document.getElementById('btnLike').addEventListener('click', function() {
+    if (!liked) {
+      liked = true;
+      this.classList.add('active');
+      document.getElementById('likeText').textContent = '已点赞';
+    } else {
+      liked = false;
+      this.classList.remove('active');
+      document.getElementById('likeText').textContent = '点赞';
+    }
+  });
+
+  document.getElementById('btnFavorite').addEventListener('click', function() {
+    if (!favorited) {
+      favorited = true;
+      this.classList.add('active');
+      alert('✅ 已收藏到"我的收藏"');
+    } else {
+      favorited = false;
+      this.classList.remove('active');
+      alert('❌ 已取消收藏');
+    }
+  });
+
+  document.getElementById('btnShare').addEventListener('click', () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('🔗 链接已复制到剪贴板！');
+    }).catch(() => {
+      alert('🔗 分享链接：\n' + url);
+    });
+  });
+
+  // 初始化
+  loadNewsDetail();
 </script>
 </body>
 </html>

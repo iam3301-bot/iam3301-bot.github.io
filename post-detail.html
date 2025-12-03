@@ -9,6 +9,212 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 帖子详情页专属样式 */
+    .post-header-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid rgba(255, 211, 0, 0.2);
+    }
+    
+    .post-author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.4);
+    }
+    
+    .post-author-info {
+      flex: 1;
+    }
+    
+    .post-author-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cyber-yellow);
+      margin-bottom: 4px;
+    }
+    
+    .post-stats-bar {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .post-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .post-content-full {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.8;
+      margin: 20px 0;
+    }
+    
+    .post-content-full p {
+      margin-bottom: 12px;
+    }
+    
+    .post-actions {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(255, 211, 0, 0.1);
+      border: 1px solid rgba(255, 211, 0, 0.3);
+      border-radius: 4px;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+      background: rgba(255, 211, 0, 0.2);
+      border-color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
+    }
+    
+    .action-btn.active {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.3), rgba(255, 61, 148, 0.2));
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+    }
+    
+    .comment-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(85, 234, 212, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .comment-item:hover {
+      border-color: rgba(85, 234, 212, 0.4);
+      transform: translateX(3px);
+    }
+    
+    .comment-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .comment-author-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyber-cyan);
+    }
+    
+    .comment-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    .comment-content {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    
+    .comment-actions {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+    
+    .comment-action {
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .comment-action:hover {
+      color: var(--cyber-cyan);
+    }
+    
+    .reply-form {
+      margin-top: 8px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .reply-form.show {
+      display: block;
+    }
+    
+    .reply-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      color: var(--text-main);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .reply-btn {
+      padding: 6px 16px;
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.2), rgba(0, 255, 159, 0.1));
+      border: 1px solid var(--cyber-cyan);
+      border-radius: 4px;
+      color: var(--cyber-cyan);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .reply-btn:hover {
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.2));
+      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+    }
+  </style>
 </head>
 <body data-current-page="community" class="cyberpunk-theme">
 <div class="page">
@@ -58,51 +264,58 @@
   <main class="main">
     <section>
       <article class="card">
-        <div class="page-title">新手入门：如何在《艾尔登法环》中少死一点（示例）</div>
-        <div class="page-intro">
-          版块：攻略 · 游戏：艾尔登法环 · 楼主:玩家 A
+        <div class="page-title" id="postTitle">加载中...</div>
+        
+        <div class="post-header-info" id="postHeaderInfo">
+          <div class="post-author-avatar" id="authorAvatar">⚔️</div>
+          <div class="post-author-info">
+            <div class="post-author-name" id="authorName">加载中...</div>
+            <div class="post-stats-bar">
+              <span class="post-stat-item">📅 <span id="postTime">--</span></span>
+              <span class="post-stat-item">👁️ <span id="postViews">--</span> 浏览</span>
+              <span class="post-stat-item">💬 <span id="postReplies">--</span> 回复</span>
+              <span class="post-stat-item">🎮 <span id="postGame">--</span></span>
+            </div>
+          </div>
         </div>
-        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-top:8px;">
-          <p>
-            
-          </p>
-          <p>
-            1. 前期不要急着挑战所有 Boss，可以先在开放世界探索，提升等级和装备；<br />
-            2. 学会翻滚与体力管理，比盲目堆攻击更重要；<br />
-            3. 适当使用灵体和道具，这不是“作弊”，是游戏设计的一部分。
-          </p>
-          <p>
-            
-          </p>
+        
+        <div class="post-content-full" id="postContent">
+          <p>正在加载帖子内容...</p>
+        </div>
+        
+        <div class="post-actions">
+          <button class="action-btn" id="btnLike">
+            <span>👍</span>
+            <span id="likeText">点赞 (<span id="likeCount">0</span>)</span>
+          </button>
+          <button class="action-btn" id="btnFavorite">
+            <span>⭐</span>
+            <span>收藏</span>
+          </button>
+          <button class="action-btn" id="btnShare">
+            <span>🔗</span>
+            <span>分享</span>
+          </button>
         </div>
       </article>
 
       <article class="card">
         <header class="card-header">
           <div class="card-title">
-            <span class="dot"></span><span>评论区</span>
+            <span class="dot"></span><span>评论区 (<span id="commentCount">0</span>)</span>
           </div>
         </header>
-  
-  <!-- Cyberpunk Effects -->
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
+        
         <div class="comment-list" id="commentList"></div>
-        <div class="form" style="margin-top:10px;">
+        
+        <div class="form" style="margin-top:20px;">
           <div class="form-row">
             <label for="newComment">发表你的看法</label>
-            <textarea id="newComment" placeholder="说点什么吧……"></textarea>
+            <textarea id="newComment" placeholder="说点什么吧……" rows="4"></textarea>
           </div>
-          <button class="btn btn-primary btn-inline" id="btnComment">发表评论</button>
-          <div id="commentMsg" style="font-size:11px;color:var(--text-soft);margin-top:4px;">
-            提示：评论只会保存在当前页面刷新前的内存中。
+          <button class="btn btn-primary btn-inline" id="btnComment">💬 发表评论</button>
+          <div id="commentMsg" style="font-size:11px;color:var(--text-soft);margin-top:8px;">
+            提示：当前为演示版本，评论数据仅保存在本地内存中
           </div>
         </div>
       </article>
@@ -110,9 +323,25 @@
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">返回</div>
+        <div class="sidebar-title">🔙 返回</div>
         <div class="sidebar-item">
-          <span class="label">回到社区</span><span class="value"><a href="community.html">社区列表</a></span>
+          <span class="label">社区</span><span class="value"><a href="community.html">返回社区列表</a></span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">📊 帖子统计</div>
+        <div class="sidebar-item">
+          <span class="label">发布时间</span><span class="value" id="sidebarTime">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">浏览次数</span><span class="value" id="sidebarViews">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">回复数量</span><span class="value" id="sidebarReplies">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">点赞数量</span><span class="value" id="sidebarLikes">--</span>
         </div>
       </div>
     </aside>
@@ -124,54 +353,443 @@
 <script>
   initCommon();
 
-  const commentListEl = document.getElementById("commentList");
-  const newCommentEl = document.getElementById("newComment");
-  const btnComment = document.getElementById("btnComment");
-  const commentMsg = document.getElementById("commentMsg");
+  // 示例帖子数据（从community.html复制）
+  const postDatabase = {
+    "pinned-1": {
+      id: "pinned-1",
+      title: "【公告】社区使用指南 - 新人必读",
+      content: `
+        <h3>欢迎来到 GameBox 社区！</h3>
+        <p>本帖包含社区规则、发帖指南、常见问题解答等内容，建议新玩家仔细阅读。</p>
+        
+        <h4>1. 社区规则</h4>
+        <ul>
+          <li>友善交流，尊重他人意见</li>
+          <li>禁止发布广告、垃圾信息</li>
+          <li>剧透内容请标注明确警告</li>
+          <li>遵守游戏开发商的服务条款</li>
+        </ul>
+        
+        <h4>2. 发帖指南</h4>
+        <ul>
+          <li>选择合适的板块发布内容</li>
+          <li>标题简洁明了，准确描述内容</li>
+          <li>善用标签分类您的帖子</li>
+          <li>排版清晰，方便他人阅读</li>
+        </ul>
+        
+        <h4>3. 常见问题</h4>
+        <p><strong>Q: 如何获得更多权限？</strong><br>
+        A: 保持活跃发帖和评论，获取经验值提升等级即可解锁更多功能。</p>
+        
+        <p><strong>Q: 帖子被删除了怎么办？</strong><br>
+        A: 检查是否违反社区规则，可联系管理员咨询具体原因。</p>
+        
+        <p>感谢您的支持，祝您在GameBox社区玩得开心！🎮</p>
+      `,
+      author: "GameBox官方",
+      avatar: "🎮",
+      game: "GameBox",
+      board: "general",
+      replies: 156,
+      likes: 892,
+      views: 5432,
+      time: "置顶"
+    },
+    "elden-newbie": {
+      id: "elden-newbie",
+      title: "新手入门：如何在《艾尔登法环》中少死一点",
+      content: `
+        <p>大家好，作为一个从魂系游戏一路走来的老玩家，今天分享一些艾尔登法环的新手技巧。</p>
+        
+        <h4>🎯 职业选择建议</h4>
+        <p>对于新手，推荐选择以下职业：</p>
+        <ul>
+          <li><strong>流浪骑士</strong>：高防御，容错率高，适合近战</li>
+          <li><strong>魔法师</strong>：远程输出，可以风筝大部分Boss</li>
+          <li><strong>武士</strong>：平衡型，初始装备优秀</li>
+        </ul>
+        
+        <h4>⚔️ 战斗技巧</h4>
+        <ol>
+          <li><strong>不要贪刀</strong>：看准时机，打一两刀就撤，耐心磨血</li>
+          <li><strong>学会翻滚</strong>：翻滚是最重要的防御手段，练习翻滚时机</li>
+          <li><strong>体力管理</strong>：永远保留一些体力用于翻滚和跑路</li>
+          <li><strong>善用盾反</strong>：中小型敌人可以尝试盾反，高伤害+硬直</li>
+        </ol>
+        
+        <h4>🗺️ 探索建议</h4>
+        <ul>
+          <li>前期不要急着打Boss，先在宁姆格福地区充分探索</li>
+          <li>多收集黄金卢恩，提升等级让游戏更轻松</li>
+          <li>寻找散落各地的战灰和护符，提升战斗力</li>
+          <li>善用地图标记功能，记录重要地点</li>
+        </ul>
+        
+        <h4>🌟 实用道具</h4>
+        <ul>
+          <li><strong>灵体召唤</strong>：不是作弊！合理使用可以大幅降低难度</li>
+          <li><strong>药瓶升级</strong>：优先升级红瓶，保证续航能力</li>
+          <li><strong>制作材料</strong>：多收集草药和材料，可以制作实用消耗品</li>
+        </ul>
+        
+        <p>记住，艾尔登法环是一个需要耐心和学习的游戏。死亡是游戏的一部分，不要气馁，每次失败都是在积累经验。祝大家早日成为艾尔登之王！💪</p>
+      `,
+      author: "褪色者小明",
+      avatar: "⚔️",
+      game: "艾尔登法环",
+      board: "guide",
+      replies: 89,
+      likes: 456,
+      views: 2341,
+      time: "2小时前"
+    },
+    "cp-photo": {
+      id: "cp-photo",
+      title: "【截图分享】夜之城的霓虹灯太美了！",
+      content: `
+        <p>用 RTX 4090 开满光追拍的，这游戏的画面真的是绝了！</p>
+        
+        <h4>📸 拍摄参数</h4>
+        <ul>
+          <li><strong>显卡</strong>：RTX 4090 24GB</li>
+          <li><strong>分辨率</strong>：4K (3840x2160)</li>
+          <li><strong>光追等级</strong>：Psycho (最高)</li>
+          <li><strong>DLSS</strong>：质量模式</li>
+        </ul>
+        
+        <h4>🌃 拍摄地点</h4>
+        <ol>
+          <li><strong>雾街</strong>：霓虹灯最密集的地方，晚上去最美</li>
+          <li><strong>市中心</strong>：高楼大厦，科技感满满</li>
+          <li><strong>北区工业园</strong>：废土朋克风格</li>
+          <li><strong>日本街</strong>：传统与未来的碰撞</li>
+        </ol>
+        
+        <p>夜之城的每个角落都是一幅赛博朋克画卷。特别是雨天，地面的反射配合霓虹灯，简直就是电影级别的画面！</p>
+        
+        <p><strong>Tips：</strong> 推荐大家下载Appearance Menu Mod，可以随时切换V的外观，拍照更方便！</p>
+        
+        <p>晚点我会把这些截图上传到Steam创意工坊，喜欢的朋友可以收藏~</p>
+      `,
+      author: "V",
+      avatar: "🌃",
+      game: "赛博朋克 2077",
+      board: "shot",
+      replies: 67,
+      likes: 234,
+      views: 1567,
+      time: "30分钟前"
+    },
+    "zelda-tears": {
+      id: "zelda-tears",
+      title: "王国之泪 神庙全收集攻略（持续更新中）",
+      content: `
+        <p>本帖整理了王国之泪所有神庙的位置和解谜方法，目前已更新 120/152 个，欢迎收藏！</p>
+        
+        <h4>📍 神庙分布统计</h4>
+        <ul>
+          <li><strong>地表神庙</strong>：60个 ✅ 已完成</li>
+          <li><strong>天空岛神庙</strong>：40个 ✅ 已完成</li>
+          <li><strong>地下神庙</strong>：20个 🔄 进行中</li>
+          <li><strong>特殊神庙</strong>：32个 🔄 进行中</li>
+        </ul>
+        
+        <h4>🎯 新手必做神庙Top 10</h4>
+        <ol>
+          <li><strong>启始之塔</strong> - 解锁地图塔功能</li>
+          <li><strong>鸟望台神庙</strong> - 获得滑翔伞</li>
+          <li><strong>回忆之林</strong> - 增加心之器皿</li>
+          <li><strong>时间停止</strong> - 学会重要技能</li>
+          <li><strong>火焰之试炼</strong> - 获得炎之大剑</li>
+          <li><strong>冰雪神庙</strong> - 学会冰冻技巧</li>
+          <li><strong>雷电殿堂</strong> - 掌握雷电应用</li>
+          <li><strong>风之祭坛</strong> - 强化滑翔能力</li>
+          <li><strong>力量测试</strong> - 提升攻击力</li>
+          <li><strong>智慧考验</strong> - 获得珍稀道具</li>
+        </ol>
+        
+        <h4>💡 解谜技巧汇总</h4>
+        <ul>
+          <li><strong>究极手</strong>：最常用的能力，可以移动和组合物体</li>
+          <li><strong>通天术</strong>：向上穿透物体，快速到达高处</li>
+          <li><strong>时光倒流</strong>：让物体时间倒流，创造性解谜</li>
+          <li><strong>余料建造</strong>：粘合物品制作工具和武器</li>
+        </ul>
+        
+        <h4>🗺️ 地图资源</h4>
+        <p>我制作了一个互动地图，标记了所有神庙位置、呀哈哈种子、材料点等。需要的朋友可以私信我获取链接。</p>
+        
+        <h4>📢 更新计划</h4>
+        <ul>
+          <li>✅ 地表神庙 (已完成)</li>
+          <li>✅ 天空岛神庙 (已完成)</li>
+          <li>🔄 地下神庙 (进行中，预计3天完成)</li>
+          <li>📅 特殊神庙 (计划下周开始)</li>
+        </ul>
+        
+        <p>感谢大家的支持！有任何问题欢迎在评论区提问，我会尽快回复~</p>
+      `,
+      author: "海拉鲁勇者",
+      avatar: "🗡️",
+      game: "塞尔达传说：王国之泪",
+      board: "guide",
+      replies: 234,
+      likes: 678,
+      views: 4521,
+      time: "1天前"
+    }
+  };
 
+  // 获取URL参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get('id') || 'elden-newbie';
+  
+  // 当前帖子数据
+  let currentPost = postDatabase[postId] || postDatabase['elden-newbie'];
   let comments = [
-    { author: "路人甲", time: "示例 · 1 小时前", content: "少贪刀，多观察 Boss 动作。" },
-    { author: "路人乙", time: "示例 · 10 分钟前", content: "灵马冲刺绕后戳几刀挺好用的。" },
+    { 
+      id: 1,
+      author: "路人甲", 
+      avatar: "👤",
+      time: "1小时前", 
+      content: "感谢分享！这个攻略太有用了，正好需要。",
+      likes: 12
+    },
+    { 
+      id: 2,
+      author: "游戏达人", 
+      avatar: "🎮",
+      time: "30分钟前", 
+      content: "写得很详细，新手玩家必看！",
+      likes: 8
+    },
+    {
+      id: 3,
+      author: "探险者",
+      avatar: "🧭",
+      time: "15分钟前",
+      content: "补充一点：前期可以去龙墓刷卢恩，效率很高。",
+      likes: 15
+    }
   ];
 
+  // 渲染帖子内容
+  function renderPost() {
+    document.title = `${currentPost.title} - GameBox 游盒`;
+    document.getElementById('postTitle').textContent = currentPost.title;
+    document.getElementById('authorAvatar').textContent = currentPost.avatar;
+    document.getElementById('authorName').textContent = currentPost.author;
+    document.getElementById('postTime').textContent = currentPost.time;
+    document.getElementById('postViews').textContent = currentPost.views.toLocaleString();
+    document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
+    document.getElementById('postGame').textContent = currentPost.game;
+    document.getElementById('postContent').innerHTML = currentPost.content;
+    document.getElementById('likeCount').textContent = currentPost.likes;
+    
+    // 侧边栏统计
+    document.getElementById('sidebarTime').textContent = currentPost.time;
+    document.getElementById('sidebarViews').textContent = currentPost.views.toLocaleString();
+    document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
+    document.getElementById('sidebarLikes').textContent = currentPost.likes;
+  }
+
+  // 渲染评论列表
   function renderComments() {
+    const commentListEl = document.getElementById("commentList");
+    const commentCountEl = document.getElementById("commentCount");
+    
+    commentCountEl.textContent = comments.length;
     commentListEl.innerHTML = "";
+    
+    if (comments.length === 0) {
+      commentListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">💬 还没有评论，来发表第一条吧！</div>';
+      return;
+    }
+    
     comments.forEach((c) => {
       const div = document.createElement("div");
       div.className = "comment-item";
       div.innerHTML = `
-        <div class="comment-meta">${c.author} · ${c.time}</div>
+        <div class="comment-header">
+          <div class="comment-author">
+            <div class="comment-avatar">${c.avatar}</div>
+            <div>
+              <div class="comment-author-name">${c.author}</div>
+              <div class="comment-meta">发布于 ${c.time}</div>
+            </div>
+          </div>
+        </div>
         <div class="comment-content">${c.content}</div>
+        <div class="comment-actions">
+          <span class="comment-action" onclick="likeComment(${c.id})">👍 点赞 (${c.likes})</span>
+          <span class="comment-action" onclick="toggleReply(${c.id})">💬 回复</span>
+        </div>
+        <div class="reply-form" id="reply-form-${c.id}">
+          <input type="text" class="reply-input" id="reply-input-${c.id}" placeholder="输入回复内容..." />
+          <button class="reply-btn" onclick="submitReply(${c.id})">发送</button>
+        </div>
       `;
       commentListEl.appendChild(div);
     });
   }
 
+  // 点赞评论
+  window.likeComment = function(commentId) {
+    const comment = comments.find(c => c.id === commentId);
+    if (comment) {
+      comment.likes++;
+      renderComments();
+    }
+  };
+
+  // 切换回复框
+  window.toggleReply = function(commentId) {
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    if (replyForm) {
+      replyForm.classList.toggle('show');
+    }
+  };
+
+  // 提交回复
+  window.submitReply = function(commentId) {
+    const input = document.getElementById(`reply-input-${commentId}`);
+    const content = input.value.trim();
+    
+    if (!content) {
+      alert('回复内容不能为空');
+      return;
+    }
+    
+    const user = getCurrentUser();
+    const userName = user ? (user.nickname || user.username || "已登录玩家") : "游客";
+    
+    const comment = comments.find(c => c.id === commentId);
+    if (comment) {
+      const newComment = {
+        id: Date.now(),
+        author: userName,
+        avatar: "👥",
+        time: "刚刚",
+        content: `回复 @${comment.author}: ${content}`,
+        likes: 0
+      };
+      comments.push(newComment);
+      input.value = "";
+      toggleReply(commentId);
+      renderComments();
+      
+      // 更新回复数
+      currentPost.replies = currentPost.replies + 1;
+      document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
+      document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
+    }
+  };
+
+  // 获取当前用户
+  function getCurrentUser() {
+    try {
+      const raw = localStorage.getItem("currentUser");
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { 
+      return null; 
+    }
+  }
+
+  // 发表评论
+  const btnComment = document.getElementById("btnComment");
+  const newCommentEl = document.getElementById("newComment");
+  const commentMsg = document.getElementById("commentMsg");
+
   btnComment.addEventListener("click", () => {
     const text = newCommentEl.value.trim();
     if (!text) {
-      commentMsg.textContent = "内容不能为空。";
+      commentMsg.textContent = "❌ 评论内容不能为空";
+      commentMsg.style.color = "var(--danger)";
       return;
     }
-    const user = (function(){
-      try {
-        const raw = localStorage.getItem("currentUser");
-        if (!raw) return null;
-        return JSON.parse(raw);
-      } catch { return null; }
-    })();
+    
+    const user = getCurrentUser();
     const name = user ? (user.nickname || user.username || "已登录玩家") : "游客";
 
-    comments.push({
+    const newComment = {
+      id: Date.now(),
       author: name,
-      time: "刚刚（本地）",
+      avatar: "👤",
+      time: "刚刚",
       content: text,
-    });
+      likes: 0
+    };
+    
+    comments.push(newComment);
     newCommentEl.value = "";
-    commentMsg.textContent = "评论已添加（仅当前页面有效）。";
+    commentMsg.textContent = "✅ 评论发布成功！";
+    commentMsg.style.color = "var(--cyber-cyan)";
+    
+    // 更新回复数
+    currentPost.replies = currentPost.replies + 1;
+    document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
+    document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
+    
     renderComments();
+    
+    // 3秒后清除提示
+    setTimeout(() => {
+      commentMsg.textContent = "提示：当前为演示版本，评论数据仅保存在本地内存中";
+      commentMsg.style.color = "var(--text-soft)";
+    }, 3000);
   });
 
+  // 点赞按钮
+  const btnLike = document.getElementById("btnLike");
+  let liked = false;
+
+  btnLike.addEventListener("click", () => {
+    if (!liked) {
+      currentPost.likes++;
+      liked = true;
+      btnLike.classList.add('active');
+      document.getElementById('likeCount').textContent = currentPost.likes;
+      document.getElementById('sidebarLikes').textContent = currentPost.likes;
+    } else {
+      currentPost.likes--;
+      liked = false;
+      btnLike.classList.remove('active');
+      document.getElementById('likeCount').textContent = currentPost.likes;
+      document.getElementById('sidebarLikes').textContent = currentPost.likes;
+    }
+  });
+
+  // 收藏按钮
+  const btnFavorite = document.getElementById("btnFavorite");
+  let favorited = false;
+
+  btnFavorite.addEventListener("click", () => {
+    if (!favorited) {
+      favorited = true;
+      btnFavorite.classList.add('active');
+      alert('✅ 已收藏到"我的收藏"');
+    } else {
+      favorited = false;
+      btnFavorite.classList.remove('active');
+      alert('❌ 已取消收藏');
+    }
+  });
+
+  // 分享按钮
+  const btnShare = document.getElementById("btnShare");
+  btnShare.addEventListener("click", () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('🔗 链接已复制到剪贴板！');
+    }).catch(() => {
+      alert('🔗 分享链接：\n' + url);
+    });
+  });
+
+  // 初始化
+  renderPost();
   renderComments();
 </script>
 </body>

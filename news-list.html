@@ -9,6 +9,207 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 资讯卡片优化样式 */
+    .news-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(20, 0, 30, 0.85) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      padding: 0;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .news-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--cyber-yellow), var(--cyber-pink));
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .news-card:hover {
+      border-color: rgba(255, 211, 0, 0.5);
+      transform: translateX(5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .news-card:hover::before {
+      transform: scaleY(1);
+    }
+    
+    .news-card-content {
+      padding: 20px;
+    }
+    
+    .news-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .news-cover {
+      width: 120px;
+      height: 120px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.1), rgba(255, 61, 148, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      flex-shrink: 0;
+      border: 1px solid rgba(85, 234, 212, 0.2);
+      overflow: hidden;
+    }
+    
+    .news-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .news-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .news-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    
+    .news-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    
+    .news-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .news-excerpt {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    
+    .news-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .news-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .news-tag {
+      padding: 4px 10px;
+      background: rgba(85, 234, 212, 0.15);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--cyber-cyan);
+      font-weight: 600;
+    }
+    
+    .news-tag.hot {
+      background: rgba(255, 61, 148, 0.15);
+      border-color: rgba(255, 61, 148, 0.3);
+      color: var(--cyber-pink);
+    }
+    
+    .news-tag.new {
+      background: rgba(255, 211, 0, 0.15);
+      border-color: rgba(255, 211, 0, 0.3);
+      color: var(--cyber-yellow);
+    }
+    
+    .news-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    .news-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* 筛选器样式优化 */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-tab {
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .filter-tab:hover {
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+    }
+    
+    .filter-tab.active {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.2), rgba(255, 61, 148, 0.1));
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .news-header {
+        flex-direction: column;
+      }
+      
+      .news-cover {
+        width: 100%;
+        height: 200px;
+      }
+    }
+  </style>
 </head>
 <body data-current-page="news" class="cyberpunk-theme">
 <div class="page">
@@ -58,32 +259,39 @@
   <main class="main">
     <section>
       <div class="card">
-        <div class="page-title">游戏资讯</div>
+        <div class="page-title">📰 游戏资讯</div>
         <div class="page-intro">
-          示例资讯列表，支持按分类与关键字过滤，点击可查看详情页面。
+          最新游戏动态、版本更新、活动赛事，一手资讯尽在掌握。
         </div>
       </div>
 
       <div class="card">
         <header class="card-header">
           <div class="card-title">
-            <span class="dot"></span><span>筛选</span>
+            <span class="dot"></span><span>// CATEGORIES</span>
           </div>
         </header>
-        <div class="form">
-          <div class="form-row">
-            <label>类型</label>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px;" id="newsCats">
-              <label><input type="radio" name="newsCat" value="all" checked /> 全部</label>
-              <label><input type="radio" name="newsCat" value="update" /> 更新 / 版本</label>
-              <label><input type="radio" name="newsCat" value="new" /> 新作 / 发售</label>
-              <label><input type="radio" name="newsCat" value="event" /> 活动 / 赛事</label>
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="newsSearch">按标题 / 游戏搜索</label>
-            <input id="newsSearch" type="text" placeholder="例如：艾尔登法环 DLC" />
-          </div>
+        <div class="filter-tabs" id="newsCats">
+          <button class="filter-tab active" data-type="all">
+            <span>🌐</span>
+            <span>全部资讯</span>
+          </button>
+          <button class="filter-tab" data-type="update">
+            <span>🔄</span>
+            <span>更新 / 版本</span>
+          </button>
+          <button class="filter-tab" data-type="new">
+            <span>🎮</span>
+            <span>新作 / 发售</span>
+          </button>
+          <button class="filter-tab" data-type="event">
+            <span>🎉</span>
+            <span>活动 / 赛事</span>
+          </button>
+        </div>
+        
+        <div style="margin-top: 16px;">
+          <input id="newsSearch" type="text" placeholder="🔍 搜索资讯标题、游戏名称..." style="width: 100%;" />
         </div>
       </div>
 
@@ -94,15 +302,32 @@
           </div>
           <div class="chip" id="newsCount">共 0 条</div>
         </header>
-        <div id="newsList" class="news-list" style="max-height: 600px; overflow-y: auto;"></div>
+        <div id="newsList" class="news-list" style="max-height: none;"></div>
+        
+        <div id="loadMoreBtn" style="text-align: center; margin-top: 20px; display: none;">
+          <button class="btn btn-primary" onclick="loadMoreNews()">
+            📰 加载更多资讯
+          </button>
+        </div>
       </div>
     </section>
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">提示</div>
+        <div class="sidebar-title">🔥 热门资讯</div>
+        <div id="hotNewsSidebar"></div>
+      </div>
+      
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">📊 统计</div>
         <div class="sidebar-item">
-          <span class="label">详情示例</span><span class="value">点击艾尔登 DLC</span>
+          <span class="label">总资讯</span><span class="value" id="totalNews">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">本周新增</span><span class="value" id="weekNews">--</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">今日更新</span><span class="value" id="todayNews">--</span>
         </div>
       </div>
     </aside>
@@ -125,37 +350,101 @@
   const newsList = document.getElementById("newsList");
   const newsCount = document.getElementById("newsCount");
   const newsCatsWrap = document.getElementById("newsCats");
+  const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+  // 新闻类型图标映射
+  const typeIcons = {
+    'update': '🔄',
+    'new': '🎮',
+    'event': '🎉'
+  };
+  
+  const typeNames = {
+    'update': '更新/版本',
+    'new': '新作/发售',
+    'event': '活动/赛事'
+  };
+  
+  // 游戏图标映射（部分游戏）
+  const gameIcons = {
+    '艾尔登法环': '⚔️',
+    '赛博朋克2077': '🌃',
+    '原神': '⚡',
+    '塞尔达传说': '🗡️',
+    'GTA 6': '🚗',
+    '博德之门3': '🎲',
+    '星空': '🌌',
+    '战神': '🏆',
+    '只狼': '🥷'
+  };
 
   function getCurrentCat() {
-    const checked = newsCatsWrap.querySelector("input[name=newsCat]:checked");
-    return checked ? checked.value : "all";
+    const active = newsCatsWrap.querySelector(".filter-tab.active");
+    return active ? active.dataset.type : "all";
   }
 
   // 加载所有新闻数据
   async function loadAllNews() {
     try {
-      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 正在加载新闻数据...</div>';
+      newsList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:40px;text-align:center;">📰 正在加载资讯数据...</div>';
       
       allNewsData = await window.newsAPI.getAllNews();
       dataLoaded = true;
       console.log(`✅ 成功加载 ${allNewsData.length} 条新闻`);
       
+      // 更新统计数据
+      updateStats();
+      
+      // 渲染热门资讯
+      renderHotNews();
+      
       applyFiltersAndRender();
     } catch (err) {
       console.error("加载新闻失败:", err);
       newsList.innerHTML = `
-        <div style="text-align: center; color: var(--danger); padding: 20px;">
-          ❌ 新闻数据加载失败<br>
+        <div style="text-align: center; color: var(--danger); padding: 40px;">
+          ❌ 资讯数据加载失败<br>
           <span style="font-size: 11px; opacity: 0.8;">错误: ${err.message}</span>
         </div>
       `;
     }
   }
 
+  // 更新统计数据
+  function updateStats() {
+    const today = new Date().toISOString().split('T')[0];
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    
+    const todayCount = allNewsData.filter(n => n.date === today).length;
+    const weekCount = allNewsData.filter(n => n.date >= oneWeekAgo).length;
+    
+    document.getElementById('totalNews').textContent = allNewsData.length;
+    document.getElementById('weekNews').textContent = weekCount;
+    document.getElementById('todayNews').textContent = todayCount;
+  }
+
+  // 渲染热门资讯
+  function renderHotNews() {
+    const hotNews = allNewsData
+      .sort((a, b) => (b.views + b.comments * 10) - (a.views + a.comments * 10))
+      .slice(0, 5);
+    
+    const container = document.getElementById('hotNewsSidebar');
+    container.innerHTML = hotNews.map((news, index) => `
+      <div class="sidebar-item" style="cursor: pointer; padding: 8px; border-radius: 4px; transition: all 0.3s;" 
+           onmouseover="this.style.background='rgba(255, 211, 0, 0.1)'" 
+           onmouseout="this.style.background='transparent'"
+           onclick="window.location.href='news-detail.html?id=${news.id}'">
+        <span class="label" style="color: var(--cyber-pink); font-weight: 700;">${index + 1}</span>
+        <span class="value" style="font-size: 12px; line-height: 1.4;">${news.title.substring(0, 30)}...</span>
+      </div>
+    `).join('');
+  }
+
   // 应用筛选条件并渲染
   function applyFiltersAndRender() {
     if (!dataLoaded) {
-      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 正在加载新闻数据...</div>';
+      newsList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:40px;text-align:center;">📰 正在加载资讯数据...</div>';
       return;
     }
 
@@ -180,7 +469,8 @@
     newsCount.textContent = `共 ${currentFilteredList.length} 条`;
 
     if (!currentFilteredList.length) {
-      newsList.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">📰 暂无符合条件的资讯。</div>';
+      newsList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:40px;text-align:center;">📰 暂无符合条件的资讯</div>';
+      loadMoreBtn.style.display = 'none';
       return;
     }
 
@@ -188,48 +478,60 @@
   }
 
   // 加载更多新闻
-  function loadMoreNews() {
+  window.loadMoreNews = function() {
     const startIdx = currentPage * PAGE_SIZE;
     const endIdx = startIdx + PAGE_SIZE;
     const pageItems = currentFilteredList.slice(startIdx, endIdx);
     
-    if (!pageItems.length) return;
+    if (!pageItems.length) {
+      loadMoreBtn.style.display = 'none';
+      return;
+    }
 
     pageItems.forEach((n) => {
       const div = document.createElement("div");
       div.className = "news-card";
-      div.style.cursor = "pointer";
       
-      // 添加类型图标
-      let typeIcon = "📰";
-      let typeText = "";
-      if (n.type === "update") {
-        typeIcon = "🔄";
-        typeText = "更新/版本";
-      } else if (n.type === "new") {
-        typeIcon = "🎮";
-        typeText = "新作/发售";
-      } else {
-        typeIcon = "🎉";
-        typeText = "活动/赛事";
-      }
+      // 获取图标
+      const typeIcon = typeIcons[n.type] || "📰";
+      const typeName = typeNames[n.type] || "资讯";
+      const gameIcon = gameIcons[n.game] || "🎮";
+      
+      // 判断是否为热门或新资讯
+      const isHot = n.views > 20000 || n.comments > 100;
+      const isNew = new Date(n.date).getTime() > Date.now() - 3 * 24 * 60 * 60 * 1000; // 3天内
       
       div.innerHTML = `
-        <div class="news-title">${typeIcon} ${n.title}</div>
-        <div class="news-meta">🎯 ${n.game} · 📅 ${n.date} · ${typeText} · 👁️ ${n.views || 0} · 💬 ${n.comments || 0}</div>
-        <div class="news-excerpt">${n.summary}</div>
+        <div class="news-card-content">
+          <div class="news-header">
+            <div class="news-cover">
+              ${gameIcon}
+            </div>
+            <div class="news-info">
+              <div class="news-title">${n.title}</div>
+              <div class="news-meta">
+                <span class="news-meta-item">${typeIcon} ${typeName}</span>
+                <span class="news-meta-item">🎯 ${n.game}</span>
+                <span class="news-meta-item">📅 ${n.date}</span>
+              </div>
+              <div class="news-excerpt">${n.summary}</div>
+              <div class="news-footer">
+                <div class="news-tags">
+                  ${isHot ? '<span class="news-tag hot">🔥 热门</span>' : ''}
+                  ${isNew ? '<span class="news-tag new">✨ 最新</span>' : ''}
+                  <span class="news-tag">${n.game}</span>
+                </div>
+                <div class="news-stats">
+                  <span class="news-stat">👁️ ${n.views.toLocaleString()}</span>
+                  <span class="news-stat">💬 ${n.comments}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       `;
       
-      // 添加悬停效果
-      div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateX(4px)";
-        div.style.transition = "all 0.3s ease";
-      });
-      
-      div.addEventListener("mouseleave", () => {
-        div.style.transform = "translateX(0)";
-      });
-      
+      // 添加点击事件
       div.addEventListener("click", () => {
         window.location.href = `news-detail.html?id=${n.id}`;
       });
@@ -238,23 +540,29 @@
     });
     
     currentPage++;
-  }
-
-  // 无限滚动监听
-  newsList.addEventListener("scroll", () => {
-    const scrollTop = newsList.scrollTop;
-    const scrollHeight = newsList.scrollHeight;
-    const clientHeight = newsList.clientHeight;
     
-    // 距离底部 100px 时加载更多
-    if (scrollHeight - scrollTop - clientHeight < 100) {
-      loadMoreNews();
+    // 显示/隐藏加载更多按钮
+    if (endIdx >= currentFilteredList.length) {
+      loadMoreBtn.style.display = 'none';
+    } else {
+      loadMoreBtn.style.display = 'block';
     }
+  };
+
+  // 分类切换
+  newsCatsWrap.addEventListener("click", (e) => {
+    const tab = e.target.closest(".filter-tab");
+    if (!tab) return;
+    
+    // 更新激活状态
+    newsCatsWrap.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    
+    applyFiltersAndRender();
   });
 
-  // 监听筛选条件变化
+  // 搜索
   newsSearch.addEventListener("input", applyFiltersAndRender);
-  newsCatsWrap.addEventListener("change", applyFiltersAndRender);
 
   // 初始加载
   loadAllNews();
