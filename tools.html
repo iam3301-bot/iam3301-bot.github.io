@@ -9,6 +9,310 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 工具卡片增强样式 */
+    .tool-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(31, 41, 55, 0.6));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .tool-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+      transform: translateY(-4px);
+    }
+    
+    .tool-card:hover::before {
+      left: 100%;
+    }
+    
+    .tool-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+    
+    .tool-icon {
+      font-size: 32px;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(255, 211, 0, 0.2));
+      border-radius: 12px;
+      border: 2px solid rgba(56, 189, 248, 0.4);
+    }
+    
+    .tool-info {
+      flex: 1;
+    }
+    
+    .tool-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 4px;
+    }
+    
+    .tool-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .tool-content {
+      margin-top: 20px;
+    }
+    
+    .result-box {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(56, 189, 248, 0.05);
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
+      font-size: 14px;
+      line-height: 1.6;
+      display: none;
+    }
+    
+    .result-box.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .input-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+    
+    .input-group input,
+    .input-group select {
+      padding: 10px 12px;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    }
+    
+    .btn-tool {
+      padding: 12px 32px;
+      background: linear-gradient(135deg, var(--accent), #0ea5e9);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .btn-tool:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+    }
+    
+    .btn-tool:active {
+      transform: translateY(0);
+    }
+    
+    .btn-tool:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .game-pool {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    
+    .game-tag {
+      padding: 8px 12px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-soft);
+    }
+    
+    .game-tag:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.05);
+    }
+    
+    .game-tag.selected {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+    
+    .price-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .platform-price {
+      padding: 16px;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .platform-price:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+    
+    .platform-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    
+    .platform-current {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--danger);
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .platform-original {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      margin-top: 4px;
+    }
+    
+    .platform-discount {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 8px;
+      background: var(--danger);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .stat-item {
+      padding: 16px;
+      background: rgba(56, 189, 248, 0.05);
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .rolling-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: center;
+      padding: 20px;
+      animation: pulse 0.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+      }
+    }
+  </style>
 </head>
 <body data-current-page="tools" class="cyberpunk-theme">
 <div class="page">
@@ -58,76 +362,196 @@
   <main class="main">
     <section>
       <div class="card">
-        <div class="page-title">工具中心</div>
+        <div class="page-title">🛠️ 工具中心</div>
         <div class="page-intro">
-          一些贴近日常需求的小工具：配置 vs 画质估算、通关时间估算、“今晚玩什么”随机推荐。
+          为玩家提供实用的游戏工具：配置评估、价格对比、通关时间计算、游戏推荐等功能，让你的游戏体验更加便捷高效！
         </div>
       </div>
 
-      <!-- 配置估算 -->
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>配置 vs 画质估算（示例）</span></div>
-        </header>
-        <div class="form">
-          <div class="form-row">
-            <label for="cfgCpu">CPU 档次</label>
-            <select id="cfgCpu">
-              <option value="low">入门</option>
-              <option value="mid">主流</option>
-              <option value="high">高端</option>
+      <!-- 配置估算工具 -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">💻</div>
+          <div class="tool-info">
+            <div class="tool-title">配置 vs 画质评估器</div>
+            <div class="tool-desc">根据你的电脑配置，智能推荐最佳游戏画质设置</div>
+          </div>
+        </div>
+        <div class="tool-content">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="cfgCpu">🔧 CPU 性能等级</label>
+              <select id="cfgCpu">
+                <option value="low">入门级 (i3/R3 或更低)</option>
+                <option value="mid" selected>主流级 (i5/R5)</option>
+                <option value="high">高端级 (i7/R7)</option>
+                <option value="ultra">旗舰级 (i9/R9/Threadripper)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="cfgGpu">🎮 显卡性能等级</label>
+              <select id="cfgGpu">
+                <option value="low">入门级 (GTX 1650/RX 6500 XT)</option>
+                <option value="mid" selected>主流级 (RTX 3060/RX 6600 XT)</option>
+                <option value="high">高端级 (RTX 3080/RX 6800 XT)</option>
+                <option value="ultra">旗舰级 (RTX 4090/RX 7900 XTX)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="cfgRam">💾 内存容量</label>
+              <select id="cfgRam">
+                <option value="8">8GB</option>
+                <option value="16" selected>16GB</option>
+                <option value="32">32GB</option>
+                <option value="64">64GB+</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="cfgResolution">🖥️ 显示器分辨率</label>
+              <select id="cfgResolution">
+                <option value="1080">1080p (1920x1080)</option>
+                <option value="1440" selected>2K (2560x1440)</option>
+                <option value="2160">4K (3840x2160)</option>
+                <option value="ultrawide">超宽屏 (3440x1440)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-tool" id="cfgBtn">🔍 智能评估</button>
+          <div class="result-box" id="cfgResult"></div>
+        </div>
+      </div>
+
+      <!-- 游戏价格对比工具 -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">💰</div>
+          <div class="tool-info">
+            <div class="tool-title">跨平台价格对比器</div>
+            <div class="tool-desc">一键对比Steam、Epic、杉果等平台价格，找到最优惠的购买渠道</div>
+          </div>
+        </div>
+        <div class="tool-content">
+          <div class="input-group">
+            <label for="priceGame">🎯 选择游戏</label>
+            <select id="priceGame">
+              <option value="elden-ring">艾尔登法环 (Elden Ring)</option>
+              <option value="cyberpunk">赛博朋克2077 (Cyberpunk 2077)</option>
+              <option value="baldurs-gate">博德之门3 (Baldur's Gate 3)</option>
+              <option value="starfield">星空 (Starfield)</option>
+              <option value="rdr2">荒野大镖客2 (Red Dead Redemption 2)</option>
             </select>
           </div>
-          <div class="form-row">
-            <label for="cfgGpu">显卡档次</label>
-            <select id="cfgGpu">
-              <option value="low">入门</option>
-              <option value="mid">主流</option>
-              <option value="high">高端</option>
-            </select>
-          </div>
-          <button class="btn btn-primary btn-inline" id="cfgBtn">估算可用画质</button>
-          <div id="cfgResult" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+          <button class="btn-tool" id="priceBtn">🔍 价格对比</button>
+          <div class="result-box" id="priceResult"></div>
         </div>
       </div>
 
-      <!-- 通关时间 -->
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>通关时间估算（示例）</span></div>
-        </header>
-        <div class="form">
-          <div class="form-row">
-            <label for="timeTotal">游戏总时长（小时，示例）</label>
-            <input id="timeTotal" type="number" min="1" placeholder="例如：60" />
+      <!-- 通关时间计算器 -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">⏱️</div>
+          <div class="tool-info">
+            <div class="tool-title">通关时间计算器</div>
+            <div class="tool-desc">根据游戏总时长和每日游戏时间，计算预计通关所需天数</div>
           </div>
-          <div class="form-row">
-            <label for="timeDaily">每天可玩时间（小时）</label>
-            <input id="timeDaily" type="number" min="0.5" step="0.5" placeholder="例如：2" />
+        </div>
+        <div class="tool-content">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="timeTotal">📊 游戏总时长 (小时)</label>
+              <input id="timeTotal" type="number" min="1" placeholder="例如：60" />
+            </div>
+            <div class="input-group">
+              <label for="timeDaily">🎮 每日可玩时间 (小时)</label>
+              <input id="timeDaily" type="number" min="0.5" step="0.5" placeholder="例如：2" />
+            </div>
+            <div class="input-group">
+              <label for="timeGoal">🎯 目标完成度</label>
+              <select id="timeGoal">
+                <option value="1">主线通关 (100%)</option>
+                <option value="1.5">支线探索 (150%)</option>
+                <option value="2">全收集 (200%)</option>
+              </select>
+            </div>
           </div>
-          <button class="btn btn-primary btn-inline" id="timeBtn">估算需要几天</button>
-          <div id="timeResult" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+          <button class="btn-tool" id="timeBtn">⏱️ 计算时间</button>
+          <div class="result-box" id="timeResult"></div>
         </div>
       </div>
 
-      <!-- 随机今晚玩什么 -->
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>今晚玩什么？</span></div>
-        </header>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">
-          随机从一个示例游戏池中选一款，当作今晚的推荐。
+      <!-- 今晚玩什么 -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">🎲</div>
+          <div class="tool-info">
+            <div class="tool-title">今晚玩什么？决策助手</div>
+            <div class="tool-desc">选择困难症救星！从你的游戏库中随机抽取一款游戏</div>
+          </div>
         </div>
-        <button class="btn btn-primary btn-inline" id="randBtn">抽一抽</button>
-        <div id="randResult" style="font-size:13px;color:var(--text-main);margin-top:8px;"></div>
+        <div class="tool-content">
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+            💡 点击游戏卡片添加到抽奖池，然后抽取今晚要玩的游戏：
+          </div>
+          <div class="game-pool" id="gamePool"></div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn-tool" id="randBtn">🎲 抽取游戏</button>
+          </div>
+          <div class="result-box" id="randResult"></div>
+        </div>
       </div>
+
+      <!-- 游戏性价比分析 -->
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-icon">📊</div>
+          <div class="tool-info">
+            <div class="tool-title">游戏性价比分析器</div>
+            <div class="tool-desc">综合评估游戏的价格、时长、评分，计算性价比指数</div>
+          </div>
+        </div>
+        <div class="tool-content">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="valuePrice">💰 游戏价格 (元)</label>
+              <input id="valuePrice" type="number" min="0" placeholder="例如：298" />
+            </div>
+            <div class="input-group">
+              <label for="valueTime">⏱️ 游戏时长 (小时)</label>
+              <input id="valueTime" type="number" min="1" placeholder="例如：80" />
+            </div>
+            <div class="input-group">
+              <label for="valueRating">⭐ 评分 (0-10)</label>
+              <input id="valueRating" type="number" min="0" max="10" step="0.1" placeholder="例如：9.2" />
+            </div>
+          </div>
+          <button class="btn-tool" id="valueBtn">📊 分析性价比</button>
+          <div class="result-box" id="valueResult"></div>
+        </div>
+      </div>
+
     </section>
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">说明</div>
+        <div class="sidebar-title">🎯 使用说明</div>
         <div class="sidebar-item">
-          <span class="label">工具性质</span><span class="value">前端 Demo</span>
+          <span class="label">工具总数</span><span class="value">5 个</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">数据来源</span><span class="value">模拟数据</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">更新频率</span><span class="value">实时</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card">
+        <div class="sidebar-title">💡 贴士</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+          <p>• 配置评估仅供参考，实际表现因游戏优化而异</p>
+          <p>• 价格对比数据为示例，实际请以平台官网为准</p>
+          <p>• 通关时间基于平均数据，个人体验可能不同</p>
+          <p>• 定期更新游戏库，获得更准确的推荐</p>
         </div>
       </div>
     </aside>
@@ -139,115 +563,394 @@
 <script>
   initCommon();
 
-  // 配置估算
+  // =============================================
+  // 1. 配置估算工具
+  // =============================================
   const cfgCpu = document.getElementById("cfgCpu");
   const cfgGpu = document.getElementById("cfgGpu");
+  const cfgRam = document.getElementById("cfgRam");
+  const cfgResolution = document.getElementById("cfgResolution");
   const cfgBtn = document.getElementById("cfgBtn");
   const cfgResult = document.getElementById("cfgResult");
 
   cfgBtn.addEventListener("click", () => {
     const cpu = cfgCpu.value;
     const gpu = cfgGpu.value;
-    let text = "";
-    let emoji = "";
-
-    if (cpu === "low" && gpu === "low") {
-      emoji = "💻";
-      text = "推荐 720p 或 1080p 低画质，适当关闭特效。建议玩独立游戏或较老的 3A 游戏。";
-    } else if (gpu === "high" && cpu === "high") {
-      emoji = "🚀";
-      text = "大部分 3A 在 2K 分辨率下中高甚至最高画质都没问题。可以尝试光追和 DLSS 等特效。";
-    } else if (gpu === "mid" && cpu !== "low") {
-      emoji = "⚡";
-      text = "1080p 中高画质比较合适，部分游戏可以尝试 2K 中画质。适合大部分主流游戏。";
+    const ram = parseInt(cfgRam.value);
+    const res = cfgResolution.value;
+    
+    let score = 0;
+    const cpuScores = { low: 1, mid: 2, high: 3, ultra: 4 };
+    const gpuScores = { low: 1, mid: 2, high: 3, ultra: 4 };
+    
+    score += cpuScores[cpu] * 2;
+    score += gpuScores[gpu] * 3;
+    score += ram / 8;
+    
+    const resMultiplier = { '1080': 1, '1440': 1.5, '2160': 2, 'ultrawide': 1.6 };
+    score = score / resMultiplier[res];
+    
+    let quality, fps, raytracing, details;
+    
+    if (score >= 10) {
+      quality = "极高";
+      fps = "120+ FPS";
+      raytracing = "✅ 支持光追+DLSS 3";
+      details = "可以开启所有特效，体验最佳画质。适合玩最新的3A大作，如《赛博朋克2077》、《艾尔登法环》等。";
+    } else if (score >= 7) {
+      quality = "高";
+      fps = "60-120 FPS";
+      raytracing = "✅ 支持部分光追特效";
+      details = "高画质运行大部分游戏。可以尝试光追特效，建议开启DLSS/FSR提升帧数。";
+    } else if (score >= 5) {
+      quality = "中高";
+      fps = "60 FPS";
+      raytracing = "⚠️ 关闭光追";
+      details = "中高画质流畅运行主流游戏。关闭极端特效（如体积光、高级阴影）可获得更好帧数。";
+    } else if (score >= 3) {
+      quality = "中";
+      fps = "30-60 FPS";
+      raytracing = "❌ 不支持光追";
+      details = "中画质运行多数游戏。建议玩独立游戏、老游戏或者降低画质设置。";
     } else {
-      emoji = "🎮";
-      text = "大多数情况建议 1080p 中画质，关闭极端特效。可以流畅运行多数游戏。";
+      quality = "低";
+      fps = "30 FPS";
+      raytracing = "❌ 不支持光追";
+      details = "低画质运行游戏。推荐玩像素游戏、休闲游戏或2D游戏。";
     }
-
-    cfgResult.innerHTML = `<strong style="color: var(--accent);">${emoji} 估算结果：</strong>${text}`;
-    cfgResult.style.padding = "10px";
-    cfgResult.style.background = "rgba(56, 189, 248, 0.05)";
-    cfgResult.style.borderRadius = "6px";
-    cfgResult.style.color = "var(--text-main)";
+    
+    cfgResult.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:32px;font-weight:900;color:var(--accent);font-family:'Orbitron',sans-serif;">${quality}</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">推荐画质等级</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">${fps}</div>
+          <div class="stat-label">预期帧率</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${res === '1080' ? '1080p' : res === '1440' ? '2K' : res === '2160' ? '4K' : '超宽'}</div>
+          <div class="stat-label">分辨率</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(56,189,248,0.1);border-radius:6px;">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;">${raytracing}</div>
+        <div style="font-size:13px;color:var(--text-soft);line-height:1.6;">${details}</div>
+      </div>
+    `;
+    cfgResult.classList.add('show');
   });
 
-  // 通关时间
+  // =============================================
+  // 2. 价格对比工具
+  // =============================================
+  const priceGame = document.getElementById("priceGame");
+  const priceBtn = document.getElementById("priceBtn");
+  const priceResult = document.getElementById("priceResult");
+  
+  const priceData = {
+    'elden-ring': {
+      name: '艾尔登法环',
+      platforms: [
+        { name: 'Steam', current: 298, original: 298, discount: 0 },
+        { name: 'Epic', current: 268, original: 298, discount: 10 },
+        { name: '杉果', current: 248, original: 298, discount: 17 },
+        { name: '凤凰商城', current: 238, original: 298, discount: 20 }
+      ]
+    },
+    'cyberpunk': {
+      name: '赛博朋克2077',
+      platforms: [
+        { name: 'Steam', current: 198, original: 298, discount: 33 },
+        { name: 'Epic', current: 178, original: 298, discount: 40 },
+        { name: 'GOG', current: 188, original: 298, discount: 37 },
+        { name: '杉果', current: 168, original: 298, discount: 44 }
+      ]
+    },
+    'baldurs-gate': {
+      name: '博德之门3',
+      platforms: [
+        { name: 'Steam', current: 298, original: 298, discount: 0 },
+        { name: 'Epic', current: 298, original: 298, discount: 0 },
+        { name: 'GOG', current: 278, original: 298, discount: 7 },
+        { name: '杉果', current: 268, original: 298, discount: 10 }
+      ]
+    },
+    'starfield': {
+      name: '星空',
+      platforms: [
+        { name: 'Steam', current: 298, original: 328, discount: 9 },
+        { name: 'Xbox Game Pass', current: 68, original: 328, discount: 79, note: '订阅制' },
+        { name: '微软商店', current: 298, original: 328, discount: 9 },
+        { name: '杉果', current: 278, original: 328, discount: 15 }
+      ]
+    },
+    'rdr2': {
+      name: '荒野大镖客2',
+      platforms: [
+        { name: 'Steam', current: 189, original: 299, discount: 37 },
+        { name: 'Epic', current: 179, original: 299, discount: 40 },
+        { name: 'Rockstar', current: 169, original: 299, discount: 43 },
+        { name: '杉果', current: 159, original: 299, discount: 47 }
+      ]
+    }
+  };
+  
+  priceBtn.addEventListener("click", () => {
+    const gameKey = priceGame.value;
+    const game = priceData[gameKey];
+    
+    const sortedPlatforms = [...game.platforms].sort((a, b) => a.current - b.current);
+    const bestDeal = sortedPlatforms[0];
+    
+    let html = `
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:20px;font-weight:700;color:var(--accent);">《${game.name}》价格对比</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">最低价：<strong style="color:var(--danger);">¥${bestDeal.current}</strong> (${bestDeal.name})</div>
+      </div>
+      <div class="price-comparison">
+    `;
+    
+    sortedPlatforms.forEach(platform => {
+      html += `
+        <div class="platform-price" style="${platform.name === bestDeal.name ? 'border-color:var(--danger);box-shadow:0 0 20px rgba(239,68,68,0.3);' : ''}">
+          <div class="platform-name">${platform.name}</div>
+          <div class="platform-current">¥${platform.current}</div>
+          ${platform.discount > 0 ? `
+            <div class="platform-original">原价 ¥${platform.original}</div>
+            <div class="platform-discount">-${platform.discount}%</div>
+          ` : ''}
+          ${platform.note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${platform.note}</div>` : ''}
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+    
+    priceResult.innerHTML = html;
+    priceResult.classList.add('show');
+  });
+
+  // =============================================
+  // 3. 通关时间计算器
+  // =============================================
   const timeTotal = document.getElementById("timeTotal");
   const timeDaily = document.getElementById("timeDaily");
+  const timeGoal = document.getElementById("timeGoal");
   const timeBtn = document.getElementById("timeBtn");
   const timeResult = document.getElementById("timeResult");
 
   timeBtn.addEventListener("click", () => {
     const total = parseFloat(timeTotal.value);
     const daily = parseFloat(timeDaily.value);
+    const goalMultiplier = parseFloat(timeGoal.value);
+    
     if (!total || !daily || total <= 0 || daily <= 0) {
-      timeResult.innerHTML = "⚠️ 请正确填写总时长和每日游戏时间。";
-      timeResult.style.color = "var(--danger)";
+      timeResult.innerHTML = "<div style='color:var(--danger);text-align:center;'>⚠️ 请正确填写游戏时长和每日游戏时间</div>";
+      timeResult.classList.add('show');
       return;
     }
-    const days = Math.ceil(total / daily);
-    const weeks = Math.ceil(days / 7);
-    let tip = "";
     
-    if (days <= 7) {
-      tip = "💪 一周内搞定！加油！";
+    const adjustedTotal = total * goalMultiplier;
+    const days = Math.ceil(adjustedTotal / daily);
+    const weeks = Math.ceil(days / 7);
+    const months = (days / 30).toFixed(1);
+    
+    let tip, emoji;
+    if (days <= 3) {
+      tip = "周末就能通关！";
+      emoji = "⚡";
+    } else if (days <= 7) {
+      tip = "一周内搞定，冲鸭！";
+      emoji = "💪";
+    } else if (days <= 14) {
+      tip = "两周时间，慢慢享受";
+      emoji = "🎮";
     } else if (days <= 30) {
-      tip = `📅 约 ${weeks} 周，慢慢享受游戏乐趣吧！`;
+      tip = "一个月的游戏旅程";
+      emoji = "📅";
+    } else if (days <= 90) {
+      tip = "这是个长期工程，记得劳逸结合";
+      emoji = "⏰";
     } else {
-      tip = "⏰ 这是个长期工程，记得劳逸结合哦！";
+      tip = "史诗级冒险，需要极大耐心";
+      emoji = "🏆";
     }
     
-    timeResult.innerHTML = `<strong style="color: var(--accent);">⏱️ 预计通关时间：</strong>每天玩 ${daily} 小时，大概需要 <strong>${days} 天</strong>。${tip}`;
-    timeResult.style.padding = "10px";
-    timeResult.style.background = "rgba(56, 189, 248, 0.05)";
-    timeResult.style.borderRadius = "6px";
-    timeResult.style.color = "var(--text-main)";
+    timeResult.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:48px;font-weight:900;color:var(--accent);font-family:'Orbitron',sans-serif;">${days}</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">天</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">${weeks}</div>
+          <div class="stat-label">周</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${months}</div>
+          <div class="stat-label">月</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${adjustedTotal.toFixed(0)}</div>
+          <div class="stat-label">总时长(h)</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;text-align:center;font-size:16px;color:var(--accent);">
+        ${emoji} ${tip}
+      </div>
+    `;
+    timeResult.classList.add('show');
   });
 
-  // 随机今晚玩什么
+  // =============================================
+  // 4. 今晚玩什么
+  // =============================================
   const randBtn = document.getElementById("randBtn");
   const randResult = document.getElementById("randResult");
-  const randPool = [
-    "艾尔登法环",
-    "空洞骑士",
-    "赛博朋克 2077",
-    "星露谷物语",
-    "杀戮尖塔",
-    "英雄联盟",
-    "原神",
+  const gamePoolEl = document.getElementById("gamePool");
+  
+  const allGames = [
+    "艾尔登法环", "赛博朋克2077", "博德之门3", "星空", "荒野大镖客2",
+    "空洞骑士", "星露谷物语", "杀戮尖塔", "哈迪斯", "死亡细胞",
+    "原神", "崩坏：星穹铁道", "英雄联盟", "Dota 2", "CS2",
+    "我的世界", "泰拉瑞亚", "饥荒", "双人成行", "胡闹厨房",
+    "黑神话：悟空", "永劫无间", "怪物猎人：世界", "最终幻想14", "魔兽世界"
   ];
-
-  // 添加抽取动画效果
+  
+  let selectedGames = [];
+  
+  // 渲染游戏池
+  allGames.forEach(game => {
+    const tag = document.createElement('div');
+    tag.className = 'game-tag';
+    tag.textContent = game;
+    tag.addEventListener('click', () => {
+      const index = selectedGames.indexOf(game);
+      if (index > -1) {
+        selectedGames.splice(index, 1);
+        tag.classList.remove('selected');
+      } else {
+        selectedGames.push(game);
+        tag.classList.add('selected');
+      }
+    });
+    gamePoolEl.appendChild(tag);
+  });
+  
   let isRolling = false;
   
   randBtn.addEventListener("click", () => {
+    if (selectedGames.length === 0) {
+      randResult.innerHTML = "<div style='color:var(--danger);text-align:center;'>⚠️ 请先选择至少一款游戏</div>";
+      randResult.classList.add('show');
+      return;
+    }
+    
     if (isRolling) return;
     
     isRolling = true;
-    randBtn.textContent = "抽取中...";
+    randBtn.textContent = "🎲 抽取中...";
     randBtn.disabled = true;
+    randResult.classList.add('show');
     
     let count = 0;
     const rollInterval = setInterval(() => {
-      const idx = Math.floor(Math.random() * randPool.length);
-      randResult.innerHTML = `<span style="font-size: 16px; color: var(--text-muted);">🎲 ${randPool[idx]}</span>`;
+      const idx = Math.floor(Math.random() * selectedGames.length);
+      randResult.innerHTML = `<div class="rolling-text">🎲 ${selectedGames[idx]}</div>`;
       count++;
       
-      if (count >= 10) {
+      if (count >= 15) {
         clearInterval(rollInterval);
-        const finalIdx = Math.floor(Math.random() * randPool.length);
-        const game = randPool[finalIdx];
-        randResult.innerHTML = `<strong style="color: var(--accent); font-size: 18px;">🎮 今晚不如试试：${game}</strong>`;
-        randResult.style.padding = "15px";
-        randResult.style.background = "rgba(56, 189, 248, 0.1)";
-        randResult.style.borderRadius = "6px";
-        randResult.style.border = "1px solid var(--accent)";
-        randBtn.textContent = "再抽一次";
+        const finalIdx = Math.floor(Math.random() * selectedGames.length);
+        const game = selectedGames[finalIdx];
+        randResult.innerHTML = `
+          <div style="text-align:center;">
+            <div style="font-size:36px;margin-bottom:12px;">🎮</div>
+            <div style="font-size:24px;font-weight:900;color:var(--accent);font-family:'Orbitron',sans-serif;margin-bottom:8px;">${game}</div>
+            <div style="font-size:14px;color:var(--text-muted);">今晚就玩它了！</div>
+          </div>
+        `;
+        randBtn.textContent = "🎲 再抽一次";
         randBtn.disabled = false;
         isRolling = false;
       }
     }, 100);
+  });
+
+  // =============================================
+  // 5. 性价比分析
+  // =============================================
+  const valuePrice = document.getElementById("valuePrice");
+  const valueTime = document.getElementById("valueTime");
+  const valueRating = document.getElementById("valueRating");
+  const valueBtn = document.getElementById("valueBtn");
+  const valueResult = document.getElementById("valueResult");
+  
+  valueBtn.addEventListener("click", () => {
+    const price = parseFloat(valuePrice.value);
+    const time = parseFloat(valueTime.value);
+    const rating = parseFloat(valueRating.value);
+    
+    if (!price || !time || !rating || price <= 0 || time <= 0 || rating < 0 || rating > 10) {
+      valueResult.innerHTML = "<div style='color:var(--danger);text-align:center;'>⚠️ 请正确填写所有数据</div>";
+      valueResult.classList.add('show');
+      return;
+    }
+    
+    // 计算性价比指数
+    const hourlyPrice = price / time;
+    const ratingScore = rating / 10;
+    const valueScore = (1 / hourlyPrice) * ratingScore * 100;
+    
+    let level, color, comment;
+    if (valueScore >= 30) {
+      level = "极高";
+      color = "#10b981";
+      comment = "超值游戏！强烈推荐购买，性价比爆表！";
+    } else if (valueScore >= 20) {
+      level = "很高";
+      color = "#3b82f6";
+      comment = "非常值得购买，物有所值的好游戏！";
+    } else if (valueScore >= 10) {
+      level = "中等";
+      color = "#f59e0b";
+      comment = "性价比尚可，可以考虑打折时入手。";
+    } else if (valueScore >= 5) {
+      level = "偏低";
+      color = "#ef4444";
+      comment = "性价比较低，建议等大促或史低再买。";
+    } else {
+      level = "很低";
+      color = "#991b1b";
+      comment = "性价比很低，不太推荐购买。";
+    }
+    
+    valueResult.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:48px;font-weight:900;color:${color};font-family:'Orbitron',sans-serif;">${valueScore.toFixed(1)}</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">性价比指数</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">¥${hourlyPrice.toFixed(2)}</div>
+          <div class="stat-label">每小时成本</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" style="color:${color};">${level}</div>
+          <div class="stat-label">性价比等级</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${(time / price).toFixed(1)}</div>
+          <div class="stat-label">时长/价格比</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(56,189,248,0.1);border-radius:6px;text-align:center;">
+        <div style="font-size:14px;color:var(--text-soft);line-height:1.6;">${comment}</div>
+      </div>
+    `;
+    valueResult.classList.add('show');
   });
 </script>
 </body>
