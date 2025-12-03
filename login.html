@@ -2,13 +2,456 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 登录</title>
+  <title>GameBox 游盒 - 登录/注册</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Cyberpunk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    /* 登录页面专属样式 */
+    .auth-container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .auth-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88, #00ccff, #a855f7, #ff00ff);
+    }
+    
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .auth-logo {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .auth-title {
+      font-size: 28px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+    
+    .auth-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    /* Tab 切换 */
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    
+    .auth-tab {
+      flex: 1;
+      padding: 14px 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .auth-tab:hover {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--text-soft);
+    }
+    
+    .auth-tab.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(0, 255, 136, 0.1));
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+    
+    /* 表单样式 */
+    .auth-form {
+      display: none;
+    }
+    
+    .auth-form.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .form-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    
+    /* 密码强度指示器 */
+    .password-strength {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    
+    .strength-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(56, 189, 248, 0.2);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    
+    .strength-bar.weak { background: #ef4444; }
+    .strength-bar.medium { background: #f59e0b; }
+    .strength-bar.strong { background: #10b981; }
+    .strength-bar.very-strong { background: #00ff88; }
+    
+    .strength-text {
+      font-size: 11px;
+      margin-top: 4px;
+    }
+    
+    /* 按钮 */
+    .auth-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      border: none;
+      border-radius: 8px;
+      color: #0a0f1a;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+    
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+    }
+    
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .auth-btn.loading {
+      position: relative;
+      color: transparent;
+    }
+    
+    .auth-btn.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid transparent;
+      border-top-color: #0a0f1a;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 消息提示 */
+    .auth-message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .auth-message.show {
+      display: block;
+    }
+    
+    .auth-message.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .auth-message.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+    
+    .auth-message.info {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+    }
+    
+    /* 分隔线 */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      gap: 16px;
+    }
+    
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
+    }
+    
+    .auth-divider span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    /* 社交登录按钮 */
+    .social-login {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .social-btn {
+      flex: 1;
+      padding: 12px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--text-soft);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .social-btn:hover {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+    }
+    
+    /* 额外链接 */
+    .auth-links {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .auth-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-links a:hover {
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+    
+    /* 用户协议复选框 */
+    .form-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .form-checkbox input {
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+    
+    .form-checkbox label {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    .form-checkbox a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    /* 已登录状态 */
+    .logged-in-card {
+      text-align: center;
+      padding: 40px;
+    }
+    
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+    }
+    
+    .user-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    
+    .user-email {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    
+    .logout-btn {
+      padding: 12px 32px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      color: #ef4444;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+    }
+    
+    /* 侧边栏信息 */
+    .auth-info-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(31, 41, 55, 0.8));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .auth-info-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .auth-info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .auth-info-list li {
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    }
+    
+    .auth-info-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .auth-info-list .icon {
+      color: #00ff88;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .auth-card {
+        padding: 24px;
+      }
+      
+      .auth-title {
+        font-size: 22px;
+      }
+      
+      .social-login {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body data-current-page="profile" class="cyberpunk-theme">
 <div class="page">
@@ -42,7 +485,7 @@
           <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
           <span class="header-search-icon">🔍</span>
         </div>
-        <button class="header-user">未登录 · 游客</button>
+        <button class="header-user" id="headerUserBtn">未登录 · 游客</button>
       </div>
     </div>
   </header>
@@ -51,89 +494,653 @@
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
   <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
+
+  <!-- 主体 -->
+  <main class="main" style="display: block; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+    <div style="display: grid; grid-template-columns: 1fr 320px; gap: 30px; align-items: start;">
+      
+      <!-- 左侧：登录/注册卡片 -->
+      <div class="auth-container" style="max-width: none; padding: 0;">
+        
+        <!-- 未登录状态：显示登录/注册表单 -->
+        <div id="authFormContainer" class="auth-card">
+          <div class="auth-header">
+            <div class="auth-logo">🎮</div>
+            <div class="auth-title">GAMEBOX</div>
+            <div class="auth-subtitle">开启你的游戏世界</div>
+          </div>
+          
+          <!-- 消息提示 -->
+          <div id="authMessage" class="auth-message"></div>
+          
+          <!-- Tab 切换 -->
+          <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">登录</button>
+            <button class="auth-tab" data-tab="register">注册</button>
+          </div>
+          
+          <!-- 登录表单 -->
+          <form id="loginForm" class="auth-form active">
+            <div class="form-group">
+              <label class="form-label">邮箱地址</label>
+              <input type="email" class="form-input" id="loginEmail" placeholder="your@email.com" required />
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">密码</label>
+              <input type="password" class="form-input" id="loginPassword" placeholder="输入密码" required />
+            </div>
+            
+            <button type="submit" class="auth-btn" id="loginBtn">登 录</button>
+          </form>
+          
+          <!-- 注册表单 -->
+          <form id="registerForm" class="auth-form">
+            <div class="form-group">
+              <label class="form-label">邮箱地址</label>
+              <input type="email" class="form-input" id="registerEmail" placeholder="your@email.com" required />
+              <div class="form-hint">用于登录和接收验证邮件</div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">用户名 (昵称)</label>
+              <input type="text" class="form-input" id="registerUsername" placeholder="给自己起个名字" required minlength="2" maxlength="20" />
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">密码</label>
+              <input type="password" class="form-input" id="registerPassword" placeholder="至少6位字符" required minlength="6" />
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+              </div>
+              <div class="strength-text" id="strengthText"></div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">确认密码</label>
+              <input type="password" class="form-input" id="registerPasswordConfirm" placeholder="再次输入密码" required />
+            </div>
+            
+            <div class="form-checkbox">
+              <input type="checkbox" id="agreeTerms" required />
+              <label for="agreeTerms">
+                我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="auth-btn" id="registerBtn">注 册</button>
+          </form>
+          
+          <div class="auth-divider">
+            <span>或者使用以下方式</span>
+          </div>
+          
+          <!-- 社交登录 -->
+          <div class="social-login">
+            <button type="button" class="social-btn" id="googleLoginBtn">
+              <span>🔵</span> Google
+            </button>
+            <button type="button" class="social-btn" id="githubLoginBtn">
+              <span>⚫</span> GitHub
+            </button>
+          </div>
+          
+          <div class="auth-links">
+            <a href="#" id="forgotPasswordLink">忘记密码？</a>
+          </div>
+        </div>
+        
+        <!-- 已登录状态 -->
+        <div id="loggedInContainer" class="auth-card logged-in-card" style="display: none;">
+          <div class="user-avatar" id="userAvatar">🎮</div>
+          <div class="user-name" id="userName">用户名</div>
+          <div class="user-email" id="userEmail">email@example.com</div>
+          
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="profile.html" class="auth-btn" style="flex: 1; max-width: 160px; text-align: center; text-decoration: none;">个人中心</a>
+            <button class="logout-btn" id="logoutBtn">退出登录</button>
+          </div>
+          
+          <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(56, 189, 248, 0.2);">
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+              登录时间: <span id="loginTime">-</span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted);">
+              邮箱状态: <span id="emailVerifyStatus">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 右侧：说明信息 -->
+      <div>
+        <div class="auth-info-card">
+          <div class="auth-info-title">
+            <span>✨</span> 注册福利
+          </div>
+          <ul class="auth-info-list">
+            <li><span class="icon">✓</span> 永久免费使用所有功能</li>
+            <li><span class="icon">✓</span> 个性化游戏推荐</li>
+            <li><span class="icon">✓</span> 游戏库收藏同步</li>
+            <li><span class="icon">✓</span> 社区互动评论</li>
+            <li><span class="icon">✓</span> 价格追踪提醒</li>
+          </ul>
+        </div>
+        
+        <div class="auth-info-card">
+          <div class="auth-info-title">
+            <span>🔒</span> 安全保障
+          </div>
+          <ul class="auth-info-list">
+            <li><span class="icon">✓</span> 密码加密存储</li>
+            <li><span class="icon">✓</span> Supabase 安全认证</li>
+            <li><span class="icon">✓</span> 支持邮箱验证</li>
+            <li><span class="icon">✓</span> 隐私数据保护</li>
+          </ul>
+        </div>
+        
+        <div class="auth-info-card" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(56, 189, 248, 0.1));">
+          <div class="auth-info-title" style="color: #00ff88;">
+            <span>💡</span> 快速体验
+          </div>
+          <p style="font-size: 13px; color: var(--text-soft); line-height: 1.6; margin: 0;">
+            不想注册？可以使用测试账号：<br>
+            <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">demo@gamebox.test</code><br>
+            密码：<code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">demo123456</code>
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- 主体：登录表单 -->
-  <main class="main">
-    <section>
-      <div class="card">
-        <div class="page-title">登录 GameBox</div>
-        <div class="page-intro">
-          这是课程 Demo 的前端模拟登录，不连接真实服务器。<br />
-          示例账号：<strong>demo</strong> / 密码：<strong>123456</strong>
-        </div>
-
-        <form class="form" id="loginForm">
-          <div class="form-row">
-            <label for="loginUsername">用户名</label>
-            <input type="text" id="loginUsername" required placeholder="demo" />
-          </div>
-          <div class="form-row">
-            <label for="loginPassword">密码</label>
-            <input type="password" id="loginPassword" required placeholder="123456" />
-          </div>
-          <button type="submit" class="btn btn-primary">登录</button>
-          <div id="loginMsg" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
-        </form>
-      </div>
-    </section>
-
-    <aside>
-      <div class="sidebar-card">
-        <div class="sidebar-title">说明</div>
-        <div class="sidebar-item">
-          <span class="label">仅用于前端课程演示，不进行真实账号验证。</span>
-        </div>
-      </div>
-    </aside>
   </main>
 
   <footer class="footer">
-    GameBox 游盒 · 登录页面示例
+    GameBox 游盒 · 安全登录系统 · Powered by Supabase
   </footer>
 </div>
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<!-- GameBox 认证系统 -->
+<script src="supabase-config.js"></script>
 <script>
+  // =============================================
+  // 页面初始化
+  // =============================================
+  
   initCommon();
-
-  // 模拟用户数据
-  const mockUsers = [
-    { username: "demo", password: "123456", nickname: "演示玩家" }
-  ];
-
-  const form = document.getElementById("loginForm");
-  const msg  = document.getElementById("loginMsg");
-
-  form.addEventListener("submit", function (e) {
+  
+  // DOM 元素
+  const authFormContainer = document.getElementById('authFormContainer');
+  const loggedInContainer = document.getElementById('loggedInContainer');
+  const authMessage = document.getElementById('authMessage');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const tabs = document.querySelectorAll('.auth-tab');
+  const authModeIndicator = document.createElement('div');
+  
+  // 添加认证模式指示器
+  authModeIndicator.className = 'auth-mode-indicator';
+  authModeIndicator.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background: rgba(17, 24, 39, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  `;
+  document.body.appendChild(authModeIndicator);
+  
+  // =============================================
+  // 初始化认证系统
+  // =============================================
+  
+  async function initAuth() {
+    try {
+      const result = await GameBoxAuth.init();
+      
+      // 更新模式指示器
+      if (result.mode === 'supabase') {
+        authModeIndicator.innerHTML = `
+          <span style="color: #00ff88;">●</span>
+          <span>Supabase 在线模式</span>
+        `;
+      } else {
+        authModeIndicator.innerHTML = `
+          <span style="color: #f59e0b;">●</span>
+          <span>本地演示模式</span>
+          <a href="#" onclick="showConfigHelp(); return false;" style="color: var(--accent); margin-left: 8px;">配置指南</a>
+        `;
+      }
+      
+      // 检查登录状态
+      await checkAuthState();
+      
+      console.log('[GameBox] 认证系统初始化完成');
+    } catch (error) {
+      console.error('[GameBox] 认证系统初始化失败:', error);
+      showMessage('系统初始化失败，请刷新页面重试', 'error');
+    }
+  }
+  
+  // =============================================
+  // 认证状态检查
+  // =============================================
+  
+  async function checkAuthState() {
+    const user = await GameBoxAuth.getCurrentUser();
+    
+    if (user) {
+      const session = await GameBoxAuth.getSession();
+      showLoggedInState(user, session);
+    } else {
+      showAuthForm();
+    }
+    
+    updateHeaderUser();
+  }
+  
+  function showLoggedInState(user, session) {
+    authFormContainer.style.display = 'none';
+    loggedInContainer.style.display = 'block';
+    
+    document.getElementById('userAvatar').textContent = user.avatar || '🎮';
+    document.getElementById('userName').textContent = user.username;
+    document.getElementById('userEmail').textContent = user.email;
+    
+    const loginTime = session?.login_time || new Date().toISOString();
+    document.getElementById('loginTime').textContent = new Date(loginTime).toLocaleString('zh-CN');
+    
+    // 显示邮箱验证状态
+    const emailStatus = document.getElementById('emailVerifyStatus');
+    if (emailStatus) {
+      if (user.email_confirmed) {
+        emailStatus.innerHTML = '<span style="color: #00ff88;">✓ 已验证</span>';
+      } else {
+        emailStatus.innerHTML = '<span style="color: #f59e0b;">⚠ 未验证</span>';
+      }
+    }
+  }
+  
+  function showAuthForm() {
+    authFormContainer.style.display = 'block';
+    loggedInContainer.style.display = 'none';
+  }
+  
+  async function updateHeaderUser() {
+    const user = await GameBoxAuth.getCurrentUser();
+    const headerBtn = document.getElementById('headerUserBtn');
+    
+    if (user) {
+      headerBtn.textContent = user.username;
+      headerBtn.style.color = 'var(--accent)';
+    } else {
+      headerBtn.textContent = '未登录 · 游客';
+      headerBtn.style.color = '';
+    }
+  }
+  
+  // =============================================
+  // UI 工具函数
+  // =============================================
+  
+  function showMessage(text, type = 'error') {
+    authMessage.textContent = text;
+    authMessage.className = 'auth-message show ' + type;
+    
+    if (type === 'success' || type === 'info') {
+      setTimeout(() => {
+        authMessage.classList.remove('show');
+      }, 5000);
+    }
+  }
+  
+  function hideMessage() {
+    authMessage.classList.remove('show');
+  }
+  
+  function showConfigHelp() {
+    const helpModal = document.createElement('div');
+    helpModal.className = 'config-help-modal';
+    helpModal.innerHTML = `
+      <div class="config-help-content" style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95));
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 16px;
+        padding: 32px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        z-index: 10001;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      ">
+        <h2 style="color: var(--accent); margin: 0 0 20px; font-family: 'Orbitron', sans-serif;">
+          🔧 配置 Supabase 后端
+        </h2>
+        
+        <div style="color: var(--text-soft); line-height: 1.8; font-size: 14px;">
+          <p><strong>步骤 1:</strong> 访问 <a href="https://supabase.com" target="_blank" style="color: var(--accent);">supabase.com</a> 创建免费账户</p>
+          
+          <p><strong>步骤 2:</strong> 创建新项目 (免费计划支持 50,000 月活用户)</p>
+          
+          <p><strong>步骤 3:</strong> 在项目 Settings → API 中获取:</p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Project URL</li>
+            <li>anon/public key</li>
+          </ul>
+          
+          <p><strong>步骤 4:</strong> 编辑 <code style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px;">supabase-config.js</code> 文件:</p>
+          
+          <pre style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; overflow-x: auto; margin: 12px 0;">
+const SUPABASE_CONFIG = {
+  url: 'https://YOUR_PROJECT.supabase.co',
+  anonKey: 'YOUR_ANON_KEY',
+  enabled: true,  // 改为 true
+  ...
+};</pre>
+          
+          <p><strong>可选配置:</strong></p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>OAuth 登录: 在 Supabase → Authentication → Providers 配置 Google/GitHub</li>
+            <li>邮件服务: 配置 SMTP 发送验证邮件</li>
+          </ul>
+          
+          <div style="margin-top: 20px; padding: 12px; background: rgba(0, 255, 136, 0.1); border-radius: 8px;">
+            <strong style="color: #00ff88;">💡 提示:</strong> 
+            Supabase 免费计划包含 500MB 数据库、50,000 月活用户，足够大多数项目使用。
+          </div>
+        </div>
+        
+        <button onclick="this.parentElement.parentElement.remove()" style="
+          margin-top: 24px;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, var(--accent), #00ff88);
+          border: none;
+          border-radius: 8px;
+          color: #0a0f1a;
+          font-weight: 600;
+          cursor: pointer;
+          width: 100%;
+        ">知道了</button>
+      </div>
+      <div onclick="this.parentElement.remove()" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+      "></div>
+    `;
+    document.body.appendChild(helpModal);
+  }
+  
+  // =============================================
+  // Tab 切换
+  // =============================================
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetTab = tab.dataset.tab;
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      if (targetTab === 'login') {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+      } else {
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+      }
+      
+      hideMessage();
+    });
+  });
+  
+  // =============================================
+  // 密码强度检测
+  // =============================================
+  
+  const registerPassword = document.getElementById('registerPassword');
+  const strengthBars = document.querySelectorAll('.strength-bar');
+  const strengthText = document.getElementById('strengthText');
+  
+  registerPassword.addEventListener('input', () => {
+    const password = registerPassword.value;
+    const strength = checkPasswordStrength(password);
+    
+    strengthBars.forEach((bar, index) => {
+      bar.className = 'strength-bar';
+      if (index < strength.level) {
+        bar.classList.add(strength.class);
+      }
+    });
+    
+    strengthText.textContent = strength.text;
+    strengthText.style.color = strength.color;
+  });
+  
+  function checkPasswordStrength(password) {
+    let score = 0;
+    
+    if (password.length >= 6) score++;
+    if (password.length >= 10) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^a-zA-Z0-9]/.test(password)) score++;
+    
+    if (score <= 1) return { level: 1, class: 'weak', text: '弱', color: '#ef4444' };
+    if (score <= 2) return { level: 2, class: 'medium', text: '中等', color: '#f59e0b' };
+    if (score <= 3) return { level: 3, class: 'strong', text: '强', color: '#10b981' };
+    return { level: 4, class: 'very-strong', text: '非常强', color: '#00ff88' };
+  }
+  
+  // =============================================
+  // 登录表单提交
+  // =============================================
+  
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const u = document.getElementById("loginUsername").value.trim();
-    const p = document.getElementById("loginPassword").value.trim();
-
-    const user = mockUsers.find(item => item.username === u && item.password === p);
-
-    if (!user) {
-      msg.textContent = "用户名或密码错误，试试 demo / 123456";
+    
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    
+    if (!email || !password) {
+      showMessage('请填写邮箱和密码', 'error');
       return;
     }
-
-    // 写入 localStorage
-    localStorage.setItem("currentUser", JSON.stringify({
-      username: user.username,
-      nickname: user.nickname
-    }));
-
-    msg.textContent = "登录成功，正在跳转首页……";
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 600);
+    
+    btn.classList.add('loading');
+    btn.disabled = true;
+    hideMessage();
+    
+    try {
+      const result = await GameBoxAuth.signIn(email, password);
+      
+      if (result.success) {
+        showMessage(result.message, 'success');
+        
+        setTimeout(async () => {
+          await checkAuthState();
+        }, 1000);
+      } else {
+        showMessage(result.error, 'error');
+      }
+    } catch (error) {
+      showMessage('登录失败: ' + error.message, 'error');
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
   });
+  
+  // =============================================
+  // 注册表单提交
+  // =============================================
+  
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('registerEmail').value.trim();
+    const username = document.getElementById('registerUsername').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+    const agreeTerms = document.getElementById('agreeTerms').checked;
+    const btn = document.getElementById('registerBtn');
+    
+    // 验证
+    if (!email || !username || !password) {
+      showMessage('请填写所有必填项', 'error');
+      return;
+    }
+    
+    if (password !== passwordConfirm) {
+      showMessage('两次输入的密码不一致', 'error');
+      return;
+    }
+    
+    if (password.length < 6) {
+      showMessage('密码至少需要6位字符', 'error');
+      return;
+    }
+    
+    if (username.length < 2) {
+      showMessage('用户名至少需要2个字符', 'error');
+      return;
+    }
+    
+    if (!agreeTerms) {
+      showMessage('请先同意用户协议', 'error');
+      return;
+    }
+    
+    btn.classList.add('loading');
+    btn.disabled = true;
+    hideMessage();
+    
+    try {
+      const result = await GameBoxAuth.signUp(email, password, username);
+      
+      if (result.success) {
+        if (result.needsEmailConfirmation) {
+          showMessage(result.message, 'info');
+          // 切换到登录 tab
+          tabs.forEach(t => t.classList.remove('active'));
+          tabs[0].classList.add('active');
+          loginForm.classList.add('active');
+          registerForm.classList.remove('active');
+        } else {
+          showMessage(result.message + ' 自动登录中...', 'success');
+          
+          // 自动登录
+          const loginResult = await GameBoxAuth.signIn(email, password);
+          
+          if (loginResult.success) {
+            setTimeout(async () => {
+              await checkAuthState();
+            }, 1500);
+          }
+        }
+      } else {
+        showMessage(result.error, 'error');
+      }
+    } catch (error) {
+      showMessage('注册失败: ' + error.message, 'error');
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+  
+  // =============================================
+  // 登出
+  // =============================================
+  
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('logoutBtn');
+    btn.disabled = true;
+    btn.textContent = '退出中...';
+    
+    try {
+      const result = await GameBoxAuth.signOut();
+      showMessage(result.message, 'info');
+      await checkAuthState();
+    } catch (error) {
+      showMessage('退出失败: ' + error.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '退出登录';
+    }
+  });
+  
+  // =============================================
+  // OAuth 社交登录
+  // =============================================
+  
+  document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+    const result = await GameBoxAuth.signInWithGoogle();
+    
+    if (!result.success) {
+      showMessage(result.error, 'info');
+    }
+    // 如果成功，会自动跳转到 Google 登录页面
+  });
+  
+  document.getElementById('githubLoginBtn').addEventListener('click', async () => {
+    const result = await GameBoxAuth.signInWithGitHub();
+    
+    if (!result.success) {
+      showMessage(result.error, 'info');
+    }
+    // 如果成功，会自动跳转到 GitHub 登录页面
+  });
+  
+  // =============================================
+  // 忘记密码
+  // =============================================
+  
+  document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value.trim();
+    
+    if (!email) {
+      showMessage('请先在登录框中输入您的邮箱地址', 'info');
+      document.getElementById('loginEmail').focus();
+      return;
+    }
+    
+    const result = await GameBoxAuth.resetPassword(email);
+    
+    if (result.success) {
+      showMessage(result.message, 'success');
+    } else {
+      showMessage(result.error, 'error');
+    }
+  });
+  
+  // =============================================
+  // 启动
+  // =============================================
+  
+  initAuth();
 </script>
 </body>
 </html>
