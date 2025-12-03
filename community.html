@@ -517,11 +517,16 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="community-data-service.js"></script>
+<script src="create-post-modal.js"></script>
 <script>
   initCommon();
 
-  // 示例帖子数据
-  const postData = [
+  // 使用真实社区数据服务
+  let postData = window.communityDataService.getAllPosts();
+  
+  // 旧的示例数据（作为备份）
+  const postDataBackup = [
     {
       id: "pinned-1",
       title: "【公告】社区使用指南 - 新人必读",
@@ -789,14 +794,39 @@
 
   // 发帖
   function createPost() {
-    alert("🎮 发帖功能需要登录后使用！\n\n这是一个前端示例项目，实际发帖功能需要后端支持。");
+    window.openCreatePostModal();
+  }
+
+  // 更新社区统计数据
+  function updateCommunityStats() {
+    const stats = window.communityDataService.getCommunityStats();
+    
+    document.getElementById('statPosts').textContent = stats.totalPosts.toLocaleString();
+    document.getElementById('statMembers').textContent = stats.totalMembers.toLocaleString();
+    document.getElementById('statReplies').textContent = stats.totalReplies.toLocaleString();
+    document.getElementById('statOnline').textContent = stats.onlineUsers;
+  }
+
+  // 刷新帖子数据
+  function refreshPostsData() {
+    postData = window.communityDataService.getAllPosts();
+    renderPosts();
+    updateBoardCounts();
+    updateCommunityStats();
   }
 
   // 初始化
+  updateCommunityStats();
   renderPosts();
   renderHotTopics();
   renderOnlineUsers();
   updateBoardCounts();
+  
+  // 每30秒刷新在线用户
+  setInterval(() => {
+    renderOnlineUsers();
+    updateCommunityStats();
+  }, 30000);
 </script>
 </body>
 </html>

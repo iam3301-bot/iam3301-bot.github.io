@@ -337,8 +337,12 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="news-api.js"></script>
+<script src="real-news-api.js"></script>
 <script>
   initCommon();
+  
+  // 使用真实API还是备用API
+  const USE_REAL_API = true;
 
   let allNewsData = [];
   let dataLoaded = false;
@@ -386,11 +390,25 @@
   // 加载所有新闻数据
   async function loadAllNews() {
     try {
-      newsList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:40px;text-align:center;">📰 正在加载资讯数据...</div>';
+      newsList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:40px;text-align:center;">📰 正在加载真实游戏资讯...</div>';
       
-      allNewsData = await window.newsAPI.getAllNews();
+      // 优先使用真实API
+      if (USE_REAL_API && window.realNewsAPI) {
+        console.log('🔄 使用真实游戏资讯API...');
+        allNewsData = await window.realNewsAPI.getAllRealNews();
+        
+        // 如果真实API返回数据少于10条，补充备用数据
+        if (allNewsData.length < 10) {
+          console.log('⚠️ 真实API数据不足，补充备用数据');
+          const fallbackData = await window.newsAPI.getAllNews();
+          allNewsData = allNewsData.concat(fallbackData.slice(0, 50));
+        }
+      } else {
+        allNewsData = await window.newsAPI.getAllNews();
+      }
+      
       dataLoaded = true;
-      console.log(`✅ 成功加载 ${allNewsData.length} 条新闻`);
+      console.log(`✅ 成功加载 ${allNewsData.length} 条资讯`);
       
       // 更新统计数据
       updateStats();

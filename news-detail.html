@@ -293,8 +293,12 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="news-api.js"></script>
+<script src="real-news-api.js"></script>
 <script>
   initCommon();
+  
+  // 使用真实API
+  const USE_REAL_API = true;
 
   // 类型图标和名称映射
   const typeIcons = {
@@ -446,8 +450,18 @@
         throw new Error('未指定资讯ID');
       }
       
-      // 加载所有资讯
-      allNews = await window.newsAPI.getAllNews();
+      // 加载所有资讯（优先使用真实API）
+      if (USE_REAL_API && window.realNewsAPI) {
+        allNews = await window.realNewsAPI.getAllRealNews();
+        
+        // 如果真实API数据不足，补充备用数据
+        if (allNews.length < 10) {
+          const fallbackData = await window.newsAPI.getAllNews();
+          allNews = allNews.concat(fallbackData.slice(0, 50));
+        }
+      } else {
+        allNews = await window.newsAPI.getAllNews();
+      }
       
       // 查找对应资讯
       currentNews = allNews.find(n => n.id === newsId);
