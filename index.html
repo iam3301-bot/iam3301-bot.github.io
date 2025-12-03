@@ -511,6 +511,8 @@
 <script src="cyber-effects.js"></script>
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
+<script src="chinese-game-names.js"></script>
+<script src="multi-platform-games.js"></script>
 <script>
   // 初始化通用逻辑（导航高亮等）
   initCommon();
@@ -532,7 +534,32 @@
     try {
       rankingListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px; list-style: none;">🎮 正在加载游戏数据...</li>';
       
-      allGamesData = await window.megaGameDB.getAllGames();
+      // 加载Steam游戏数据
+      const steamGames = await window.megaGameDB.getAllGames();
+      console.log(`✅ Steam游戏: ${steamGames.length} 款`);
+      
+      // 加载多平台游戏数据
+      const multiPlatformGames = window.multiPlatformGames ? window.multiPlatformGames.all : [];
+      console.log(`✅ 多平台游戏: ${multiPlatformGames.length} 款`);
+      
+      // 合并数据
+      allGamesData = [
+        ...steamGames,
+        ...multiPlatformGames.map(game => ({
+          id: game.id,
+          appid: game.id,
+          name: game.name,
+          chineseName: game.chineseName,
+          genre: game.genre,
+          rating: game.rating,
+          price: game.price,
+          year: game.year,
+          platform: game.platform,
+          thumbnail: game.cover,
+          source: game.platform.includes(',') ? 'Multi-Platform' : game.platform
+        }))
+      ];
+      
       console.log(`✅ 首页加载 ${allGamesData.length} 款游戏`);
       
       // 更新总数显示
@@ -667,15 +694,43 @@
 
   // 更新折扣列表
   function updateDiscounts() {
-    const pricedGames = allGamesData.filter(g => g.price && g.price > 20).slice(0, 100);
+    // 筛选有价格的游戏（排除免费游戏）
+    const pricedGames = allGamesData.filter(g => {
+      let price = g.price || 0;
+      // 对没有价格的游戏估算价格
+      if (price === 0) {
+        const platform = (g.platform || g.source || '').toLowerCase();
+        if (platform.includes('switch') || platform.includes('playstation') || platform.includes('xbox')) {
+          price = g.year >= 2023 ? 298 : g.year >= 2020 ? 198 : 128;
+        } else {
+          price = g.year >= 2023 ? 198 : g.year >= 2020 ? 128 : 68;
+        }
+      }
+      return price > 20 && price <= 498; // 限制价格范围
+    }).slice(0, 100);
+    
     const shuffled = pricedGames.sort(() => Math.random() - 0.5).slice(0, 4);
     
     const discountContent = document.getElementById('discountContent');
     discountContent.innerHTML = shuffled.map((game, index) => {
-      const discountPercent = [40, 50, 60, 75][index];
-      const originalPrice = game.price || 100;
+      // 合理的折扣百分比
+      const discountPercent = [25, 40, 50, 70][index];
+      let originalPrice = game.price || 0;
+      
+      // 估算原价
+      if (originalPrice === 0) {
+        const platform = (game.platform || game.source || '').toLowerCase();
+        if (platform.includes('switch') || platform.includes('playstation') || platform.includes('xbox')) {
+          originalPrice = game.year >= 2023 ? 298 : game.year >= 2020 ? 198 : 128;
+        } else {
+          originalPrice = game.year >= 2023 ? 198 : game.year >= 2020 ? 128 : 68;
+        }
+      }
+      
+      // 限制最高价格
+      originalPrice = Math.min(originalPrice, 498);
       const currentPrice = Math.round(originalPrice * (1 - discountPercent / 100));
-      const isHistLow = index === 0;
+      const isHistLow = discountPercent >= 70;
       
       return `
         <div class="discount-mini-item" onclick="window.location.href='game-detail.html?id=${game.id}&name=${encodeURIComponent(game.name)}'">
