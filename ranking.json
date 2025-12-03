@@ -185,34 +185,11 @@
       }
     },
     {
-      "id": 623,
-      "name": "Raven2",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
-      "score": 8.9,
-      "tag": "高人气",
-      "description": "A free-to-play open-world MMORPG.",
-      "releaseDate": "2025-10-22",
-      "publisher": "Netmarble",
-      "developer": "Netmarble",
-      "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit) or later",
-        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
-        "memory": "16 GB",
-        "graphics": "GTX 960",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "Windows · Racing",
       "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
       "releaseDate": "2015-09-15",
@@ -226,6 +203,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 623,
+      "name": "Raven2",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -323,34 +323,11 @@
       }
     },
     {
-      "id": 599,
-      "name": "Marvel Rivals",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play superhero team shooter from NetEase.",
-      "releaseDate": "2024-12-06",
-      "publisher": "NetEase",
-      "developer": "NetEase",
-      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit (1909 or newer)",
-        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
-        "memory": "16 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
-        "storage": "70 GB available space (SSD Preferred)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -369,34 +346,11 @@
       }
     },
     {
-      "id": 57,
-      "name": "Fortnite",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
-      "score": 8.5,
-      "tag": "人气不错",
-      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
-      "releaseDate": "2017-09-26",
-      "publisher": "Epic Games",
-      "developer": "Epic Games",
-      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
-      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
-      "systemRequirements": {
-        "os": "Window 7 or later",
-        "processor": "Intel HD 4000",
-        "memory": "4 GB",
-        "graphics": "Core i3 2.4",
-        "storage": "Not defined",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 511,
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.450000000000001,
+      "score": 8.55,
       "tag": "人气不错",
       "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
       "releaseDate": "2021-06-09",
@@ -419,7 +373,7 @@
       "name": "Superball",
       "platform": "Windows · Sports",
       "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.4,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "A free-to-play futuristic sports game.",
       "releaseDate": "2025-10-28",
@@ -433,6 +387,52 @@
         "memory": " 8 GB RAM",
         "graphics": "Nvidia GeForce GTX760",
         "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 57,
+      "name": "Fortnite",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
+      "score": 8.450000000000001,
+      "tag": "人气不错",
+      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
+      "releaseDate": "2017-09-26",
+      "publisher": "Epic Games",
+      "developer": "Epic Games",
+      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
+      "systemRequirements": {
+        "os": "Window 7 or later",
+        "processor": "Intel HD 4000",
+        "memory": "4 GB",
+        "graphics": "Core i3 2.4",
+        "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 599,
+      "name": "Marvel Rivals",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
+      "score": 8.4,
+      "tag": "人气不错",
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -877,34 +877,11 @@
       }
     },
     {
-      "id": 623,
-      "name": "Raven2",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
-      "score": 8.9,
-      "tag": "高人气",
-      "description": "A free-to-play open-world MMORPG.",
-      "releaseDate": "2025-10-22",
-      "publisher": "Netmarble",
-      "developer": "Netmarble",
-      "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit) or later",
-        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
-        "memory": "16 GB",
-        "graphics": "GTX 960",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "Windows · Racing",
       "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
       "releaseDate": "2015-09-15",
@@ -918,6 +895,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 623,
+      "name": "Raven2",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1015,34 +1015,11 @@
       }
     },
     {
-      "id": 599,
-      "name": "Marvel Rivals",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play superhero team shooter from NetEase.",
-      "releaseDate": "2024-12-06",
-      "publisher": "NetEase",
-      "developer": "NetEase",
-      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
-      "profileUrl": "https://www.freetogame.com/marvel-rivals",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit (1909 or newer)",
-        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
-        "memory": "16 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
-        "storage": "70 GB available space (SSD Preferred)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -1061,34 +1038,11 @@
       }
     },
     {
-      "id": 57,
-      "name": "Fortnite",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
-      "score": 8.5,
-      "tag": "人气不错",
-      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
-      "releaseDate": "2017-09-26",
-      "publisher": "Epic Games",
-      "developer": "Epic Games",
-      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
-      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
-      "systemRequirements": {
-        "os": "Window 7 or later",
-        "processor": "Intel HD 4000",
-        "memory": "4 GB",
-        "graphics": "Core i3 2.4",
-        "storage": "Not defined",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 511,
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.450000000000001,
+      "score": 8.55,
       "tag": "人气不错",
       "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
       "releaseDate": "2021-06-09",
@@ -1111,7 +1065,7 @@
       "name": "Superball",
       "platform": "Windows · Sports",
       "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.4,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "A free-to-play futuristic sports game.",
       "releaseDate": "2025-10-28",
@@ -1125,6 +1079,52 @@
         "memory": " 8 GB RAM",
         "graphics": "Nvidia GeForce GTX760",
         "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 57,
+      "name": "Fortnite",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
+      "score": 8.450000000000001,
+      "tag": "人气不错",
+      "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
+      "releaseDate": "2017-09-26",
+      "publisher": "Epic Games",
+      "developer": "Epic Games",
+      "gameUrl": "https://www.freetogame.com/open/fortnite-battle-royale",
+      "profileUrl": "https://www.freetogame.com/fortnite-battle-royale",
+      "systemRequirements": {
+        "os": "Window 7 or later",
+        "processor": "Intel HD 4000",
+        "memory": "4 GB",
+        "graphics": "Core i3 2.4",
+        "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 599,
+      "name": "Marvel Rivals",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
+      "score": 8.4,
+      "tag": "人气不错",
+      "description": "A free-to-play superhero team shooter from NetEase.",
+      "releaseDate": "2024-12-06",
+      "publisher": "NetEase",
+      "developer": "NetEase",
+      "gameUrl": "https://www.freetogame.com/open/marvel-rivals",
+      "profileUrl": "https://www.freetogame.com/marvel-rivals",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit (1909 or newer)",
+        "processor": "Intel Core i5-6600K or AMD Ryzen 5 1600X",
+        "memory": "16 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
+        "storage": "70 GB available space (SSD Preferred)",
         "source": "freetogame",
         "steamRaw": null
       }
