@@ -10,60 +10,108 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
   <style>
-    /* 游戏详情页优化样式 - 缩小顶部区域 */
+    /* ===== 游戏详情页优化样式 ===== */
+    
+    /* ===== 顶部区域 - 极致压缩高度 ===== */
     .detail-hero {
-      padding: 12px !important;
-      gap: 12px !important;
-      grid-template-columns: 180px minmax(0, 1fr) !important;
+      padding: 8px 12px !important;
+      gap: 10px !important;
+      grid-template-columns: 100px minmax(0, 1fr) !important;
+      min-height: auto !important;
+      max-height: 130px !important;
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%) !important;
+      overflow: hidden;
     }
     
     .detail-cover-large {
-      max-height: 220px;
+      max-height: 110px !important;
+      height: 110px !important;
+      width: 100px !important;
     }
     
     .detail-cover-large img {
-      max-height: 220px;
-      object-fit: cover;
+      max-height: 110px !important;
+      height: 110px !important;
+      width: 100% !important;
+      object-fit: cover !important;
+      border-radius: 6px !important;
+    }
+    
+    .detail-hero-left {
+      display: flex;
+      align-items: center;
+    }
+    
+    .detail-hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      overflow: hidden;
+    }
+    
+    .detail-title-row {
+      gap: 8px !important;
+      align-items: center !important;
     }
     
     .detail-title {
-      font-size: 18px !important;
-      margin-bottom: 2px !important;
+      font-size: 15px !important;
+      margin-bottom: 0 !important;
+      line-height: 1.1 !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .detail-title-block {
+      flex: 1;
+      overflow: hidden;
     }
     
     .detail-platform {
-      font-size: 11px !important;
+      font-size: 10px !important;
+      margin-top: 2px;
     }
     
     .detail-score-card {
-      padding: 8px 12px !important;
+      padding: 4px 8px !important;
+      width: 70px !important;
+      min-width: 70px !important;
+      flex-shrink: 0;
     }
     
     .detail-score-value {
-      font-size: 28px !important;
+      font-size: 18px !important;
     }
     
-    .detail-score-label,
-    .detail-score-sub {
-      font-size: 10px !important;
+    .detail-score-label {
+      font-size: 7px !important;
+    }
+    
+    .detail-score-sub,
+    .detail-score-outof {
+      font-size: 8px !important;
     }
     
     .detail-tag-row {
-      margin-top: 6px !important;
-      gap: 6px !important;
-      flex-wrap: wrap;
+      margin-top: 2px !important;
+      gap: 3px !important;
+      flex-wrap: nowrap;
+      overflow: hidden;
     }
     
     .detail-tag-row .pill {
-      padding: 3px 8px !important;
-      font-size: 10px !important;
+      padding: 1px 5px !important;
+      font-size: 8px !important;
+      white-space: nowrap;
     }
     
     .detail-hero-desc {
-      margin-top: 6px !important;
-      font-size: 11px !important;
-      line-height: 1.5 !important;
-      max-height: 40px;
+      margin-top: 2px !important;
+      font-size: 10px !important;
+      line-height: 1.3 !important;
+      max-height: 26px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -72,58 +120,208 @@
     }
     
     .detail-links {
-      margin-top: 8px !important;
-      gap: 8px !important;
+      margin-top: 4px !important;
+      gap: 4px !important;
     }
     
     .detail-btn {
-      padding: 6px 14px !important;
-      font-size: 11px !important;
+      padding: 3px 8px !important;
+      font-size: 9px !important;
     }
     
-    /* Steam数据和系统配置区域优化 */
+    /* ===== Steam数据和系统配置区域优化 ===== */
     .detail-info-grid {
-      margin-top: 12px !important;
+      margin-top: 16px !important;
     }
     
     .detail-section {
-      padding: 12px !important;
-      margin-bottom: 12px !important;
+      padding: 14px 16px !important;
+      margin-bottom: 14px !important;
     }
     
     .detail-section-header {
-      margin-bottom: 10px !important;
+      margin-bottom: 12px !important;
     }
     
     .detail-section-title {
-      font-size: 14px !important;
+      font-size: 13px !important;
     }
     
-    .sysreq-title {
-      font-size: 12px !important;
-      padding: 6px 10px !important;
+    /* ===== 系统配置 - 超紧凑一行显示 ===== */
+    .sysreq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
     
-    .sysreq-list li {
-      padding: 6px 10px !important;
-      font-size: 11px !important;
-    }
-    
-    .sysreq-note {
-      font-size: 10px !important;
-      margin-top: 8px !important;
+    .sysreq-column {
+      background: rgba(0, 0, 0, 0.3) !important;
+      border: 1px solid rgba(85, 234, 212, 0.2) !important;
+      border-radius: 6px !important;
       padding: 8px !important;
     }
     
-    /* 响应式 */
+    .sysreq-column--recommended {
+      border-color: rgba(255, 211, 0, 0.2) !important;
+    }
+    
+    .sysreq-title {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      padding: 4px 8px !important;
+      margin-bottom: 8px !important;
+      background: rgba(85, 234, 212, 0.15) !important;
+      border-left: 3px solid var(--cyber-cyan) !important;
+      color: var(--cyber-cyan) !important;
+    }
+    
+    .sysreq-column--recommended .sysreq-title {
+      background: rgba(255, 211, 0, 0.15) !important;
+      border-left-color: var(--cyber-yellow) !important;
+      color: var(--cyber-yellow) !important;
+    }
+    
+    /* 配置列表 - 一行显示 */
+    .sysreq-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .sysreq-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 6px !important;
+      margin-bottom: 3px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      border-left: 2px solid rgba(85, 234, 212, 0.3);
+      font-size: 10px !important;
+      gap: 8px;
+      min-height: 22px;
+    }
+    
+    .sysreq-list li:last-child {
+      margin-bottom: 0;
+    }
+    
+    .sysreq-column--recommended .sysreq-list li {
+      border-left-color: rgba(255, 211, 0, 0.3);
+    }
+    
+    .sysreq-label {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 9px !important;
+      min-width: 45px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+    
+    .sysreq-value {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 10px !important;
+      text-align: right;
+      flex: 1;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .sysreq-note {
+      font-size: 9px !important;
+      margin-top: 8px !important;
+      padding: 6px 8px !important;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* ===== 紧凑型配置行 - 单行显示 ===== */
+    .sysreq-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    
+    .sysreq-row {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 4px;
+      border-left: 2px solid rgba(85, 234, 212, 0.3);
+      min-height: 24px;
+    }
+    
+    .sysreq-column--recommended .sysreq-row {
+      border-left-color: rgba(255, 211, 0, 0.3);
+    }
+    
+    .sysreq-row-label {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--cyber-cyan);
+      min-width: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    
+    .sysreq-column--recommended .sysreq-row-label {
+      color: var(--cyber-yellow);
+    }
+    
+    .sysreq-row-value {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      flex: 1;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* ===== 响应式 ===== */
+    @media (max-width: 900px) {
+      .sysreq-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
     @media (max-width: 768px) {
       .detail-hero {
         grid-template-columns: 1fr !important;
+        padding: 10px !important;
       }
       
       .detail-cover-large {
-        max-height: 150px;
-        width: 100%;
+        max-height: 120px !important;
+        height: 120px !important;
+        width: 100% !important;
+        max-width: 200px !important;
+        margin: 0 auto;
+      }
+      
+      .detail-title {
+        font-size: 16px !important;
+        text-align: center;
+      }
+      
+      .detail-title-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .detail-tag-row {
+        justify-content: center;
+      }
+      
+      .detail-links {
+        justify-content: center;
       }
     }
   </style>
@@ -172,7 +370,7 @@
           <button class="btn-secondary" onclick="history.back()">← 返回上一页</button>
         </div>
 
-        <!-- 视觉主区域（封面 + 标题 + 大号评分 + 标签） -->
+        <!-- 视觉主区域（封面 + 标题 + 大号评分 + 标签）- 高度缩减 -->
         <div class="detail-hero cyber-glow-box">
           <div class="detail-hero-left">
             <div class="detail-cover-large">
@@ -198,45 +396,21 @@
             </div>
 
             <div class="detail-tag-row">
-              <span class="pill" id="gameTag">标签加载中...</span>
-              <span class="pill pill-soft">
-                发售：<span id="gameReleaseDate">未知</span>
-              </span>
-              <span class="pill pill-soft">
-                开发：<span id="gameDeveloper">未知</span>
-              </span>
-              <span class="pill pill-soft">
-                发行：<span id="gamePublisher">未知</span>
-              </span>
-              <span class="pill pill-soft">
-                平台：<span id="gamePlatformTag">未知</span>
-              </span>
+              <span class="pill" id="gameTag">标签</span>
+              <span class="pill pill-soft">发售：<span id="gameReleaseDate">未知</span></span>
+              <span class="pill pill-soft">开发：<span id="gameDeveloper">未知</span></span>
+              <span class="pill pill-soft">发行：<span id="gamePublisher">未知</span></span>
             </div>
 
-            <p id="gameDescription" class="detail-hero-desc">
-              游戏简介加载中...
-            </p>
+            <p id="gameDescription" class="detail-hero-desc">游戏简介加载中...</p>
 
             <div class="detail-links">
-              <a
-                id="gameUrl"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                class="detail-btn detail-btn-main"
-              >
-                <span>前往 Steam 商店页面</span>
+              <a id="gameUrl" href="#" target="_blank" rel="noopener" class="detail-btn detail-btn-main">
+                <span>前往 Steam 商店</span>
                 <span class="detail-btn-icon">↗</span>
               </a>
-
-              <a
-                id="gameProfileUrl"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                class="detail-btn detail-btn-ghost"
-              >
-                <span>查看 SteamDB 详情</span>
+              <a id="gameProfileUrl" href="#" target="_blank" rel="noopener" class="detail-btn detail-btn-ghost">
+                <span>查看 SteamDB</span>
                 <span class="detail-btn-icon">↗</span>
               </a>
             </div>
@@ -247,34 +421,35 @@
         <div class="detail-info-grid">
           
           <!-- Steam 数据统计 -->
-          <section class="detail-section detail-section--primary cyber-sysreq-section" style="margin-bottom: 20px;">
-            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-              <span style="font-size: 20px;">📊</span>
+          <section class="detail-section detail-section--primary cyber-sysreq-section" style="margin-bottom: 16px;">
+            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <span style="font-size: 18px;">📊</span>
               <h2 class="detail-section-title" style="margin: 0;">// STEAM DATA</h2>
             </div>
 
             <div class="sysreq-grid" id="steamDataGrid">
-              <!-- Steam 数据将填充这里 -->
+              <!-- Steam 统计 -->
               <div class="sysreq-column">
-                <div class="sysreq-title">Steam 统计</div>
-                <ul class="sysreq-list" id="steamStatsList">
-                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
-                </ul>
+                <div class="sysreq-title">STEAM 统计</div>
+                <div class="sysreq-compact" id="steamStatsList">
+                  <div style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</div>
+                </div>
               </div>
 
+              <!-- 评价详情 -->
               <div class="sysreq-column sysreq-column--recommended">
                 <div class="sysreq-title">评价详情</div>
-                <ul class="sysreq-list" id="steamReviewsList">
-                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
-                </ul>
+                <div class="sysreq-compact" id="steamReviewsList">
+                  <div style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</div>
+                </div>
               </div>
             </div>
           </section>
 
           <!-- 系统配置要求 -->
           <section class="detail-section detail-section--secondary cyber-sysreq-section">
-            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-              <span style="font-size: 20px;">💻</span>
+            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <span style="font-size: 18px;">💻</span>
               <h2 class="detail-section-title" style="margin: 0;">// SYSTEM SPECS</h2>
             </div>
 
@@ -282,22 +457,22 @@
               <!-- 最低配置 -->
               <div class="sysreq-column">
                 <div class="sysreq-title">最低配置</div>
-                <ul class="sysreq-list" id="sysMinList">
-                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
-                </ul>
+                <div class="sysreq-compact" id="sysMinList">
+                  <div style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</div>
+                </div>
               </div>
 
               <!-- 推荐配置 -->
               <div class="sysreq-column sysreq-column--recommended">
                 <div class="sysreq-title">推荐配置</div>
-                <ul class="sysreq-list" id="sysRecommendedList">
-                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
-                </ul>
+                <div class="sysreq-compact" id="sysRecommendedList">
+                  <div style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</div>
+                </div>
               </div>
             </div>
 
-            <p class="detail-section-text sysreq-note">
-              系统配置数据来自 Steam 商店页面。若显示"暂无数据"，表示该游戏在 Steam 接口中没有提供对应配置信息。
+            <p class="sysreq-note">
+              💡 系统配置数据来自 Steam 商店页面。若显示"暂无数据"，表示该游戏在 Steam 接口中没有提供对应配置信息。
             </p>
           </section>
         </div>
@@ -333,7 +508,6 @@ const tagEl = document.getElementById("gameTag");
 const descEl = document.getElementById("gameDescription");
 const urlEl = document.getElementById("gameUrl");
 const profileEl = document.getElementById("gameProfileUrl");
-const platformTagEl = document.getElementById("gamePlatformTag");
 
 // Steam 数据 DOM
 const steamStatsList = document.getElementById("steamStatsList");
@@ -357,21 +531,28 @@ if (!gameId && !gameName) {
   safeSetText(titleEl, "正在加载：" + (gameName || ("ID " + gameId)));
 }
 
-// 创建列表项
-function createListItem(label, value) {
-  const li = document.createElement('li');
-  const labelSpan = document.createElement('span');
-  labelSpan.className = 'sysreq-label';
-  labelSpan.textContent = label;
-  const valueSpan = document.createElement('span');
-  valueSpan.className = 'sysreq-value';
-  valueSpan.textContent = value || '暂无数据';
-  li.appendChild(labelSpan);
-  li.appendChild(valueSpan);
-  return li;
+// 创建紧凑型配置行（单行显示，带悬停显示完整内容）
+function createCompactRow(label, value, icon = '') {
+  const div = document.createElement('div');
+  div.className = 'sysreq-row';
+  
+  // 处理值，截断过长的文本
+  let displayValue = value || '暂无数据';
+  let fullValue = displayValue;
+  
+  // 如果值太长，截断并添加省略号
+  if (displayValue.length > 50) {
+    displayValue = displayValue.substring(0, 47) + '...';
+  }
+  
+  div.innerHTML = `
+    <span class="sysreq-row-label">${icon}${label}</span>
+    <span class="sysreq-row-value" title="${fullValue}">${displayValue}</span>
+  `;
+  return div;
 }
 
-// 填充 Steam 数据
+// 填充 Steam 数据（紧凑版）
 function fillSteamData(game) {
   steamStatsList.innerHTML = '';
   steamReviewsList.innerHTML = '';
@@ -379,12 +560,12 @@ function fillSteamData(game) {
   if (game.steamData) {
     const data = game.steamData;
     
-    // Steam 统计
-    steamStatsList.appendChild(createListItem('🎮 Steam App ID', game.appid || '未知'));
-    steamStatsList.appendChild(createListItem('👥 拥有者', data.owners || '未知'));
-    steamStatsList.appendChild(createListItem('📊 数据来源', data.source || 'SteamSpy'));
-    steamStatsList.appendChild(createListItem('🎯 游戏类型', game.category || game.genre || '未知'));
-    steamStatsList.appendChild(createListItem('📅 发售年份', game.year || '未知'));
+    // Steam 统计 - 紧凑行
+    steamStatsList.appendChild(createCompactRow('App ID', game.appid || '未知', '🎮 '));
+    steamStatsList.appendChild(createCompactRow('拥有者', data.owners || '未知', '👥 '));
+    steamStatsList.appendChild(createCompactRow('数据源', data.source || 'SteamSpy', '📊 '));
+    steamStatsList.appendChild(createCompactRow('类型', game.category || game.genre || '未知', '🎯 '));
+    steamStatsList.appendChild(createCompactRow('年份', game.year || '未知', '📅 '));
     
     // 评价详情
     const positive = data.positive || 0;
@@ -392,10 +573,10 @@ function fillSteamData(game) {
     const total = positive + negative;
     const ratio = total > 0 ? (positive / total * 100).toFixed(1) : '0';
     
-    steamReviewsList.appendChild(createListItem('👍 好评数', positive ? positive.toLocaleString() : '未知'));
-    steamReviewsList.appendChild(createListItem('👎 差评数', negative ? negative.toLocaleString() : '未知'));
-    steamReviewsList.appendChild(createListItem('📝 总评测数', total ? total.toLocaleString() : '未知'));
-    steamReviewsList.appendChild(createListItem('⭐ 好评率', total > 0 ? `${ratio}%` : '未知'));
+    steamReviewsList.appendChild(createCompactRow('好评数', positive ? positive.toLocaleString() : '未知', '👍 '));
+    steamReviewsList.appendChild(createCompactRow('差评数', negative ? negative.toLocaleString() : '未知', '👎 '));
+    steamReviewsList.appendChild(createCompactRow('总评测', total ? total.toLocaleString() : '未知', '📝 '));
+    steamReviewsList.appendChild(createCompactRow('好评率', total > 0 ? `${ratio}%` : '未知', '⭐ '));
     
     // 评价等级
     let ratingLevel = '未知';
@@ -408,36 +589,45 @@ function fillSteamData(game) {
       else if (r >= 40) ratingLevel = '多半差评';
       else ratingLevel = '差评如潮';
     }
-    steamReviewsList.appendChild(createListItem('🏆 评价等级', ratingLevel));
+    steamReviewsList.appendChild(createCompactRow('等级', ratingLevel, '🏆 '));
   } else {
-    steamStatsList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📊 暂无 Steam 统计数据</li>';
-    steamReviewsList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📝 暂无评价数据</li>';
+    steamStatsList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">📊 暂无 Steam 统计数据</div>';
+    steamReviewsList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">📝 暂无评价数据</div>';
   }
 }
 
-// 填充系统配置
+// 填充系统配置（紧凑版一行显示）
 function fillSystemRequirements(minReq, recReq) {
   sysMinListEl.innerHTML = '';
   sysRecommendedListEl.innerHTML = '';
   
-  if (minReq) {
-    sysMinListEl.appendChild(createListItem('操作系统', minReq.os));
-    sysMinListEl.appendChild(createListItem('处理器', minReq.processor));
-    sysMinListEl.appendChild(createListItem('内存', minReq.memory));
-    sysMinListEl.appendChild(createListItem('显卡', minReq.graphics));
-    sysMinListEl.appendChild(createListItem('存储空间', minReq.storage));
+  if (minReq && Object.keys(minReq).length > 0) {
+    if (minReq.os) sysMinListEl.appendChild(createCompactRow('系统', minReq.os, '💿 '));
+    if (minReq.processor) sysMinListEl.appendChild(createCompactRow('CPU', minReq.processor, '🔲 '));
+    if (minReq.memory) sysMinListEl.appendChild(createCompactRow('内存', minReq.memory, '📟 '));
+    if (minReq.graphics) sysMinListEl.appendChild(createCompactRow('显卡', minReq.graphics, '🎨 '));
+    if (minReq.storage) sysMinListEl.appendChild(createCompactRow('硬盘', minReq.storage, '💾 '));
+    
+    // 如果没有任何数据项被添加
+    if (sysMinListEl.children.length === 0) {
+      sysMinListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无最低配置数据</div>';
+    }
   } else {
-    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无最低配置数据</li>';
+    sysMinListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无最低配置数据</div>';
   }
   
-  if (recReq) {
-    sysRecommendedListEl.appendChild(createListItem('操作系统', recReq.os));
-    sysRecommendedListEl.appendChild(createListItem('处理器', recReq.processor));
-    sysRecommendedListEl.appendChild(createListItem('内存', recReq.memory));
-    sysRecommendedListEl.appendChild(createListItem('显卡', recReq.graphics));
-    sysRecommendedListEl.appendChild(createListItem('存储空间', recReq.storage));
+  if (recReq && Object.keys(recReq).length > 0) {
+    if (recReq.os) sysRecommendedListEl.appendChild(createCompactRow('系统', recReq.os, '💿 '));
+    if (recReq.processor) sysRecommendedListEl.appendChild(createCompactRow('CPU', recReq.processor, '🔲 '));
+    if (recReq.memory) sysRecommendedListEl.appendChild(createCompactRow('内存', recReq.memory, '📟 '));
+    if (recReq.graphics) sysRecommendedListEl.appendChild(createCompactRow('显卡', recReq.graphics, '🎨 '));
+    if (recReq.storage) sysRecommendedListEl.appendChild(createCompactRow('硬盘', recReq.storage, '💾 '));
+    
+    if (sysRecommendedListEl.children.length === 0) {
+      sysRecommendedListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无推荐配置数据</div>';
+    }
   } else {
-    sysRecommendedListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无推荐配置数据</li>';
+    sysRecommendedListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无推荐配置数据</div>';
   }
 }
 
@@ -447,8 +637,8 @@ async function fetchSteamRequirements(gameTitle, appid) {
     console.log(`正在获取 ${gameTitle} 的系统配置...`);
     
     // 显示加载状态
-    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</li>';
-    sysRecommendedListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</li>';
+    sysMinListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</div>';
+    sysRecommendedListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</div>';
     
     // 如果有 appid，直接使用本地代理服务器
     if (appid && typeof appid === 'number') {
@@ -507,17 +697,17 @@ function parseRequirementsHTML(htmlString) {
   const result = {};
   
   const patterns = {
-    os: /OS[:\s]*([^\n]+)/i,
-    processor: /Processor[:\s]*([^\n]+)/i,
-    memory: /Memory[:\s]*([^\n]+)/i,
-    graphics: /Graphics[:\s]*([^\n]+)/i,
-    storage: /Storage[:\s]*([^\n]+)/i,
+    os: /(?:OS|操作系统)[:\s：]*([^\n]+)/i,
+    processor: /(?:Processor|CPU|处理器)[:\s：]*([^\n]+)/i,
+    memory: /(?:Memory|RAM|内存)[:\s：]*([^\n]+)/i,
+    graphics: /(?:Graphics|GPU|显卡|图形)[:\s：]*([^\n]+)/i,
+    storage: /(?:Storage|Hard Drive|硬盘|存储空间)[:\s：]*([^\n]+)/i,
   };
   
   for (const [key, pattern] of Object.entries(patterns)) {
     const match = text.match(pattern);
     if (match && match[1]) {
-      result[key] = match[1].trim();
+      result[key] = match[1].trim().substring(0, 100); // 限制长度
     }
   }
   
@@ -531,7 +721,7 @@ async function loadDetail() {
   try {
     // 从真实游戏数据库获取游戏数据
     let game = null;
-    const allGames = window.megaGameDB.getAllGames();
+    const allGames = await window.megaGameDB.getAllGames();
     
     // 优先使用名称精确匹配（更准确）
     if (gameName) {
@@ -542,7 +732,7 @@ async function loadDetail() {
         const lowerName = gameName.toLowerCase();
         game = allGames.find(g => 
           g.name.toLowerCase().includes(lowerName) ||
-          g.title.toLowerCase().includes(lowerName)
+          (g.title && g.title.toLowerCase().includes(lowerName))
         );
       }
     }
@@ -555,10 +745,10 @@ async function loadDetail() {
     if (!game) {
       safeSetText(titleEl, "游戏未找到");
       safeSetText(descEl, "在游戏库中找不到该游戏，请返回重新选择。");
-      steamStatsList.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
-      steamReviewsList.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
-      sysMinListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
-      sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+      steamStatsList.innerHTML = '<div style="color: var(--danger);">游戏数据未找到</div>';
+      steamReviewsList.innerHTML = '<div style="color: var(--danger);">游戏数据未找到</div>';
+      sysMinListEl.innerHTML = '<div style="color: var(--danger);">游戏数据未找到</div>';
+      sysRecommendedListEl.innerHTML = '<div style="color: var(--danger);">游戏数据未找到</div>';
       return;
     }
 
@@ -570,7 +760,6 @@ async function loadDetail() {
     safeSetText(pubEl, game.publisher || "未知");
     safeSetText(dateEl, game.releaseDate || game.year || "未知");
     safeSetText(tagEl, game.category || game.genre || "游戏");
-    safeSetText(platformTagEl, game.platform || "PC (Windows)");
     
     // 游戏描述
     let description = game.short_description || `${game.name} 是一款由 ${game.developer || '未知'} 开发的 ${game.category || game.genre || ''} 游戏。`;
