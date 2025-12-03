@@ -42,6 +42,44 @@ const SUPABASE_CONFIG = {
 };
 
 // =============================================
+// 邮件服务配置 (用于发送真实验证码)
+// =============================================
+// 支持的服务:
+// 1. Resend (推荐, 免费 3000 封/月): https://resend.com
+// 2. EmailJS (免费 200 封/月): https://emailjs.com
+// 3. 自定义后端 API
+// =============================================
+
+const EMAIL_SERVICE_CONFIG = {
+  // 邮件服务提供商: 'resend' | 'emailjs' | 'custom' | 'demo'
+  provider: 'demo',
+  
+  // Resend 配置 (推荐)
+  // 免费版: 3000 封/月, 100 封/日
+  // 获取 API Key: https://resend.com/api-keys
+  resend: {
+    apiKey: '',  // 填入你的 Resend API Key
+    fromEmail: 'GameBox <onboarding@resend.dev>', // 发送者邮箱
+    // 自定义域名后可使用: 'GameBox <noreply@yourdomain.com>'
+  },
+  
+  // EmailJS 配置
+  // 免费版: 200 封/月
+  // 获取: https://www.emailjs.com/docs/sdk/installation/
+  emailjs: {
+    serviceId: '',
+    templateId: '',
+    publicKey: '',
+  },
+  
+  // 自定义后端 API 配置
+  custom: {
+    endpoint: '', // 你的后端 API 地址
+    // 后端需要处理发送邮件逻辑
+  }
+};
+
+// =============================================
 // Supabase 客户端初始化
 // =============================================
 
@@ -626,12 +664,36 @@ const GameBoxAuth = {
   
   // 发送邮箱验证码 (OTP)
   async sendEmailOTP(email) {
-    if (isSupabaseEnabled()) {
+    // 生成6位验证码
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpData = {
+      email: email.toLowerCase(),
+      code: code,
+      expires: Date.now() + 5 * 60 * 1000 // 5分钟过期
+    };
+    
+    // 保存验证码到本地 (用于验证)
+    localStorage.setItem('gamebox_email_otp', JSON.stringify(otpData));
+    
+    // 根据配置选择邮件服务
+    const provider = EMAIL_SERVICE_CONFIG.provider;
+    
+    if (provider === 'resend' && EMAIL_SERVICE_CONFIG.resend.apiKey) {
+      // 使用 Resend 发送真实邮件
+      return await this._sendEmailWithResend(email, code);
+    } else if (provider === 'emailjs' && EMAIL_SERVICE_CONFIG.emailjs.publicKey) {
+      // 使用 EmailJS 发送
+      return await this._sendEmailWithEmailJS(email, code);
+    } else if (provider === 'custom' && EMAIL_SERVICE_CONFIG.custom.endpoint) {
+      // 使用自定义后端
+      return await this._sendEmailWithCustomAPI(email, code);
+    } else if (isSupabaseEnabled()) {
+      // 使用 Supabase OTP
       try {
         const { data, error } = await supabaseClient.auth.signInWithOtp({
           email: email,
           options: {
-            shouldCreateUser: false // 仅验证邮箱，不创建用户
+            shouldCreateUser: false
           }
         });
         
@@ -645,23 +707,120 @@ const GameBoxAuth = {
         return { success: false, error: error.message };
       }
     } else {
-      // 本地模式模拟验证码
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      const otpData = {
-        email: email.toLowerCase(),
-        code: code,
-        expires: Date.now() + 5 * 60 * 1000 // 5分钟过期
-      };
-      localStorage.setItem('gamebox_email_otp', JSON.stringify(otpData));
-      
+      // 演示模式
       console.log(`[演示模式] 邮箱验证码: ${code}`);
       
       return {
         success: true,
-        message: '验证码已发送 (演示模式: 请在控制台查看验证码)',
-        // 演示模式下直接返回验证码
+        message: '验证码已发送 (演示模式: 请查看页面显示的验证码)',
         demoCode: code
       };
+    }
+  },
+  
+  // 使用 Resend 发送邮件
+  async _sendEmailWithResend(email, code) {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${EMAIL_SERVICE_CONFIG.resend.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: EMAIL_SERVICE_CONFIG.resend.fromEmail,
+          to: email,
+          subject: 'GameBox 游盒 - 邮箱验证码',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <div style="background: linear-gradient(135deg, #0a0f1a, #1a1f2e); padding: 30px; border-radius: 12px; text-align: center;">
+                <h1 style="color: #38bdf8; margin-bottom: 20px;">🎮 GameBox 游盒</h1>
+                <p style="color: #94a3b8; margin-bottom: 20px;">您的邮箱验证码是:</p>
+                <div style="background: rgba(56, 189, 248, 0.1); border: 2px solid #38bdf8; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                  <span style="font-size: 36px; font-weight: bold; color: #00ff88; letter-spacing: 8px;">${code}</span>
+                </div>
+                <p style="color: #64748b; font-size: 14px;">验证码有效期为 5 分钟，请尽快完成验证。</p>
+                <p style="color: #64748b; font-size: 12px; margin-top: 20px;">如果这不是您的操作，请忽略此邮件。</p>
+              </div>
+            </div>
+          `
+        })
+      });
+      
+      if (response.ok) {
+        return {
+          success: true,
+          message: '验证码已发送到您的邮箱，请查收'
+        };
+      } else {
+        const errorData = await response.json();
+        console.error('[Resend] 发送失败:', errorData);
+        return { success: false, error: '邮件发送失败，请稍后重试' };
+      }
+    } catch (error) {
+      console.error('[Resend] 请求错误:', error);
+      return { success: false, error: '网络错误，请稍后重试' };
+    }
+  },
+  
+  // 使用 EmailJS 发送邮件
+  async _sendEmailWithEmailJS(email, code) {
+    try {
+      // 需要在页面中引入 EmailJS SDK
+      if (typeof emailjs === 'undefined') {
+        console.error('[EmailJS] SDK 未加载');
+        return { success: false, error: '邮件服务未配置' };
+      }
+      
+      await emailjs.send(
+        EMAIL_SERVICE_CONFIG.emailjs.serviceId,
+        EMAIL_SERVICE_CONFIG.emailjs.templateId,
+        {
+          to_email: email,
+          verification_code: code,
+          app_name: 'GameBox 游盒'
+        },
+        EMAIL_SERVICE_CONFIG.emailjs.publicKey
+      );
+      
+      return {
+        success: true,
+        message: '验证码已发送到您的邮箱，请查收'
+      };
+    } catch (error) {
+      console.error('[EmailJS] 发送失败:', error);
+      return { success: false, error: '邮件发送失败，请稍后重试' };
+    }
+  },
+  
+  // 使用自定义 API 发送邮件
+  async _sendEmailWithCustomAPI(email, code) {
+    try {
+      const response = await fetch(EMAIL_SERVICE_CONFIG.custom.endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          code: code,
+          type: 'verification'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        return {
+          success: true,
+          message: '验证码已发送到您的邮箱，请查收'
+        };
+      } else {
+        return { success: false, error: data.error || '发送失败' };
+      }
+    } catch (error) {
+      console.error('[Custom API] 请求错误:', error);
+      return { success: false, error: '网络错误，请稍后重试' };
     }
   },
   
@@ -735,14 +894,25 @@ const GameBoxAuth = {
 
 const STEAM_CONFIG = {
   // Steam Web API Key (用户需要自行申请: https://steamcommunity.com/dev/apikey)
-  apiKey: '',
+  apiKey: 'ioa3301-bot',
   
   // 是否启用 Steam 集成
-  enabled: false,
+  enabled: true,
   
-  // CORS 代理 (由于浏览器限制，需要通过代理访问 Steam API)
-  // 可以使用自己的后端代理或公共代理服务
-  proxyUrl: 'https://api.allorigins.win/raw?url='
+  // CORS 代理列表 (按优先级排序，自动故障转移)
+  // 由于浏览器限制，需要通过代理访问 Steam API
+  proxyServers: [
+    { name: 'corsproxy.io', url: 'https://corsproxy.io/?', active: true },
+    { name: 'cors.lol', url: 'https://api.cors.lol/?url=', active: true },
+    { name: 'allorigins', url: 'https://api.allorigins.win/raw?url=', active: true },
+    { name: 'codetabs', url: 'https://api.codetabs.com/v1/proxy?quest=', active: true }
+  ],
+  
+  // 当前使用的代理索引
+  currentProxyIndex: 0,
+  
+  // 兼容旧配置
+  proxyUrl: 'https://corsproxy.io/?'
 };
 
 const SteamAPI = {
@@ -754,6 +924,55 @@ const SteamAPI = {
   // 检查是否启用
   isEnabled() {
     return STEAM_CONFIG.enabled && STEAM_CONFIG.apiKey;
+  },
+  
+  // 获取当前代理服务器
+  _getCurrentProxy() {
+    const activeProxies = STEAM_CONFIG.proxyServers.filter(p => p.active);
+    if (activeProxies.length === 0) {
+      return STEAM_CONFIG.proxyUrl; // 回退到默认
+    }
+    const index = STEAM_CONFIG.currentProxyIndex % activeProxies.length;
+    return activeProxies[index].url;
+  },
+  
+  // 切换到下一个代理
+  _switchToNextProxy() {
+    const activeProxies = STEAM_CONFIG.proxyServers.filter(p => p.active);
+    if (activeProxies.length > 1) {
+      STEAM_CONFIG.currentProxyIndex = (STEAM_CONFIG.currentProxyIndex + 1) % activeProxies.length;
+      console.log('[Steam API] 切换到代理:', activeProxies[STEAM_CONFIG.currentProxyIndex % activeProxies.length].name);
+    }
+  },
+  
+  // 带故障转移的请求
+  async _fetchWithFailover(url, maxRetries = 3) {
+    const activeProxies = STEAM_CONFIG.proxyServers.filter(p => p.active);
+    let lastError = null;
+    
+    for (let i = 0; i < Math.min(maxRetries, activeProxies.length); i++) {
+      const proxyUrl = this._getCurrentProxy();
+      const fullUrl = proxyUrl + encodeURIComponent(url);
+      
+      try {
+        const response = await fetch(fullUrl, {
+          timeout: 10000
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          return { success: true, data };
+        }
+        
+        throw new Error(`HTTP ${response.status}`);
+      } catch (error) {
+        console.warn(`[Steam API] 代理请求失败 (${this._getCurrentProxy()}):`, error.message);
+        lastError = error;
+        this._switchToNextProxy();
+      }
+    }
+    
+    return { success: false, error: lastError?.message || '所有代理服务器均不可用' };
   },
   
   // 从 Steam 个人资料 URL 提取 SteamID64
@@ -788,19 +1007,14 @@ const SteamAPI = {
         };
       }
       
-      // 调用 Steam API 解析
-      try {
-        const url = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_CONFIG.apiKey}&vanityurl=${vanityUrl}`;
-        const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
-        const data = await response.json();
-        
-        if (data.response && data.response.success === 1) {
-          return { success: true, steamId: data.response.steamid };
-        } else {
-          return { success: false, error: '无法解析该 Steam 个人资料' };
-        }
-      } catch (error) {
-        return { success: false, error: '解析失败: ' + error.message };
+      // 使用故障转移请求
+      const url = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_CONFIG.apiKey}&vanityurl=${vanityUrl}`;
+      const result = await this._fetchWithFailover(url);
+      
+      if (result.success && result.data.response && result.data.response.success === 1) {
+        return { success: true, steamId: result.data.response.steamid };
+      } else {
+        return { success: false, error: result.error || '无法解析该 Steam 个人资料' };
       }
     }
     
@@ -814,33 +1028,34 @@ const SteamAPI = {
       return this._getMockPlayerSummary(steamId);
     }
     
-    try {
-      const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_CONFIG.apiKey}&steamids=${steamId}`;
-      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
-      const data = await response.json();
-      
-      if (data.response && data.response.players && data.response.players.length > 0) {
-        const player = data.response.players[0];
-        return {
-          success: true,
-          player: {
-            steamId: player.steamid,
-            personaName: player.personaname,
-            profileUrl: player.profileurl,
-            avatar: player.avatarfull || player.avatarmedium || player.avatar,
-            personaState: player.personastate, // 0=离线, 1=在线, 2=忙碌, 3=离开, 4=打盹, 5=想交易, 6=想玩
-            visibility: player.communityvisibilitystate, // 1=私密, 3=公开
-            lastLogoff: player.lastlogoff,
-            gameId: player.gameid,
-            gameExtraInfo: player.gameextrainfo
-          }
-        };
-      }
-      
-      return { success: false, error: '未找到该用户' };
-    } catch (error) {
-      return { success: false, error: '获取用户信息失败: ' + error.message };
+    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_CONFIG.apiKey}&steamids=${steamId}`;
+    const result = await this._fetchWithFailover(url);
+    
+    if (result.success && result.data.response && result.data.response.players && result.data.response.players.length > 0) {
+      const player = result.data.response.players[0];
+      return {
+        success: true,
+        player: {
+          steamId: player.steamid,
+          personaName: player.personaname,
+          profileUrl: player.profileurl,
+          avatar: player.avatarfull || player.avatarmedium || player.avatar,
+          personaState: player.personastate, // 0=离线, 1=在线, 2=忙碌, 3=离开, 4=打盹, 5=想交易, 6=想玩
+          visibility: player.communityvisibilitystate, // 1=私密, 3=公开
+          lastLogoff: player.lastlogoff,
+          gameId: player.gameid,
+          gameExtraInfo: player.gameextrainfo
+        }
+      };
     }
+    
+    // 如果 API 请求失败，回退到模拟数据
+    if (!result.success) {
+      console.warn('[Steam API] API 请求失败，使用模拟数据');
+      return this._getMockPlayerSummary(steamId);
+    }
+    
+    return { success: false, error: '未找到该用户' };
   },
   
   // 获取拥有的游戏
@@ -850,36 +1065,37 @@ const SteamAPI = {
       return this._getMockOwnedGames(steamId);
     }
     
-    try {
-      let url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&format=json`;
-      if (includeAppInfo) url += '&include_appinfo=1';
-      if (includeFreeGames) url += '&include_played_free_games=1';
-      
-      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
-      const data = await response.json();
-      
-      if (data.response) {
-        const games = data.response.games || [];
-        return {
-          success: true,
-          gameCount: data.response.game_count || games.length,
-          games: games.map(game => ({
-            appId: game.appid,
-            name: game.name || `App ${game.appid}`,
-            playtimeForever: game.playtime_forever || 0, // 总游戏时间(分钟)
-            playtime2Weeks: game.playtime_2weeks || 0, // 最近两周游戏时间
-            imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
-            imgLogoUrl: game.img_logo_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg` : null,
-            // Steam 商店封面图
-            headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
-          }))
-        };
-      }
-      
-      return { success: false, error: '获取游戏库失败，可能是用户资料设为私密' };
-    } catch (error) {
-      return { success: false, error: '获取游戏库失败: ' + error.message };
+    let url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&format=json`;
+    if (includeAppInfo) url += '&include_appinfo=1';
+    if (includeFreeGames) url += '&include_played_free_games=1';
+    
+    const result = await this._fetchWithFailover(url);
+    
+    if (result.success && result.data.response) {
+      const games = result.data.response.games || [];
+      return {
+        success: true,
+        gameCount: result.data.response.game_count || games.length,
+        games: games.map(game => ({
+          appId: game.appid,
+          name: game.name || `App ${game.appid}`,
+          playtimeForever: game.playtime_forever || 0, // 总游戏时间(分钟)
+          playtime2Weeks: game.playtime_2weeks || 0, // 最近两周游戏时间
+          imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
+          imgLogoUrl: game.img_logo_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg` : null,
+          // Steam 商店封面图
+          headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
+        }))
+      };
     }
+    
+    // 如果 API 请求失败，回退到模拟数据
+    if (!result.success) {
+      console.warn('[Steam API] API 请求失败，使用模拟数据');
+      return this._getMockOwnedGames(steamId);
+    }
+    
+    return { success: false, error: '获取游戏库失败，可能是用户资料设为私密' };
   },
   
   // 获取最近游玩的游戏
@@ -888,31 +1104,32 @@ const SteamAPI = {
       return this._getMockRecentGames(steamId);
     }
     
-    try {
-      const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&count=${count}&format=json`;
-      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
-      const data = await response.json();
-      
-      if (data.response) {
-        const games = data.response.games || [];
-        return {
-          success: true,
-          totalCount: data.response.total_count || games.length,
-          games: games.map(game => ({
-            appId: game.appid,
-            name: game.name,
-            playtimeForever: game.playtime_forever || 0,
-            playtime2Weeks: game.playtime_2weeks || 0,
-            imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
-            headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
-          }))
-        };
-      }
-      
-      return { success: false, error: '获取最近游戏失败' };
-    } catch (error) {
-      return { success: false, error: error.message };
+    const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&count=${count}&format=json`;
+    const result = await this._fetchWithFailover(url);
+    
+    if (result.success && result.data.response) {
+      const games = result.data.response.games || [];
+      return {
+        success: true,
+        totalCount: result.data.response.total_count || games.length,
+        games: games.map(game => ({
+          appId: game.appid,
+          name: game.name,
+          playtimeForever: game.playtime_forever || 0,
+          playtime2Weeks: game.playtime_2weeks || 0,
+          imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
+          headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
+        }))
+      };
     }
+    
+    // 如果 API 请求失败，回退到模拟数据
+    if (!result.success) {
+      console.warn('[Steam API] API 请求失败，使用模拟数据');
+      return this._getMockRecentGames(steamId);
+    }
+    
+    return { success: false, error: '获取最近游戏失败' };
   },
   
   // 获取成就
@@ -921,29 +1138,24 @@ const SteamAPI = {
       return { success: false, error: '成就功能需要 Steam API Key' };
     }
     
-    try {
-      const url = `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${STEAM_CONFIG.apiKey}&steamid=${steamId}`;
-      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
-      const data = await response.json();
+    const url = `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${STEAM_CONFIG.apiKey}&steamid=${steamId}`;
+    const result = await this._fetchWithFailover(url);
+    
+    if (result.success && result.data.playerstats && result.data.playerstats.achievements) {
+      const achievements = result.data.playerstats.achievements;
+      const achieved = achievements.filter(a => a.achieved === 1).length;
       
-      if (data.playerstats && data.playerstats.achievements) {
-        const achievements = data.playerstats.achievements;
-        const achieved = achievements.filter(a => a.achieved === 1).length;
-        
-        return {
-          success: true,
-          gameName: data.playerstats.gameName,
-          achievements: achievements,
-          achievedCount: achieved,
-          totalCount: achievements.length,
-          completionRate: Math.round((achieved / achievements.length) * 100)
-        };
-      }
-      
-      return { success: false, error: '获取成就失败' };
-    } catch (error) {
-      return { success: false, error: error.message };
+      return {
+        success: true,
+        gameName: result.data.playerstats.gameName,
+        achievements: achievements,
+        achievedCount: achieved,
+        totalCount: achievements.length,
+        completionRate: Math.round((achieved / achievements.length) * 100)
+      };
     }
+    
+    return { success: false, error: result.error || '获取成就失败' };
   },
   
   // 格式化游戏时间
@@ -1158,10 +1370,149 @@ const UserDataManager = {
     }
     
     return this.linkSteam(userId, userData.steam.steamId);
+  },
+  
+  // =============================================
+  // Supabase 云端同步 (当 Supabase 启用时)
+  // =============================================
+  
+  // 同步本地数据到 Supabase
+  async syncToCloud(userId) {
+    if (!isSupabaseEnabled()) {
+      return { success: false, error: '云同步需要配置 Supabase' };
+    }
+    
+    const localData = this.getData(userId);
+    
+    try {
+      // 使用 upsert 更新或插入用户数据
+      const { data, error } = await supabaseClient
+        .from('user_profiles')
+        .upsert({
+          user_id: userId,
+          steam_data: localData.steam,
+          preferences: localData.preferences,
+          stats: localData.stats,
+          custom_avatar: localData.customAvatar || null,
+          bio: localData.bio || null,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
+        });
+      
+      if (error) throw error;
+      
+      console.log('[UserDataManager] 数据已同步到云端');
+      return { success: true, message: '数据已同步到云端' };
+    } catch (error) {
+      console.error('[UserDataManager] 云同步失败:', error);
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // 从 Supabase 拉取数据
+  async syncFromCloud(userId) {
+    if (!isSupabaseEnabled()) {
+      return { success: false, error: '云同步需要配置 Supabase' };
+    }
+    
+    try {
+      const { data, error } = await supabaseClient
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+      
+      if (data) {
+        // 合并云端数据到本地
+        const mergedData = {
+          ...this.getData(userId),
+          steam: data.steam_data || this._getDefaultData().steam,
+          preferences: data.preferences || this._getDefaultData().preferences,
+          stats: data.stats || this._getDefaultData().stats,
+          customAvatar: data.custom_avatar,
+          bio: data.bio,
+          lastCloudSync: new Date().toISOString()
+        };
+        
+        // 保存到本地
+        this.saveData(userId, mergedData);
+        
+        console.log('[UserDataManager] 已从云端同步数据');
+        return { success: true, data: mergedData, message: '数据已从云端同步' };
+      }
+      
+      return { success: true, message: '云端暂无数据' };
+    } catch (error) {
+      console.error('[UserDataManager] 从云端同步失败:', error);
+      return { success: false, error: error.message };
+    }
   }
 };
 
+// =============================================
+// Supabase 数据库表结构 (SQL)
+// 用户首次配置 Supabase 时，需要在 Supabase Dashboard
+// 的 SQL Editor 中执行以下 SQL 创建表
+// =============================================
+
+const SUPABASE_SCHEMA_SQL = `
+-- 创建用户资料表
+CREATE TABLE IF NOT EXISTS user_profiles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
+  steam_data JSONB DEFAULT '{}',
+  preferences JSONB DEFAULT '{"theme": "cyberpunk", "notifications": true, "publicProfile": true}',
+  stats JSONB DEFAULT '{"ownedGames": 0, "wishlistGames": 0, "totalPlaytime": 0, "achievements": 0}',
+  custom_avatar TEXT,
+  bio TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
+
+-- 启用 Row Level Security (RLS)
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+
+-- 创建策略：用户只能访问自己的数据
+CREATE POLICY "Users can view own profile" ON user_profiles
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own profile" ON user_profiles
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own profile" ON user_profiles
+  FOR UPDATE USING (auth.uid() = user_id);
+
+-- 创建更新时间自动更新触发器
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = TIMEZONE('utc', NOW());
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_user_profiles_updated_at
+  BEFORE UPDATE ON user_profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+`;
+
 // 导出
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { GameBoxAuth, SUPABASE_CONFIG, LOCAL_AUTH, SteamAPI, STEAM_CONFIG, UserDataManager };
+  module.exports = { 
+    GameBoxAuth, 
+    SUPABASE_CONFIG, 
+    LOCAL_AUTH, 
+    SteamAPI, 
+    STEAM_CONFIG, 
+    UserDataManager,
+    EMAIL_SERVICE_CONFIG,
+    SUPABASE_SCHEMA_SQL
+  };
 }
