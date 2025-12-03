@@ -495,6 +495,8 @@
 <!-- 🎮 5000款真实Steam游戏数据库 -->
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
+<script src="chinese-game-names.js"></script>
+<script src="multi-platform-games.js"></script>
 <script>
 // 初始化通用逻辑（导航高亮）
 initCommon();
@@ -729,18 +731,77 @@ async function loadDetail() {
   try {
     // 从真实游戏数据库获取游戏数据
     let game = null;
-    const allGames = await window.megaGameDB.getAllGames();
+    
+    // 加载Steam游戏数据
+    const steamGames = await window.megaGameDB.getAllGames();
+    
+    // 加载多平台游戏数据
+    const multiPlatformGames = window.multiPlatformGames ? window.multiPlatformGames.all : [];
+    
+    // 合并所有游戏数据
+    const allGames = [
+      ...steamGames,
+      ...multiPlatformGames.map(g => ({
+        id: g.id,
+        appid: g.id,
+        name: g.name,
+        chineseName: g.chineseName,
+        genre: g.genre,
+        rating: g.rating,
+        price: g.price,
+        year: g.year,
+        platform: g.platform,
+        thumbnail: g.cover,
+        developer: 'Official',
+        publisher: 'Official',
+        releaseDate: g.year,
+        category: g.genre,
+        short_description: `${g.name} is a ${g.genre} game released in ${g.year}.`,
+        source: g.platform.includes(',') ? 'Multi-Platform' : g.platform
+      }))
+    ];
+    
+    console.log(`✅ 游戏详情页加载 ${allGames.length} 款游戏（Steam: ${steamGames.length}, 多平台: ${multiPlatformGames.length}）`);
     
     // 优先使用名称精确匹配（更准确）
     if (gameName) {
       game = window.megaGameDB.getGameByName(gameName);
+      
+      // 如果在Steam数据库没找到，搜索多平台游戏
+      if (!game && multiPlatformGames.length > 0) {
+        const foundMulti = multiPlatformGames.find(g => 
+          g.name.toLowerCase() === gameName.toLowerCase() ||
+          (g.chineseName && g.chineseName === gameName)
+        );
+        if (foundMulti) {
+          game = {
+            id: foundMulti.id,
+            appid: foundMulti.id,
+            name: foundMulti.name,
+            chineseName: foundMulti.chineseName,
+            genre: foundMulti.genre,
+            rating: foundMulti.rating,
+            price: foundMulti.price,
+            year: foundMulti.year,
+            platform: foundMulti.platform,
+            thumbnail: foundMulti.cover,
+            developer: 'Official',
+            publisher: 'Official',
+            releaseDate: foundMulti.year,
+            category: foundMulti.genre,
+            short_description: `${foundMulti.name} is a ${foundMulti.genre} game released in ${foundMulti.year}.`,
+            source: foundMulti.platform.includes(',') ? 'Multi-Platform' : foundMulti.platform
+          };
+        }
+      }
       
       // 如果精确匹配失败，尝试模糊匹配
       if (!game) {
         const lowerName = gameName.toLowerCase();
         game = allGames.find(g => 
           g.name.toLowerCase().includes(lowerName) ||
-          (g.title && g.title.toLowerCase().includes(lowerName))
+          (g.title && g.title.toLowerCase().includes(lowerName)) ||
+          (g.chineseName && g.chineseName.includes(gameName))
         );
       }
     }
@@ -748,6 +809,31 @@ async function loadDetail() {
     // 如果名称匹配失败，再尝试用ID查找
     if (!game && gameId) {
       game = window.megaGameDB.getGameById(gameId);
+      
+      // 搜索多平台游戏
+      if (!game && multiPlatformGames.length > 0) {
+        const foundMulti = multiPlatformGames.find(g => g.id === gameId);
+        if (foundMulti) {
+          game = {
+            id: foundMulti.id,
+            appid: foundMulti.id,
+            name: foundMulti.name,
+            chineseName: foundMulti.chineseName,
+            genre: foundMulti.genre,
+            rating: foundMulti.rating,
+            price: foundMulti.price,
+            year: foundMulti.year,
+            platform: foundMulti.platform,
+            thumbnail: foundMulti.cover,
+            developer: 'Official',
+            publisher: 'Official',
+            releaseDate: foundMulti.year,
+            category: foundMulti.genre,
+            short_description: `${foundMulti.name} is a ${foundMulti.genre} game released in ${foundMulti.year}.`,
+            source: foundMulti.platform.includes(',') ? 'Multi-Platform' : foundMulti.platform
+          };
+        }
+      }
     }
 
     if (!game) {

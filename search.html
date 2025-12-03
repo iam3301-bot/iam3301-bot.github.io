@@ -526,6 +526,7 @@
 <script src="chinese-game-names.js"></script>
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
+<script src="multi-platform-games.js"></script>
 <script>
   initCommon();
 
@@ -536,7 +537,33 @@
   // 加载游戏数据
   async function loadGames() {
     try {
-      allGames = await window.megaGameDB.getAllGames();
+      // 加载Steam游戏数据
+      const steamGames = await window.megaGameDB.getAllGames();
+      console.log(`✅ Steam游戏: ${steamGames.length} 款`);
+      
+      // 加载多平台游戏数据
+      const multiPlatformGames = window.multiPlatformGames ? window.multiPlatformGames.all : [];
+      console.log(`✅ 多平台游戏: ${multiPlatformGames.length} 款`);
+      
+      // 合并数据
+      allGames = [
+        ...steamGames,
+        ...multiPlatformGames.map(game => ({
+          id: game.id,
+          appid: game.id,
+          name: game.name,
+          chineseName: game.chineseName,
+          genre: game.genre,
+          rating: game.rating,
+          price: game.price,
+          year: game.year,
+          platform: game.platform,
+          cover: game.cover,
+          thumbnail: game.cover,
+          source: game.platform.includes(',') ? 'Multi-Platform' : game.platform
+        }))
+      ];
+      
       console.log(`✅ 加载了 ${allGames.length} 款游戏`);
       
       // 为每个游戏添加中文名
