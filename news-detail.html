@@ -313,7 +313,35 @@
     'event': '活动/赛事'
   };
   
-  // 游戏图标映射
+  // 游戏封面图片映射（与news-list.html保持一致）
+  const gameCoverImages = {
+    '艾尔登法环': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
+    '赛博朋克2077': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg',
+    '博德之门3': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
+    '荒野大镖客2': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg',
+    'Dota 2': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570/header.jpg',
+    'CS2': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
+    '战神': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg',
+    '只狼': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/814380/header.jpg',
+    '塞尔达传说': 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
+    '原神': 'https://webstatic.hoyoverse.com/upload/event/2020/11/11/3bf483f7ae6c274c52ecdf1d922e0e7d_7166511990095952130.jpg',
+    'GTA 6': 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/ak73k52o94598a/c79e2f870d22444a9bd3bdda33ba96da.jpg',
+    '星空': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1716740/header.jpg',
+    '空洞骑士': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg',
+    '英雄联盟': 'https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blt7cd7f2a1d317cc6f/6229e6430b1f095c7e5e2e33/LOL_PromoImage_ClientOG.jpg',
+    '怪物猎人': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg',
+    '最终幻想16': 'https://gmedia.playstation.com/is/image/SIEPDC/final-fantasy-xvi-hero-banner-desktop-01-en-04may23',
+    '霍格沃茨之遗': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/990080/header.jpg',
+    '生化危机4': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg',
+    '女神异闻录5': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1687950/header.jpg',
+    '暗黑破坏神4': 'https://blz-contentstack-images.akamaized.net/v3/assets/blt0e00eb71333df64e/blt2b0d26431d8067d1/64c1ec10e6d14d3a2e88e0d1/D4-S1-KeyArt-16x9-L-enUS.jpg',
+    '守望先锋2': 'https://blz-contentstack-images.akamaized.net/v3/assets/blt9c12f249ac15c7ec/bltbfd24eb5eda1e29e/62d24ee5a1e7c50fd732dd4d/OW_Group_Key_Art.jpg',
+    '我的世界': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1794680/header.jpg',
+    '黑神话：悟空': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2358720/header.jpg',
+    '永劫无间': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1608800/header.jpg'
+  };
+  
+  // 游戏图标映射（作为备用）
   const gameIcons = {
     '艾尔登法环': '⚔️',
     '赛博朋克2077': '🌃',
@@ -493,13 +521,22 @@
     const typeIcon = typeIcons[currentNews.type] || '📰';
     const typeName = typeNames[currentNews.type] || '资讯';
     const gameIcon = gameIcons[currentNews.game] || '🎮';
+    const gameCover = gameCoverImages[currentNews.game] || gameCoverImages[currentNews.gameEn] || null;
     
     // 更新页面标题
     document.title = `${currentNews.title} - GameBox 游盒`;
     
     // 主体内容
     document.getElementById('newsTitle').textContent = currentNews.title;
-    document.getElementById('newsIcon').textContent = gameIcon;
+    
+    // 设置封面图片或图标
+    const newsIconEl = document.getElementById('newsIcon');
+    if (gameCover) {
+      newsIconEl.innerHTML = `<img src="${gameCover}" alt="${currentNews.game}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.parentElement.textContent='${gameIcon}';" />`;
+    } else {
+      newsIconEl.textContent = gameIcon;
+    }
+    
     document.getElementById('newsType').textContent = `${typeIcon} ${typeName}`;
     document.getElementById('newsGame').textContent = currentNews.game;
     document.getElementById('newsDate').textContent = currentNews.date;
