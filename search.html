@@ -2,17 +2,313 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 搜索结果</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Cyberpunk Fonts -->
+  <title>GameBox 游盒 - 高级搜索</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 高级搜索页面样式 */
+    .search-hero {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.1) 0%, rgba(255, 61, 148, 0.05) 100%);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .search-main-input {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+    
+    .search-main-input input {
+      width: 100%;
+      padding: 16px 60px 16px 20px;
+      font-size: 18px;
+      border: 2px solid rgba(255, 211, 0, 0.4);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      color: var(--text-main);
+    }
+    
+    .search-main-input button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 10px 24px;
+      background: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-pink));
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .search-main-input button:hover {
+      transform: translateY(-50%) scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.6);
+    }
+    
+    .search-tips {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    
+    .search-tip {
+      padding: 6px 14px;
+      background: rgba(85, 234, 212, 0.15);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--cyber-cyan);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .search-tip:hover {
+      background: rgba(85, 234, 212, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    /* 高级筛选面板 */
+    .filter-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .filter-group {
+      background: rgba(10, 10, 10, 0.6);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    
+    .filter-group-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyber-yellow);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-option:hover {
+      background: rgba(255, 211, 0, 0.1);
+    }
+    
+    .filter-option input[type="checkbox"] {
+      margin: 0;
+    }
+    
+    .filter-option label {
+      flex: 1;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    
+    .filter-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* 搜索结果 */
+    .search-results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .result-count {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .result-count strong {
+      color: var(--cyber-yellow);
+      font-size: 18px;
+    }
+    
+    .sort-selector {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .view-mode {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 6px;
+    }
+    
+    .view-btn {
+      padding: 6px 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .view-btn.active {
+      background: rgba(255, 211, 0, 0.2);
+      color: var(--cyber-yellow);
+    }
+    
+    /* 列表视图 */
+    .search-results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .result-item {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(20, 0, 30, 0.85) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .result-item:hover {
+      border-color: rgba(255, 211, 0, 0.5);
+      transform: translateX(5px);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+    }
+    
+    .result-cover {
+      width: 140px;
+      height: 85px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .result-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .result-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .result-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .result-chinese {
+      font-size: 14px;
+      color: var(--cyber-cyan);
+    }
+    
+    .result-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .result-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .result-tag {
+      padding: 3px 8px;
+      background: rgba(85, 234, 212, 0.15);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--cyber-cyan);
+    }
+    
+    .result-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      min-width: 100px;
+    }
+    
+    .result-rating {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--cyber-yellow);
+      text-shadow: 0 0 10px rgba(255, 211, 0, 0.5);
+    }
+    
+    .result-platform {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* 响应式 */
+    @media (max-width: 900px) {
+      .result-item {
+        grid-template-columns: 100px 1fr;
+      }
+      
+      .result-stats {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  </style>
 </head>
-<body class="cyberpunk-theme">
+<body data-current-page="search" class="cyberpunk-theme">
 <div class="page">
-  <!-- 顶部导航 -->
   <header class="header">
     <div class="header-inner">
       <a href="index.html" class="logo">
@@ -22,7 +318,6 @@
           <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
         </div>
       </a>
-
       <nav class="nav-main">
         <a href="index.html" data-page="home" class="nav-link">首页</a>
         <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
@@ -36,7 +331,6 @@
         <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
         <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
       </nav>
-
       <div class="header-right">
         <div class="header-search">
           <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
@@ -46,8 +340,7 @@
       </div>
     </div>
   </header>
-
-  <!-- Cyberpunk Effects -->
+  
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
   <div id="scroll-progress" class="scroll-progress"></div>
@@ -58,348 +351,414 @@
     </div>
   </div>
 
-  <main class="main">
-    <section>
-      <div class="card">
-        <div class="page-title">搜索结果</div>
-        <div class="page-intro">
-          关键词：<strong id="searchKeyword">（空）</strong>
+  <main class="main main--wide">
+    <!-- 搜索主区域 -->
+    <div class="search-hero">
+      <h1 style="font-family: 'Orbitron', sans-serif; font-size: 32px; color: var(--cyber-yellow); margin-bottom: 16px;">
+        🔍 高级游戏搜索
+      </h1>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+        支持中英文混合搜索 · 5000+ 真实游戏数据 · 智能拼音匹配
+      </p>
+      
+      <div class="search-main-input">
+        <input 
+          id="mainSearchInput" 
+          type="text" 
+          placeholder="搜索游戏名称，支持中文、英文、拼音首字母..." 
+          autofocus
+        />
+        <button onclick="performSearch()">搜索</button>
+      </div>
+      
+      <div class="search-tips">
+        <span class="search-tip" onclick="quickSearch('艾尔登法环')">🔥 艾尔登法环</span>
+        <span class="search-tip" onclick="quickSearch('赛博朋克')">🌆 赛博朋克</span>
+        <span class="search-tip" onclick="quickSearch('黑神话')">🐵 黑神话悟空</span>
+        <span class="search-tip" onclick="quickSearch('原神')">⚡ 原神</span>
+        <span class="search-tip" onclick="quickSearch('博德之门')">🎲 博德之门3</span>
+        <span class="search-tip" onclick="quickSearch('空洞骑士')">🪲 空洞骑士</span>
+      </div>
+    </div>
+
+    <!-- 高级筛选面板 -->
+    <div class="card">
+      <header class="card-header">
+        <div class="card-title">
+          <span class="dot"></span><span>// ADVANCED FILTERS</span>
+        </div>
+        <button class="cyber-btn cyber-btn--cyan" onclick="resetFilters()" style="padding: 8px 20px; font-size: 11px;">
+          重置筛选
+        </button>
+      </header>
+      
+      <div class="filter-panel" id="filterPanel">
+        <!-- 发行年份 -->
+        <div class="filter-group">
+          <div class="filter-group-title">📅 发行年份</div>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="year2025" value="2025">
+              <label for="year2025">2025年 <span class="filter-count" id="count2025">NEW</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="year2024" value="2024">
+              <label for="year2024">2024年 <span class="filter-count" id="count2024"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="year2023" value="2023">
+              <label for="year2023">2023年 <span class="filter-count" id="count2023"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="year2022-2020" value="2022-2020">
+              <label for="year2022-2020">2020-2022年 <span class="filter-count" id="count2022-2020"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="year2019-2015" value="2019-2015">
+              <label for="year2019-2015">2015-2019年 <span class="filter-count" id="count2019-2015"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="yearOlder" value="older">
+              <label for="yearOlder">2015年之前 <span class="filter-count" id="countOlder"></span></label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 游戏类型 -->
+        <div class="filter-group">
+          <div class="filter-group-title">🎮 游戏类型</div>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="typeAction" value="Action">
+              <label for="typeAction">动作 <span class="filter-count" id="countAction"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="typeRPG" value="RPG">
+              <label for="typeRPG">角色扮演 <span class="filter-count" id="countRPG"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="typeStrategy" value="Strategy">
+              <label for="typeStrategy">策略 <span class="filter-count" id="countStrategy"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="typeShooter" value="Shooter">
+              <label for="typeShooter">射击 <span class="filter-count" id="countShooter"></span></label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 平台 -->
+        <div class="filter-group">
+          <div class="filter-group-title">💻 游戏平台</div>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="platformSteam" value="Steam">
+              <label for="platformSteam">Steam <span class="filter-count" id="countSteam"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="platformPS" value="PlayStation">
+              <label for="platformPS">PlayStation <span class="filter-count" id="countPS"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="platformXbox" value="Xbox">
+              <label for="platformXbox">Xbox <span class="filter-count" id="countXbox"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="platformSwitch" value="Switch">
+              <label for="platformSwitch">Switch <span class="filter-count" id="countSwitch"></span></label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 评分 -->
+        <div class="filter-group">
+          <div class="filter-group-title">⭐ 评分范围</div>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="rating95" value="95">
+              <label for="rating95">9.5+ 神作 <span class="filter-count" id="count95"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="rating90" value="90">
+              <label for="rating90">9.0+ 杰作 <span class="filter-count" id="count90"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="rating80" value="80">
+              <label for="rating80">8.0+ 佳作 <span class="filter-count" id="count80"></span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="rating70" value="70">
+              <label for="rating70">7.0+ 好评 <span class="filter-count" id="count70"></span></label>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>游戏匹配</span>
-          </div>
-        </header>
-        <div id="searchGames"></div>
-      </div>
-
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>资讯匹配</span>
-          </div>
-        </header>
-        <div id="searchNews" style="max-height: 400px; overflow-y: auto;"></div>
-      </div>
-
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>社区帖子匹配</span>
-          </div>
-        </header>
-        <div id="searchPosts" style="max-height: 400px; overflow-y: auto;"></div>
-      </div>
-    </section>
-
-    <aside>
-      <div class="sidebar-card">
-        <div class="sidebar-title">提示</div>
-        <div class="sidebar-item">
-          <span class="label">顶部搜索框也可以重新输入关键字</span>
+    <!-- 搜索结果 -->
+    <div class="card">
+      <div class="search-results-header">
+        <div class="result-count">
+          找到 <strong id="resultCount">0</strong> 款游戏
+        </div>
+        <div class="sort-selector">
+          <select id="sortSelect" onchange="sortResults()" style="padding: 8px 12px;">
+            <option value="relevance">相关度</option>
+            <option value="rating">评分最高</option>
+            <option value="name">名称排序</option>
+            <option value="year">发行时间</option>
+          </select>
         </div>
       </div>
-    </aside>
+      
+      <div class="search-results-list" id="searchResults">
+        <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+          <div style="font-size: 64px; margin-bottom: 16px;">🔍</div>
+          <div style="font-size: 16px;">输入关键词开始搜索...</div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
-
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="mega-game-database.js"></script>
-<script src="news-api.js"></script>
+<script src="chinese-game-names.js"></script>
+<script src="real-5000-games-database.js"></script>
+<script src="mega-game-database-real.js"></script>
 <script>
   initCommon();
 
-  const searchKeyword = document.getElementById("searchKeyword");
-  const searchGames = document.getElementById("searchGames");
-  const searchNews = document.getElementById("searchNews");
-  const searchPosts = document.getElementById("searchPosts");
+  let allGames = [];
+  let filteredResults = [];
+  let currentSort = 'relevance';
 
-  let gamesData = [];
-  let newsData = [];
-  let postsData = [];
-  let isDataLoaded = false;
-
-  // 分页状态
-  let gamesPage = 0;
-  let newsPage = 0;
-  let postsPage = 0;
-  const PAGE_SIZE = 10;
-  
-  let filteredGames = [];
-  let filteredNews = [];
-  let filteredPosts = [];
-
-  // 获取 URL 参数中的关键词
-  function getKeyword() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("q") || "";
-  }
-
-  // 加载所有数据
-  async function loadAllData() {
+  // 加载游戏数据
+  async function loadGames() {
     try {
-      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🎮 加载中...</div>';
-      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">📰 加载中...</div>';
-      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">💬 加载中...</div>';
-
-      // 并行加载所有数据
-      const [games, news] = await Promise.all([
-        window.megaGameDB.getAllGames(),
-        window.newsAPI.getAllNews()
-      ]);
-
-      gamesData = games.map(g => ({
-        name: g.title || g.name,
-        desc: `${g.genre} · ${g.platform.split(',')[0].trim()} · ${g.publisher}`,
-        url: `game-detail.html?id=${g.id}&name=${encodeURIComponent(g.name)}`,
-        cover: g.thumbnail,
-        genre: g.genre,
-        publisher: g.publisher,
-        rating: g.rating,
-        price: g.price,
-        short_description: g.short_description
-      }));
-
-      newsData = news.map(n => ({
-        title: n.title,
-        summary: n.summary,
-        url: `news-detail.html?id=${n.id}`,
-        game: n.game,
-        type: n.type,
-        date: n.date
-      }));
-
-      // 生成社区帖子数据
-      postsData = generatePostsData();
-
-      console.log(`✅ 搜索数据加载完成：${gamesData.length} 游戏，${newsData.length} 新闻，${postsData.length} 帖子`);
-      isDataLoaded = true;
-      performSearch();
-    } catch (err) {
-      console.error("加载数据失败:", err);
-      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
-      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
-      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 加载失败</div>';
-    }
-  }
-
-  // 生成社区帖子数据
-  function generatePostsData() {
-    const boards = ["综合讨论", "攻略心得", "截图分享", "求助问答"];
-    const topics = [
-      "新手入门指南", "配置推荐", "通关心得", "彩蛋发现", 
-      "隐藏Boss攻略", "速通技巧", "MOD推荐", "联机组队",
-      "剧情讨论", "结局解析", "人物分析", "世界观探讨"
-    ];
-    
-    const posts = [];
-    gamesData.slice(0, 200).forEach(game => {
-      for (let i = 0; i < 5; i++) {
-        const board = boards[Math.floor(Math.random() * boards.length)];
-        const topic = topics[Math.floor(Math.random() * topics.length)];
-        posts.push({
-          title: `【${board}】《${game.name}》${topic}`,
-          board: board,
-          author: `玩家${Math.floor(Math.random() * 10000)}`,
-          replies: Math.floor(Math.random() * 500),
-          views: Math.floor(Math.random() * 5000),
-          url: `post-detail.html?id=post-${posts.length}`
-        });
+      allGames = await window.megaGameDB.getAllGames();
+      console.log(`✅ 加载了 ${allGames.length} 款游戏`);
+      
+      // 为每个游戏添加中文名
+      allGames.forEach(game => {
+        game.chineseName = window.getChineseName(game.name || game.title);
+      });
+      
+      // URL参数搜索
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      if (query) {
+        document.getElementById('mainSearchInput').value = query;
+        performSearch();
       }
-    });
-    return posts;
+    } catch (error) {
+      console.error('加载游戏数据失败:', error);
+    }
   }
 
   // 执行搜索
   function performSearch() {
-    if (!isDataLoaded) return;
-
-    const kw = getKeyword().trim().toLowerCase();
-    searchKeyword.textContent = kw || "（空）";
-
-    if (!kw) {
-      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
-      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
-      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 请输入搜索关键词</div>';
+    const query = document.getElementById('mainSearchInput').value.trim();
+    
+    if (!query) {
+      document.getElementById('searchResults').innerHTML = `
+        <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+          <div style="font-size: 64px; margin-bottom: 16px;">🔍</div>
+          <div style="font-size: 16px;">请输入搜索关键词</div>
+        </div>
+      `;
       return;
     }
-
-    // 筛选数据
-    filteredGames = gamesData.filter(g => {
-      const text = `${g.name} ${g.desc} ${g.genre} ${g.publisher} ${g.short_description}`.toLowerCase();
-      return text.includes(kw);
-    });
-
-    filteredNews = newsData.filter(n => {
-      const text = `${n.title} ${n.summary} ${n.game}`.toLowerCase();
-      return text.includes(kw);
-    });
-
-    filteredPosts = postsData.filter(p => {
-      const text = `${p.title} ${p.board}`.toLowerCase();
-      return text.includes(kw);
-    });
-
-    console.log(`🔍 搜索"${kw}"结果：${filteredGames.length} 游戏，${filteredNews.length} 新闻，${filteredPosts.length} 帖子`);
-
-    // 重置分页并渲染
-    gamesPage = 0;
-    newsPage = 0;
-    postsPage = 0;
     
-    searchGames.innerHTML = "";
-    searchNews.innerHTML = "";
-    searchPosts.innerHTML = "";
+    // 搜索游戏
+    filteredResults = allGames.filter(game => {
+      return window.searchGameName(query, game.name || game.title);
+    });
     
-    renderGames();
-    renderNews();
-    renderPosts();
+    // 应用筛选器
+    applyFilters();
+    
+    // 显示结果
+    displayResults();
   }
 
-  // 渲染游戏结果
-  function renderGames() {
-    const startIdx = gamesPage * PAGE_SIZE;
-    const endIdx = startIdx + PAGE_SIZE;
-    const pageItems = filteredGames.slice(startIdx, endIdx);
+  // 快速搜索
+  function quickSearch(keyword) {
+    document.getElementById('mainSearchInput').value = keyword;
+    performSearch();
+  }
 
-    if (gamesPage === 0 && !filteredGames.length) {
-      searchGames.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关游戏</div>';
+  // 应用筛选器
+  function applyFilters() {
+    let results = [...filteredResults];
+    
+    // 年份筛选
+    const yearChecks = {
+      '2025': document.getElementById('year2025')?.checked,
+      '2024': document.getElementById('year2024')?.checked,
+      '2023': document.getElementById('year2023')?.checked,
+      '2022-2020': document.getElementById('year2022-2020')?.checked,
+      '2019-2015': document.getElementById('year2019-2015')?.checked,
+      'older': document.getElementById('yearOlder')?.checked
+    };
+    
+    const hasYearFilter = Object.values(yearChecks).some(v => v);
+    
+    if (hasYearFilter) {
+      results = results.filter(game => {
+        const year = game.year || (game.releaseDate ? new Date(game.releaseDate).getFullYear() : null) || 2020;
+        
+        if (yearChecks['2025'] && year === 2025) return true;
+        if (yearChecks['2024'] && year === 2024) return true;
+        if (yearChecks['2023'] && year === 2023) return true;
+        if (yearChecks['2022-2020'] && year >= 2020 && year <= 2022) return true;
+        if (yearChecks['2019-2015'] && year >= 2015 && year <= 2019) return true;
+        if (yearChecks['older'] && year < 2015) return true;
+        
+        return false;
+      });
+    }
+    
+    // 类型筛选
+    const typeChecks = {
+      'Action': document.getElementById('typeAction')?.checked,
+      'RPG': document.getElementById('typeRPG')?.checked,
+      'Strategy': document.getElementById('typeStrategy')?.checked,
+      'Shooter': document.getElementById('typeShooter')?.checked
+    };
+    
+    const hasTypeFilter = Object.values(typeChecks).some(v => v);
+    
+    if (hasTypeFilter) {
+      results = results.filter(game => {
+        const genre = (game.genre || game.category || '').toLowerCase();
+        const tags = (game.tags || []).map(t => t.toLowerCase());
+        
+        if (typeChecks['Action'] && (genre.includes('action') || tags.some(t => t.includes('action')))) return true;
+        if (typeChecks['RPG'] && (genre.includes('rpg') || tags.some(t => t.includes('rpg')))) return true;
+        if (typeChecks['Strategy'] && (genre.includes('strategy') || tags.some(t => t.includes('strategy')))) return true;
+        if (typeChecks['Shooter'] && (genre.includes('shooter') || tags.some(t => t.includes('shooter')))) return true;
+        
+        return false;
+      });
+    }
+    
+    // 评分筛选
+    const minRating = parseFloat(document.getElementById('ratingFilter')?.value || 0);
+    if (minRating > 0) {
+      results = results.filter(game => (game.rating || 0) >= minRating);
+    }
+    
+    filteredResults = results;
+  }
+
+  // 显示结果
+  function displayResults() {
+    const container = document.getElementById('searchResults');
+    const countEl = document.getElementById('resultCount');
+    
+    countEl.textContent = filteredResults.length;
+    
+    if (filteredResults.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+          <div style="font-size: 64px; margin-bottom: 16px;">😔</div>
+          <div style="font-size: 16px;">未找到符合条件的游戏</div>
+          <div style="font-size: 13px; margin-top: 8px; opacity: 0.7;">尝试调整搜索关键词或筛选条件</div>
+        </div>
+      `;
       return;
     }
-
-    pageItems.forEach(g => {
-      const div = document.createElement("div");
-      div.className = "search-item";
-      div.style.cursor = "pointer";
+    
+    // 排序
+    sortResultsList();
+    
+    // 渲染
+    container.innerHTML = filteredResults.map(game => {
+      const rating = (game.rating || 0).toFixed(1);
+      const chineseName = game.chineseName || '';
+      const showChinese = chineseName && chineseName !== game.name;
       
-      const coverImg = g.cover 
-        ? `<img src="${g.cover}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'" />` 
-        : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">🎮</div>';
-      
-      const priceTag = g.price === 0 ? '<span style="color:var(--success);">免费</span>' : `¥${g.price}`;
-      
-      div.innerHTML = `
-        <div style="display:flex;gap:12px;align-items:center;">
-          <div style="width:80px;height:80px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#1a1a2e;">
-            ${coverImg}
+      return `
+        <div class="result-item" onclick="goToGame('${game.id || game.appid}', '${(game.name || game.title).replace(/'/g, "\\'")}')">
+          <div class="result-cover">
+            <img src="${game.thumbnail || game.cover || ''}" alt="${game.name}" 
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 60%22><rect fill=%22%231a1a2e%22 width=%22100%22 height=%2260%22/><text x=%2250%22 y=%2235%22 fill=%22%23FFD300%22 font-size=%2220%22 text-anchor=%22middle%22>🎮</text></svg>'" />
           </div>
-          <div style="flex:1;">
-            <div class="search-title">🎮 ${g.name}</div>
-            <div class="search-excerpt">${g.desc}</div>
-            <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;">
-              <span style="color:var(--accent);">⭐ ${g.rating}</span>
-              <span>${priceTag}</span>
+          <div class="result-info">
+            <div class="result-title">
+              ${game.name || game.title}
+              ${showChinese ? `<span class="result-chinese">${chineseName}</span>` : ''}
             </div>
+            <div class="result-meta">
+              <span>🎯 ${game.genre || game.category || '游戏'}</span>
+              <span>📅 ${game.year || '未知'}</span>
+              <span>💰 ${game.price > 0 ? '¥' + game.price : '免费'}</span>
+            </div>
+            <div class="result-tags">
+              ${game.platform ? `<span class="result-tag">💻 ${game.platform.split(',')[0].trim()}</span>` : ''}
+              ${game.source ? `<span class="result-tag">📊 ${game.source}</span>` : ''}
+            </div>
+          </div>
+          <div class="result-stats">
+            <div class="result-rating">${rating}</div>
+            <div class="result-platform">${game.platform || 'PC'}</div>
           </div>
         </div>
       `;
-      div.addEventListener("click", () => window.location.href = g.url);
-      div.addEventListener("mouseenter", () => {
-        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
-        div.style.transition = "all 0.3s ease";
-      });
-      div.addEventListener("mouseleave", () => {
-        div.style.backgroundColor = "";
-      });
-      searchGames.appendChild(div);
-    });
-
-    gamesPage++;
+    }).join('');
   }
 
-  // 渲染新闻结果
-  function renderNews() {
-    const startIdx = newsPage * PAGE_SIZE;
-    const endIdx = startIdx + PAGE_SIZE;
-    const pageItems = filteredNews.slice(startIdx, endIdx);
-
-    if (newsPage === 0 && !filteredNews.length) {
-      searchNews.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关资讯</div>';
-      return;
+  // 排序结果
+  function sortResultsList() {
+    switch (currentSort) {
+      case 'rating':
+        filteredResults.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case 'name':
+        filteredResults.sort((a, b) => (a.name || a.title).localeCompare(b.name || b.title));
+        break;
+      case 'year':
+        filteredResults.sort((a, b) => (b.year || 2020) - (a.year || 2020));
+        break;
+      // relevance 不排序
     }
-
-    pageItems.forEach(n => {
-      const div = document.createElement("div");
-      div.className = "search-item";
-      div.style.cursor = "pointer";
-      div.innerHTML = `
-        <div class="search-title">📰 ${n.title}</div>
-        <div class="search-meta">🎯 ${n.game} · 📅 ${n.date}</div>
-        <div class="search-excerpt">${n.summary}</div>
-      `;
-      div.addEventListener("click", () => window.location.href = n.url);
-      div.addEventListener("mouseenter", () => {
-        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
-        div.style.transition = "all 0.3s ease";
-      });
-      div.addEventListener("mouseleave", () => {
-        div.style.backgroundColor = "";
-      });
-      searchNews.appendChild(div);
-    });
-
-    newsPage++;
   }
 
-  // 渲染帖子结果
-  function renderPosts() {
-    const startIdx = postsPage * PAGE_SIZE;
-    const endIdx = startIdx + PAGE_SIZE;
-    const pageItems = filteredPosts.slice(startIdx, endIdx);
-
-    if (postsPage === 0 && !filteredPosts.length) {
-      searchPosts.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">🔍 未找到相关帖子</div>';
-      return;
-    }
-
-    pageItems.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "search-item";
-      div.style.cursor = "pointer";
-      div.innerHTML = `
-        <div class="search-title">💬 ${p.title}</div>
-        <div class="search-meta">👤 ${p.author} · 💬 ${p.replies} 回复 · 👁️ ${p.views} 浏览</div>
-      `;
-      div.addEventListener("click", () => window.location.href = p.url);
-      div.addEventListener("mouseenter", () => {
-        div.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
-        div.style.transition = "all 0.3s ease";
-      });
-      div.addEventListener("mouseleave", () => {
-        div.style.backgroundColor = "";
-      });
-      searchPosts.appendChild(div);
-    });
-
-    postsPage++;
+  function sortResults() {
+    currentSort = document.getElementById('sortSelect').value;
+    displayResults();
   }
 
-  // 无限滚动
-  searchGames.addEventListener("scroll", () => {
-    if (searchGames.scrollHeight - searchGames.scrollTop - searchGames.clientHeight < 100) {
-      renderGames();
-    }
+  function resetFilters() {
+    document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(cb => cb.checked = false);
+    performSearch();
+  }
+
+  function goToGame(id, name) {
+    const url = new URL("game-detail.html", window.location.href);
+    url.searchParams.set("id", id);
+    url.searchParams.set("name", name);
+    window.location.href = url.toString();
+  }
+
+  // Enter键搜索
+  document.getElementById('mainSearchInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') performSearch();
   });
 
-  searchNews.addEventListener("scroll", () => {
-    if (searchNews.scrollHeight - searchNews.scrollTop - searchNews.clientHeight < 100) {
-      renderNews();
-    }
-  });
-
-  searchPosts.addEventListener("scroll", () => {
-    if (searchPosts.scrollHeight - searchPosts.scrollTop - searchPosts.clientHeight < 100) {
-      renderPosts();
-    }
+  // 监听筛选器变化
+  document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (filteredResults.length > 0) {
+        applyFilters();
+        displayResults();
+      }
+    });
   });
 
   // 初始化
-  loadAllData();
+  loadGames();
 </script>
 </body>
 </html>
