@@ -292,7 +292,7 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="game-covers.js"></script>
+<script src="game-cover-fetcher.js"></script>
 <script src="news-api.js"></script>
 <script src="real-news-api.js"></script>
 <script>
@@ -314,8 +314,8 @@
     'event': '活动/赛事'
   };
   
-  // 使用统一的游戏封面库（从 game-covers.js）
-  const gameCoverImages = window.gameCoverImages || {};
+  // 使用智能游戏封面获取系统
+  const gameCoverFetcher = window.gameCoverFetcher;
   
   // 游戏图标映射（作为备用）
   const gameIcons = {
@@ -339,11 +339,24 @@
   let allNews = [];
 
   // 生成详细内容
-  function generateDetailContent(news) {
+  function generateDetailContent(news, gameCover) {
+    // 使用游戏封面作为详情页截图
+    let screenshots = '';
+    if (gameCover) {
+      screenshots = `
+        <div style="margin: 20px 0; text-align: center;">
+          <img src="${gameCover}" alt="${news.game} 游戏画面" style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onerror="this.parentElement.style.display='none';" />
+          <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">《${news.game}》游戏画面</p>
+        </div>
+      `;
+    }
+    
     const templates = {
       'update': `
         <h3>📋 更新概要</h3>
         <p>本次更新为《${news.game}》带来了重要的改进和优化。${news.summary}</p>
+        
+        ${screenshots}
         
         <h4>🔧 主要更新内容</h4>
         <ul>
@@ -373,6 +386,8 @@
       'new': `
         <h3>🎮 游戏介绍</h3>
         <p>${news.summary} 《${news.game}》即将为玩家带来全新的游戏体验。</p>
+        
+        ${screenshots}
         
         <h4>✨ 游戏特色</h4>
         <ul>
@@ -410,6 +425,8 @@
       'event': `
         <h3>🎉 活动详情</h3>
         <p>${news.summary} 这是一次不容错过的精彩活动！</p>
+        
+        ${screenshots}
         
         <h4>📋 活动内容</h4>
         <ul>
@@ -497,7 +514,9 @@
     const typeIcon = typeIcons[currentNews.type] || '📰';
     const typeName = typeNames[currentNews.type] || '资讯';
     const gameIcon = gameIcons[currentNews.game] || '🎮';
-    const gameCover = gameCoverImages[currentNews.game] || gameCoverImages[currentNews.gameEn] || null;
+    
+    // 使用智能封面获取系统（同步版本）
+    const gameCover = gameCoverFetcher.getGameCover(currentNews.game);
     
     // 更新页面标题
     document.title = `${currentNews.title} - GameBox 游盒`;
@@ -519,8 +538,8 @@
     document.getElementById('newsViews').textContent = currentNews.views.toLocaleString();
     document.getElementById('newsComments').textContent = currentNews.comments;
     
-    // 生成详细内容
-    document.getElementById('newsContent').innerHTML = generateDetailContent(currentNews);
+    // 生成详细内容（包含游戏截图）
+    document.getElementById('newsContent').innerHTML = generateDetailContent(currentNews, gameCover);
     
     // 侧边栏
     document.getElementById('sidebarGame').textContent = currentNews.game;

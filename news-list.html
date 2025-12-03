@@ -336,7 +336,7 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="game-covers.js"></script>
+<script src="game-cover-fetcher.js"></script>
 <script src="news-api.js"></script>
 <script src="real-news-api.js"></script>
 <script>
@@ -505,8 +505,8 @@
       const typeIcon = typeIcons[n.type] || "📰";
       const typeName = typeNames[n.type] || "资讯";
       
-      // 使用统一的封面API获取游戏封面
-      const gameCover = window.gameCoverAPI ? window.gameCoverAPI.getGameCover(n.game || n.gameEn || '未知游戏') : null;
+      // 使用智能封面获取系统（同步版本）
+      const gameCover = window.gameCoverFetcher.getGameCover(n.game || n.gameEn || '未知游戏');
       
       // 判断是否为热门或新资讯
       const isHot = n.views > 20000 || n.comments > 100;
