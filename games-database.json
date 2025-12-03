@@ -1,25 +1,4 @@
-/**
- * 🎮 5000款真实Steam游戏数据库
- * 
- * ✅ 100%真实数据:
- *    - 5000款真实游戏
- *    - 真实Steam App ID
- *    - 真实封面URL (Steam CDN)
- *    - 真实评分数据（基于好评率）
- * 
- * 📊 数据来源:
- *    - SteamSpy API: 热门游戏+全部游戏
- *    - CheapShark API: 促销游戏
- *    - FreeToGame API: 免费游戏
- *    - 手动补充: 知名游戏
- * 
- * 🕐 生成时间: 2025-12-03T04:26:34.878Z
- */
-
-(function() {
-  'use strict';
-
-  const REAL_5000_GAMES = [
+[
   {
     "appid": 620,
     "name": "Portal 2",
@@ -95107,15 +95086,4 @@
     "cover": "https://cdn.cloudflare.steamstatic.com/steam/apps/314830/header.jpg",
     "source": "SteamSpy"
   }
-];
-
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = REAL_5000_GAMES;
-  }
-  
-  if (typeof window !== 'undefined') {
-    window.REAL_5000_GAMES = REAL_5000_GAMES;
-    console.log('🎮 真实游戏数据库: ' + REAL_5000_GAMES.length + ' 款游戏');
-    console.log('✅ 100%真实数据 - 来自SteamSpy/CheapShark/FreeToGame');
-  }
-})();
+]

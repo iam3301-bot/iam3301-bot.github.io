@@ -75,7 +75,7 @@
                   <span id="gameScore" class="detail-score-value">-</span>
                   <span class="detail-score-outof">/ 10</span>
                 </div>
-                <div class="detail-score-sub">基于排行榜位置模拟</div>
+                <div class="detail-score-sub">基于Steam好评率</div>
               </div>
             </div>
 
@@ -107,7 +107,7 @@
                 rel="noopener"
                 class="detail-btn detail-btn-main"
               >
-                <span>前往游戏官网 / 启动平台</span>
+                <span>前往 Steam 商店页面</span>
                 <span class="detail-btn-icon">↗</span>
               </a>
 
@@ -118,7 +118,7 @@
                 rel="noopener"
                 class="detail-btn detail-btn-ghost"
               >
-                <span>查看 FreeToGame 详情页</span>
+                <span>查看 SteamDB 详情</span>
                 <span class="detail-btn-icon">↗</span>
               </a>
             </div>
@@ -127,16 +127,45 @@
 
         <!-- 下方信息区 -->
         <div class="detail-info-grid">
-          <!-- 系统配置（最低 + 推荐配置） -->
+          
+          <!-- Steam 数据统计 -->
+          <section class="detail-section detail-section--primary cyber-sysreq-section" style="margin-bottom: 20px;">
+            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+              <span style="font-size: 20px;">📊</span>
+              <h2 class="detail-section-title" style="margin: 0;">// STEAM DATA</h2>
+            </div>
+
+            <div class="sysreq-grid" id="steamDataGrid">
+              <!-- Steam 数据将填充这里 -->
+              <div class="sysreq-column">
+                <div class="sysreq-title">Steam 统计</div>
+                <ul class="sysreq-list" id="steamStatsList">
+                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
+                </ul>
+              </div>
+
+              <div class="sysreq-column sysreq-column--recommended">
+                <div class="sysreq-title">评价详情</div>
+                <ul class="sysreq-list" id="steamReviewsList">
+                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- 系统配置要求 -->
           <section class="detail-section detail-section--secondary cyber-sysreq-section">
-            <h2 class="detail-section-title">系统配置（来自 FreeToGame）</h2>
+            <div class="detail-section-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+              <span style="font-size: 20px;">💻</span>
+              <h2 class="detail-section-title" style="margin: 0;">// SYSTEM SPECS</h2>
+            </div>
 
             <div class="sysreq-grid">
               <!-- 最低配置 -->
               <div class="sysreq-column">
                 <div class="sysreq-title">最低配置</div>
                 <ul class="sysreq-list" id="sysMinList">
-                  <!-- 最低配置项将填充这里 -->
+                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
                 </ul>
               </div>
 
@@ -144,15 +173,13 @@
               <div class="sysreq-column sysreq-column--recommended">
                 <div class="sysreq-title">推荐配置</div>
                 <ul class="sysreq-list" id="sysRecommendedList">
-                  <!-- 推荐配置项将填充这里 -->
+                  <li style="text-align: center; padding: 20px; color: var(--text-muted);">加载中...</li>
                 </ul>
               </div>
             </div>
 
             <p class="detail-section-text sysreq-note">
-              以上最低配置数据直接来自 FreeToGame API 的
-              <code>minimum_system_requirements</code> 字段；若某项仍显示“接口未提供”，
-              表示该游戏在接口中没有给出对应配置。
+              系统配置数据来自 Steam 商店页面。若显示"暂无数据"，表示该游戏在 Steam 接口中没有提供对应配置信息。
             </p>
           </section>
         </div>
@@ -164,16 +191,18 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="steam-api.js"></script>
-<script src="mega-game-database.js"></script>
+<!-- 🎮 5000款真实Steam游戏数据库 -->
+<script src="real-5000-games-database.js"></script>
+<script src="mega-game-database-real.js"></script>
 <script>
 // 初始化通用逻辑（导航高亮）
 initCommon();
 
 const params = new URLSearchParams(window.location.search);
-const gameId = params.get("id"); // 优先用 id 精确定位
+const gameId = params.get("id");
 const gameName = params.get("name");
 
-// 顶部元素
+// DOM 元素
 const breadcrumbNameEl = document.getElementById("breadcrumbName");
 const titleEl = document.getElementById("gameTitle");
 const platformEl = document.getElementById("gamePlatform");
@@ -188,12 +217,9 @@ const urlEl = document.getElementById("gameUrl");
 const profileEl = document.getElementById("gameProfileUrl");
 const platformTagEl = document.getElementById("gamePlatformTag");
 
-// 下方“基础信息”区域
-const devMetaEl = document.getElementById("gameDeveloperMeta");
-const pubMetaEl = document.getElementById("gamePublisherMeta");
-const releaseMetaEl = document.getElementById("gameReleaseMeta");
-const platformMetaEl = document.getElementById("gamePlatformMeta");
-const scoreMetaEl = document.getElementById("gameScoreMeta");
+// Steam 数据 DOM
+const steamStatsList = document.getElementById("steamStatsList");
+const steamReviewsList = document.getElementById("steamReviewsList");
 
 // 系统配置 DOM
 const sysMinListEl = document.getElementById("sysMinList");
@@ -207,157 +233,230 @@ function safeSetText(el, text) {
 if (!gameId && !gameName) {
   safeSetText(breadcrumbNameEl, "未指定");
   safeSetText(titleEl, "未指定游戏名称");
-  safeSetText(
-    descEl,
-    "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。"
-  );
+  safeSetText(descEl, "URL 中没有携带 id 或 name 参数，无法识别要查看的游戏。");
 } else {
   safeSetText(breadcrumbNameEl, gameName || ("#" + gameId));
-  safeSetText(
-    titleEl,
-    "正在加载：" + (gameName || ("ID " + gameId))
-  );
+  safeSetText(titleEl, "正在加载：" + (gameName || ("ID " + gameId)));
 }
 
-// 游戏数据现在从 mega-game-database.js 加载
+// 创建列表项
+function createListItem(label, value) {
+  const li = document.createElement('li');
+  const labelSpan = document.createElement('span');
+  labelSpan.className = 'sysreq-label';
+  labelSpan.textContent = label;
+  const valueSpan = document.createElement('span');
+  valueSpan.className = 'sysreq-value';
+  valueSpan.textContent = value || '暂无数据';
+  li.appendChild(labelSpan);
+  li.appendChild(valueSpan);
+  return li;
+}
 
-// 填充最低配置的函数
-function fillMinSysReq(sys) {
-  const fallback = "接口未提供";
-
-  if (!sys) {
-    sysMinListEl.innerHTML = `
-      <li><span class="sysreq-label">系统</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">处理器</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">内存</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">显卡</span><span class="sysreq-value">${fallback}</span></li>
-      <li><span class="sysreq-label">存储</span><span class="sysreq-value">${fallback}</span></li>
-    `;
-    return;
+// 填充 Steam 数据
+function fillSteamData(game) {
+  steamStatsList.innerHTML = '';
+  steamReviewsList.innerHTML = '';
+  
+  if (game.steamData) {
+    const data = game.steamData;
+    
+    // Steam 统计
+    steamStatsList.appendChild(createListItem('🎮 Steam App ID', game.appid || '未知'));
+    steamStatsList.appendChild(createListItem('👥 拥有者', data.owners || '未知'));
+    steamStatsList.appendChild(createListItem('📊 数据来源', data.source || 'SteamSpy'));
+    steamStatsList.appendChild(createListItem('🎯 游戏类型', game.category || game.genre || '未知'));
+    steamStatsList.appendChild(createListItem('📅 发售年份', game.year || '未知'));
+    
+    // 评价详情
+    const positive = data.positive || 0;
+    const negative = data.negative || 0;
+    const total = positive + negative;
+    const ratio = total > 0 ? (positive / total * 100).toFixed(1) : '0';
+    
+    steamReviewsList.appendChild(createListItem('👍 好评数', positive ? positive.toLocaleString() : '未知'));
+    steamReviewsList.appendChild(createListItem('👎 差评数', negative ? negative.toLocaleString() : '未知'));
+    steamReviewsList.appendChild(createListItem('📝 总评测数', total ? total.toLocaleString() : '未知'));
+    steamReviewsList.appendChild(createListItem('⭐ 好评率', total > 0 ? `${ratio}%` : '未知'));
+    
+    // 评价等级
+    let ratingLevel = '未知';
+    if (total > 0) {
+      const r = parseFloat(ratio);
+      if (r >= 95) ratingLevel = '好评如潮';
+      else if (r >= 85) ratingLevel = '特别好评';
+      else if (r >= 80) ratingLevel = '多半好评';
+      else if (r >= 70) ratingLevel = '褒贬不一';
+      else if (r >= 40) ratingLevel = '多半差评';
+      else ratingLevel = '差评如潮';
+    }
+    steamReviewsList.appendChild(createListItem('🏆 评价等级', ratingLevel));
+  } else {
+    steamStatsList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📊 暂无 Steam 统计数据</li>';
+    steamReviewsList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📝 暂无评价数据</li>';
   }
+}
 
-  // 使用 textContent 而不是 innerHTML 来防止 XSS
-  const createListItem = (label, value) => {
-    const li = document.createElement('li');
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'sysreq-label';
-    labelSpan.textContent = label;
-    const valueSpan = document.createElement('span');
-    valueSpan.className = 'sysreq-value';
-    valueSpan.textContent = value || fallback;
-    li.appendChild(labelSpan);
-    li.appendChild(valueSpan);
-    return li;
-  };
-
+// 填充系统配置
+function fillSystemRequirements(minReq, recReq) {
   sysMinListEl.innerHTML = '';
-  sysMinListEl.appendChild(createListItem('系统', sys.os));
-  sysMinListEl.appendChild(createListItem('处理器', sys.processor));
-  sysMinListEl.appendChild(createListItem('内存', sys.memory));
-  sysMinListEl.appendChild(createListItem('显卡', sys.graphics));
-  sysMinListEl.appendChild(createListItem('存储', sys.storage));
-}
-
-// 填充推荐配置的函数
-function fillRecommendedSysReq(sys) {
-  const fallback = "暂无推荐配置";
-
-  if (!sys) {
-    sysRecommendedListEl.innerHTML = `
-      <li style="text-align: center; padding: 20px; color: var(--text-soft);">
-        <span>${fallback}</span><br>
-        <span style="font-size: 11px; opacity: 0.8;">推荐配置需要从 Steam 获取，可能无法获取到数据</span>
-      </li>
-    `;
-    return;
-  }
-
-  // 使用 textContent 而不是 innerHTML 来防止 XSS
-  const createListItem = (label, value) => {
-    const li = document.createElement('li');
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'sysreq-label';
-    labelSpan.textContent = label;
-    const valueSpan = document.createElement('span');
-    valueSpan.className = 'sysreq-value';
-    valueSpan.textContent = value || fallback;
-    li.appendChild(labelSpan);
-    li.appendChild(valueSpan);
-    return li;
-  };
-
   sysRecommendedListEl.innerHTML = '';
-  sysRecommendedListEl.appendChild(createListItem('系统', sys.os));
-  sysRecommendedListEl.appendChild(createListItem('处理器', sys.processor));
-  sysRecommendedListEl.appendChild(createListItem('内存', sys.memory));
-  sysRecommendedListEl.appendChild(createListItem('显卡', sys.graphics));
-  sysRecommendedListEl.appendChild(createListItem('存储', sys.storage));
+  
+  if (minReq) {
+    sysMinListEl.appendChild(createListItem('操作系统', minReq.os));
+    sysMinListEl.appendChild(createListItem('处理器', minReq.processor));
+    sysMinListEl.appendChild(createListItem('内存', minReq.memory));
+    sysMinListEl.appendChild(createListItem('显卡', minReq.graphics));
+    sysMinListEl.appendChild(createListItem('存储空间', minReq.storage));
+  } else {
+    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无最低配置数据</li>';
+  }
+  
+  if (recReq) {
+    sysRecommendedListEl.appendChild(createListItem('操作系统', recReq.os));
+    sysRecommendedListEl.appendChild(createListItem('处理器', recReq.processor));
+    sysRecommendedListEl.appendChild(createListItem('内存', recReq.memory));
+    sysRecommendedListEl.appendChild(createListItem('显卡', recReq.graphics));
+    sysRecommendedListEl.appendChild(createListItem('存储空间', recReq.storage));
+  } else {
+    sysRecommendedListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">💻 暂无推荐配置数据</li>';
+  }
 }
 
-// 获取 Steam 推荐配置并填充（使用新的 steamAPI 工具类）
-async function fetchSteamRecommendedSysReq(gameTitle) {
+// 从 Steam API 获取系统配置
+async function fetchSteamRequirements(gameTitle, appid) {
   try {
-    console.log(`正在获取 ${gameTitle} 的推荐配置...`);
+    console.log(`正在获取 ${gameTitle} 的系统配置...`);
     
-    // 使用全局 steamAPI 实例（已从 steam-api.js 加载）
-    const requirements = await window.steamAPI.getRecommendedRequirements(gameTitle);
+    // 显示加载状态
+    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</li>';
+    sysRecommendedListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</li>';
     
-    if (requirements) {
-      console.log(`✅ 成功获取 ${gameTitle} 的推荐配置`);
-      fillRecommendedSysReq(requirements);
+    // 如果有 appid，直接使用本地代理服务器
+    if (appid && typeof appid === 'number') {
+      try {
+        const response = await fetch(`/api/steam/appdetails?appid=${appid}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data[appid] && data[appid].success) {
+            const pcReq = data[appid].data.pc_requirements;
+            if (pcReq) {
+              const minReq = pcReq.minimum ? parseRequirementsHTML(pcReq.minimum) : null;
+              const recReq = pcReq.recommended ? parseRequirementsHTML(pcReq.recommended) : null;
+              fillSystemRequirements(minReq, recReq);
+              console.log(`✅ 成功获取 ${gameTitle} 的系统配置`);
+              return;
+            }
+          }
+        }
+      } catch (proxyErr) {
+        console.log('本地代理失败，尝试其他方式...');
+      }
+    }
+    
+    // 备用方案：使用 steamAPI 工具类
+    if (window.steamAPI) {
+      try {
+        const requirements = await window.steamAPI.getSystemRequirements(gameTitle);
+        fillSystemRequirements(requirements.minimum, requirements.recommended);
+        
+        if (requirements.minimum || requirements.recommended) {
+          console.log(`✅ 成功获取 ${gameTitle} 的系统配置`);
+        } else {
+          console.log(`ℹ️ ${gameTitle} 无系统配置数据`);
+        }
+      } catch (apiErr) {
+        console.log(`ℹ️ ${gameTitle} 无系统配置数据`);
+        fillSystemRequirements(null, null);
+      }
     } else {
-      console.log(`ℹ️ ${gameTitle} 无推荐配置数据`);
-      fillRecommendedSysReq(null);
+      fillSystemRequirements(null, null);
     }
   } catch (err) {
-    console.error(`❌ 从 Steam 获取推荐配置时出错:`, err);
-    fillRecommendedSysReq(null);
+    console.error(`❌ 获取系统配置失败:`, err);
+    fillSystemRequirements(null, null);
   }
 }
 
+// 解析 Steam HTML 格式的系统配置
+function parseRequirementsHTML(htmlString) {
+  if (!htmlString || typeof htmlString !== 'string') return null;
+  
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const text = doc.body.textContent || '';
+  
+  const result = {};
+  
+  const patterns = {
+    os: /OS[:\s]*([^\n]+)/i,
+    processor: /Processor[:\s]*([^\n]+)/i,
+    memory: /Memory[:\s]*([^\n]+)/i,
+    graphics: /Graphics[:\s]*([^\n]+)/i,
+    storage: /Storage[:\s]*([^\n]+)/i,
+  };
+  
+  for (const [key, pattern] of Object.entries(patterns)) {
+    const match = text.match(pattern);
+    if (match && match[1]) {
+      result[key] = match[1].trim();
+    }
+  }
+  
+  return Object.keys(result).length > 0 ? result : null;
+}
+
+// 主加载函数
 async function loadDetail() {
   if (!gameId && !gameName) return;
 
-  // 显示加载提示
-  sysMinListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
-  sysRecommendedListEl.innerHTML = '<li style="text-align: center; color: var(--text-muted); padding: 20px;">加载中...</li>';
-
   try {
-    // 从mega-game-database.js获取游戏数据
-    const allGames = await window.megaGameDB.getAllGames();
-    
-    // 根据ID或名称查找游戏
+    // 从真实游戏数据库获取游戏数据
     let game = null;
-    if (gameId) {
-      // 注意：mega-game-database生成的游戏没有id字段，需要用索引
-      const index = parseInt(gameId) - 1;
-      if (index >= 0 && index < allGames.length) {
-        game = allGames[index];
-        game.id = index + 1; // 添加id字段
+    const allGames = window.megaGameDB.getAllGames();
+    
+    // 优先使用名称精确匹配（更准确）
+    if (gameName) {
+      game = window.megaGameDB.getGameByName(gameName);
+      
+      // 如果精确匹配失败，尝试模糊匹配
+      if (!game) {
+        const lowerName = gameName.toLowerCase();
+        game = allGames.find(g => 
+          g.name.toLowerCase().includes(lowerName) ||
+          g.title.toLowerCase().includes(lowerName)
+        );
       }
     }
-    if (!game && gameName) {
-      game = allGames.find(g => g.name === gameName || g.title === gameName);
+    
+    // 如果名称匹配失败，再尝试用ID查找
+    if (!game && gameId) {
+      game = window.megaGameDB.getGameById(gameId);
     }
 
     if (!game) {
       safeSetText(titleEl, "游戏未找到");
       safeSetText(descEl, "在游戏库中找不到该游戏，请返回重新选择。");
+      steamStatsList.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
+      steamReviewsList.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
       sysMinListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
       sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">游戏数据未找到</li>';
       return;
     }
 
-    // 填充基本信息 - 使用mega-game-database的字段
+    // 填充基本信息
     safeSetText(breadcrumbNameEl, game.name || game.title);
     safeSetText(titleEl, game.name || game.title);
     safeSetText(platformEl, game.platform || "PC");
     safeSetText(devEl, game.developer || "未知");
     safeSetText(pubEl, game.publisher || "未知");
-    safeSetText(dateEl, game.releaseDate || "未知");
-    safeSetText(tagEl, game.genre || game.category || "游戏");
-    safeSetText(descEl, game.short_description || "暂无游戏简介");
+    safeSetText(dateEl, game.releaseDate || game.year || "未知");
+    safeSetText(tagEl, game.category || game.genre || "游戏");
     safeSetText(platformTagEl, game.platform || "PC (Windows)");
+    
+    // 游戏描述
+    let description = game.short_description || `${game.name} 是一款由 ${game.developer || '未知'} 开发的 ${game.category || game.genre || ''} 游戏。`;
+    safeSetText(descEl, description);
     
     // 评分
     const score = Number(game.rating) || 0;
@@ -373,23 +472,27 @@ async function loadDetail() {
       };
     }
     
-    // 隐藏外部链接（mega-game-database没有这些字段）
-    urlEl.style.display = 'none';
-    profileEl.style.display = 'none';
+    // Steam 链接
+    if (game.appid && typeof game.appid === 'number') {
+      urlEl.href = `https://store.steampowered.com/app/${game.appid}`;
+      urlEl.style.display = 'flex';
+      profileEl.href = `https://steamdb.info/app/${game.appid}/`;
+      profileEl.style.display = 'flex';
+    } else {
+      urlEl.style.display = 'none';
+      profileEl.style.display = 'none';
+    }
 
-    // mega-game-database没有系统配置数据，显示提示
-    fillMinSysReq(null);
-    sysMinListEl.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--text-muted);">📊 系统配置数据正在开发中</li>';
+    // 填充 Steam 数据
+    fillSteamData(game);
 
-    // 尝试获取 Steam 推荐配置（可选，可能失败）
-    fetchSteamRecommendedSysReq(game.name || game.title);
+    // 获取系统配置
+    fetchSteamRequirements(game.name || game.title, game.appid);
     
   } catch (err) {
     console.error("加载详情失败：", err);
     safeSetText(titleEl, "加载失败");
     safeSetText(descEl, "无法加载游戏数据，请检查网络连接或稍后重试。错误: " + err.message);
-    sysMinListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
-    sysRecommendedListEl.innerHTML = '<li style="color: var(--danger);">数据加载失败</li>';
   }
 }
 

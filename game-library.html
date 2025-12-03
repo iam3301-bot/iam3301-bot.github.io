@@ -98,11 +98,11 @@
           <div class="form-row">
             <label>平台（可多选）</label>
             <div id="libPlatforms" style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px;">
-              <label><input type="checkbox" value="steam" checked /> Steam</label>
-              <label><input type="checkbox" value="pc" checked /> PC（其他平台）</label>
-              <label><input type="checkbox" value="ps" checked /> PlayStation</label>
-              <label><input type="checkbox" value="switch" checked /> Switch</label>
-              <label><input type="checkbox" value="mobile" checked /> 手机</label>
+              <label><input type="checkbox" name="libPlatform" value="steam" checked /> Steam</label>
+              <label><input type="checkbox" name="libPlatform" value="pc" checked /> PC（其他平台）</label>
+              <label><input type="checkbox" name="libPlatform" value="ps" /> PlayStation</label>
+              <label><input type="checkbox" name="libPlatform" value="switch" /> Switch</label>
+              <label><input type="checkbox" name="libPlatform" value="mobile" /> 手机</label>
             </div>
           </div>
 
@@ -126,7 +126,17 @@
           </div>
           <div class="chip" id="libResultCount">共 0 款</div>
         </header>
-        <ol id="libList" class="ranking-list ranking-list--scroll" style="max-height: 800px; overflow-y: auto;"></ol>
+        <ol id="libList" class="ranking-list"></ol>
+        <!-- 加载更多按钮 -->
+        <div id="loadMoreContainer" style="text-align: center; padding: 20px; display: none;">
+          <button id="loadMoreBtn" class="btn-secondary" style="padding: 12px 30px;">🔽 加载更多游戏</button>
+        </div>
+        <div id="loadingIndicator" style="text-align: center; padding: 20px; display: none; color: var(--text-muted);">
+          ⏳ 加载中...
+        </div>
+        <div id="noMoreGames" style="text-align: center; padding: 20px; display: none; color: var(--text-muted);">
+          ✅ 已加载全部游戏
+        </div>
       </div>
     </section>
 
@@ -168,7 +178,9 @@
   const libSearch = document.getElementById("libSearch");
   const libType = document.getElementById("libType");
   const libPrice = document.getElementById("libPrice");
-  const libPlatforms = document.querySelectorAll('input[name="libPlatform"]');
+  const libPlatformsEl = document.getElementById('libPlatforms');
+  const libPlatforms = libPlatformsEl.querySelectorAll('input[name="libPlatform"]');
+  const totalGamesCountEl = document.getElementById('totalGamesCount');
   const libList = document.getElementById("libList");
   const libCount = document.getElementById("libResultCount");
 
@@ -181,6 +193,11 @@
       isDataLoaded = true;
       
       console.log(`✅ 成功加载 ${allGamesData.length} 款游戏`);
+      
+      // 更新侧边栏游戏总数
+      if (totalGamesCountEl) {
+        totalGamesCountEl.textContent = `${allGamesData.length} 款`;
+      }
       applyFiltersAndRender();
     } catch (error) {
       console.error("❌ 加载失败:", error);
@@ -333,24 +350,109 @@
     });
 
     currentPage++;
+    
+    // 更新加载状态
+    updateLoadingState();
+    
+    // 检查是否需要继续加载（如果页面没填满）
+    setTimeout(() => {
+      const scrollHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const clientHeight = window.innerHeight || document.documentElement.clientHeight;
+      const loadedCount = currentPage * PAGE_SIZE;
+      const totalCount = filteredGames.length;
+      
+      console.log(`📦 加载状态: ${loadedCount}/${totalCount}, 页面高度: ${scrollHeight}, 视口: ${clientHeight}`);
+      
+      if (scrollHeight <= clientHeight + 200 && loadedCount < totalCount) {
+        loadMoreGames();
+      }
+    }, 100);
+  }
+
+  // 加载更多按钮和指示器
+  const loadMoreContainer = document.getElementById('loadMoreContainer');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const loadingIndicator = document.getElementById('loadingIndicator');
+  const noMoreGames = document.getElementById('noMoreGames');
+
+  // 更新加载状态UI
+  function updateLoadingState() {
+    const hasMore = currentPage * PAGE_SIZE < filteredGames.length;
+    loadMoreContainer.style.display = hasMore ? 'block' : 'none';
+    noMoreGames.style.display = hasMore ? 'none' : (filteredGames.length > 0 ? 'block' : 'none');
+    loadingIndicator.style.display = 'none';
   }
 
   // 无限滚动 - 监听窗口滚动
   let isLoading = false;
-  window.addEventListener("scroll", () => {
+  let scrollTimeout = null;
+  
+  function checkAndLoadMore() {
     if (isLoading) return;
+    if (!filteredGames || filteredGames.length === 0) return;
     
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = window.innerHeight;
+    const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight
+    );
+    const clientHeight = window.innerHeight || document.documentElement.clientHeight;
 
-    // 当距离底部小于500px时加载更多
-    if (scrollHeight - scrollTop - clientHeight < 500) {
-      if (currentPage * PAGE_SIZE < filteredGames.length) {
-        isLoading = true;
+    // 计算当前已加载的数量
+    const loadedCount = currentPage * PAGE_SIZE;
+    const totalCount = filteredGames.length;
+    
+    // 当距离底部小于1200px时加载更多（增加触发距离）
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+    
+    if (distanceFromBottom < 1200 && loadedCount < totalCount) {
+      isLoading = true;
+      loadingIndicator.style.display = 'block';
+      loadMoreContainer.style.display = 'none';
+      
+      console.log(`📜 无限滚动触发: 已加载 ${loadedCount}/${totalCount}, 距底部 ${Math.round(distanceFromBottom)}px`);
+      
+      setTimeout(() => {
         loadMoreGames();
-        setTimeout(() => { isLoading = false; }, 100);
-      }
+        updateLoadingState();
+        isLoading = false;
+        
+        // 再次检查是否需要继续加载（快速滚动时）
+        setTimeout(checkAndLoadMore, 50);
+      }, 80);
+    }
+  }
+
+  // 使用多种事件监听确保滚动检测
+  window.addEventListener("scroll", () => {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(checkAndLoadMore, 50);
+  }, { passive: true });
+  
+  // 兼容性：同时监听document滚动
+  document.addEventListener("scroll", () => {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(checkAndLoadMore, 50);
+  }, { passive: true });
+  
+  // 初始检测（页面加载后）
+  setTimeout(checkAndLoadMore, 200);
+  
+  // 加载更多按钮点击事件
+  loadMoreBtn.addEventListener('click', () => {
+    if (currentPage * PAGE_SIZE < filteredGames.length) {
+      loadingIndicator.style.display = 'block';
+      loadMoreContainer.style.display = 'none';
+      
+      setTimeout(() => {
+        loadMoreGames();
+        updateLoadingState();
+      }, 100);
     }
   });
 

@@ -172,9 +172,25 @@
 
     // 筛选游戏
     filteredGames = allGamesData.filter(game => {
-      // 平台筛选
-      if (platform !== "all" && !game.platform.toLowerCase().includes(platform.toLowerCase())) {
-        return false;
+      // 平台筛选 - Steam 和 PC 视为相同
+      if (platform !== "all") {
+        const gamePlatforms = game.platform.toLowerCase();
+        const platformLower = platform.toLowerCase();
+        
+        // Steam 和 PC 视为相同
+        if (platformLower === 'steam' || platformLower === 'pc') {
+          if (!gamePlatforms.includes('pc') && !gamePlatforms.includes('steam')) {
+            return false;
+          }
+        } else if (platformLower === 'ps') {
+          if (!gamePlatforms.includes('ps') && !gamePlatforms.includes('playstation')) {
+            return false;
+          }
+        } else {
+          if (!gamePlatforms.includes(platformLower)) {
+            return false;
+          }
+        }
       }
 
       // 关键词搜索
