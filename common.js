@@ -74,6 +74,132 @@ function initGlobalSearch() {
     const q = params.get("q");
     if (q) input.value = q;
   } catch {}
+
+  // 添加智能搜索建议功能（支持中英文）
+  initSearchSuggestions(input);
+}
+
+function initSearchSuggestions(input) {
+  if (!input) return;
+  
+  let suggestBox = document.querySelector('.search-suggestions');
+  if (!suggestBox) {
+    suggestBox = document.createElement('div');
+    suggestBox.className = 'search-suggestions';
+    suggestBox.style.cssText = `
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(10, 10, 20, 0.98);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 8px 16px rgba(0, 255, 136, 0.15);
+    `;
+    input.parentElement.style.position = 'relative';
+    input.parentElement.appendChild(suggestBox);
+  }
+
+  let debounceTimer;
+  input.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    const query = e.target.value.trim();
+    
+    if (query.length < 2) {
+      suggestBox.style.display = 'none';
+      return;
+    }
+
+    debounceTimer = setTimeout(() => {
+      showSuggestions(query, suggestBox, input);
+    }, 300);
+  });
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => {
+      suggestBox.style.display = 'none';
+    }, 200);
+  });
+
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length >= 2) {
+      showSuggestions(input.value.trim(), suggestBox, input);
+    }
+  });
+}
+
+function showSuggestions(query, suggestBox, input) {
+  // 使用 window.megaGameDB 或 window.chineseGameNames 进行搜索
+  if (!window.megaGameDB && !window.chineseGameNames) {
+    return;
+  }
+
+  const results = [];
+  const lowerQuery = query.toLowerCase();
+
+  // 搜索游戏数据库
+  if (window.megaGameDB && window.megaGameDB.length > 0) {
+    const matches = window.megaGameDB.filter(game => {
+      const gameName = (game.name || '').toLowerCase();
+      const chineseName = window.chineseGameNames ? 
+        window.chineseGameNames.getChineseName(game.name) : '';
+      
+      // 匹配英文名、中文名或拼音首字母
+      return gameName.includes(lowerQuery) || 
+             (chineseName && chineseName.includes(query)) ||
+             (window.chineseGameNames && 
+              window.chineseGameNames.searchGameName(query).length > 0);
+    }).slice(0, 8);
+
+    results.push(...matches);
+  }
+
+  if (results.length === 0) {
+    suggestBox.innerHTML = `
+      <div style="padding: 12px; color: rgba(255, 255, 255, 0.5); font-size: 12px; text-align: center;">
+        没有找到相关游戏
+      </div>
+    `;
+    suggestBox.style.display = 'block';
+    return;
+  }
+
+  suggestBox.innerHTML = results.map(game => {
+    const chineseName = window.chineseGameNames ? 
+      window.chineseGameNames.getChineseName(game.name) : '';
+    const displayName = chineseName ? 
+      `${game.name} <span style="color: #00ff88;">(${chineseName})</span>` : 
+      game.name;
+    
+    return `
+      <div class="search-suggestion-item" 
+           onclick="window.location.href='game-detail.html?id=${game.appid || game.id}&name=${encodeURIComponent(game.name)}'"
+           style="padding: 10px 14px; cursor: pointer; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+                  transition: all 0.2s; font-size: 13px; display: flex; align-items: center; gap: 10px;">
+        <span style="color: #00ff88; font-size: 16px;">🎮</span>
+        <span style="color: #fff;">${displayName}</span>
+      </div>
+    `;
+  }).join('');
+
+  // 添加悬停效果
+  suggestBox.querySelectorAll('.search-suggestion-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      item.style.background = 'rgba(0, 255, 136, 0.1)';
+      item.style.borderLeft = '3px solid #00ff88';
+    });
+    item.addEventListener('mouseleave', () => {
+      item.style.background = 'transparent';
+      item.style.borderLeft = 'none';
+    });
+  });
+
+  suggestBox.style.display = 'block';
 }
 
 // HTML 转义函数，防止 XSS
