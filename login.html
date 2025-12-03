@@ -538,8 +538,19 @@
           <form id="registerForm" class="auth-form">
             <div class="form-group">
               <label class="form-label">邮箱地址</label>
-              <input type="email" class="form-input" id="registerEmail" placeholder="your@email.com" required />
+              <div style="display: flex; gap: 8px;">
+                <input type="email" class="form-input" id="registerEmail" placeholder="your@email.com" required style="flex: 1;" />
+                <button type="button" class="auth-btn" id="sendOtpBtn" style="width: auto; padding: 14px 16px; font-size: 13px;">
+                  发送验证码
+                </button>
+              </div>
               <div class="form-hint">用于登录和接收验证邮件</div>
+            </div>
+            
+            <div class="form-group" id="otpGroup" style="display: none;">
+              <label class="form-label">邮箱验证码</label>
+              <input type="text" class="form-input" id="emailOtp" placeholder="输入6位验证码" maxlength="6" pattern="\d{6}" />
+              <div class="form-hint" id="otpHint">验证码已发送，5分钟内有效</div>
             </div>
             
             <div class="form-group">
@@ -549,7 +560,7 @@
             
             <div class="form-group">
               <label class="form-label">密码</label>
-              <input type="password" class="form-input" id="registerPassword" placeholder="至少6位字符" required minlength="6" />
+              <input type="password" class="form-input" id="registerPassword" placeholder="至少6位字符" required minlength="6" autocomplete="new-password" />
               <div class="password-strength" id="passwordStrength">
                 <div class="strength-bar"></div>
                 <div class="strength-bar"></div>
@@ -561,7 +572,7 @@
             
             <div class="form-group">
               <label class="form-label">确认密码</label>
-              <input type="password" class="form-input" id="registerPasswordConfirm" placeholder="再次输入密码" required />
+              <input type="password" class="form-input" id="registerPasswordConfirm" placeholder="再次输入密码" required autocomplete="new-password" />
             </div>
             
             <div class="form-checkbox">
@@ -992,6 +1003,90 @@ const SUPABASE_CONFIG = {
   });
   
   // =============================================
+  // 邮箱验证码功能
+  // =============================================
+  
+  let otpSent = false;
+  let otpCountdown = 0;
+  let otpTimer = null;
+  
+  const sendOtpBtn = document.getElementById('sendOtpBtn');
+  const otpGroup = document.getElementById('otpGroup');
+  const emailOtpInput = document.getElementById('emailOtp');
+  const otpHint = document.getElementById('otpHint');
+  
+  sendOtpBtn.addEventListener('click', async () => {
+    const email = document.getElementById('registerEmail').value.trim();
+    
+    if (!email) {
+      showMessage('请先输入邮箱地址', 'error');
+      return;
+    }
+    
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showMessage('请输入有效的邮箱地址', 'error');
+      return;
+    }
+    
+    sendOtpBtn.disabled = true;
+    sendOtpBtn.textContent = '发送中...';
+    
+    try {
+      const result = await GameBoxAuth.sendEmailOTP(email);
+      
+      if (result.success) {
+        otpSent = true;
+        otpGroup.style.display = 'block';
+        
+        // 演示模式下显示验证码
+        if (result.demoCode) {
+          otpHint.innerHTML = `验证码已发送 <span style="color: #00ff88; font-weight: bold;">(演示验证码: ${result.demoCode})</span>`;
+        } else {
+          otpHint.textContent = '验证码已发送到您的邮箱，5分钟内有效';
+        }
+        
+        showMessage(result.message, 'success');
+        
+        // 倒计时
+        startOtpCountdown(60);
+      } else {
+        showMessage(result.error, 'error');
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = '发送验证码';
+      }
+    } catch (error) {
+      showMessage('发送失败: ' + error.message, 'error');
+      sendOtpBtn.disabled = false;
+      sendOtpBtn.textContent = '发送验证码';
+    }
+  });
+  
+  function startOtpCountdown(seconds) {
+    otpCountdown = seconds;
+    updateOtpButton();
+    
+    if (otpTimer) clearInterval(otpTimer);
+    
+    otpTimer = setInterval(() => {
+      otpCountdown--;
+      if (otpCountdown <= 0) {
+        clearInterval(otpTimer);
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = '重新发送';
+      } else {
+        updateOtpButton();
+      }
+    }, 1000);
+  }
+  
+  function updateOtpButton() {
+    sendOtpBtn.textContent = `${otpCountdown}s 后重发`;
+    sendOtpBtn.disabled = true;
+  }
+  
+  // =============================================
   // 注册表单提交
   // =============================================
   
@@ -1003,11 +1098,23 @@ const SUPABASE_CONFIG = {
     const password = document.getElementById('registerPassword').value;
     const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
     const agreeTerms = document.getElementById('agreeTerms').checked;
+    const otpCode = emailOtpInput.value.trim();
     const btn = document.getElementById('registerBtn');
     
     // 验证
     if (!email || !username || !password) {
       showMessage('请填写所有必填项', 'error');
+      return;
+    }
+    
+    // 验证码检查 (如果已发送)
+    if (otpSent && !otpCode) {
+      showMessage('请输入邮箱验证码', 'error');
+      return;
+    }
+    
+    if (otpSent && otpCode.length !== 6) {
+      showMessage('验证码应为6位数字', 'error');
       return;
     }
     
@@ -1036,7 +1143,15 @@ const SUPABASE_CONFIG = {
     hideMessage();
     
     try {
-      const result = await GameBoxAuth.signUp(email, password, username);
+      let result;
+      
+      // 如果发送了验证码，使用带验证码的注册
+      if (otpSent && otpCode) {
+        result = await GameBoxAuth.signUpWithOTP(email, password, username, otpCode);
+      } else {
+        // 否则使用普通注册
+        result = await GameBoxAuth.signUp(email, password, username);
+      }
       
       if (result.success) {
         if (result.needsEmailConfirmation) {
@@ -1058,6 +1173,15 @@ const SUPABASE_CONFIG = {
             }, 1500);
           }
         }
+        
+        // 重置验证码状态
+        otpSent = false;
+        otpGroup.style.display = 'none';
+        emailOtpInput.value = '';
+        if (otpTimer) clearInterval(otpTimer);
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = '发送验证码';
+        
       } else {
         showMessage(result.error, 'error');
       }

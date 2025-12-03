@@ -3,12 +3,645 @@
 <head>
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 用户中心</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Cyberpunk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    /* 用户中心专属样式 */
+    .profile-container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    @media (max-width: 900px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .profile-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .profile-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+    }
+    
+    .profile-card-icon {
+      font-size: 24px;
+    }
+    
+    .profile-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    /* 用户信息头部 */
+    .user-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 32px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(168, 85, 247, 0.05));
+      border-radius: 16px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .user-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88, #00ccff, #a855f7);
+    }
+    
+    .user-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4fc3f7, #7c4dff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+      flex-shrink: 0;
+    }
+    
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--text-main);
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 8px;
+    }
+    
+    .user-email {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .user-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .user-badge {
+      padding: 4px 12px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent);
+    }
+    
+    .user-badge.verified {
+      background: rgba(0, 255, 136, 0.15);
+      border-color: rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+    }
+    
+    .user-badge.steam {
+      background: rgba(102, 192, 244, 0.15);
+      border-color: rgba(102, 192, 244, 0.3);
+      color: #66c0f4;
+    }
+    
+    /* 统计卡片 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(31, 41, 55, 0.8));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    /* Steam 区域 */
+    .steam-section {
+      background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(20, 30, 45, 0.9));
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .steam-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .steam-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .steam-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .steam-logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #66c0f4;
+    }
+    
+    .steam-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    
+    .steam-status.linked {
+      color: #00ff88;
+    }
+    
+    .steam-status.unlinked {
+      color: var(--text-muted);
+    }
+    
+    .steam-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .steam-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .steam-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .steam-user-info {
+      flex: 1;
+    }
+    
+    .steam-persona-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #66c0f4;
+      margin-bottom: 4px;
+    }
+    
+    .steam-id {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+    
+    .steam-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .steam-stat {
+      text-align: center;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+    
+    .steam-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #66c0f4;
+    }
+    
+    .steam-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* Steam 游戏列表 */
+    .steam-games-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0 16px;
+    }
+    
+    .steam-games-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+    
+    .steam-games-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    
+    .steam-game-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .steam-game-item:hover {
+      background: rgba(102, 192, 244, 0.1);
+    }
+    
+    .steam-game-img {
+      width: 120px;
+      height: 45px;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    
+    .steam-game-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .steam-game-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .steam-game-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .steam-game-playtime {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    
+    /* 绑定表单 */
+    .link-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .link-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 14px;
+    }
+    
+    .link-input:focus {
+      outline: none;
+      border-color: #66c0f4;
+    }
+    
+    .link-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+      border: 1px solid rgba(102, 192, 244, 0.5);
+      border-radius: 8px;
+      color: #66c0f4;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .link-btn:hover {
+      background: linear-gradient(135deg, #2a475e, #3d6a8e);
+      border-color: #66c0f4;
+    }
+    
+    .link-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* 按钮样式 */
+    .profile-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      border: none;
+      border-radius: 8px;
+      color: #0a0f1a;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .profile-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(56, 189, 248, 0.4);
+    }
+    
+    .profile-btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+    }
+    
+    .profile-btn.danger {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .profile-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+      box-shadow: none;
+    }
+    
+    /* 设置项 */
+    .settings-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    }
+    
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+    
+    .settings-label {
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+    
+    .settings-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* 开关 */
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(56, 189, 248, 0.2);
+      transition: .3s;
+      border-radius: 26px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-muted);
+      transition: .3s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--accent);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+      background-color: #0a0f1a;
+    }
+    
+    /* 未登录提示 */
+    .login-prompt {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .login-prompt-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+    }
+    
+    .login-prompt-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+    
+    .login-prompt-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    
+    /* 消息提示 */
+    .profile-message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    
+    .profile-message.show {
+      display: block;
+    }
+    
+    .profile-message.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .profile-message.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+    
+    .profile-message.info {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+    }
+    
+    /* 侧边栏快捷操作 */
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      color: var(--text-soft);
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-action-btn:hover {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+    }
+    
+    .quick-action-icon {
+      font-size: 20px;
+    }
+    
+    /* Demo 提示 */
+    .demo-notice {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #f59e0b;
+      margin-top: 12px;
+    }
+    
+    /* 滚动条美化 */
+    .steam-games-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .steam-games-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+    
+    .steam-games-list::-webkit-scrollbar-thumb {
+      background: rgba(102, 192, 244, 0.3);
+      border-radius: 3px;
+    }
+    
+    .steam-games-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 192, 244, 0.5);
+    }
+  </style>
 </head>
 <body data-current-page="profile" class="cyberpunk-theme">
 <div class="page">
@@ -32,14 +665,14 @@
         <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
         <a href="tools.html" data-page="tools" class="nav-link">工具</a>
         <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+        <a href="profile.html" data-page="profile" class="nav-link active">用户中心</a>
       </nav>
       <div class="header-right">
         <div class="header-search">
           <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
           <span class="header-search-icon">🔍</span>
         </div>
-        <button class="header-user">未登录 · 游客</button>
+        <button class="header-user" id="headerUserBtn">未登录 · 游客</button>
       </div>
     </div>
   </header>
@@ -48,127 +681,593 @@
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
   <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
+
+  <main class="main" style="display: block; padding: 20px;">
+    
+    <!-- 未登录提示 -->
+    <div id="loginPrompt" class="profile-card login-prompt" style="display: none;">
+      <div class="login-prompt-icon">🔐</div>
+      <div class="login-prompt-title">请先登录</div>
+      <div class="login-prompt-text">登录后即可访问用户中心，管理您的游戏库和账号设置</div>
+      <a href="login.html" class="profile-btn" style="display: inline-block; text-decoration: none;">
+        前往登录
+      </a>
     </div>
-  </div>
-
-  <main class="main">
-    <section>
-      <div class="card">
-        <div class="page-title">用户中心</div>
-        <div class="page-intro" id="profileIntro">
-          简单展示“账号”的感觉，结合登录状态与本地游戏记录做一个汇总。
-        </div>
-
-        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;align-items:center;">
-          <div style="width:64px;height:64px;border-radius:50%;
-              background:linear-gradient(135deg,#4fc3f7,#7c4dff);
-              box-shadow:0 0 20px rgba(56,189,248,0.6);"></div>
-          <div style="flex:1;min-width:200px;font-size:13px;">
-            <p>昵称：<span id="profileName">游客玩家</span></p>
-            <p>账号等级：<span id="profileLevel">Lv. 1</span></p>
-            <p id="profileSummary" style="color:var(--text-muted);margin-top:4px;"></p>
+    
+    <!-- 已登录内容 -->
+    <div id="profileContent" class="profile-container" style="display: none;">
+      
+      <!-- 左侧主内容 -->
+      <div class="profile-main">
+        
+        <!-- 消息提示 -->
+        <div id="profileMessage" class="profile-message"></div>
+        
+        <!-- 用户信息头部 -->
+        <div class="user-header">
+          <div class="user-avatar" id="userAvatar">🎮</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">加载中...</div>
+            <div class="user-email" id="userEmail">-</div>
+            <div class="user-badges" id="userBadges">
+              <!-- 徽章动态生成 -->
+            </div>
+          </div>
+          <div>
+            <a href="login.html" class="profile-btn secondary">编辑资料</a>
           </div>
         </div>
-      </div>
-
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>数据概览</span></div>
-        </header>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:13px;">
-          <div style="flex:1;min-width:140px;">
-            <div class="sidebar-title">游戏记录</div>
-            <p style="color:var(--text-muted);margin-top:4px;">
-              已拥有游戏：<strong id="statOwned">0</strong> 款<br />
-              想玩游戏：<strong id="statWish">0</strong> 款
+        
+        <!-- 统计卡片 -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statOwnedGames">0</div>
+            <div class="stat-label">已拥有游戏</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statWishlistGames">0</div>
+            <div class="stat-label">想玩游戏</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statPlaytime">0</div>
+            <div class="stat-label">总游戏时长</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statLevel">Lv.1</div>
+            <div class="stat-label">账号等级</div>
+          </div>
+        </div>
+        
+        <!-- Steam 绑定区域 -->
+        <div class="steam-section" id="steamSection">
+          <div class="steam-header">
+            <div class="steam-logo">
+              <div class="steam-logo-icon">🎮</div>
+              <div class="steam-logo-text">Steam 账号</div>
+            </div>
+            <div class="steam-status" id="steamStatus">
+              <span>●</span> <span id="steamStatusText">未绑定</span>
+            </div>
+          </div>
+          
+          <!-- 未绑定状态 -->
+          <div id="steamUnlinked">
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+              绑定 Steam 账号后，可以自动同步您的游戏库、游戏时长等数据
             </p>
+            
+            <div class="link-form">
+              <input type="text" class="link-input" id="steamIdInput" 
+                placeholder="输入 Steam ID 或个人资料链接" />
+              <button class="link-btn" id="linkSteamBtn">绑定账号</button>
+            </div>
+            
+            <div class="demo-notice" id="steamDemoNotice">
+              💡 演示模式下将显示模拟数据。获取真实数据需要配置 Steam API Key。
+              <br>支持格式: SteamID64 / steamcommunity.com/profiles/xxx / steamcommunity.com/id/xxx
+            </div>
           </div>
-          <div style="flex:1;min-width:140px;">
-            <div class="sidebar-title">说明</div>
-            <p style="color:var(--text-muted);margin-top:4px;">
-              以上数据均来自本地 localStorage，是课程项目的前端示例。
-            </p>
+          
+          <!-- 已绑定状态 -->
+          <div id="steamLinked" style="display: none;">
+            <div class="steam-profile">
+              <div class="steam-avatar" id="steamAvatar">
+                <img src="" alt="Steam Avatar" />
+              </div>
+              <div class="steam-user-info">
+                <div class="steam-persona-name" id="steamPersonaName">-</div>
+                <div class="steam-id" id="steamIdDisplay">-</div>
+              </div>
+              <button class="link-btn" id="syncSteamBtn" style="margin-right: 8px;">🔄 同步</button>
+              <button class="profile-btn danger" id="unlinkSteamBtn">解绑</button>
+            </div>
+            
+            <div class="steam-stats">
+              <div class="steam-stat">
+                <div class="steam-stat-value" id="steamGameCount">0</div>
+                <div class="steam-stat-label">Steam 游戏</div>
+              </div>
+              <div class="steam-stat">
+                <div class="steam-stat-value" id="steamPlaytime">0</div>
+                <div class="steam-stat-label">总时长</div>
+              </div>
+              <div class="steam-stat">
+                <div class="steam-stat-value" id="steamRecentCount">0</div>
+                <div class="steam-stat-label">近期游玩</div>
+              </div>
+            </div>
+            
+            <div class="steam-games-header">
+              <div class="steam-games-title">🎮 游戏库 (按游戏时长排序)</div>
+              <select id="steamGamesSort" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(102,192,244,0.3); border-radius: 4px; padding: 4px 8px; color: var(--text-soft); font-size: 12px;">
+                <option value="playtime">按时长</option>
+                <option value="recent">最近游玩</option>
+                <option value="name">按名称</option>
+              </select>
+            </div>
+            
+            <div class="steam-games-list" id="steamGamesList">
+              <!-- 游戏列表动态生成 -->
+            </div>
+            
+            <div class="demo-notice" id="steamLinkedDemoNotice" style="display: none;">
+              ⚠️ 当前显示的是演示数据。配置 Steam API Key 后可获取真实游戏库。
+            </div>
+          </div>
+        </div>
+        
+        <!-- 账号设置 -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <span class="profile-card-icon">⚙️</span>
+            <span class="profile-card-title">账号设置</span>
+          </div>
+          
+          <div class="settings-item">
+            <div>
+              <div class="settings-label">邮箱通知</div>
+              <div class="settings-desc">接收游戏折扣、新闻等邮件通知</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="settingNotifications" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="settings-item">
+            <div>
+              <div class="settings-label">公开资料</div>
+              <div class="settings-desc">允许其他用户查看您的游戏库</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="settingPublicProfile" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="settings-item">
+            <div>
+              <div class="settings-label">修改密码</div>
+              <div class="settings-desc">更新您的登录密码</div>
+            </div>
+            <a href="reset-password.html" class="profile-btn secondary" style="text-decoration: none;">修改</a>
+          </div>
+          
+          <div class="settings-item">
+            <div>
+              <div class="settings-label">退出登录</div>
+              <div class="settings-desc">安全退出当前账号</div>
+            </div>
+            <button class="profile-btn danger" id="logoutBtn">退出</button>
           </div>
         </div>
       </div>
-    </section>
-
-    <aside>
-      <div class="sidebar-card">
-        <div class="sidebar-title">操作建议</div>
-        <div class="sidebar-item">
-          <span class="label">登录</span><span class="value"><a href="login.html">去登录页</a></span>
+      
+      <!-- 右侧边栏 -->
+      <div class="profile-sidebar">
+        
+        <!-- 快捷操作 -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <span class="profile-card-icon">⚡</span>
+            <span class="profile-card-title">快捷操作</span>
+          </div>
+          <div class="quick-actions">
+            <a href="my-library.html" class="quick-action-btn">
+              <span class="quick-action-icon">📚</span>
+              <span>我的游戏库</span>
+            </a>
+            <a href="tools.html" class="quick-action-btn">
+              <span class="quick-action-icon">🔧</span>
+              <span>配置检测工具</span>
+            </a>
+            <a href="discount.html" class="quick-action-btn">
+              <span class="quick-action-icon">💰</span>
+              <span>查看折扣游戏</span>
+            </a>
+            <a href="ranking.html" class="quick-action-btn">
+              <span class="quick-action-icon">🏆</span>
+              <span>热门排行榜</span>
+            </a>
+          </div>
         </div>
-        <div class="sidebar-item">
-          <span class="label">查看游戏</span><span class="value"><a href="my-library.html">我的游戏</a></span>
+        
+        <!-- 最近活动 -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <span class="profile-card-icon">📊</span>
+            <span class="profile-card-title">最近活动</span>
+          </div>
+          <div id="recentActivity" style="font-size: 13px; color: var(--text-muted);">
+            <p>暂无最近活动记录</p>
+          </div>
+        </div>
+        
+        <!-- 帮助信息 -->
+        <div class="profile-card" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(56, 189, 248, 0.05));">
+          <div class="profile-card-header">
+            <span class="profile-card-icon">💡</span>
+            <span class="profile-card-title" style="color: #00ff88;">使用提示</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-soft); line-height: 1.8;">
+            <p>• 绑定 Steam 账号可自动同步游戏库</p>
+            <p>• Steam 资料需设为公开才能获取游戏数据</p>
+            <p>• 本地标记的游戏会保存在浏览器中</p>
+            <p>• 配置 Supabase 可跨设备同步数据</p>
+          </div>
         </div>
       </div>
-    </aside>
+    </div>
   </main>
+  
+  <footer class="footer">
+    GameBox 游盒 · 用户中心 · Powered by Steam & Supabase
+  </footer>
 </div>
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="supabase-config.js"></script>
 <script>
+  // =============================================
+  // 页面初始化
+  // =============================================
+  
   initCommon();
-
-  function getArray(key) {
+  
+  const loginPrompt = document.getElementById('loginPrompt');
+  const profileContent = document.getElementById('profileContent');
+  const profileMessage = document.getElementById('profileMessage');
+  
+  let currentUser = null;
+  let userData = null;
+  
+  // =============================================
+  // 初始化
+  // =============================================
+  
+  async function init() {
+    await GameBoxAuth.init();
+    SteamAPI.init();
+    
+    currentUser = await GameBoxAuth.getCurrentUser();
+    
+    if (currentUser) {
+      loginPrompt.style.display = 'none';
+      profileContent.style.display = 'grid';
+      
+      // 加载用户数据
+      userData = UserDataManager.getData(currentUser.id);
+      
+      renderUserInfo();
+      renderStats();
+      renderSteamSection();
+      updateHeaderUser();
+    } else {
+      loginPrompt.style.display = 'block';
+      profileContent.style.display = 'none';
+    }
+  }
+  
+  // =============================================
+  // 渲染用户信息
+  // =============================================
+  
+  function renderUserInfo() {
+    document.getElementById('userName').textContent = currentUser.username || '玩家';
+    document.getElementById('userEmail').textContent = currentUser.email || '-';
+    
+    // 头像
+    const avatarEl = document.getElementById('userAvatar');
+    if (userData.steam?.linked && userData.steam?.avatar) {
+      avatarEl.innerHTML = `<img src="${userData.steam.avatar}" alt="Avatar" />`;
+    } else {
+      avatarEl.textContent = currentUser.avatar || '🎮';
+    }
+    
+    // 徽章
+    const badgesEl = document.getElementById('userBadges');
+    let badges = '';
+    
+    if (currentUser.email_confirmed) {
+      badges += '<span class="user-badge verified">✓ 已验证</span>';
+    }
+    
+    if (userData.steam?.linked) {
+      badges += '<span class="user-badge steam">🎮 Steam 已绑定</span>';
+    }
+    
+    badges += '<span class="user-badge">Lv.' + calculateLevel() + '</span>';
+    
+    badgesEl.innerHTML = badges;
+  }
+  
+  // =============================================
+  // 渲染统计数据
+  // =============================================
+  
+  function renderStats() {
+    // 本地游戏数据
+    const ownedGames = getLocalArray('ownedGames');
+    const wishlistGames = getLocalArray('wishlistGames');
+    
+    // 总游戏数 (本地 + Steam)
+    let totalOwned = ownedGames.length;
+    if (userData.steam?.linked && userData.steam?.gameCount) {
+      totalOwned = Math.max(totalOwned, userData.steam.gameCount);
+    }
+    
+    document.getElementById('statOwnedGames').textContent = totalOwned;
+    document.getElementById('statWishlistGames').textContent = wishlistGames.length;
+    
+    // 游戏时长
+    let totalPlaytime = userData.steam?.totalPlaytime || 0;
+    document.getElementById('statPlaytime').textContent = formatPlaytimeShort(totalPlaytime);
+    
+    // 等级
+    document.getElementById('statLevel').textContent = 'Lv.' + calculateLevel();
+  }
+  
+  function calculateLevel() {
+    let points = 0;
+    
+    // 本地游戏
+    points += getLocalArray('ownedGames').length * 10;
+    points += getLocalArray('wishlistGames').length * 2;
+    
+    // Steam 数据
+    if (userData.steam?.linked) {
+      points += userData.steam.gameCount * 5;
+      points += Math.floor(userData.steam.totalPlaytime / 60); // 每小时1点
+    }
+    
+    // 计算等级
+    if (points >= 1000) return 10;
+    if (points >= 500) return 8;
+    if (points >= 300) return 6;
+    if (points >= 150) return 4;
+    if (points >= 50) return 2;
+    return 1;
+  }
+  
+  function formatPlaytimeShort(minutes) {
+    if (minutes < 60) return minutes + '分';
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + '小时';
+    const days = Math.floor(hours / 24);
+    return days + '天';
+  }
+  
+  function getLocalArray(key) {
     try {
-      const raw = localStorage.getItem(key);
-      if (!raw) return [];
-      return JSON.parse(raw);
+      return JSON.parse(localStorage.getItem(key) || '[]');
     } catch {
       return [];
     }
   }
-
-  const ownedCount = getArray("ownedGames").length;
-  const wishCount = getArray("wishlistGames").length;
-
-  document.getElementById("statOwned").textContent = ownedCount;
-  document.getElementById("statWish").textContent = wishCount;
-
-  let currentUser = null;
-  try {
-    const raw = localStorage.getItem("currentUser");
-    if (raw) currentUser = JSON.parse(raw);
-  } catch {}
-
-  const profileName = document.getElementById("profileName");
-  const profileSummary = document.getElementById("profileSummary");
-  const profileIntro = document.getElementById("profileIntro");
-
-  if (currentUser) {
-    const name = currentUser.nickname || currentUser.username || "玩家";
-    profileName.textContent = name;
-    profileIntro.innerHTML =
-      `欢迎回来，<strong>${name}</strong>。这是一个用于课程展示的前端 Demo 用户中心。`;
-  }
-
   
-  // 美化数据展示区域
-  document.getElementById("statOwned").style.color = "var(--accent)";
-  document.getElementById("statWish").style.color = "var(--accent)";
-
-  if (ownedCount === 0 && wishCount === 0) {
-    profileSummary.innerHTML =
-      "📝 还没有记录任何游戏，可以去<a href='game-library.html' style='color: var(--accent);'>游戏库</a>或<a href='ranking.html' style='color: var(--accent);'>排行榜</a>找找感兴趣的游戏，然后在详情页标记它们。";
-  } else {
-    const who = currentUser
-      ? (currentUser.nickname || currentUser.username || "你")
-      : "你";
+  // =============================================
+  // Steam 区域渲染
+  // =============================================
+  
+  function renderSteamSection() {
+    const steamUnlinked = document.getElementById('steamUnlinked');
+    const steamLinked = document.getElementById('steamLinked');
+    const steamStatus = document.getElementById('steamStatus');
+    const steamStatusText = document.getElementById('steamStatusText');
     
-    let emoji = "🎮";
-    if (ownedCount >= 10) emoji = "🏆";
-    else if (ownedCount >= 5) emoji = "⭐";
-    
-    profileSummary.innerHTML =
-      `${emoji} ${who} 当前已记录 <strong style="color: var(--accent);">${ownedCount}</strong> 款已拥有游戏，<strong style="color: var(--accent);">${wishCount}</strong> 款想玩的游戏。`;
+    if (userData.steam?.linked) {
+      steamUnlinked.style.display = 'none';
+      steamLinked.style.display = 'block';
+      steamStatus.className = 'steam-status linked';
+      steamStatusText.textContent = '已绑定';
+      
+      // 渲染 Steam 信息
+      document.getElementById('steamAvatar').querySelector('img').src = userData.steam.avatar || '';
+      document.getElementById('steamPersonaName').textContent = userData.steam.personaName || '-';
+      document.getElementById('steamIdDisplay').textContent = 'Steam ID: ' + userData.steam.steamId;
+      
+      // 统计
+      document.getElementById('steamGameCount').textContent = userData.steam.gameCount || 0;
+      document.getElementById('steamPlaytime').textContent = formatPlaytimeShort(userData.steam.totalPlaytime || 0);
+      
+      // 最近游玩数
+      const recentGames = (userData.steam.games || []).filter(g => g.playtime2Weeks > 0);
+      document.getElementById('steamRecentCount').textContent = recentGames.length;
+      
+      // 渲染游戏列表
+      renderSteamGames(userData.steam.games || []);
+      
+      // 检查是否是演示数据
+      // (通过检查 localStorage 中保存的数据是否有 isDemo 标记)
+      if (!SteamAPI.isEnabled()) {
+        document.getElementById('steamLinkedDemoNotice').style.display = 'block';
+      }
+    } else {
+      steamUnlinked.style.display = 'block';
+      steamLinked.style.display = 'none';
+      steamStatus.className = 'steam-status unlinked';
+      steamStatusText.textContent = '未绑定';
+    }
   }
+  
+  function renderSteamGames(games, sortBy = 'playtime') {
+    const gamesList = document.getElementById('steamGamesList');
+    
+    if (!games || games.length === 0) {
+      gamesList.innerHTML = '<p style="color: var(--text-muted); padding: 20px; text-align: center;">暂无游戏数据</p>';
+      return;
+    }
+    
+    // 排序
+    let sortedGames = [...games];
+    switch (sortBy) {
+      case 'playtime':
+        sortedGames.sort((a, b) => (b.playtimeForever || 0) - (a.playtimeForever || 0));
+        break;
+      case 'recent':
+        sortedGames.sort((a, b) => (b.playtime2Weeks || 0) - (a.playtime2Weeks || 0));
+        break;
+      case 'name':
+        sortedGames.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        break;
+    }
+    
+    gamesList.innerHTML = sortedGames.map(game => `
+      <div class="steam-game-item">
+        <div class="steam-game-img">
+          <img src="${game.headerImage}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
+        </div>
+        <div class="steam-game-info">
+          <div class="steam-game-name">${game.name}</div>
+          <div class="steam-game-playtime">
+            总时长: ${SteamAPI.formatPlaytime(game.playtimeForever || 0)}
+            ${game.playtime2Weeks > 0 ? ` · 近两周: ${SteamAPI.formatPlaytime(game.playtime2Weeks)}` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  // =============================================
+  // 事件处理
+  // =============================================
+  
+  // 绑定 Steam
+  document.getElementById('linkSteamBtn').addEventListener('click', async () => {
+    const steamInput = document.getElementById('steamIdInput');
+    const btn = document.getElementById('linkSteamBtn');
+    const steamIdOrUrl = steamInput.value.trim();
+    
+    if (!steamIdOrUrl) {
+      showMessage('请输入 Steam ID 或个人资料链接', 'error');
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '绑定中...';
+    
+    try {
+      const result = await UserDataManager.linkSteam(currentUser.id, steamIdOrUrl);
+      
+      if (result.success) {
+        userData = UserDataManager.getData(currentUser.id);
+        renderUserInfo();
+        renderStats();
+        renderSteamSection();
+        
+        let message = result.message;
+        if (result.isDemo) {
+          message += ' (演示数据)';
+        }
+        showMessage(message, 'success');
+      } else {
+        showMessage(result.error, 'error');
+      }
+    } catch (error) {
+      showMessage('绑定失败: ' + error.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '绑定账号';
+    }
+  });
+  
+  // 同步 Steam
+  document.getElementById('syncSteamBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('syncSteamBtn');
+    btn.disabled = true;
+    btn.textContent = '同步中...';
+    
+    try {
+      const result = await UserDataManager.syncSteam(currentUser.id);
+      
+      if (result.success) {
+        userData = UserDataManager.getData(currentUser.id);
+        renderStats();
+        renderSteamSection();
+        showMessage('Steam 数据已同步', 'success');
+      } else {
+        showMessage(result.error, 'error');
+      }
+    } catch (error) {
+      showMessage('同步失败: ' + error.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🔄 同步';
+    }
+  });
+  
+  // 解绑 Steam
+  document.getElementById('unlinkSteamBtn').addEventListener('click', () => {
+    if (confirm('确定要解绑 Steam 账号吗？这将清除已同步的游戏数据。')) {
+      UserDataManager.unlinkSteam(currentUser.id);
+      userData = UserDataManager.getData(currentUser.id);
+      renderUserInfo();
+      renderStats();
+      renderSteamSection();
+      showMessage('Steam 账号已解绑', 'info');
+    }
+  });
+  
+  // 游戏排序
+  document.getElementById('steamGamesSort').addEventListener('change', (e) => {
+    renderSteamGames(userData.steam?.games || [], e.target.value);
+  });
+  
+  // 登出
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    if (confirm('确定要退出登录吗？')) {
+      await GameBoxAuth.signOut();
+      window.location.href = 'login.html';
+    }
+  });
+  
+  // =============================================
+  // 工具函数
+  // =============================================
+  
+  function showMessage(text, type = 'info') {
+    profileMessage.textContent = text;
+    profileMessage.className = 'profile-message show ' + type;
+    
+    setTimeout(() => {
+      profileMessage.classList.remove('show');
+    }, 5000);
+  }
+  
+  async function updateHeaderUser() {
+    const headerBtn = document.getElementById('headerUserBtn');
+    if (currentUser) {
+      headerBtn.textContent = currentUser.username;
+      headerBtn.style.color = 'var(--accent)';
+    }
+  }
+  
+  // =============================================
+  // 启动
+  // =============================================
+  
+  init();
 </script>
 </body>
 </html>

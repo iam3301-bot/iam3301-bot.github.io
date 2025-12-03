@@ -618,10 +618,550 @@ const GameBoxAuth = {
       githubOAuthEnabled: SUPABASE_CONFIG.oauth.github.enabled,
       emailConfirmationRequired: SUPABASE_CONFIG.email.confirmationRequired
     };
+  },
+  
+  // =============================================
+  // 邮箱验证码功能
+  // =============================================
+  
+  // 发送邮箱验证码 (OTP)
+  async sendEmailOTP(email) {
+    if (isSupabaseEnabled()) {
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithOtp({
+          email: email,
+          options: {
+            shouldCreateUser: false // 仅验证邮箱，不创建用户
+          }
+        });
+        
+        if (error) throw error;
+        
+        return {
+          success: true,
+          message: '验证码已发送到您的邮箱，请查收'
+        };
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    } else {
+      // 本地模式模拟验证码
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      const otpData = {
+        email: email.toLowerCase(),
+        code: code,
+        expires: Date.now() + 5 * 60 * 1000 // 5分钟过期
+      };
+      localStorage.setItem('gamebox_email_otp', JSON.stringify(otpData));
+      
+      console.log(`[演示模式] 邮箱验证码: ${code}`);
+      
+      return {
+        success: true,
+        message: '验证码已发送 (演示模式: 请在控制台查看验证码)',
+        // 演示模式下直接返回验证码
+        demoCode: code
+      };
+    }
+  },
+  
+  // 验证邮箱验证码
+  async verifyEmailOTP(email, code) {
+    if (isSupabaseEnabled()) {
+      try {
+        const { data, error } = await supabaseClient.auth.verifyOtp({
+          email: email,
+          token: code,
+          type: 'email'
+        });
+        
+        if (error) throw error;
+        
+        return {
+          success: true,
+          message: '邮箱验证成功'
+        };
+      } catch (error) {
+        return { success: false, error: '验证码错误或已过期' };
+      }
+    } else {
+      // 本地模式验证
+      const otpDataStr = localStorage.getItem('gamebox_email_otp');
+      if (!otpDataStr) {
+        return { success: false, error: '请先发送验证码' };
+      }
+      
+      const otpData = JSON.parse(otpDataStr);
+      
+      if (otpData.email !== email.toLowerCase()) {
+        return { success: false, error: '邮箱不匹配' };
+      }
+      
+      if (Date.now() > otpData.expires) {
+        localStorage.removeItem('gamebox_email_otp');
+        return { success: false, error: '验证码已过期，请重新发送' };
+      }
+      
+      if (otpData.code !== code) {
+        return { success: false, error: '验证码错误' };
+      }
+      
+      // 验证成功，清除验证码
+      localStorage.removeItem('gamebox_email_otp');
+      
+      return {
+        success: true,
+        message: '邮箱验证成功'
+      };
+    }
+  },
+  
+  // 带验证码的注册
+  async signUpWithOTP(email, password, username, otpCode) {
+    // 先验证验证码
+    const verifyResult = await this.verifyEmailOTP(email, otpCode);
+    if (!verifyResult.success) {
+      return verifyResult;
+    }
+    
+    // 验证通过后注册
+    return this.signUp(email, password, username);
+  }
+};
+
+// =============================================
+// Steam 集成 API
+// =============================================
+
+const STEAM_CONFIG = {
+  // Steam Web API Key (用户需要自行申请: https://steamcommunity.com/dev/apikey)
+  apiKey: '',
+  
+  // 是否启用 Steam 集成
+  enabled: false,
+  
+  // CORS 代理 (由于浏览器限制，需要通过代理访问 Steam API)
+  // 可以使用自己的后端代理或公共代理服务
+  proxyUrl: 'https://api.allorigins.win/raw?url='
+};
+
+const SteamAPI = {
+  // 初始化
+  init() {
+    console.log('[Steam API] 初始化, 启用状态:', STEAM_CONFIG.enabled);
+  },
+  
+  // 检查是否启用
+  isEnabled() {
+    return STEAM_CONFIG.enabled && STEAM_CONFIG.apiKey;
+  },
+  
+  // 从 Steam 个人资料 URL 提取 SteamID64
+  async resolveSteamId(profileUrl) {
+    // 支持多种格式:
+    // https://steamcommunity.com/id/customurl
+    // https://steamcommunity.com/profiles/76561198xxxxxxxxx
+    // 76561198xxxxxxxxx (直接 ID)
+    
+    let steamId = profileUrl.trim();
+    
+    // 如果已经是纯数字 ID
+    if (/^\d{17}$/.test(steamId)) {
+      return { success: true, steamId: steamId };
+    }
+    
+    // 从 URL 提取
+    const profileMatch = steamId.match(/steamcommunity\.com\/profiles\/(\d{17})/);
+    if (profileMatch) {
+      return { success: true, steamId: profileMatch[1] };
+    }
+    
+    // 自定义 URL 格式
+    const customMatch = steamId.match(/steamcommunity\.com\/id\/([^\/\?]+)/);
+    if (customMatch) {
+      const vanityUrl = customMatch[1];
+      
+      if (!this.isEnabled()) {
+        return { 
+          success: false, 
+          error: '解析自定义 URL 需要 Steam API Key。请直接输入您的 SteamID64，或使用个人资料链接格式: steamcommunity.com/profiles/您的ID' 
+        };
+      }
+      
+      // 调用 Steam API 解析
+      try {
+        const url = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_CONFIG.apiKey}&vanityurl=${vanityUrl}`;
+        const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
+        const data = await response.json();
+        
+        if (data.response && data.response.success === 1) {
+          return { success: true, steamId: data.response.steamid };
+        } else {
+          return { success: false, error: '无法解析该 Steam 个人资料' };
+        }
+      } catch (error) {
+        return { success: false, error: '解析失败: ' + error.message };
+      }
+    }
+    
+    return { success: false, error: '无效的 Steam 个人资料链接或 ID' };
+  },
+  
+  // 获取用户信息
+  async getPlayerSummary(steamId) {
+    if (!this.isEnabled()) {
+      // 本地模式 - 返回模拟数据
+      return this._getMockPlayerSummary(steamId);
+    }
+    
+    try {
+      const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_CONFIG.apiKey}&steamids=${steamId}`;
+      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
+      const data = await response.json();
+      
+      if (data.response && data.response.players && data.response.players.length > 0) {
+        const player = data.response.players[0];
+        return {
+          success: true,
+          player: {
+            steamId: player.steamid,
+            personaName: player.personaname,
+            profileUrl: player.profileurl,
+            avatar: player.avatarfull || player.avatarmedium || player.avatar,
+            personaState: player.personastate, // 0=离线, 1=在线, 2=忙碌, 3=离开, 4=打盹, 5=想交易, 6=想玩
+            visibility: player.communityvisibilitystate, // 1=私密, 3=公开
+            lastLogoff: player.lastlogoff,
+            gameId: player.gameid,
+            gameExtraInfo: player.gameextrainfo
+          }
+        };
+      }
+      
+      return { success: false, error: '未找到该用户' };
+    } catch (error) {
+      return { success: false, error: '获取用户信息失败: ' + error.message };
+    }
+  },
+  
+  // 获取拥有的游戏
+  async getOwnedGames(steamId, includeAppInfo = true, includeFreeGames = true) {
+    if (!this.isEnabled()) {
+      // 本地模式 - 返回模拟数据
+      return this._getMockOwnedGames(steamId);
+    }
+    
+    try {
+      let url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&format=json`;
+      if (includeAppInfo) url += '&include_appinfo=1';
+      if (includeFreeGames) url += '&include_played_free_games=1';
+      
+      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
+      const data = await response.json();
+      
+      if (data.response) {
+        const games = data.response.games || [];
+        return {
+          success: true,
+          gameCount: data.response.game_count || games.length,
+          games: games.map(game => ({
+            appId: game.appid,
+            name: game.name || `App ${game.appid}`,
+            playtimeForever: game.playtime_forever || 0, // 总游戏时间(分钟)
+            playtime2Weeks: game.playtime_2weeks || 0, // 最近两周游戏时间
+            imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
+            imgLogoUrl: game.img_logo_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg` : null,
+            // Steam 商店封面图
+            headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
+          }))
+        };
+      }
+      
+      return { success: false, error: '获取游戏库失败，可能是用户资料设为私密' };
+    } catch (error) {
+      return { success: false, error: '获取游戏库失败: ' + error.message };
+    }
+  },
+  
+  // 获取最近游玩的游戏
+  async getRecentlyPlayedGames(steamId, count = 10) {
+    if (!this.isEnabled()) {
+      return this._getMockRecentGames(steamId);
+    }
+    
+    try {
+      const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&count=${count}&format=json`;
+      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
+      const data = await response.json();
+      
+      if (data.response) {
+        const games = data.response.games || [];
+        return {
+          success: true,
+          totalCount: data.response.total_count || games.length,
+          games: games.map(game => ({
+            appId: game.appid,
+            name: game.name,
+            playtimeForever: game.playtime_forever || 0,
+            playtime2Weeks: game.playtime_2weeks || 0,
+            imgIconUrl: game.img_icon_url ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg` : null,
+            headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`
+          }))
+        };
+      }
+      
+      return { success: false, error: '获取最近游戏失败' };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // 获取成就
+  async getPlayerAchievements(steamId, appId) {
+    if (!this.isEnabled()) {
+      return { success: false, error: '成就功能需要 Steam API Key' };
+    }
+    
+    try {
+      const url = `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${STEAM_CONFIG.apiKey}&steamid=${steamId}`;
+      const response = await fetch(STEAM_CONFIG.proxyUrl + encodeURIComponent(url));
+      const data = await response.json();
+      
+      if (data.playerstats && data.playerstats.achievements) {
+        const achievements = data.playerstats.achievements;
+        const achieved = achievements.filter(a => a.achieved === 1).length;
+        
+        return {
+          success: true,
+          gameName: data.playerstats.gameName,
+          achievements: achievements,
+          achievedCount: achieved,
+          totalCount: achievements.length,
+          completionRate: Math.round((achieved / achievements.length) * 100)
+        };
+      }
+      
+      return { success: false, error: '获取成就失败' };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // 格式化游戏时间
+  formatPlaytime(minutes) {
+    if (minutes < 60) return `${minutes} 分钟`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours < 24) return mins > 0 ? `${hours} 小时 ${mins} 分钟` : `${hours} 小时`;
+    const days = Math.floor(hours / 24);
+    const remainHours = hours % 24;
+    return `${days} 天 ${remainHours} 小时`;
+  },
+  
+  // 获取在线状态文本
+  getPersonaStateText(state) {
+    const states = ['离线', '在线', '忙碌', '离开', '打盹', '想交易', '想玩游戏'];
+    return states[state] || '未知';
+  },
+  
+  // =============================================
+  // 本地模拟数据 (演示用)
+  // =============================================
+  
+  _getMockPlayerSummary(steamId) {
+    return {
+      success: true,
+      player: {
+        steamId: steamId || '76561198000000000',
+        personaName: '演示玩家',
+        profileUrl: 'https://steamcommunity.com/profiles/' + (steamId || '76561198000000000'),
+        avatar: 'https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg',
+        personaState: 1,
+        visibility: 3,
+        lastLogoff: Math.floor(Date.now() / 1000) - 3600,
+        gameId: null,
+        gameExtraInfo: null
+      },
+      isDemo: true
+    };
+  },
+  
+  _getMockOwnedGames(steamId) {
+    const mockGames = [
+      { appId: 730, name: 'Counter-Strike 2', playtimeForever: 15420, playtime2Weeks: 840 },
+      { appId: 570, name: 'Dota 2', playtimeForever: 8760, playtime2Weeks: 120 },
+      { appId: 1245620, name: 'ELDEN RING', playtimeForever: 4320, playtime2Weeks: 360 },
+      { appId: 1091500, name: 'Cyberpunk 2077', playtimeForever: 2880, playtime2Weeks: 0 },
+      { appId: 1174180, name: 'Red Dead Redemption 2', playtimeForever: 3600, playtime2Weeks: 180 },
+      { appId: 292030, name: 'The Witcher 3: Wild Hunt', playtimeForever: 5400, playtime2Weeks: 0 },
+      { appId: 1551360, name: 'Forza Horizon 5', playtimeForever: 1200, playtime2Weeks: 60 },
+      { appId: 1817070, name: 'Hogwarts Legacy', playtimeForever: 2160, playtime2Weeks: 0 },
+      { appId: 2358720, name: 'Black Myth: Wukong', playtimeForever: 1800, playtime2Weeks: 720 },
+      { appId: 1086940, name: 'Baldur\'s Gate 3', playtimeForever: 6000, playtime2Weeks: 480 }
+    ];
+    
+    return {
+      success: true,
+      gameCount: mockGames.length,
+      games: mockGames.map(game => ({
+        ...game,
+        imgIconUrl: null,
+        imgLogoUrl: null,
+        headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`
+      })),
+      isDemo: true
+    };
+  },
+  
+  _getMockRecentGames(steamId) {
+    const recentGames = [
+      { appId: 2358720, name: 'Black Myth: Wukong', playtimeForever: 1800, playtime2Weeks: 720 },
+      { appId: 730, name: 'Counter-Strike 2', playtimeForever: 15420, playtime2Weeks: 840 },
+      { appId: 1086940, name: 'Baldur\'s Gate 3', playtimeForever: 6000, playtime2Weeks: 480 },
+      { appId: 1245620, name: 'ELDEN RING', playtimeForever: 4320, playtime2Weeks: 360 }
+    ];
+    
+    return {
+      success: true,
+      totalCount: recentGames.length,
+      games: recentGames.map(game => ({
+        ...game,
+        imgIconUrl: null,
+        headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`
+      })),
+      isDemo: true
+    };
+  }
+};
+
+// =============================================
+// 用户数据管理 (用户中心扩展)
+// =============================================
+
+const UserDataManager = {
+  STORAGE_KEY: 'gamebox_user_data',
+  
+  // 获取用户数据
+  getData(userId) {
+    const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return allData[userId] || this._getDefaultData();
+  },
+  
+  // 保存用户数据
+  saveData(userId, data) {
+    const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    allData[userId] = { ...this.getData(userId), ...data, updatedAt: new Date().toISOString() };
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allData));
+    return allData[userId];
+  },
+  
+  // 默认数据结构
+  _getDefaultData() {
+    return {
+      steam: {
+        linked: false,
+        steamId: null,
+        personaName: null,
+        avatar: null,
+        lastSync: null,
+        games: [],
+        gameCount: 0,
+        totalPlaytime: 0
+      },
+      preferences: {
+        theme: 'cyberpunk',
+        notifications: true,
+        publicProfile: true
+      },
+      stats: {
+        ownedGames: 0,
+        wishlistGames: 0,
+        totalPlaytime: 0,
+        achievements: 0
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+  },
+  
+  // 绑定 Steam 账号
+  async linkSteam(userId, steamIdOrUrl) {
+    // 解析 Steam ID
+    const resolveResult = await SteamAPI.resolveSteamId(steamIdOrUrl);
+    if (!resolveResult.success) {
+      return resolveResult;
+    }
+    
+    const steamId = resolveResult.steamId;
+    
+    // 获取用户信息
+    const playerResult = await SteamAPI.getPlayerSummary(steamId);
+    if (!playerResult.success) {
+      return playerResult;
+    }
+    
+    // 获取游戏库
+    const gamesResult = await SteamAPI.getOwnedGames(steamId);
+    
+    // 计算总游戏时间
+    let totalPlaytime = 0;
+    if (gamesResult.success && gamesResult.games) {
+      totalPlaytime = gamesResult.games.reduce((sum, g) => sum + (g.playtimeForever || 0), 0);
+    }
+    
+    // 保存数据
+    const userData = this.saveData(userId, {
+      steam: {
+        linked: true,
+        steamId: steamId,
+        personaName: playerResult.player.personaName,
+        avatar: playerResult.player.avatar,
+        profileUrl: playerResult.player.profileUrl,
+        lastSync: new Date().toISOString(),
+        games: gamesResult.success ? gamesResult.games : [],
+        gameCount: gamesResult.success ? gamesResult.gameCount : 0,
+        totalPlaytime: totalPlaytime
+      }
+    });
+    
+    return {
+      success: true,
+      message: 'Steam 账号绑定成功！',
+      data: userData.steam,
+      isDemo: playerResult.isDemo || gamesResult.isDemo
+    };
+  },
+  
+  // 解绑 Steam 账号
+  unlinkSteam(userId) {
+    const userData = this.getData(userId);
+    userData.steam = {
+      linked: false,
+      steamId: null,
+      personaName: null,
+      avatar: null,
+      lastSync: null,
+      games: [],
+      gameCount: 0,
+      totalPlaytime: 0
+    };
+    this.saveData(userId, userData);
+    
+    return { success: true, message: 'Steam 账号已解绑' };
+  },
+  
+  // 同步 Steam 数据
+  async syncSteam(userId) {
+    const userData = this.getData(userId);
+    
+    if (!userData.steam.linked || !userData.steam.steamId) {
+      return { success: false, error: '请先绑定 Steam 账号' };
+    }
+    
+    return this.linkSteam(userId, userData.steam.steamId);
   }
 };
 
 // 导出
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { GameBoxAuth, SUPABASE_CONFIG, LOCAL_AUTH };
+  module.exports = { GameBoxAuth, SUPABASE_CONFIG, LOCAL_AUTH, SteamAPI, STEAM_CONFIG, UserDataManager };
 }
