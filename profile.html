@@ -187,20 +187,23 @@
       color: var(--text-muted);
     }
     
-    /* Steam 区域 */
+    /* Steam 区域 - 小黑盒风格 */
     .steam-section {
       background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(20, 30, 45, 0.9));
       border: 1px solid rgba(102, 192, 244, 0.3);
       border-radius: 16px;
-      padding: 24px;
+      padding: 0;
       margin-bottom: 24px;
+      overflow: hidden;
     }
     
     .steam-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(102, 192, 244, 0.15);
     }
     
     .steam-logo {
@@ -210,20 +213,26 @@
     }
     
     .steam-logo-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, #1b2838, #2a475e);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 20px;
     }
     
     .steam-logo-text {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: #66c0f4;
+    }
+    
+    .steam-logo-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
     
     .steam-status {
@@ -241,6 +250,55 @@
       color: var(--text-muted);
     }
     
+    .steam-help-link {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .steam-help-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* 热门游戏横幅 */
+    .steam-games-banner {
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.15);
+    }
+    
+    .steam-games-banner::-webkit-scrollbar {
+      height: 0;
+    }
+    
+    .steam-banner-item {
+      width: 70px;
+      height: 90px;
+      border-radius: 6px;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .steam-banner-item:hover {
+      transform: scale(1.05);
+    }
+    
+    .steam-banner-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* 绑定内容区域 */
+    .steam-bind-content {
+      padding: 20px;
+    }
+    
     .steam-profile {
       display: flex;
       align-items: center;
@@ -252,10 +310,11 @@
     }
     
     .steam-avatar {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       border-radius: 8px;
       overflow: hidden;
+      flex-shrink: 0;
     }
     
     .steam-avatar img {
@@ -266,13 +325,26 @@
     
     .steam-user-info {
       flex: 1;
+      min-width: 0;
     }
     
     .steam-persona-name {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: #66c0f4;
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .steam-primary-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
     }
     
     .steam-id {
@@ -281,29 +353,104 @@
       font-family: monospace;
     }
     
+    .steam-profile-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .steam-action-btn {
+      padding: 8px 14px;
+      background: rgba(102, 192, 244, 0.2);
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      border-radius: 6px;
+      color: #66c0f4;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .steam-action-btn:hover {
+      background: rgba(102, 192, 244, 0.3);
+      border-color: #66c0f4;
+    }
+    
+    .steam-action-btn.primary {
+      background: #66c0f4;
+      color: #1b2838;
+      border-color: transparent;
+    }
+    
+    .steam-action-btn.danger {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .steam-action-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+    
     .steam-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 16px;
+      margin-bottom: 16px;
     }
     
     .steam-stat {
       text-align: center;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
+      padding: 14px 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      border: 1px solid rgba(102, 192, 244, 0.1);
     }
     
     .steam-stat-value {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: #66c0f4;
+      font-family: 'Orbitron', sans-serif;
     }
     
     .steam-stat-label {
       font-size: 11px;
       color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* 多账号管理入口 */
+    .steam-multi-account {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(102, 192, 244, 0.05);
+      border: 1px dashed rgba(102, 192, 244, 0.3);
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .steam-multi-account-text {
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+    
+    .steam-multi-account-link {
+      font-size: 13px;
+      color: #66c0f4;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .steam-multi-account-link:hover {
+      text-decoration: underline;
     }
     
     /* Steam 游戏列表 */
@@ -757,80 +904,124 @@
           </div>
         </div>
         
-        <!-- Steam 绑定区域 -->
+        <!-- Steam 绑定区域 - 小黑盒风格 -->
         <div class="steam-section" id="steamSection">
           <div class="steam-header">
             <div class="steam-logo">
               <div class="steam-logo-icon">🎮</div>
-              <div class="steam-logo-text">Steam 账号</div>
+              <div>
+                <div class="steam-logo-text">Steam</div>
+                <div class="steam-logo-desc">同步游玩数据</div>
+              </div>
             </div>
-            <div class="steam-status" id="steamStatus">
-              <span>●</span> <span id="steamStatusText">未绑定</span>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <a href="#" class="steam-help-link" onclick="showSteamHelp(); return false;">帮助</a>
+              <div class="steam-status" id="steamStatus">
+                <span>●</span> <span id="steamStatusText">未绑定</span>
+              </div>
             </div>
           </div>
           
-          <!-- 未绑定状态 -->
-          <div id="steamUnlinked">
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
-              绑定 Steam 账号后，可以自动同步您的游戏库、游戏时长等数据
-            </p>
-            
-            <div class="link-form">
-              <input type="text" class="link-input" id="steamIdInput" 
-                placeholder="输入 Steam ID 或个人资料链接" />
-              <button class="link-btn" id="linkSteamBtn">绑定账号</button>
+          <!-- 热门游戏横幅 -->
+          <div class="steam-games-banner">
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/730', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/730/capsule_231x87.jpg" alt="CS2">
             </div>
-            
-            <div class="demo-notice" id="steamDemoNotice">
-              💡 演示模式下将显示模拟数据。获取真实数据需要配置 Steam API Key。
-              <br>支持格式: SteamID64 / steamcommunity.com/profiles/xxx / steamcommunity.com/id/xxx
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/570', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/570/capsule_231x87.jpg" alt="Dota2">
+            </div>
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/578080', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/578080/capsule_231x87.jpg" alt="PUBG">
+            </div>
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/1172470', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/capsule_231x87.jpg" alt="Apex">
+            </div>
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/1245620', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/capsule_231x87.jpg" alt="Elden Ring">
+            </div>
+            <div class="steam-banner-item" onclick="window.open('https://store.steampowered.com/app/2358720', '_blank')">
+              <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/capsule_231x87.jpg" alt="Black Myth">
             </div>
           </div>
           
-          <!-- 已绑定状态 -->
-          <div id="steamLinked" style="display: none;">
-            <div class="steam-profile">
-              <div class="steam-avatar" id="steamAvatar">
-                <img src="" alt="Steam Avatar" />
+          <div class="steam-bind-content">
+            <!-- 未绑定状态 -->
+            <div id="steamUnlinked">
+              <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+                绑定 Steam 账号后，可以自动同步您的游戏库、游戏时长等数据
+              </p>
+              
+              <div class="link-form">
+                <input type="text" class="link-input" id="steamIdInput" 
+                  placeholder="输入 Steam ID 或个人资料链接" />
+                <button class="link-btn" id="linkSteamBtn">绑定账号</button>
               </div>
-              <div class="steam-user-info">
-                <div class="steam-persona-name" id="steamPersonaName">-</div>
-                <div class="steam-id" id="steamIdDisplay">-</div>
-              </div>
-              <button class="link-btn" id="syncSteamBtn" style="margin-right: 8px;">🔄 同步</button>
-              <button class="profile-btn danger" id="unlinkSteamBtn">解绑</button>
-            </div>
-            
-            <div class="steam-stats">
-              <div class="steam-stat">
-                <div class="steam-stat-value" id="steamGameCount">0</div>
-                <div class="steam-stat-label">Steam 游戏</div>
-              </div>
-              <div class="steam-stat">
-                <div class="steam-stat-value" id="steamPlaytime">0</div>
-                <div class="steam-stat-label">总时长</div>
-              </div>
-              <div class="steam-stat">
-                <div class="steam-stat-value" id="steamRecentCount">0</div>
-                <div class="steam-stat-label">近期游玩</div>
+              
+              <div class="demo-notice" id="steamDemoNotice">
+                💡 演示模式下将显示模拟数据。获取真实数据需要配置 Steam API Key。
+                <br>支持格式: SteamID64 / steamcommunity.com/profiles/xxx / steamcommunity.com/id/xxx
               </div>
             </div>
             
-            <div class="steam-games-header">
-              <div class="steam-games-title">🎮 游戏库 (按游戏时长排序)</div>
-              <select id="steamGamesSort" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(102,192,244,0.3); border-radius: 4px; padding: 4px 8px; color: var(--text-soft); font-size: 12px;">
-                <option value="playtime">按时长</option>
-                <option value="recent">最近游玩</option>
-                <option value="name">按名称</option>
-              </select>
-            </div>
-            
-            <div class="steam-games-list" id="steamGamesList">
-              <!-- 游戏列表动态生成 -->
-            </div>
-            
-            <div class="demo-notice" id="steamLinkedDemoNotice" style="display: none;">
-              ⚠️ 当前显示的是演示数据。配置 Steam API Key 后可获取真实游戏库。
+            <!-- 已绑定状态 -->
+            <div id="steamLinked" style="display: none;">
+              <div class="steam-profile">
+                <div class="steam-avatar" id="steamAvatar">
+                  <img src="" alt="Steam Avatar" />
+                </div>
+                <div class="steam-user-info">
+                  <div class="steam-persona-name">
+                    <span id="steamPersonaName">-</span>
+                    <span class="steam-primary-badge">主账号</span>
+                  </div>
+                  <div class="steam-id" id="steamIdDisplay">-</div>
+                </div>
+                <div class="steam-profile-actions">
+                  <button class="steam-action-btn primary" id="showFriendCodeBtn">显示好友码</button>
+                  <button class="steam-action-btn" id="syncSteamBtn">🔄 同步</button>
+                  <button class="steam-action-btn danger" id="unlinkSteamBtn">解绑</button>
+                </div>
+              </div>
+              
+              <div class="steam-stats">
+                <div class="steam-stat">
+                  <div class="steam-stat-value" id="steamGameCount">0</div>
+                  <div class="steam-stat-label">Steam 游戏</div>
+                </div>
+                <div class="steam-stat">
+                  <div class="steam-stat-value" id="steamPlaytime">0</div>
+                  <div class="steam-stat-label">总时长</div>
+                </div>
+                <div class="steam-stat">
+                  <div class="steam-stat-value" id="steamRecentCount">0</div>
+                  <div class="steam-stat-label">近期游玩</div>
+                </div>
+              </div>
+              
+              <!-- 多账号管理入口 -->
+              <div class="steam-multi-account">
+                <span class="steam-multi-account-text">管理多个 Steam 账号</span>
+                <a href="accounts.html" class="steam-multi-account-link">
+                  游戏账号管理 →
+                </a>
+              </div>
+              
+              <div class="steam-games-header">
+                <div class="steam-games-title">🎮 游戏库 (按游戏时长排序)</div>
+                <select id="steamGamesSort" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(102,192,244,0.3); border-radius: 4px; padding: 4px 8px; color: var(--text-soft); font-size: 12px;">
+                  <option value="playtime">按时长</option>
+                  <option value="recent">最近游玩</option>
+                  <option value="name">按名称</option>
+                </select>
+              </div>
+              
+              <div class="steam-games-list" id="steamGamesList">
+                <!-- 游戏列表动态生成 -->
+              </div>
+              
+              <div class="demo-notice" id="steamLinkedDemoNotice" style="display: none;">
+                ⚠️ 当前显示的是演示数据。配置 Steam API Key 后可获取真实游戏库。
+              </div>
             </div>
           </div>
         </div>
@@ -892,6 +1083,10 @@
             <span class="profile-card-title">快捷操作</span>
           </div>
           <div class="quick-actions">
+            <a href="accounts.html" class="quick-action-btn" style="border-color: rgba(102, 192, 244, 0.4);">
+              <span class="quick-action-icon">🎮</span>
+              <span>游戏账号管理</span>
+            </a>
             <a href="my-library.html" class="quick-action-btn">
               <span class="quick-action-icon">📚</span>
               <span>我的游戏库</span>
@@ -1108,7 +1303,8 @@
       
       // 渲染 Steam 信息
       document.getElementById('steamAvatar').querySelector('img').src = userData.steam.avatar || '';
-      document.getElementById('steamPersonaName').textContent = userData.steam.personaName || '-';
+      const personaNameEl = document.getElementById('steamPersonaName');
+      if (personaNameEl) personaNameEl.textContent = userData.steam.personaName || '-';
       document.getElementById('steamIdDisplay').textContent = 'Steam ID: ' + userData.steam.steamId;
       
       // 统计
@@ -1253,6 +1449,86 @@
       showMessage('Steam 账号已解绑', 'info');
     }
   });
+  
+  // 显示好友码
+  document.getElementById('showFriendCodeBtn').addEventListener('click', () => {
+    if (!userData.steam?.steamId) return;
+    showFriendCode(userData.steam.steamId);
+  });
+  
+  // 显示好友码弹窗
+  function showFriendCode(steamId) {
+    // Steam 好友码计算
+    // 好友码 = SteamID64 - 76561197960265728 (Steam64 ID Offset)
+    const steamIdNum = BigInt(steamId);
+    const offset = BigInt('76561197960265728');
+    const friendCode = (steamIdNum - offset).toString();
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 400px; text-align: center;" onclick="event.stopPropagation()">
+          <h3 style="color: #66c0f4; margin-bottom: 16px;">Steam 好友码</h3>
+          <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; margin-bottom: 16px;">
+            <div style="font-size: 32px; font-weight: bold; color: #00ff88; letter-spacing: 4px; font-family: monospace;">${friendCode}</div>
+          </div>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+            SteamID64: ${steamId}
+          </p>
+          <button onclick="navigator.clipboard.writeText('${friendCode}'); this.textContent='已复制!'; setTimeout(() => this.textContent='复制好友码', 2000)" 
+            style="padding: 10px 24px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer; margin-right: 8px;">
+            复制好友码
+          </button>
+          <button onclick="this.parentElement.parentElement.remove()" 
+            style="padding: 10px 24px; background: transparent; border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 8px; color: var(--text-soft); cursor: pointer;">
+            关闭
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  // Steam 帮助弹窗
+  function showSteamHelp() {
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 500px; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
+          <h3 style="color: #66c0f4; margin-bottom: 16px;">如何获取 Steam ID？</h3>
+          
+          <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
+            <p><strong>方法一：从个人资料页面获取</strong></p>
+            <ol style="margin: 12px 0; padding-left: 20px;">
+              <li>打开 Steam 客户端或网页版</li>
+              <li>点击您的用户名，进入个人资料</li>
+              <li>复制浏览器地址栏中的链接</li>
+              <li>格式如: steamcommunity.com/id/xxx 或 steamcommunity.com/profiles/xxx</li>
+            </ol>
+            
+            <p><strong>方法二：在 Steam 设置中查看</strong></p>
+            <ol style="margin: 12px 0; padding-left: 20px;">
+              <li>打开 Steam 客户端</li>
+              <li>进入 设置 > 界面</li>
+              <li>勾选 "当可用时在 Steam URL 栏中显示 Steam URL"</li>
+              <li>您的 SteamID64 会显示在个人资料中</li>
+            </ol>
+            
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+              <strong style="color: #f59e0b;">⚠️ 注意</strong>
+              <p style="margin-top: 8px;">您的 Steam 资料需要设为公开才能获取游戏数据。<br>在 Steam 中进入 编辑个人资料 > 隐私设置，将"游戏详情"设为公开。</p>
+            </div>
+          </div>
+          
+          <button onclick="this.parentElement.parentElement.remove()" 
+            style="margin-top: 20px; padding: 10px 24px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer; width: 100%;">
+            知道了
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
   
   // 游戏排序
   document.getElementById('steamGamesSort').addEventListener('change', (e) => {

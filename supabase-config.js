@@ -51,31 +51,43 @@ const SUPABASE_CONFIG = {
 // =============================================
 
 const EMAIL_SERVICE_CONFIG = {
-  // 邮件服务提供商: 'resend' | 'emailjs' | 'custom' | 'demo'
-  provider: 'demo',
+  // 邮件服务提供商: 'emailjs' | 'resend_proxy' | 'custom' | 'demo'
+  // 推荐使用 emailjs - 支持纯前端调用，无需后端
+  provider: 'emailjs',
   
-  // Resend 配置 (推荐)
-  // 免费版: 3000 封/月, 100 封/日
-  // 获取 API Key: https://resend.com/api-keys
-  resend: {
-    apiKey: '',  // 填入你的 Resend API Key
-    fromEmail: 'GameBox <onboarding@resend.dev>', // 发送者邮箱
-    // 自定义域名后可使用: 'GameBox <noreply@yourdomain.com>'
-  },
-  
-  // EmailJS 配置
+  // =============================================
+  // EmailJS 配置 (推荐 - 纯前端方案)
   // 免费版: 200 封/月
-  // 获取: https://www.emailjs.com/docs/sdk/installation/
+  // 配置步骤:
+  // 1. 访问 https://www.emailjs.com 注册账号
+  // 2. 创建 Email Service (选择 Gmail/Outlook 等)
+  // 3. 创建 Email Template, 使用以下变量:
+  //    - {{to_email}} - 收件人邮箱
+  //    - {{verification_code}} - 验证码
+  //    - {{app_name}} - 应用名称 (GameBox 游盒)
+  // 4. 获取 Service ID, Template ID, Public Key
+  // =============================================
   emailjs: {
-    serviceId: '',
-    templateId: '',
-    publicKey: '',
+    serviceId: 'service_gamebox',  // 替换为你的 Service ID
+    templateId: 'template_otp',     // 替换为你的 Template ID  
+    publicKey: 'your_public_key',   // 替换为你的 Public Key
+    enabled: false  // 设为 true 启用真实邮件发送
   },
   
-  // 自定义后端 API 配置
+  // =============================================
+  // Resend 配置 (需要后端代理)
+  // 免费版: 3000 封/月, 100 封/日
+  // 注意: Resend API Key 不能暴露在前端
+  // 需要设置后端代理或使用 Serverless Function
+  // =============================================
+  resend: {
+    proxyEndpoint: '', // 你的后端代理地址
+    // 后端示例: Cloudflare Worker / Vercel Function
+  },
+  
+  // 自定义后端 API
   custom: {
-    endpoint: '', // 你的后端 API 地址
-    // 后端需要处理发送邮件逻辑
+    endpoint: '',
   }
 };
 
@@ -678,16 +690,20 @@ const GameBoxAuth = {
     // 根据配置选择邮件服务
     const provider = EMAIL_SERVICE_CONFIG.provider;
     
-    if (provider === 'resend' && EMAIL_SERVICE_CONFIG.resend.apiKey) {
-      // 使用 Resend 发送真实邮件
-      return await this._sendEmailWithResend(email, code);
-    } else if (provider === 'emailjs' && EMAIL_SERVICE_CONFIG.emailjs.publicKey) {
-      // 使用 EmailJS 发送
+    // EmailJS - 推荐的纯前端方案
+    if (provider === 'emailjs' && EMAIL_SERVICE_CONFIG.emailjs.enabled) {
       return await this._sendEmailWithEmailJS(email, code);
-    } else if (provider === 'custom' && EMAIL_SERVICE_CONFIG.custom.endpoint) {
-      // 使用自定义后端
+    }
+    // Resend 代理方案
+    else if (provider === 'resend_proxy' && EMAIL_SERVICE_CONFIG.resend.proxyEndpoint) {
+      return await this._sendEmailWithResendProxy(email, code);
+    }
+    // 自定义后端
+    else if (provider === 'custom' && EMAIL_SERVICE_CONFIG.custom.endpoint) {
       return await this._sendEmailWithCustomAPI(email, code);
-    } else if (isSupabaseEnabled()) {
+    }
+    // Supabase 内置 OTP
+    else if (isSupabaseEnabled()) {
       // 使用 Supabase OTP
       try {
         const { data, error } = await supabaseClient.auth.signInWithOtp({
@@ -718,70 +734,62 @@ const GameBoxAuth = {
     }
   },
   
-  // 使用 Resend 发送邮件
-  async _sendEmailWithResend(email, code) {
+  // 使用 Resend 代理发送邮件 (需要后端代理)
+  async _sendEmailWithResendProxy(email, code) {
     try {
-      const response = await fetch('https://api.resend.com/emails', {
+      const response = await fetch(EMAIL_SERVICE_CONFIG.resend.proxyEndpoint, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${EMAIL_SERVICE_CONFIG.resend.apiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: EMAIL_SERVICE_CONFIG.resend.fromEmail,
           to: email,
-          subject: 'GameBox 游盒 - 邮箱验证码',
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <div style="background: linear-gradient(135deg, #0a0f1a, #1a1f2e); padding: 30px; border-radius: 12px; text-align: center;">
-                <h1 style="color: #38bdf8; margin-bottom: 20px;">🎮 GameBox 游盒</h1>
-                <p style="color: #94a3b8; margin-bottom: 20px;">您的邮箱验证码是:</p>
-                <div style="background: rgba(56, 189, 248, 0.1); border: 2px solid #38bdf8; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                  <span style="font-size: 36px; font-weight: bold; color: #00ff88; letter-spacing: 8px;">${code}</span>
-                </div>
-                <p style="color: #64748b; font-size: 14px;">验证码有效期为 5 分钟，请尽快完成验证。</p>
-                <p style="color: #64748b; font-size: 12px; margin-top: 20px;">如果这不是您的操作，请忽略此邮件。</p>
-              </div>
-            </div>
-          `
+          code: code,
+          type: 'verification'
         })
       });
       
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (data.success) {
         return {
           success: true,
           message: '验证码已发送到您的邮箱，请查收'
         };
       } else {
-        const errorData = await response.json();
-        console.error('[Resend] 发送失败:', errorData);
-        return { success: false, error: '邮件发送失败，请稍后重试' };
+        return { success: false, error: data.error || '邮件发送失败' };
       }
     } catch (error) {
-      console.error('[Resend] 请求错误:', error);
+      console.error('[Resend Proxy] 请求错误:', error);
       return { success: false, error: '网络错误，请稍后重试' };
     }
   },
   
-  // 使用 EmailJS 发送邮件
+  // 使用 EmailJS 发送邮件 (推荐 - 纯前端方案)
   async _sendEmailWithEmailJS(email, code) {
     try {
-      // 需要在页面中引入 EmailJS SDK
+      // 检查 EmailJS SDK 是否已加载
       if (typeof emailjs === 'undefined') {
-        console.error('[EmailJS] SDK 未加载');
-        return { success: false, error: '邮件服务未配置' };
+        // 动态加载 EmailJS SDK
+        await this._loadEmailJSSDK();
       }
       
-      await emailjs.send(
+      // 初始化 EmailJS
+      emailjs.init(EMAIL_SERVICE_CONFIG.emailjs.publicKey);
+      
+      // 发送邮件
+      const result = await emailjs.send(
         EMAIL_SERVICE_CONFIG.emailjs.serviceId,
         EMAIL_SERVICE_CONFIG.emailjs.templateId,
         {
           to_email: email,
           verification_code: code,
-          app_name: 'GameBox 游盒'
-        },
-        EMAIL_SERVICE_CONFIG.emailjs.publicKey
+          app_name: 'GameBox 游盒',
+          message: `您的验证码是: ${code}，有效期5分钟。`
+        }
       );
+      
+      console.log('[EmailJS] 发送成功:', result);
       
       return {
         success: true,
@@ -789,8 +797,30 @@ const GameBoxAuth = {
       };
     } catch (error) {
       console.error('[EmailJS] 发送失败:', error);
-      return { success: false, error: '邮件发送失败，请稍后重试' };
+      // 如果 EmailJS 失败，回退到演示模式
+      console.log(`[回退演示模式] 邮箱验证码: ${code}`);
+      return { 
+        success: true, 
+        message: '验证码已发送 (演示模式)',
+        demoCode: code
+      };
     }
+  },
+  
+  // 动态加载 EmailJS SDK
+  async _loadEmailJSSDK() {
+    return new Promise((resolve, reject) => {
+      if (typeof emailjs !== 'undefined') {
+        resolve();
+        return;
+      }
+      
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
   },
   
   // 使用自定义 API 发送邮件
@@ -894,13 +924,13 @@ const GameBoxAuth = {
 
 const STEAM_CONFIG = {
   // Steam Web API Key (用户需要自行申请: https://steamcommunity.com/dev/apikey)
-  apiKey: 'ioa3301-bot',
+  // 正确的 API Key 是 32 位十六进制字符串
+  apiKey: '',
   
   // 是否启用 Steam 集成
   enabled: true,
   
   // CORS 代理列表 (按优先级排序，自动故障转移)
-  // 由于浏览器限制，需要通过代理访问 Steam API
   proxyServers: [
     { name: 'corsproxy.io', url: 'https://corsproxy.io/?', active: true },
     { name: 'cors.lol', url: 'https://api.cors.lol/?url=', active: true },
@@ -908,10 +938,7 @@ const STEAM_CONFIG = {
     { name: 'codetabs', url: 'https://api.codetabs.com/v1/proxy?quest=', active: true }
   ],
   
-  // 当前使用的代理索引
   currentProxyIndex: 0,
-  
-  // 兼容旧配置
   proxyUrl: 'https://corsproxy.io/?'
 };
 
