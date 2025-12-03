@@ -10,6 +10,184 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="cyberpunk-styles.css" />
+  <style>
+    /* 游戏库专用滚动列表样式 */
+    .lib-scroll-container {
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 4px;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 255, 136, 0.6) rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Chrome / Edge / Safari */
+    .lib-scroll-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .lib-scroll-container::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      margin: 4px;
+    }
+    
+    .lib-scroll-container::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 255, 136, 0.8),
+        rgba(0, 200, 100, 0.9)
+      );
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+    
+    .lib-scroll-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 255, 136, 1),
+        rgba(0, 255, 200, 1)
+      );
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+    }
+
+    /* 筛选区域样式优化 */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .filter-item label {
+      font-size: 12px;
+      color: var(--text-soft);
+      font-weight: 500;
+    }
+    
+    .filter-item input,
+    .filter-item select {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: var(--text-main);
+      transition: all 0.3s ease;
+    }
+    
+    .filter-item input:focus,
+    .filter-item select:focus {
+      outline: none;
+      border-color: rgba(0, 255, 136, 0.8);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+    
+    .platform-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .platform-checkboxes label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .platform-checkboxes label:hover {
+      border-color: rgba(0, 255, 136, 0.5);
+      background: rgba(0, 255, 136, 0.1);
+    }
+    
+    .platform-checkboxes input:checked + span {
+      color: #00ff88;
+    }
+    
+    /* 排序按钮组 */
+    .sort-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .sort-tab {
+      padding: 6px 14px;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 4px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sort-tab:hover {
+      border-color: rgba(0, 255, 136, 0.5);
+      color: var(--text-main);
+    }
+    
+    .sort-tab.is-active {
+      background: rgba(0, 255, 136, 0.2);
+      border-color: rgba(0, 255, 136, 0.8);
+      color: #00ff88;
+    }
+    
+    /* 加载提示 */
+    .lib-hint {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text-soft);
+      border-top: 1px solid rgba(0, 255, 136, 0.1);
+      margin-top: 10px;
+    }
+    
+    /* 评分范围滑块 */
+    .rating-slider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .rating-slider input[type="range"] {
+      flex: 1;
+      height: 4px;
+      background: rgba(0, 255, 136, 0.3);
+      border-radius: 2px;
+      -webkit-appearance: none;
+    }
+    
+    .rating-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #00ff88;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+    
+    .rating-value {
+      min-width: 40px;
+      text-align: center;
+      color: #00ff88;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body data-current-page="library" class="cyberpunk-theme">
 <div class="page">
@@ -63,61 +241,98 @@
       <div class="card">
         <div class="page-title">游戏库</div>
         <div class="page-intro">
-          通过名称、类型、平台和价格区间来筛选你感兴趣的游戏（示例数据）。
+          从 5000+ 款真实 Steam 游戏中，通过多种筛选条件找到你感兴趣的游戏。
         </div>
       </div>
 
+      <!-- 筛选条件卡片 -->
       <div class="card">
         <header class="card-header">
           <div class="card-title">
             <span class="dot"></span>
             <span>筛选条件</span>
           </div>
+          <button id="resetFilters" class="btn-secondary" style="padding: 4px 12px; font-size: 11px;">重置筛选</button>
         </header>
 
-        <div class="form">
-          <div class="form-row">
-            <label for="libSearch">按名称搜索</label>
-            <input type="text" id="libSearch" placeholder="输入游戏名，如：艾尔登法环" />
+        <div class="filter-grid">
+          <!-- 搜索框 -->
+          <div class="filter-item" style="grid-column: span 2;">
+            <label for="libSearch">🔍 按名称搜索</label>
+            <input type="text" id="libSearch" placeholder="输入游戏名，如：Portal 2、Counter-Strike" />
           </div>
-
-          <div class="form-row">
-            <label for="libType">类型</label>
+          
+          <!-- 游戏类型 -->
+          <div class="filter-item">
+            <label for="libType">🎮 游戏类型</label>
             <select id="libType">
               <option value="all">全部类型</option>
-              <option value="action">动作 / ACT</option>
+              <option value="action">动作 / Action</option>
               <option value="rpg">角色扮演 / RPG</option>
-              <option value="strategy">策略 / SLG</option>
+              <option value="shooter">射击 / Shooter</option>
+              <option value="strategy">策略 / Strategy</option>
+              <option value="adventure">冒险 / Adventure</option>
+              <option value="simulation">模拟 / Simulation</option>
+              <option value="puzzle">解谜 / Puzzle</option>
+              <option value="platformer">平台 / Platformer</option>
+              <option value="survival">生存 / Survival</option>
+              <option value="horror">恐怖 / Horror</option>
+              <option value="racing">赛车 / Racing</option>
+              <option value="sports">体育 / Sports</option>
               <option value="indie">独立 / Indie</option>
-              <option value="multiplayer">多人联机</option>
-              <option value="casual">休闲 / 轻度</option>
-              <option value="card">卡牌</option>
             </select>
           </div>
 
-          <div class="form-row">
-            <label>平台（可多选）</label>
-            <div id="libPlatforms" style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px;">
-              <label><input type="checkbox" name="libPlatform" value="steam" checked /> Steam</label>
-              <label><input type="checkbox" name="libPlatform" value="pc" checked /> PC（其他平台）</label>
-              <label><input type="checkbox" name="libPlatform" value="ps" /> PlayStation</label>
-              <label><input type="checkbox" name="libPlatform" value="switch" /> Switch</label>
-              <label><input type="checkbox" name="libPlatform" value="mobile" /> 手机</label>
+          <!-- 价格区间 -->
+          <div class="filter-item">
+            <label for="libPrice">💰 价格区间</label>
+            <select id="libPrice">
+              <option value="all">全部价格</option>
+              <option value="free">免费 / F2P</option>
+              <option value="under50">50 元以下</option>
+              <option value="under100">100 元以下</option>
+              <option value="under200">200 元以下</option>
+              <option value="over200">200 元以上</option>
+            </select>
+          </div>
+          
+          <!-- 最低评分 -->
+          <div class="filter-item">
+            <label>⭐ 最低评分</label>
+            <div class="rating-slider">
+              <input type="range" id="libRating" min="0" max="10" step="0.5" value="0" />
+              <span class="rating-value" id="ratingValue">0.0</span>
             </div>
           </div>
-
-          <div class="form-row">
-            <label for="libPrice">价格区间</label>
-            <select id="libPrice">
-              <option value="all">全部</option>
-              <option value="free">免费 / F2P</option>
-              <option value="low">100 元以下</option>
-              <option value="high">100 元以上</option>
+          
+          <!-- 发行年份 -->
+          <div class="filter-item">
+            <label for="libYear">📅 发行年份</label>
+            <select id="libYear">
+              <option value="all">全部年份</option>
+              <option value="2023">2023 年</option>
+              <option value="2022">2022 年</option>
+              <option value="2021">2021 年</option>
+              <option value="2020">2020 年及更早</option>
             </select>
+          </div>
+        </div>
+        
+        <!-- 平台筛选 -->
+        <div style="margin-top: 12px;">
+          <label style="font-size: 12px; color: var(--text-soft); display: block; margin-bottom: 8px;">🖥️ 平台（可多选）</label>
+          <div class="platform-checkboxes" id="libPlatforms">
+            <label><input type="checkbox" name="libPlatform" value="steam" checked /><span>Steam</span></label>
+            <label><input type="checkbox" name="libPlatform" value="pc" checked /><span>PC</span></label>
+            <label><input type="checkbox" name="libPlatform" value="ps" /><span>PlayStation</span></label>
+            <label><input type="checkbox" name="libPlatform" value="xbox" /><span>Xbox</span></label>
+            <label><input type="checkbox" name="libPlatform" value="switch" /><span>Switch</span></label>
+            <label><input type="checkbox" name="libPlatform" value="mobile" /><span>移动端</span></label>
           </div>
         </div>
       </div>
 
+      <!-- 筛选结果卡片 -->
       <div class="card">
         <header class="card-header">
           <div class="card-title">
@@ -126,34 +341,60 @@
           </div>
           <div class="chip" id="libResultCount">共 0 款</div>
         </header>
-        <ol id="libList" class="ranking-list"></ol>
-        <!-- 加载更多按钮 -->
-        <div id="loadMoreContainer" style="text-align: center; padding: 20px; display: none;">
-          <button id="loadMoreBtn" class="btn-secondary" style="padding: 12px 30px;">🔽 加载更多游戏</button>
+        
+        <!-- 排序选项 -->
+        <div class="sort-tabs" id="sortTabs">
+          <button class="sort-tab is-active" data-sort="rating">评分最高</button>
+          <button class="sort-tab" data-sort="name">名称 A-Z</button>
+          <button class="sort-tab" data-sort="year">最新发布</button>
+          <button class="sort-tab" data-sort="price-low">价格最低</button>
+          <button class="sort-tab" data-sort="price-high">价格最高</button>
         </div>
-        <div id="loadingIndicator" style="text-align: center; padding: 20px; display: none; color: var(--text-muted);">
-          ⏳ 加载中...
-        </div>
-        <div id="noMoreGames" style="text-align: center; padding: 20px; display: none; color: var(--text-muted);">
-          ✅ 已加载全部游戏
+        
+        <!-- 滚动列表容器 -->
+        <ol id="libList" class="ranking-list lib-scroll-container"></ol>
+        
+        <!-- 加载提示 -->
+        <div class="lib-hint" id="libHint">
+          已加载 <span id="loadedCount">0</span> / <span id="totalCount">0</span> 款 · 滚动加载更多
         </div>
       </div>
     </section>
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">小提示</div>
-        <div class="sidebar-item">
-          <span class="label">可与首页分类联动</span>
-          <span class="value">支持</span>
-        </div>
+        <div class="sidebar-title">📊 数据统计</div>
         <div class="sidebar-item">
           <span class="label">数据来源</span>
-          <span class="value">FreeToGame API</span>
+          <span class="value">Steam API</span>
         </div>
         <div class="sidebar-item">
           <span class="label">游戏总数</span>
           <span class="value" id="totalGamesCount">加载中...</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">数据更新</span>
+          <span class="value">实时</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card">
+        <div class="sidebar-title">🎯 快捷筛选</div>
+        <div class="sidebar-item" style="cursor: pointer;" onclick="quickFilter('free')">
+          <span class="label">🆓 免费游戏</span>
+          <span class="value">→</span>
+        </div>
+        <div class="sidebar-item" style="cursor: pointer;" onclick="quickFilter('top')">
+          <span class="label">⭐ 高评分 (9+)</span>
+          <span class="value">→</span>
+        </div>
+        <div class="sidebar-item" style="cursor: pointer;" onclick="quickFilter('action')">
+          <span class="label">🎮 动作游戏</span>
+          <span class="value">→</span>
+        </div>
+        <div class="sidebar-item" style="cursor: pointer;" onclick="quickFilter('rpg')">
+          <span class="label">⚔️ RPG游戏</span>
+          <span class="value">→</span>
         </div>
       </div>
     </aside>
@@ -168,40 +409,54 @@
 <script>
   initCommon();
 
-  // 分页和筛选状态
+  // 状态变量
   let allGamesData = [];
   let filteredGames = [];
   let currentPage = 0;
   const PAGE_SIZE = 20;
   let isDataLoaded = false;
+  let isLoading = false;
+  let currentSort = 'rating';
 
+  // DOM 元素
   const libSearch = document.getElementById("libSearch");
   const libType = document.getElementById("libType");
   const libPrice = document.getElementById("libPrice");
+  const libYear = document.getElementById("libYear");
+  const libRating = document.getElementById("libRating");
+  const ratingValue = document.getElementById("ratingValue");
   const libPlatformsEl = document.getElementById('libPlatforms');
   const libPlatforms = libPlatformsEl.querySelectorAll('input[name="libPlatform"]');
   const totalGamesCountEl = document.getElementById('totalGamesCount');
   const libList = document.getElementById("libList");
   const libCount = document.getElementById("libResultCount");
+  const loadedCountEl = document.getElementById("loadedCount");
+  const totalCountEl = document.getElementById("totalCount");
+  const sortTabs = document.getElementById("sortTabs");
+  const resetFiltersBtn = document.getElementById("resetFilters");
+
+  // 评分滑块更新
+  libRating.addEventListener("input", () => {
+    ratingValue.textContent = parseFloat(libRating.value).toFixed(1);
+  });
 
   // 加载所有游戏数据
   async function loadAllGames() {
     try {
-      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载游戏数据...</div>';
+      libList.innerHTML = '<li style="text-align: center; padding: 60px; color: var(--text-muted); list-style: none;">🎮 正在加载游戏数据...</li>';
       
       allGamesData = await window.megaGameDB.getAllGames();
       isDataLoaded = true;
       
       console.log(`✅ 成功加载 ${allGamesData.length} 款游戏`);
       
-      // 更新侧边栏游戏总数
       if (totalGamesCountEl) {
         totalGamesCountEl.textContent = `${allGamesData.length} 款`;
       }
       applyFiltersAndRender();
     } catch (error) {
       console.error("❌ 加载失败:", error);
-      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger);">❌ 游戏数据加载失败，请刷新页面重试</div>';
+      libList.innerHTML = '<li style="text-align: center; padding: 60px; color: var(--danger); list-style: none;">❌ 游戏数据加载失败，请刷新页面重试</li>';
     }
   }
 
@@ -213,53 +468,64 @@
 
   // 应用筛选条件
   function applyFiltersAndRender() {
-    if (!isDataLoaded) {
-      libList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载...</div>';
-      return;
-    }
+    if (!isDataLoaded) return;
 
     const nameKw = libSearch.value.trim().toLowerCase();
     const typeVal = libType.value;
     const priceVal = libPrice.value;
+    const yearVal = libYear.value;
+    const minRating = parseFloat(libRating.value);
     const platformsVal = getSelectedPlatforms();
 
     // 筛选游戏
     filteredGames = allGamesData.filter(game => {
       // 名称搜索
       if (nameKw && !game.name.toLowerCase().includes(nameKw) && 
-          !game.short_description.toLowerCase().includes(nameKw)) {
+          !(game.short_description && game.short_description.toLowerCase().includes(nameKw))) {
         return false;
       }
 
       // 类型筛选
-      if (typeVal !== "all" && !game.genre.toLowerCase().includes(typeVal.toLowerCase())) {
-        return false;
+      if (typeVal !== "all") {
+        const gameGenre = (game.genre || '').toLowerCase();
+        const gameCategory = (game.category || '').toLowerCase();
+        if (!gameGenre.includes(typeVal.toLowerCase()) && !gameCategory.includes(typeVal.toLowerCase())) {
+          return false;
+        }
       }
 
       // 价格筛选
-      if (priceVal === "free" && game.price !== 0) return false;
-      if (priceVal === "paid" && game.price === 0) return false;
-      if (priceVal === "low" && game.price >= 100) return false; // 100元以下
-      if (priceVal === "high" && game.price < 100) return false; // 100元以上
+      const price = game.price || 0;
+      if (priceVal === "free" && price > 0) return false;
+      if (priceVal === "under50" && price >= 50) return false;
+      if (priceVal === "under100" && price >= 100) return false;
+      if (priceVal === "under200" && price >= 200) return false;
+      if (priceVal === "over200" && price < 200) return false;
+
+      // 年份筛选
+      if (yearVal !== "all") {
+        const gameYear = game.year || 2020;
+        if (yearVal === "2020" && gameYear > 2020) return false;
+        else if (yearVal !== "2020" && gameYear != parseInt(yearVal)) return false;
+      }
+
+      // 评分筛选
+      if (minRating > 0 && (game.rating || 0) < minRating) return false;
 
       // 平台筛选
       if (platformsVal) {
-        const gamePlatforms = game.platform.toLowerCase();
+        const gamePlatforms = (game.platform || '').toLowerCase();
         const matchesPlatform = platformsVal.some(p => {
           const platform = p.toLowerCase();
-          // Steam 和 PC 视为相同
           if (platform === 'steam' || platform === 'pc') {
-            return gamePlatforms.includes('pc') || gamePlatforms.includes('steam');
+            return gamePlatforms.includes('pc') || gamePlatforms.includes('steam') || gamePlatforms.includes('windows');
           }
-          // PS系列
           if (platform === 'ps') {
-            return gamePlatforms.includes('ps4') || gamePlatforms.includes('ps5') || gamePlatforms.includes('playstation');
+            return gamePlatforms.includes('ps') || gamePlatforms.includes('playstation');
           }
-          // Xbox系列
           if (platform === 'xbox') {
             return gamePlatforms.includes('xbox');
           }
-          // 其他平台直接匹配
           return gamePlatforms.includes(platform);
         });
         if (!matchesPlatform) return false;
@@ -268,50 +534,74 @@
       return true;
     });
 
-    // 排序：高评分优先
-    filteredGames.sort((a, b) => b.rating - a.rating);
+    // 排序
+    sortGames();
 
     // 重置列表
     currentPage = 0;
     libList.innerHTML = "";
     libCount.textContent = `共 ${filteredGames.length} 款`;
+    totalCountEl.textContent = filteredGames.length;
 
     if (filteredGames.length === 0) {
-      libList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted); list-style: none;">🔍 未找到符合条件的游戏</li>';
+      libList.innerHTML = '<li style="text-align: center; padding: 60px; color: var(--text-muted); list-style: none;">🔍 未找到符合条件的游戏，请调整筛选条件</li>';
+      loadedCountEl.textContent = "0";
       return;
     }
 
-    // 加载第一页
+    // 加载第一批
     loadMoreGames();
   }
 
+  // 排序游戏
+  function sortGames() {
+    switch (currentSort) {
+      case 'rating':
+        filteredGames.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case 'name':
+        filteredGames.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'year':
+        filteredGames.sort((a, b) => (b.year || 2020) - (a.year || 2020));
+        break;
+      case 'price-low':
+        filteredGames.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case 'price-high':
+        filteredGames.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+    }
+  }
+
   // 加载更多游戏
-  async function loadMoreGames() {
+  function loadMoreGames() {
+    if (isLoading) return;
+    
     const start = currentPage * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     const pageGames = filteredGames.slice(start, end);
 
     if (pageGames.length === 0) return;
+    
+    isLoading = true;
 
-    // 使用排行榜样式渲染游戏列表
     pageGames.forEach((game, index) => {
       const globalIdx = start + index;
       const li = document.createElement("li");
       li.className = "ranking-item";
       li.style.cursor = "pointer";
 
-      // 封面图
       const coverHtml = game.thumbnail
         ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
         : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
 
-      // 排名样式
       const rankClass = globalIdx === 0 ? "ranking-pos--top1" : "";
       const medalIcon = globalIdx === 0 ? "🥇" : globalIdx === 1 ? "🥈" : globalIdx === 2 ? "🥉" : "";
-
-      // 类别标签
-      const categoryTag = game.genre.split(' ')[0]; // 取第一个类别
-      const categoryColor = game.rating >= 9.0 ? '#00ff00' : game.rating >= 8.0 ? '#00ccff' : '#ffaa00';
+      
+      const rating = game.rating || 0;
+      const categoryColor = rating >= 9.0 ? '#00ff00' : rating >= 8.0 ? '#00ccff' : '#ffaa00';
+      const categoryTag = (game.category || game.genre || 'Game').split(' ')[0];
 
       li.innerHTML = `
         <div class="ranking-pos ${rankClass}">${medalIcon}${globalIdx + 1}</div>
@@ -319,18 +609,17 @@
           <div class="ranking-cover">${coverHtml}</div>
           <div class="ranking-info">
             <div class="ranking-name">${game.name}</div>
-            <div class="ranking-meta">${game.genre.toUpperCase()} · ${game.platform.split(',')[0].trim().toUpperCase()}</div>
+            <div class="ranking-meta">${(game.genre || 'Game').toUpperCase()} · ${(game.platform || 'PC').split(',')[0].trim().toUpperCase()}</div>
           </div>
         </div>
         <div class="ranking-score">
-          <span class="value" style="color: ${categoryColor};">${game.rating.toFixed(1)}</span>
+          <span class="value" style="color: ${categoryColor};">${rating.toFixed(1)}</span>
           <div><span class="tag" style="border-color: ${categoryColor}; color: ${categoryColor};">${categoryTag.toUpperCase()}</span></div>
         </div>
       `;
 
-      // 悬停效果
       li.addEventListener("mouseenter", () => {
-        li.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
+        li.style.backgroundColor = "rgba(0, 255, 136, 0.05)";
         li.style.transition = "all 0.3s ease";
       });
 
@@ -338,7 +627,6 @@
         li.style.backgroundColor = "";
       });
 
-      // 点击跳转
       li.addEventListener("click", () => {
         const url = new URL("game-detail.html", window.location.href);
         url.searchParams.set("id", game.id);
@@ -350,117 +638,84 @@
     });
 
     currentPage++;
+    loadedCountEl.textContent = Math.min(currentPage * PAGE_SIZE, filteredGames.length);
+    isLoading = false;
+  }
+
+  // 监听列表滚动（内置滚动条）
+  libList.addEventListener("scroll", () => {
+    if (isLoading) return;
     
-    // 更新加载状态
-    updateLoadingState();
+    const scrollTop = libList.scrollTop;
+    const scrollHeight = libList.scrollHeight;
+    const clientHeight = libList.clientHeight;
     
-    // 检查是否需要继续加载（如果页面没填满）
-    setTimeout(() => {
-      const scrollHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-      );
-      const clientHeight = window.innerHeight || document.documentElement.clientHeight;
-      const loadedCount = currentPage * PAGE_SIZE;
-      const totalCount = filteredGames.length;
-      
-      console.log(`📦 加载状态: ${loadedCount}/${totalCount}, 页面高度: ${scrollHeight}, 视口: ${clientHeight}`);
-      
-      if (scrollHeight <= clientHeight + 200 && loadedCount < totalCount) {
+    // 当滚动到距底部 200px 时加载更多
+    if (scrollHeight - scrollTop - clientHeight < 200) {
+      if (currentPage * PAGE_SIZE < filteredGames.length) {
         loadMoreGames();
       }
-    }, 100);
-  }
-
-  // 加载更多按钮和指示器
-  const loadMoreContainer = document.getElementById('loadMoreContainer');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
-  const loadingIndicator = document.getElementById('loadingIndicator');
-  const noMoreGames = document.getElementById('noMoreGames');
-
-  // 更新加载状态UI
-  function updateLoadingState() {
-    const hasMore = currentPage * PAGE_SIZE < filteredGames.length;
-    loadMoreContainer.style.display = hasMore ? 'block' : 'none';
-    noMoreGames.style.display = hasMore ? 'none' : (filteredGames.length > 0 ? 'block' : 'none');
-    loadingIndicator.style.display = 'none';
-  }
-
-  // 无限滚动 - 监听窗口滚动
-  let isLoading = false;
-  let scrollTimeout = null;
-  
-  function checkAndLoadMore() {
-    if (isLoading) return;
-    if (!filteredGames || filteredGames.length === 0) return;
-    
-    const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-    const scrollHeight = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight
-    );
-    const clientHeight = window.innerHeight || document.documentElement.clientHeight;
-
-    // 计算当前已加载的数量
-    const loadedCount = currentPage * PAGE_SIZE;
-    const totalCount = filteredGames.length;
-    
-    // 当距离底部小于1200px时加载更多（增加触发距离）
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    
-    if (distanceFromBottom < 1200 && loadedCount < totalCount) {
-      isLoading = true;
-      loadingIndicator.style.display = 'block';
-      loadMoreContainer.style.display = 'none';
-      
-      console.log(`📜 无限滚动触发: 已加载 ${loadedCount}/${totalCount}, 距底部 ${Math.round(distanceFromBottom)}px`);
-      
-      setTimeout(() => {
-        loadMoreGames();
-        updateLoadingState();
-        isLoading = false;
-        
-        // 再次检查是否需要继续加载（快速滚动时）
-        setTimeout(checkAndLoadMore, 50);
-      }, 80);
-    }
-  }
-
-  // 使用多种事件监听确保滚动检测
-  window.addEventListener("scroll", () => {
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(checkAndLoadMore, 50);
-  }, { passive: true });
-  
-  // 兼容性：同时监听document滚动
-  document.addEventListener("scroll", () => {
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(checkAndLoadMore, 50);
-  }, { passive: true });
-  
-  // 初始检测（页面加载后）
-  setTimeout(checkAndLoadMore, 200);
-  
-  // 加载更多按钮点击事件
-  loadMoreBtn.addEventListener('click', () => {
-    if (currentPage * PAGE_SIZE < filteredGames.length) {
-      loadingIndicator.style.display = 'block';
-      loadMoreContainer.style.display = 'none';
-      
-      setTimeout(() => {
-        loadMoreGames();
-        updateLoadingState();
-      }, 100);
     }
   });
 
+  // 排序切换
+  sortTabs.addEventListener("click", (e) => {
+    if (e.target.classList.contains("sort-tab")) {
+      sortTabs.querySelectorAll(".sort-tab").forEach(t => t.classList.remove("is-active"));
+      e.target.classList.add("is-active");
+      currentSort = e.target.dataset.sort;
+      applyFiltersAndRender();
+    }
+  });
+
+  // 重置筛选
+  resetFiltersBtn.addEventListener("click", () => {
+    libSearch.value = "";
+    libType.value = "all";
+    libPrice.value = "all";
+    libYear.value = "all";
+    libRating.value = "0";
+    ratingValue.textContent = "0.0";
+    libPlatforms.forEach(cb => {
+      cb.checked = cb.value === 'steam' || cb.value === 'pc';
+    });
+    applyFiltersAndRender();
+  });
+
+  // 快捷筛选
+  window.quickFilter = function(type) {
+    resetFiltersBtn.click();
+    setTimeout(() => {
+      if (type === 'free') {
+        libPrice.value = 'free';
+      } else if (type === 'top') {
+        libRating.value = '9';
+        ratingValue.textContent = '9.0';
+      } else if (type === 'action') {
+        libType.value = 'action';
+      } else if (type === 'rpg') {
+        libType.value = 'rpg';
+      }
+      applyFiltersAndRender();
+    }, 100);
+  };
+
   // 监听筛选条件变化
-  libSearch.addEventListener("input", applyFiltersAndRender);
+  libSearch.addEventListener("input", debounce(applyFiltersAndRender, 300));
   libType.addEventListener("change", applyFiltersAndRender);
   libPrice.addEventListener("change", applyFiltersAndRender);
+  libYear.addEventListener("change", applyFiltersAndRender);
+  libRating.addEventListener("change", applyFiltersAndRender);
   libPlatforms.forEach(cb => cb.addEventListener("change", applyFiltersAndRender));
+
+  // 防抖函数
+  function debounce(fn, delay) {
+    let timer = null;
+    return function(...args) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
 
   // 初始加载
   loadAllGames();

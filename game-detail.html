@@ -9,6 +9,124 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 游戏详情页优化样式 - 缩小顶部区域 */
+    .detail-hero {
+      padding: 12px !important;
+      gap: 12px !important;
+      grid-template-columns: 180px minmax(0, 1fr) !important;
+    }
+    
+    .detail-cover-large {
+      max-height: 220px;
+    }
+    
+    .detail-cover-large img {
+      max-height: 220px;
+      object-fit: cover;
+    }
+    
+    .detail-title {
+      font-size: 18px !important;
+      margin-bottom: 2px !important;
+    }
+    
+    .detail-platform {
+      font-size: 11px !important;
+    }
+    
+    .detail-score-card {
+      padding: 8px 12px !important;
+    }
+    
+    .detail-score-value {
+      font-size: 28px !important;
+    }
+    
+    .detail-score-label,
+    .detail-score-sub {
+      font-size: 10px !important;
+    }
+    
+    .detail-tag-row {
+      margin-top: 6px !important;
+      gap: 6px !important;
+      flex-wrap: wrap;
+    }
+    
+    .detail-tag-row .pill {
+      padding: 3px 8px !important;
+      font-size: 10px !important;
+    }
+    
+    .detail-hero-desc {
+      margin-top: 6px !important;
+      font-size: 11px !important;
+      line-height: 1.5 !important;
+      max-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    
+    .detail-links {
+      margin-top: 8px !important;
+      gap: 8px !important;
+    }
+    
+    .detail-btn {
+      padding: 6px 14px !important;
+      font-size: 11px !important;
+    }
+    
+    /* Steam数据和系统配置区域优化 */
+    .detail-info-grid {
+      margin-top: 12px !important;
+    }
+    
+    .detail-section {
+      padding: 12px !important;
+      margin-bottom: 12px !important;
+    }
+    
+    .detail-section-header {
+      margin-bottom: 10px !important;
+    }
+    
+    .detail-section-title {
+      font-size: 14px !important;
+    }
+    
+    .sysreq-title {
+      font-size: 12px !important;
+      padding: 6px 10px !important;
+    }
+    
+    .sysreq-list li {
+      padding: 6px 10px !important;
+      font-size: 11px !important;
+    }
+    
+    .sysreq-note {
+      font-size: 10px !important;
+      margin-top: 8px !important;
+      padding: 8px !important;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .detail-hero {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .detail-cover-large {
+        max-height: 150px;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body data-current-page="detail" class="cyberpunk-theme">
 <div class="page">
