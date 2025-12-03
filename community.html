@@ -3,12 +3,349 @@
 <head>
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 社区</title>
-  <!-- Cyberpunk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 社区页面专属样式 */
+    .community-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .community-stat {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .community-stat:hover {
+      border-color: var(--cyber-yellow);
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.3);
+    }
+    
+    .community-stat .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    
+    .community-stat .value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cyber-yellow);
+    }
+    
+    .community-stat .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* 板块选择器 */
+    .board-selector {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    
+    .board-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .board-btn:hover {
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+    }
+    
+    .board-btn.active {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.15) 0%, rgba(255, 61, 148, 0.1) 100%);
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
+    }
+    
+    .board-btn .board-icon {
+      font-size: 18px;
+    }
+    
+    .board-btn .board-count {
+      background: rgba(255, 211, 0, 0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    
+    /* 帖子卡片 */
+    .post-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(20, 0, 30, 0.85) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .post-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--cyber-yellow), var(--cyber-pink));
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .post-card:hover {
+      border-color: rgba(255, 211, 0, 0.5);
+      transform: translateX(5px);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+    }
+    
+    .post-card:hover::before {
+      transform: scaleY(1);
+    }
+    
+    .post-card.pinned {
+      border-color: rgba(255, 61, 148, 0.4);
+      background: linear-gradient(135deg, rgba(255, 61, 148, 0.1) 0%, rgba(20, 0, 30, 0.9) 100%);
+    }
+    
+    .post-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .post-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .post-info {
+      flex: 1;
+    }
+    
+    .post-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .post-badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    
+    .post-badge.hot {
+      background: linear-gradient(135deg, #FF0055, #FF3D94);
+      color: #fff;
+    }
+    
+    .post-badge.pinned {
+      background: linear-gradient(135deg, var(--cyber-yellow), #FFC700);
+      color: #000;
+    }
+    
+    .post-badge.new {
+      background: linear-gradient(135deg, var(--cyber-cyan), #00FF9F);
+      color: #000;
+    }
+    
+    .post-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .post-content {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .post-tags {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .post-tag {
+      padding: 3px 10px;
+      background: rgba(85, 234, 212, 0.15);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--cyber-cyan);
+    }
+    
+    .post-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .post-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* 发帖按钮 */
+    .create-post-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.2) 0%, rgba(255, 61, 148, 0.15) 100%);
+      border: 2px solid var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+    
+    .create-post-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.3) 0%, rgba(255, 61, 148, 0.2) 100%);
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    /* 在线用户 */
+    .online-users {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .online-user {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      font-size: 11px;
+    }
+    
+    .online-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--cyber-cyan);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* 热门话题 */
+    .hot-topic {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .hot-topic:hover {
+      background: rgba(255, 211, 0, 0.1);
+      transform: translateX(3px);
+    }
+    
+    .hot-topic-rank {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cyber-pink);
+      min-width: 24px;
+    }
+    
+    .hot-topic-title {
+      flex: 1;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+    
+    .hot-topic-heat {
+      font-size: 11px;
+      color: var(--cyber-yellow);
+    }
+    
+    @media (max-width: 768px) {
+      .community-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .board-selector {
+        flex-direction: column;
+      }
+      
+      .board-btn {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body data-current-page="community" class="cyberpunk-theme">
 <div class="page">
@@ -23,15 +360,15 @@
       </a>
       <nav class="nav-main">
         <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
         <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
         <a href="ranking.html" data-page="ranking" class="nav-link">
           排行榜 <span class="badge">HOT</span>
         </a>
         <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
         <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
         <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
         <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
       </nav>
       <div class="header-right">
@@ -44,7 +381,6 @@
     </div>
   </header>
   
-  <!-- Cyberpunk Effects -->
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
   <div id="scroll-progress" class="scroll-progress"></div>
@@ -57,37 +393,84 @@
 
   <main class="main">
     <section>
+      <!-- 页面标题 -->
       <div class="card">
-        <div class="page-title">社区广场</div>
+        <div class="page-title">💬 社区广场</div>
         <div class="page-intro">
-          示例社区列表，分为综合 / 攻略 / 截图三类，点击帖子可进入详情页面。
+          与玩家交流心得、分享攻略、发布截图，加入最活跃的游戏社区。
         </div>
       </div>
 
+      <!-- 社区统计 -->
+      <div class="community-stats">
+        <div class="community-stat">
+          <div class="icon">📝</div>
+          <div class="value" id="statPosts">1,234</div>
+          <div class="label">帖子总数</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">👥</div>
+          <div class="value" id="statMembers">5,678</div>
+          <div class="label">社区成员</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">💬</div>
+          <div class="value" id="statReplies">12,345</div>
+          <div class="label">回复总数</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">🟢</div>
+          <div class="value" id="statOnline">89</div>
+          <div class="label">在线人数</div>
+        </div>
+      </div>
+
+      <!-- 板块与搜索 -->
       <div class="card">
         <header class="card-header">
           <div class="card-title">
-            <span class="dot"></span><span>版块与搜索</span>
+            <span class="dot"></span><span>// BOARDS</span>
           </div>
-          <button class="btn btn-primary btn-inline" id="btnFakePost">发布新帖（示例）</button>
+          <button class="create-post-btn" onclick="createPost()">
+            <span>✏️</span>
+            <span>发布新帖</span>
+          </button>
         </header>
-        <div class="form">
-          <div class="form-row">
-            <label>版块</label>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="postBoards">
-              <button class="btn btn-inline" data-board="all">全部</button>
-              <button class="btn btn-inline" data-board="general">综合</button>
-              <button class="btn btn-inline" data-board="guide">攻略</button>
-              <button class="btn btn-inline" data-board="shot">截图</button>
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="postSearch">按标题 / 游戏搜索</label>
-            <input id="postSearch" type="text" placeholder="例如：艾尔登 新手怎么开荒" />
-          </div>
+        
+        <div class="board-selector" id="boardSelector">
+          <button class="board-btn active" data-board="all">
+            <span class="board-icon">🌐</span>
+            <span>全部</span>
+            <span class="board-count" id="countAll">50</span>
+          </button>
+          <button class="board-btn" data-board="general">
+            <span class="board-icon">💬</span>
+            <span>综合讨论</span>
+            <span class="board-count" id="countGeneral">20</span>
+          </button>
+          <button class="board-btn" data-board="guide">
+            <span class="board-icon">📚</span>
+            <span>攻略心得</span>
+            <span class="board-count" id="countGuide">15</span>
+          </button>
+          <button class="board-btn" data-board="shot">
+            <span class="board-icon">📷</span>
+            <span>游戏截图</span>
+            <span class="board-count" id="countShot">10</span>
+          </button>
+          <button class="board-btn" data-board="trade">
+            <span class="board-icon">🔄</span>
+            <span>交易求助</span>
+            <span class="board-count" id="countTrade">5</span>
+          </button>
+        </div>
+        
+        <div style="margin-top: 16px;">
+          <input id="postSearch" type="text" placeholder="🔍 搜索帖子标题、游戏名称..." style="width: 100%;" />
         </div>
       </div>
 
+      <!-- 帖子列表 -->
       <div class="card">
         <header class="card-header">
           <div class="card-title">
@@ -95,15 +478,37 @@
           </div>
           <div class="chip" id="postCount">共 0 帖</div>
         </header>
-        <div id="postList" class="news-list"></div>
+        <div id="postList"></div>
       </div>
     </section>
 
     <aside>
+      <!-- 热门话题 -->
       <div class="sidebar-card">
-        <div class="sidebar-title">提示</div>
+        <div class="sidebar-title">🔥 热门话题</div>
+        <div id="hotTopics"></div>
+      </div>
+      
+      <!-- 在线用户 -->
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">🟢 在线玩家</div>
+        <div class="online-users" id="onlineUsers"></div>
+      </div>
+      
+      <!-- 社区规则 -->
+      <div class="sidebar-card" style="margin-top: 16px;">
+        <div class="sidebar-title">📋 社区规则</div>
         <div class="sidebar-item">
-          <span class="label">详情示例</span><span class="value">点击“艾尔登少死一点”</span>
+          <span class="label">1</span>
+          <span class="value">友善交流，尊重他人</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">2</span>
+          <span class="value">禁止广告和垃圾信息</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">3</span>
+          <span class="value">剧透请标注警告</span>
         </div>
       </div>
     </aside>
@@ -115,147 +520,283 @@
 <script>
   initCommon();
 
+  // 示例帖子数据
   const postData = [
     {
-      id: "elden-newbie",
-      title: "新手入门：如何在《艾尔登法环》中少死一点（示例）",
-      game: "艾尔登法环",
-      board: "guide", // guide / general / shot
-      replies: 23,
-      likes: 120,
+      id: "pinned-1",
+      title: "【公告】社区使用指南 - 新人必读",
+      content: "欢迎来到 GameBox 社区！本帖包含社区规则、发帖指南、常见问题解答等内容，建议新玩家仔细阅读...",
+      author: "GameBox官方",
+      avatar: "🎮",
+      game: "GameBox",
+      board: "general",
+      replies: 156,
+      likes: 892,
+      views: 5432,
+      isPinned: true,
+      isNew: false,
+      time: "置顶"
     },
     {
-      id: "elden-shot",
-      title: "分享一下我今天在交界地拍到的风景（示例）",
+      id: "elden-newbie",
+      title: "新手入门：如何在《艾尔登法环》中少死一点",
+      content: "大家好，作为一个从魂系游戏一路走来的老玩家，今天分享一些艾尔登法环的新手技巧。首先是选择职业...",
+      author: "褪色者小明",
+      avatar: "⚔️",
       game: "艾尔登法环",
+      board: "guide",
+      replies: 89,
+      likes: 456,
+      views: 2341,
+      isPinned: false,
+      isNew: false,
+      time: "2小时前"
+    },
+    {
+      id: "cp-photo",
+      title: "【截图分享】夜之城的霓虹灯太美了！",
+      content: "用 RTX 4090 开满光追拍的，这游戏的画面真的是绝了，分享几张我最满意的截图...",
+      author: "V",
+      avatar: "🌃",
+      game: "赛博朋克 2077",
       board: "shot",
-      replies: 5,
-      likes: 45,
+      replies: 67,
+      likes: 234,
+      views: 1567,
+      isPinned: false,
+      isNew: true,
+      time: "30分钟前"
+    },
+    {
+      id: "zelda-tears",
+      title: "王国之泪 神庙全收集攻略（持续更新中）",
+      content: "本帖整理了王国之泪所有神庙的位置和解谜方法，目前已更新 120/152 个，欢迎收藏...",
+      author: "海拉鲁勇者",
+      avatar: "🗡️",
+      game: "塞尔达传说：王国之泪",
+      board: "guide",
+      replies: 234,
+      likes: 678,
+      views: 4521,
+      isPinned: false,
+      isNew: false,
+      time: "1天前"
+    },
+    {
+      id: "steam-deck",
+      title: "Steam Deck 上玩什么游戏体验最好？",
+      content: "刚入手 Steam Deck，求推荐一些适合掌机玩的游戏，最好是能离线玩的，出差时候打发时间...",
+      author: "掌机党",
+      avatar: "🎮",
+      game: "多游戏",
+      board: "general",
+      replies: 45,
+      likes: 123,
+      views: 892,
+      isPinned: false,
+      isNew: false,
+      time: "3小时前"
     },
     {
       id: "hollow-shot",
-      title: "《空洞骑士》深渊区域截图分享（示例）",
+      title: "《空洞骑士》深渊区域截图分享",
+      content: "终于打完了深渊，这个区域的氛围太压抑了，但是美术风格真的很棒，分享一些截图...",
+      author: "小骑士",
+      avatar: "🪲",
       game: "空洞骑士",
       board: "shot",
-      replies: 3,
-      likes: 30,
+      replies: 28,
+      likes: 167,
+      views: 756,
+      isPinned: false,
+      isNew: false,
+      time: "5小时前"
     },
     {
-      id: "cp-build",
-      title: "赛博朋克 2077 枪械流 BD 分享（示例）",
-      game: "赛博朋克 2077",
-      board: "guide",
-      replies: 18,
-      likes: 80,
+      id: "trade-1",
+      title: "【求购】博德之门3 Steam 激活码",
+      content: "想买一个博德之门3的Steam激活码，正版的，价格私聊，骗子勿扰...",
+      author: "买家小王",
+      avatar: "💰",
+      game: "博德之门3",
+      board: "trade",
+      replies: 12,
+      likes: 8,
+      views: 234,
+      isPinned: false,
+      isNew: false,
+      time: "6小时前"
     },
     {
-      id: "what-to-play",
-      title: "最近大家都在玩什么？来报个到（示例）",
-      game: "多游戏",
+      id: "gta6-hype",
+      title: "GTA6 预告片发布！大家怎么看？",
+      content: "R星终于发预告了！看起来比GTA5还要惊艳，希望这次PC版不要等太久...",
+      author: "罪恶都市粉",
+      avatar: "🚗",
+      game: "GTA6",
       board: "general",
-      replies: 40,
-      likes: 100,
-    },
+      replies: 567,
+      likes: 1234,
+      views: 8765,
+      isPinned: false,
+      isNew: false,
+      time: "12小时前"
+    }
   ];
 
-  const postBoards = document.getElementById("postBoards");
-  const postSearch = document.getElementById("postSearch");
-  const postList = document.getElementById("postList");
-  const postCount = document.getElementById("postCount");
-  const btnFakePost = document.getElementById("btnFakePost");
+  // 热门话题
+  const hotTopics = [
+    { title: "艾尔登法环 DLC 讨论", heat: 9999 },
+    { title: "Steam 秋季特卖推荐", heat: 8765 },
+    { title: "GTA6 预告片分析", heat: 7654 },
+    { title: "黑神话悟空期待", heat: 6543 },
+    { title: "独立游戏推荐", heat: 5432 }
+  ];
+
+  // 在线用户
+  const onlineUsers = ["褪色者小明", "V", "海拉鲁勇者", "掌机党", "小骑士", "买家小王", "罪恶都市粉", "GameBox官方"];
 
   let currentBoard = "all";
+  const postList = document.getElementById("postList");
+  const postCount = document.getElementById("postCount");
+  const postSearch = document.getElementById("postSearch");
 
+  // 渲染帖子列表
   function renderPosts() {
     const kw = postSearch.value.trim().toLowerCase();
-    let list = postData.filter((p) => {
+    
+    let list = postData.filter(p => {
       if (currentBoard !== "all" && p.board !== currentBoard) return false;
       if (kw) {
-        const text = (p.title + " " + p.game).toLowerCase();
+        const text = (p.title + " " + p.game + " " + p.content).toLowerCase();
         if (!text.includes(kw)) return false;
       }
       return true;
     });
 
-    // 按热度（回复数+点赞数）排序
-    list.sort((a, b) => ((b.replies + b.likes) - (a.replies + a.likes)));
+    // 置顶帖排前面，然后按热度排序
+    list.sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      return (b.replies + b.likes) - (a.replies + a.likes);
+    });
 
     postList.innerHTML = "";
     postCount.textContent = `共 ${list.length} 帖`;
 
     if (!list.length) {
-      postList.innerHTML =
-        '<div style="font-size:12px;color:var(--text-muted);padding:20px;text-align:center;">💬 暂无符合条件的帖子。</div>';
+      postList.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">💬 暂无符合条件的帖子</div>';
       return;
     }
 
-    list.forEach((p, idx) => {
-      const div = document.createElement("div");
-      div.className = "news-card";
-      div.style.cursor = "pointer";
-      
-      // 根据版块添加图标
-      let boardIcon = "💬";
-      let boardText = "综合";
-      if (p.board === "guide") {
-        boardIcon = "📚";
-        boardText = "攻略";
-      } else if (p.board === "shot") {
-        boardIcon = "📷";
-        boardText = "截图";
-      }
-      
-      // 热门标记
-      const isHot = (p.replies + p.likes) > 100;
-      const hotBadge = isHot ? '<span style="color: #ef4444; font-weight: bold; margin-left: 8px;">🔥 热门</span>' : '';
-      
-      div.innerHTML = `
-        <div class="news-title">${boardIcon} ${p.title}${hotBadge}</div>
-        <div class="news-meta">🎮 ${p.game} · ${boardText}</div>
-        <div class="news-excerpt" style="display: flex; gap: 16px; align-items: center;">
-          <span>💬 ${p.replies} 回复</span>
-          <span>👍 ${p.likes} 点赞</span>
+    list.forEach(p => {
+      const card = document.createElement("div");
+      card.className = `post-card ${p.isPinned ? 'pinned' : ''}`;
+
+      let badges = '';
+      if (p.isPinned) badges += '<span class="post-badge pinned">📌 置顶</span>';
+      if (p.isNew) badges += '<span class="post-badge new">NEW</span>';
+      if ((p.replies + p.likes) > 500) badges += '<span class="post-badge hot">🔥 热门</span>';
+
+      card.innerHTML = `
+        <div class="post-header">
+          <div class="post-avatar">${p.avatar}</div>
+          <div class="post-info">
+            <div class="post-title">
+              ${p.title}
+              ${badges}
+            </div>
+            <div class="post-meta">
+              <span>👤 ${p.author}</span>
+              <span>🕒 ${p.time}</span>
+              <span>👁️ ${p.views.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+        <div class="post-content">${p.content}</div>
+        <div class="post-footer">
+          <div class="post-tags">
+            <span class="post-tag">🎮 ${p.game}</span>
+          </div>
+          <div class="post-stats">
+            <span class="post-stat">💬 ${p.replies}</span>
+            <span class="post-stat">👍 ${p.likes}</span>
+          </div>
         </div>
       `;
-      
-      // 添加悬停效果
-      div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateX(4px)";
-        div.style.borderLeft = "3px solid var(--accent)";
-        div.style.transition = "all 0.3s ease";
-      });
-      
-      div.addEventListener("mouseleave", () => {
-        div.style.transform = "translateX(0)";
-        div.style.borderLeft = "";
-      });
-      
-      div.addEventListener("click", () => {
-        // 跳转到帖子详情页
+
+      card.onclick = () => {
         window.location.href = `post-detail.html?id=${p.id}`;
-      });
-      postList.appendChild(div);
+      };
+
+      postList.appendChild(card);
     });
   }
 
-  postBoards.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
+  // 渲染热门话题
+  function renderHotTopics() {
+    const container = document.getElementById("hotTopics");
+    container.innerHTML = hotTopics.map((topic, i) => `
+      <div class="hot-topic">
+        <span class="hot-topic-rank">${i + 1}</span>
+        <span class="hot-topic-title">${topic.title}</span>
+        <span class="hot-topic-heat">🔥 ${topic.heat}</span>
+      </div>
+    `).join('');
+  }
+
+  // 渲染在线用户
+  function renderOnlineUsers() {
+    const container = document.getElementById("onlineUsers");
+    container.innerHTML = onlineUsers.slice(0, 6).map(user => `
+      <div class="online-user">
+        <span class="online-dot"></span>
+        <span>${user}</span>
+      </div>
+    `).join('') + `<div class="online-user" style="color: var(--text-muted);">+${onlineUsers.length - 6} 更多</div>`;
+  }
+
+  // 更新板块计数
+  function updateBoardCounts() {
+    const counts = {
+      all: postData.length,
+      general: postData.filter(p => p.board === 'general').length,
+      guide: postData.filter(p => p.board === 'guide').length,
+      shot: postData.filter(p => p.board === 'shot').length,
+      trade: postData.filter(p => p.board === 'trade').length
+    };
+    
+    document.getElementById('countAll').textContent = counts.all;
+    document.getElementById('countGeneral').textContent = counts.general;
+    document.getElementById('countGuide').textContent = counts.guide;
+    document.getElementById('countShot').textContent = counts.shot;
+    document.getElementById('countTrade').textContent = counts.trade;
+  }
+
+  // 板块切换
+  document.getElementById("boardSelector").addEventListener("click", e => {
+    const btn = e.target.closest(".board-btn");
     if (!btn) return;
+    
     currentBoard = btn.dataset.board;
-    postBoards.querySelectorAll("button").forEach((b) => b.classList.remove("btn-primary"));
-    btn.classList.add("btn-primary");
+    document.querySelectorAll(".board-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
     renderPosts();
   });
 
+  // 搜索
   postSearch.addEventListener("input", renderPosts);
 
-  btnFakePost.addEventListener("click", () => {
-    alert("本项目为前端课程示例，发布功能为假按钮，不会真的发帖。");
-  });
+  // 发帖
+  function createPost() {
+    alert("🎮 发帖功能需要登录后使用！\n\n这是一个前端示例项目，实际发帖功能需要后端支持。");
+  }
 
-  // 默认选中“全部”按钮样式
-  postBoards.querySelector("button[data-board='all']").classList.add("btn-primary");
+  // 初始化
   renderPosts();
+  renderHotTopics();
+  renderOnlineUsers();
+  updateBoardCounts();
 </script>
 </body>
 </html>
