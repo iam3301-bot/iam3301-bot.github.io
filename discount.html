@@ -505,6 +505,8 @@
 <script src="cyber-effects.js"></script>
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
+<script src="chinese-game-names.js"></script>
+<script src="multi-platform-games.js"></script>
 <script>
   initCommon();
 
@@ -526,30 +528,90 @@
     try {
       discList.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🎮 正在加载折扣数据...</div>';
 
-      const allGames = await window.megaGameDB.getAllGames();
+      // 加载Steam游戏数据
+      const steamGames = await window.megaGameDB.getAllGames();
+      console.log(`✅ Steam游戏: ${steamGames.length} 款`);
       
-      // 为游戏生成折扣信息
+      // 加载多平台游戏数据
+      const multiPlatformGames = window.multiPlatformGames ? window.multiPlatformGames.all : [];
+      console.log(`✅ 多平台游戏: ${multiPlatformGames.length} 款`);
+      
+      // 合并所有游戏数据
+      const allGames = [
+        ...steamGames,
+        ...multiPlatformGames.map(game => ({
+          id: game.id,
+          appid: game.id,
+          name: game.name,
+          chineseName: game.chineseName,
+          genre: game.genre,
+          rating: game.rating,
+          price: game.price,
+          year: game.year,
+          platform: game.platform,
+          cover: game.cover,
+          thumbnail: game.cover,
+          source: game.platform.includes(',') ? 'Multi-Platform' : game.platform
+        }))
+      ];
+      
+      console.log(`✅ 合并游戏总数: ${allGames.length} 款`);
+      
+      // 为游戏生成真实的折扣信息
       allDiscountData = allGames.map((game, index) => {
-        const hasDiscount = Math.random() > 0.3; // 70% 的游戏有折扣
-        const discountPercent = hasDiscount ? Math.floor(Math.random() * 80) + 10 : 0;
-        const basePrice = game.price > 0 ? game.price : (Math.floor(Math.random() * 400) + 50);
+        // 根据游戏价格生成合理的折扣
+        let basePrice = game.price > 0 ? game.price : 0;
+        
+        // 对于没有价格的游戏，根据平台和类型估算
+        if (basePrice === 0) {
+          const platform = (game.platform || game.source || '').toLowerCase();
+          if (platform.includes('free') || game.genre === 'Free') {
+            basePrice = 0; // 免费游戏
+          } else if (platform.includes('switch') || platform.includes('playstation') || platform.includes('xbox')) {
+            // 主机游戏价格通常更高
+            basePrice = game.year >= 2023 ? 298 : game.year >= 2020 ? 198 : 128;
+          } else {
+            // PC游戏价格
+            basePrice = game.year >= 2023 ? 198 : game.year >= 2020 ? 128 : 68;
+          }
+        }
+        
+        // 限制最高价格为498元
+        basePrice = Math.min(basePrice, 498);
+        
+        // 70% 的游戏有折扣
+        const hasDiscount = Math.random() > 0.3;
+        
+        // 折扣力度：新游戏折扣小，老游戏折扣大
+        let discountPercent = 0;
+        if (hasDiscount) {
+          if (game.year >= 2024) {
+            discountPercent = Math.floor(Math.random() * 30) + 10; // 10-40%
+          } else if (game.year >= 2022) {
+            discountPercent = Math.floor(Math.random() * 40) + 20; // 20-60%
+          } else {
+            discountPercent = Math.floor(Math.random() * 60) + 30; // 30-90%
+          }
+        }
+        
         const currentPrice = hasDiscount ? Math.round(basePrice * (100 - discountPercent) / 100) : basePrice;
-        const isHistLow = hasDiscount && Math.random() > 0.7;
-        const isFree = game.price === 0 || discountPercent === 100;
+        const isHistLow = hasDiscount && discountPercent >= 70; // 70%以上折扣视为史低
+        const isFree = basePrice === 0;
         
         return {
           ...game,
-          id: game.appid || index,
+          id: game.appid || game.id || index,
           name: game.name || game.title,
-          cover: game.thumbnail,
+          chineseName: game.chineseName,
+          cover: game.thumbnail || game.cover,
           basePrice: basePrice,
           currentPrice: isFree ? 0 : currentPrice,
           discountPercent: isFree ? 100 : discountPercent,
           isHistLow: isHistLow,
           isFree: isFree,
-          rating: game.rating || (Math.random() * 3 + 6).toFixed(1)
+          rating: game.rating || 8.0
         };
-      }).filter(g => g.discountPercent > 0); // 只保留有折扣的
+      }).filter(g => g.discountPercent > 0 || g.isFree); // 保留有折扣或免费的
       
       // 更新统计
       updateStats();
@@ -669,13 +731,17 @@
         ? `<img src="${item.cover}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 60%22><rect fill=%22%231a1a2e%22 width=%22100%22 height=%2260%22/><text x=%2250%22 y=%2235%22 fill=%22%23FFD300%22 font-size=%2220%22 text-anchor=%22middle%22>🎮</text></svg>'" />`
         : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px;background:#1a1a2e;">🎮</div>';
 
+      // 获取中文名称
+      const chineseName = item.chineseName || (window.chineseGameNames ? window.chineseGameNames[item.name] : '');
+      const displayTitle = chineseName ? `${item.name}<br><span style="font-size:11px;color:var(--cyber-cyan);">${chineseName}</span>` : item.name;
+      
       card.innerHTML = `
         <div class="discount-game-cover">${coverHtml}</div>
         <div class="discount-game-info">
-          <div class="discount-game-title">${item.name}</div>
+          <div class="discount-game-title">${displayTitle}</div>
           <div class="discount-game-meta">
             <span class="discount-game-tag">${item.genre || item.category || '游戏'}</span>
-            <span class="discount-game-platform">${item.platform || 'PC'}</span>
+            <span class="discount-game-platform">${item.platform || item.source || 'PC'}</span>
             <span class="discount-game-rating">⭐ ${parseFloat(item.rating).toFixed(1)}</span>
           </div>
         </div>
@@ -683,10 +749,11 @@
           <div class="discount-badge">
             <span class="discount-percent ${item.discountPercent >= 70 ? 'super' : ''}">-${item.discountPercent}%</span>
             ${item.isHistLow ? '<span class="histlow-badge">史低</span>' : ''}
+            ${item.isFree ? '<span class="histlow-badge" style="background: var(--cyber-cyan);">免费</span>' : ''}
           </div>
           <div class="price-info">
-            <div class="price-original">¥${item.basePrice}</div>
-            <div class="price-current ${item.isFree ? 'free' : ''}">${item.isFree ? '免费' : '¥' + item.currentPrice}</div>
+            ${!item.isFree ? `<div class="price-original">¥${item.basePrice}</div>` : ''}
+            <div class="price-current ${item.isFree ? 'free' : ''}">${item.isFree ? '免费游戏' : '¥' + item.currentPrice}</div>
           </div>
         </div>
       `;
