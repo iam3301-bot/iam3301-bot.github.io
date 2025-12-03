@@ -686,35 +686,80 @@
   let currentMode = 'auto'; // 'auto' 或 'manual'
   let detectedHardware = null;
 
-  // 硬件检测功能
+  // 硬件检测功能 - 增强版
   detectBtn.addEventListener("click", async () => {
     detectBtn.disabled = true;
-    detectBtn.textContent = '🔍 检测中...';
+    detectBtn.innerHTML = '<span style="animation: pulse 0.5s infinite;">🔍 正在执行精准检测...</span>';
     
     try {
       const hardware = await detectHardwareSpecs();
       detectedHardware = hardware;
       
-      let specsHTML = '';
-      specsHTML += `<strong>🖥️ CPU:</strong> ${hardware.cpu}<br/>`;
-      specsHTML += `<strong>🎮 GPU:</strong> ${hardware.gpu}<br/>`;
-      specsHTML += `<strong>💾 内存:</strong> ${hardware.ram}GB<br/>`;
-      specsHTML += `<strong>📱 平台:</strong> ${hardware.platform}`;
+      // 构建详细的检测结果显示
+      const gpuMatchStatus = hardware.gpuMatched 
+        ? '<span style="color: #00ff88;">✅ 精确匹配</span>' 
+        : '<span style="color: #ffb800;">⚠️ 智能估算</span>';
+      
+      let specsHTML = '<div style="display: grid; gap: 12px;">';
+      
+      // CPU信息
+      specsHTML += `
+        <div style="padding: 12px; background: rgba(0, 204, 255, 0.1); border-radius: 8px; border-left: 3px solid #00ccff;">
+          <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">🖥️ CPU 处理器</div>
+          <div style="font-size: 14px; color: var(--text-main); font-weight: 600;">${hardware.cpu}</div>
+          <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">
+            核心数: ${hardware.cpuCores} | 性能分数: <span style="color: #00ff88; font-weight: bold;">${hardware.cpuScore}/100</span>
+            ${hardware.cpuArch ? ` | 架构: ${hardware.cpuArch}` : ''}
+          </div>
+        </div>`;
+      
+      // GPU信息
+      specsHTML += `
+        <div style="padding: 12px; background: rgba(0, 255, 136, 0.1); border-radius: 8px; border-left: 3px solid #00ff88;">
+          <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">🎮 GPU 显卡 ${gpuMatchStatus}</div>
+          <div style="font-size: 14px; color: var(--text-main); font-weight: 600;">${hardware.gpu}</div>
+          <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">
+            性能分数: <span style="color: #00ccff; font-weight: bold;">${hardware.gpuScore}/200</span>
+            ${hardware.gpuVendor ? ` | 厂商: ${hardware.gpuVendor}` : ''}
+          </div>
+          ${hardware.gpuRaw && hardware.gpuRaw !== hardware.gpu ? `<div style="font-size: 10px; color: #475569; margin-top: 4px;">原始: ${hardware.gpuRaw}</div>` : ''}
+        </div>`;
+      
+      // 内存和显示器
+      specsHTML += `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="padding: 12px; background: rgba(255, 184, 0, 0.1); border-radius: 8px; border-left: 3px solid #ffb800;">
+            <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">💾 系统内存</div>
+            <div style="font-size: 14px; color: var(--text-main); font-weight: 600;">${hardware.ram} GB</div>
+          </div>
+          <div style="padding: 12px; background: rgba(168, 85, 247, 0.1); border-radius: 8px; border-left: 3px solid #a855f7;">
+            <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">🖥️ 显示器</div>
+            <div style="font-size: 14px; color: var(--text-main); font-weight: 600;">${hardware.screenRes}</div>
+          </div>
+        </div>`;
+      
+      specsHTML += '</div>';
+      
+      // 检测方法说明
+      specsHTML += `
+        <div style="margin-top: 12px; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px; font-size: 11px; color: #94a3b8;">
+          <span style="color: #3b82f6;">ℹ️ 检测技术:</span> WebGL UNMASKED_RENDERER + CPU基准测试 + User-Agent Client Hints
+        </div>`;
       
       detectedSpecs.innerHTML = specsHTML;
       detectedInfo.style.display = 'block';
       
-      detectBtn.textContent = '✅ 检测完成';
+      detectBtn.innerHTML = '✅ 检测完成 - 点击重新检测';
       setTimeout(() => {
-        detectBtn.textContent = '🔍 重新检测';
+        detectBtn.innerHTML = '🔍 重新检测配置';
         detectBtn.disabled = false;
       }, 2000);
     } catch (error) {
-      detectBtn.textContent = '❌ 检测失败';
+      detectBtn.innerHTML = '❌ 检测失败';
       detectedSpecs.innerHTML = `<span style="color:var(--danger);">检测失败: ${error.message}<br/>请尝试手动输入配置</span>`;
       detectedInfo.style.display = 'block';
       setTimeout(() => {
-        detectBtn.textContent = '🔍 自动检测配置';
+        detectBtn.innerHTML = '🔍 自动检测配置';
         detectBtn.disabled = false;
       }, 3000);
     }
@@ -740,27 +785,208 @@
     }
   });
   
-  // 硬件检测函数
+  // =============================================
+  // 🎯 精准硬件检测系统 - 终极增强版
+  // =============================================
+  
+  // 精准GPU型号识别 - 从WebGL renderer字符串解析
+  function parseGPUModel(rendererString) {
+    // 扩展的GPU匹配规则 (按优先级排序)
+    const gpuPatterns = [
+      // NVIDIA RTX 50系列
+      { pattern: /rtx\s*5090/i, name: 'RTX 5090', score: 200 },
+      { pattern: /rtx\s*5080/i, name: 'RTX 5080', score: 160 },
+      { pattern: /rtx\s*5070\s*ti/i, name: 'RTX 5070 Ti', score: 135 },
+      { pattern: /rtx\s*5070(?!\s*ti)/i, name: 'RTX 5070', score: 120 },
+      { pattern: /rtx\s*5060\s*ti/i, name: 'RTX 5060 Ti', score: 95 },
+      { pattern: /rtx\s*5060(?!\s*ti)/i, name: 'RTX 5060', score: 80 },
+      // NVIDIA RTX 40系列
+      { pattern: /rtx\s*4090/i, name: 'RTX 4090', score: 180 },
+      { pattern: /rtx\s*4080\s*super/i, name: 'RTX 4080 Super', score: 155 },
+      { pattern: /rtx\s*4080(?!\s*super)/i, name: 'RTX 4080', score: 145 },
+      { pattern: /rtx\s*4070\s*ti\s*super/i, name: 'RTX 4070 Ti Super', score: 130 },
+      { pattern: /rtx\s*4070\s*ti(?!\s*super)/i, name: 'RTX 4070 Ti', score: 120 },
+      { pattern: /rtx\s*4070\s*super/i, name: 'RTX 4070 Super', score: 115 },
+      { pattern: /rtx\s*4070(?!\s*(ti|super))/i, name: 'RTX 4070', score: 105 },
+      { pattern: /rtx\s*4060\s*ti/i, name: 'RTX 4060 Ti', score: 85 },
+      { pattern: /rtx\s*4060(?!\s*ti)/i, name: 'RTX 4060', score: 75 },
+      // NVIDIA RTX 30系列
+      { pattern: /rtx\s*3090\s*ti/i, name: 'RTX 3090 Ti', score: 140 },
+      { pattern: /rtx\s*3090(?!\s*ti)/i, name: 'RTX 3090', score: 135 },
+      { pattern: /rtx\s*3080\s*ti/i, name: 'RTX 3080 Ti', score: 125 },
+      { pattern: /rtx\s*3080(?!\s*ti)/i, name: 'RTX 3080', score: 120 },
+      { pattern: /rtx\s*3070\s*ti/i, name: 'RTX 3070 Ti', score: 100 },
+      { pattern: /rtx\s*3070(?!\s*ti)/i, name: 'RTX 3070', score: 95 },
+      { pattern: /rtx\s*3060\s*ti/i, name: 'RTX 3060 Ti', score: 82 },
+      { pattern: /rtx\s*3060(?!\s*ti)/i, name: 'RTX 3060', score: 70 },
+      { pattern: /rtx\s*3050/i, name: 'RTX 3050', score: 50 },
+      // NVIDIA GTX 16系列
+      { pattern: /gtx\s*1660\s*super/i, name: 'GTX 1660 Super', score: 48 },
+      { pattern: /gtx\s*1660\s*ti/i, name: 'GTX 1660 Ti', score: 45 },
+      { pattern: /gtx\s*1660(?!\s*(super|ti))/i, name: 'GTX 1660', score: 42 },
+      { pattern: /gtx\s*1650\s*super/i, name: 'GTX 1650 Super', score: 38 },
+      { pattern: /gtx\s*1650(?!\s*super)/i, name: 'GTX 1650', score: 32 },
+      // NVIDIA GTX 10系列
+      { pattern: /gtx\s*1080\s*ti/i, name: 'GTX 1080 Ti', score: 60 },
+      { pattern: /gtx\s*1080(?!\s*ti)/i, name: 'GTX 1080', score: 52 },
+      { pattern: /gtx\s*1070\s*ti/i, name: 'GTX 1070 Ti', score: 48 },
+      { pattern: /gtx\s*1070(?!\s*ti)/i, name: 'GTX 1070', score: 44 },
+      { pattern: /gtx\s*1060/i, name: 'GTX 1060', score: 35 },
+      { pattern: /gtx\s*1050\s*ti/i, name: 'GTX 1050 Ti', score: 25 },
+      { pattern: /gtx\s*1050(?!\s*ti)/i, name: 'GTX 1050', score: 20 },
+      // AMD RX 7000系列
+      { pattern: /rx\s*7900\s*xtx/i, name: 'RX 7900 XTX', score: 155 },
+      { pattern: /rx\s*7900\s*xt(?!x)/i, name: 'RX 7900 XT', score: 135 },
+      { pattern: /rx\s*7900\s*gre/i, name: 'RX 7900 GRE', score: 120 },
+      { pattern: /rx\s*7800\s*xt/i, name: 'RX 7800 XT', score: 110 },
+      { pattern: /rx\s*7700\s*xt/i, name: 'RX 7700 XT', score: 95 },
+      { pattern: /rx\s*7600\s*xt/i, name: 'RX 7600 XT', score: 80 },
+      { pattern: /rx\s*7600(?!\s*xt)/i, name: 'RX 7600', score: 72 },
+      // AMD RX 6000系列
+      { pattern: /rx\s*6950\s*xt/i, name: 'RX 6950 XT', score: 130 },
+      { pattern: /rx\s*6900\s*xt/i, name: 'RX 6900 XT', score: 125 },
+      { pattern: /rx\s*6800\s*xt/i, name: 'RX 6800 XT', score: 115 },
+      { pattern: /rx\s*6800(?!\s*xt)/i, name: 'RX 6800', score: 100 },
+      { pattern: /rx\s*6750\s*xt/i, name: 'RX 6750 XT', score: 88 },
+      { pattern: /rx\s*6700\s*xt/i, name: 'RX 6700 XT', score: 85 },
+      { pattern: /rx\s*6650\s*xt/i, name: 'RX 6650 XT', score: 72 },
+      { pattern: /rx\s*6600\s*xt/i, name: 'RX 6600 XT', score: 70 },
+      { pattern: /rx\s*6600(?!\s*xt)/i, name: 'RX 6600', score: 62 },
+      { pattern: /rx\s*6500\s*xt/i, name: 'RX 6500 XT', score: 45 },
+      // AMD RX 5000系列
+      { pattern: /rx\s*5700\s*xt/i, name: 'RX 5700 XT', score: 70 },
+      { pattern: /rx\s*5700(?!\s*xt)/i, name: 'RX 5700', score: 62 },
+      { pattern: /rx\s*5600\s*xt/i, name: 'RX 5600 XT', score: 55 },
+      { pattern: /rx\s*5500\s*xt/i, name: 'RX 5500 XT', score: 42 },
+      // Intel Arc系列
+      { pattern: /arc\s*a770/i, name: 'Arc A770', score: 82 },
+      { pattern: /arc\s*a750/i, name: 'Arc A750', score: 72 },
+      { pattern: /arc\s*a580/i, name: 'Arc A580', score: 55 },
+      { pattern: /arc\s*a380/i, name: 'Arc A380', score: 30 },
+      // Intel集成显卡
+      { pattern: /iris\s*xe/i, name: 'Intel Iris Xe', score: 18 },
+      { pattern: /uhd\s*(770|graphics\s*770)/i, name: 'Intel UHD 770', score: 12 },
+      { pattern: /uhd\s*(730|graphics\s*730)/i, name: 'Intel UHD 730', score: 10 },
+      { pattern: /uhd\s*graphics/i, name: 'Intel UHD Graphics', score: 8 },
+      // AMD集成显卡
+      { pattern: /radeon\s*780m/i, name: 'AMD Radeon 780M', score: 35 },
+      { pattern: /radeon\s*760m/i, name: 'AMD Radeon 760M', score: 28 },
+      { pattern: /radeon\s*680m/i, name: 'AMD Radeon 680M', score: 25 },
+      { pattern: /vega\s*8/i, name: 'AMD Vega 8', score: 15 },
+      { pattern: /vega\s*7/i, name: 'AMD Vega 7', score: 12 }
+    ];
+    
+    // 尝试匹配
+    for (const gpu of gpuPatterns) {
+      if (gpu.pattern.test(rendererString)) {
+        console.log('[GPU检测] 精确匹配:', gpu.name, '分数:', gpu.score);
+        return { name: gpu.name, score: gpu.score, matched: true };
+      }
+    }
+    
+    // 通用分数估算
+    const str = rendererString.toLowerCase();
+    let estimatedScore = 40;
+    if (str.includes('nvidia') || str.includes('geforce')) {
+      if (str.includes('rtx')) estimatedScore = 70;
+      else if (str.includes('gtx')) estimatedScore = 40;
+    } else if (str.includes('amd') || str.includes('radeon')) {
+      if (str.includes('rx')) estimatedScore = 60;
+      else estimatedScore = 20;
+    } else if (str.includes('intel')) {
+      if (str.includes('arc')) estimatedScore = 55;
+      else if (str.includes('iris')) estimatedScore = 18;
+      else estimatedScore = 10;
+    }
+    
+    console.log('[GPU检测] 未精确匹配, 估算分数:', estimatedScore);
+    return { name: rendererString, score: estimatedScore, matched: false };
+  }
+  
+  // CPU性能基准测试
+  async function runCPUBenchmark() {
+    const iterations = 50000;
+    const startTime = performance.now();
+    
+    let result = 0;
+    for (let i = 0; i < iterations; i++) {
+      result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
+    }
+    
+    const duration = performance.now() - startTime;
+    
+    // 转换为分数 (越快越高)
+    let score;
+    if (duration <= 30) score = 100;
+    else if (duration <= 50) score = 90;
+    else if (duration <= 80) score = 80;
+    else if (duration <= 120) score = 70;
+    else if (duration <= 180) score = 60;
+    else if (duration <= 250) score = 50;
+    else if (duration <= 350) score = 40;
+    else score = 30;
+    
+    console.log('[CPU基准测试] 耗时:', duration.toFixed(2), 'ms, 分数:', score);
+    return score;
+  }
+  
+  // 精准硬件检测函数
   async function detectHardwareSpecs() {
     const specs = {
       cpu: 'Unknown',
+      cpuCores: 0,
+      cpuScore: 50,
       gpu: 'Unknown',
+      gpuScore: 50,
+      gpuMatched: false,
       ram: 0,
-      platform: navigator.platform || 'Unknown'
+      platform: navigator.platform || 'Unknown',
+      screenRes: `${screen.width}x${screen.height}`
     };
     
-    // 检测 CPU 核心数
-    if (navigator.hardwareConcurrency) {
-      const cores = navigator.hardwareConcurrency;
-      if (cores >= 24) specs.cpu = '高端多核处理器 (24+ 线程)';
-      else if (cores >= 16) specs.cpu = '高端处理器 (16-23 线程)';
-      else if (cores >= 12) specs.cpu = '主流处理器 (12-15 线程)';
-      else if (cores >= 8) specs.cpu = '中端处理器 (8-11 线程)';
-      else if (cores >= 4) specs.cpu = '入门处理器 (4-7 线程)';
-      else specs.cpu = '低端处理器 (<4 线程)';
+    // 1. 精准CPU检测
+    const cores = navigator.hardwareConcurrency || 4;
+    specs.cpuCores = cores;
+    
+    // 执行CPU基准测试
+    const benchScore = await runCPUBenchmark();
+    
+    // 综合评分 (核心数权重40%, 基准测试权重60%)
+    let coreScore;
+    if (cores >= 24) coreScore = 100;
+    else if (cores >= 16) coreScore = 88;
+    else if (cores >= 12) coreScore = 75;
+    else if (cores >= 8) coreScore = 62;
+    else if (cores >= 6) coreScore = 50;
+    else if (cores >= 4) coreScore = 40;
+    else coreScore = 25;
+    
+    specs.cpuScore = Math.round(coreScore * 0.4 + benchScore * 0.6);
+    
+    // 根据综合分数推断CPU级别
+    if (specs.cpuScore >= 90) {
+      specs.cpu = `旗舰级处理器 (${cores}核心, 性能分: ${specs.cpuScore})`;
+    } else if (specs.cpuScore >= 75) {
+      specs.cpu = `高端处理器 (${cores}核心, 性能分: ${specs.cpuScore})`;
+    } else if (specs.cpuScore >= 60) {
+      specs.cpu = `主流处理器 (${cores}核心, 性能分: ${specs.cpuScore})`;
+    } else if (specs.cpuScore >= 45) {
+      specs.cpu = `中端处理器 (${cores}核心, 性能分: ${specs.cpuScore})`;
+    } else {
+      specs.cpu = `入门处理器 (${cores}核心, 性能分: ${specs.cpuScore})`;
     }
     
-    // 检测 GPU (通过 WebGL)
+    // 尝试获取更多CPU信息
+    try {
+      if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+        const hints = await navigator.userAgentData.getHighEntropyValues(['architecture', 'bitness', 'platform']);
+        specs.cpuArch = `${hints.platform} ${hints.architecture} ${hints.bitness}bit`;
+      }
+    } catch (e) {
+      console.log('[CPU检测] User-Agent Client Hints不可用');
+    }
+    
+    // 2. 精准GPU检测
     try {
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -768,30 +994,79 @@
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
         if (debugInfo) {
           const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-          specs.gpu = renderer;
+          const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+          
+          // 精准解析GPU型号
+          const gpuInfo = parseGPUModel(renderer);
+          specs.gpu = gpuInfo.name;
+          specs.gpuScore = gpuInfo.score;
+          specs.gpuMatched = gpuInfo.matched;
+          specs.gpuRaw = renderer;
+          specs.gpuVendor = vendor;
+        } else {
+          specs.gpu = gl.getParameter(gl.RENDERER);
+          const gpuInfo = parseGPUModel(specs.gpu);
+          specs.gpuScore = gpuInfo.score;
         }
       }
     } catch (e) {
       specs.gpu = '无法检测 GPU';
+      specs.gpuScore = 40;
     }
     
-    // 估算内存 (通过 deviceMemory API)
+    // 3. 内存检测
     if (navigator.deviceMemory) {
       specs.ram = navigator.deviceMemory;
+      // deviceMemory API 有上限限制(通常8GB), 尝试进一步估算
+      if (specs.ram >= 8) {
+        try {
+          if (performance.memory && performance.memory.jsHeapSizeLimit) {
+            const heapLimit = performance.memory.jsHeapSizeLimit;
+            if (heapLimit > 4 * 1024 * 1024 * 1024) specs.ram = 32;
+            else if (heapLimit > 2 * 1024 * 1024 * 1024) specs.ram = 16;
+          }
+        } catch (e) {}
+      }
     } else {
-      // 估算内存
-      specs.ram = performance.memory ? Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024 / 1024) : 8;
+      specs.ram = 8; // 默认估算
     }
     
+    // 4. 显示器分辨率检测
+    const dpr = window.devicePixelRatio || 1;
+    const realWidth = Math.round(screen.width * dpr);
+    const realHeight = Math.round(screen.height * dpr);
+    specs.screenRes = `${screen.width}x${screen.height}`;
+    if (dpr > 1) {
+      specs.screenRes += ` (物理: ${realWidth}x${realHeight})`;
+    }
+    
+    console.log('[硬件检测完成]', specs);
     return specs;
   }
   
-  // 评估按钮事件
+  // 评估按钮事件 - 支持检测结果
   cfgBtn.addEventListener("click", () => {
     let cpuScore, gpuScore, ram, resolution;
     let cpuName, gpuName;
+    let useDetectedHardware = false;
     
-    if (currentMode === 'manual') {
+    // 优先使用检测到的硬件配置
+    if (detectedHardware && detectedHardware.cpuScore && detectedHardware.gpuScore) {
+      useDetectedHardware = true;
+      cpuName = detectedHardware.cpu;
+      cpuScore = detectedHardware.cpuScore;
+      gpuName = detectedHardware.gpu;
+      gpuScore = detectedHardware.gpuScore;
+      ram = detectedHardware.ram || 16;
+      
+      // 根据屏幕分辨率自动判断
+      const screenWidth = screen.width * (window.devicePixelRatio || 1);
+      if (screenWidth >= 3840) resolution = '2160';
+      else if (screenWidth >= 2560) resolution = '1440';
+      else resolution = '1080';
+      
+      console.log('[评估] 使用检测配置 - CPU:', cpuScore, 'GPU:', gpuScore);
+    } else if (currentMode === 'manual') {
       // 手动输入模式
       const manualCpuInput = document.getElementById("manualCpuInput");
       const manualGpuInput = document.getElementById("manualGpuInput");
