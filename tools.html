@@ -380,21 +380,26 @@
         <div class="tool-content">
           <div class="form-grid">
             <div class="input-group">
-              <label for="cfgCpu">🔧 CPU 性能等级</label>
+              <label for="cfgCpu">🔧 CPU 型号</label>
               <select id="cfgCpu">
-                <option value="low">入门级 (i3/R3 或更低)</option>
-                <option value="mid" selected>主流级 (i5/R5)</option>
-                <option value="high">高端级 (i7/R7)</option>
-                <option value="ultra">旗舰级 (i9/R9/Threadripper)</option>
+                <option value="budget">入门级 (i3-12100/R5 5500/R3 7300X)</option>
+                <option value="low">中低端 (i5-12400/R5 5600/R5 7500F)</option>
+                <option value="mid" selected>主流级 (i5-13600K/R7 5800X3D/R7 7700X)</option>
+                <option value="high">高端级 (i7-14700K/R9 7900X/i9-13900K)</option>
+                <option value="ultra">旗舰级 (i9-14900K/R9 7950X3D/i9-14900KS)</option>
+                <option value="next-gen">次世代 (Intel Core Ultra 9/AMD Ryzen 9000系列)</option>
               </select>
             </div>
             <div class="input-group">
-              <label for="cfgGpu">🎮 显卡性能等级</label>
+              <label for="cfgGpu">🎮 显卡型号</label>
               <select id="cfgGpu">
-                <option value="low">入门级 (GTX 1650/RX 6500 XT)</option>
-                <option value="mid" selected>主流级 (RTX 3060/RX 6600 XT)</option>
-                <option value="high">高端级 (RTX 3080/RX 6800 XT)</option>
-                <option value="ultra">旗舰级 (RTX 4090/RX 7900 XTX)</option>
+                <option value="budget">入门级 (GTX 1650/RX 6400/RTX 3050)</option>
+                <option value="low">中低端 (RTX 3060/RX 6600 XT/RTX 4060)</option>
+                <option value="mid" selected>主流级 (RTX 4060 Ti/RX 7600 XT/RTX 3070)</option>
+                <option value="high">高端级 (RTX 4070/RX 7800 XT/RTX 4070 Ti)</option>
+                <option value="ultra">旗舰级 (RTX 4080/RX 7900 XTX/RTX 4090)</option>
+                <option value="rtx50-high">次世代高端 (RTX 5070/RTX 5070 Ti)</option>
+                <option value="rtx50-ultra">次世代旗舰 (RTX 5080/RTX 5090)</option>
               </select>
             </div>
             <div class="input-group">
@@ -427,21 +432,20 @@
           <div class="tool-icon">💰</div>
           <div class="tool-info">
             <div class="tool-title">跨平台价格对比器</div>
-            <div class="tool-desc">一键对比Steam、Epic、杉果等平台价格，找到最优惠的购买渠道</div>
+            <div class="tool-desc">搜索任意游戏，一键对比Steam、Epic、杉果等平台价格</div>
           </div>
         </div>
         <div class="tool-content">
           <div class="input-group">
-            <label for="priceGame">🎯 选择游戏</label>
-            <select id="priceGame">
-              <option value="elden-ring">艾尔登法环 (Elden Ring)</option>
-              <option value="cyberpunk">赛博朋克2077 (Cyberpunk 2077)</option>
-              <option value="baldurs-gate">博德之门3 (Baldur's Gate 3)</option>
-              <option value="starfield">星空 (Starfield)</option>
-              <option value="rdr2">荒野大镖客2 (Red Dead Redemption 2)</option>
-            </select>
+            <label for="priceGameSearch">🎯 搜索游戏</label>
+            <div style="position: relative;">
+              <input type="text" id="priceGameSearch" placeholder="输入游戏名称搜索 (例如: 艾尔登法环, 黑神话悟空)" style="width: 100%; padding: 12px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(17, 24, 39, 0.8); color: var(--text-soft); border-radius: 8px; font-size: 14px;" />
+              <div id="priceSearchResults" style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 300px; overflow-y: auto; background: rgba(17, 24, 39, 0.98); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; margin-top: 8px; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></div>
+            </div>
           </div>
-          <button class="btn-tool" id="priceBtn">🔍 价格对比</button>
+          <div style="margin-top: 12px; padding: 12px; background: rgba(56, 189, 248, 0.05); border-radius: 8px; border-left: 3px solid var(--accent); font-size: 12px; color: var(--text-muted);">
+            💡 提示：输入游戏名称后自动搜索，点击搜索结果即可查看价格对比
+          </div>
           <div class="result-box" id="priceResult"></div>
         </div>
       </div>
@@ -580,49 +584,88 @@
     const res = cfgResolution.value;
     
     let score = 0;
-    const cpuScores = { low: 1, mid: 2, high: 3, ultra: 4 };
-    const gpuScores = { low: 1, mid: 2, high: 3, ultra: 4 };
+    const cpuScores = { budget: 1, low: 1.5, mid: 2.5, high: 3.5, ultra: 4.5, 'next-gen': 5 };
+    const gpuScores = { budget: 1, low: 2, mid: 3, high: 4, ultra: 5, 'rtx50-high': 5.5, 'rtx50-ultra': 6.5 };
     
     score += cpuScores[cpu] * 2;
-    score += gpuScores[gpu] * 3;
+    score += gpuScores[gpu] * 3.5;
     score += ram / 8;
     
-    const resMultiplier = { '1080': 1, '1440': 1.5, '2160': 2, 'ultrawide': 1.6 };
+    const resMultiplier = { '1080': 1, '1440': 1.5, '2160': 2.2, 'ultrawide': 1.6 };
     score = score / resMultiplier[res];
     
-    let quality, fps, raytracing, details;
+    let quality, fps, raytracing, details, hardware, dlss;
     
-    if (score >= 10) {
+    // 获取硬件信息
+    const cpuNames = {
+      budget: 'i3-12100/R5 5500',
+      low: 'i5-12400/R5 5600',
+      mid: 'i5-13600K/R7 5800X3D',
+      high: 'i7-14700K/R9 7900X',
+      ultra: 'i9-14900K/R9 7950X3D',
+      'next-gen': 'Intel Core Ultra 9/Ryzen 9000'
+    };
+    const gpuNames = {
+      budget: 'RTX 3050/RX 6400',
+      low: 'RTX 4060/RX 6600 XT',
+      mid: 'RTX 4060 Ti/RX 7600 XT',
+      high: 'RTX 4070 Ti/RX 7800 XT',
+      ultra: 'RTX 4090/RX 7900 XTX',
+      'rtx50-high': 'RTX 5070/5070 Ti',
+      'rtx50-ultra': 'RTX 5080/5090'
+    };
+    
+    hardware = `${cpuNames[cpu]} + ${gpuNames[gpu]}`;
+    
+    if (score >= 14) {
+      quality = "超极致";
+      fps = "240+ FPS";
+      raytracing = "✅ 全程光追 + DLSS 4 多帧生成";
+      dlss = "🚀 支持 DLSS 4.0 + 路径追踪";
+      details = `次世代旗舰配置！可以在 4K 分辨率下全开光追+路径追踪，配合 DLSS 4.0 多帧生成技术实现 240+ FPS。完美运行《赛博朋克2077》路径追踪、《艾尔登法环》、《黑神话：悟空》等所有 3A 大作的最高画质。`;
+    } else if (score >= 11) {
+      quality = "极致";
+      fps = "144-240 FPS";
+      raytracing = "✅ 全程光追 + DLSS 3.5";
+      dlss = "🎯 支持 DLSS 3.5 + 帧生成";
+      details = `旗舰级配置！可以在 4K/2K 分辨率下全开光追特效，搭配 DLSS 3.5 帧生成技术实现超高帧率。适合玩所有最新 3A 大作，如《赛博朋克2077》、《黑神话：悟空》、《星空》等，体验极致画质。`;
+    } else if (score >= 8) {
       quality = "极高";
-      fps = "120+ FPS";
-      raytracing = "✅ 支持光追+DLSS 3";
-      details = "可以开启所有特效，体验最佳画质。适合玩最新的3A大作，如《赛博朋克2077》、《艾尔登法环》等。";
-    } else if (score >= 7) {
+      fps = "120-144 FPS";
+      raytracing = "✅ 高级光追 + DLSS 3";
+      dlss = "⚡ 支持 DLSS 3.0/FSR 3";
+      details = `高端配置！可在 2K/4K 分辨率开启高级光追特效，DLSS 3.0 可提供额外性能提升。完美运行《艾尔登法环》、《博德之门3》、《霍格沃茨之遗》等大作。`;
+    } else if (score >= 6) {
       quality = "高";
       fps = "60-120 FPS";
-      raytracing = "✅ 支持部分光追特效";
-      details = "高画质运行大部分游戏。可以尝试光追特效，建议开启DLSS/FSR提升帧数。";
-    } else if (score >= 5) {
+      raytracing = "✅ 部分光追 + DLSS 2";
+      dlss = "💫 支持 DLSS 2.0/FSR 2";
+      details = `主流高配！可在 2K 分辨率开启部分光追特效，或在 1080p 全开光追。建议开启 DLSS/FSR 提升帧数。适合玩大部分 3A 游戏。`;
+    } else if (score >= 4) {
       quality = "中高";
       fps = "60 FPS";
-      raytracing = "⚠️ 关闭光追";
-      details = "中高画质流畅运行主流游戏。关闭极端特效（如体积光、高级阴影）可获得更好帧数。";
-    } else if (score >= 3) {
+      raytracing = "⚠️ 建议关闭光追";
+      dlss = "🔧 可开启 DLSS/FSR 性能模式";
+      details = `主流配置！建议在 1080p/2K 中高画质运行游戏，关闭光追可获得稳定 60 FPS。适合玩大部分主流游戏和老一代 3A 大作。`;
+    } else if (score >= 2.5) {
       quality = "中";
       fps = "30-60 FPS";
       raytracing = "❌ 不支持光追";
-      details = "中画质运行多数游戏。建议玩独立游戏、老游戏或者降低画质设置。";
+      dlss = "⚠️ 需开启性能优化";
+      details = `入门配置！建议在 1080p 中画质运行游戏。推荐玩独立游戏、竞技游戏或降低画质设置运行 3A 游戏。`;
     } else {
       quality = "低";
       fps = "30 FPS";
       raytracing = "❌ 不支持光追";
-      details = "低画质运行游戏。推荐玩像素游戏、休闲游戏或2D游戏。";
+      dlss = "❌ 性能受限";
+      details = `基础配置！建议在 1080p 低画质运行游戏。推荐玩像素游戏、2D 游戏、休闲游戏或老游戏。`;
     }
     
     cfgResult.innerHTML = `
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:32px;font-weight:900;color:var(--accent);font-family:'Orbitron',sans-serif;">${quality}</div>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:36px;font-weight:900;color:var(--accent);font-family:'Orbitron',sans-serif;text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);">${quality}</div>
         <div style="font-size:14px;color:var(--text-muted);margin-top:4px;">推荐画质等级</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:8px;font-family:'Orbitron',sans-serif;">💻 ${hardware}</div>
       </div>
       <div class="stats-grid">
         <div class="stat-item">
@@ -633,104 +676,209 @@
           <div class="stat-value">${res === '1080' ? '1080p' : res === '1440' ? '2K' : res === '2160' ? '4K' : '超宽'}</div>
           <div class="stat-label">分辨率</div>
         </div>
+        <div class="stat-item">
+          <div class="stat-value">${ram}GB</div>
+          <div class="stat-label">内存</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${score.toFixed(1)}</div>
+          <div class="stat-label">性能评分</div>
+        </div>
       </div>
-      <div style="margin-top:16px;padding:12px;background:rgba(56,189,248,0.1);border-radius:6px;">
+      <div style="margin-top:16px;padding:14px;background:rgba(56,189,248,0.1);border-radius:8px;border-left:4px solid var(--accent);">
         <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;">${raytracing}</div>
-        <div style="font-size:13px;color:var(--text-soft);line-height:1.6;">${details}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--warning);margin-bottom:8px;">${dlss}</div>
+        <div style="font-size:13px;color:var(--text-soft);line-height:1.7;">${details}</div>
       </div>
     `;
     cfgResult.classList.add('show');
   });
 
   // =============================================
-  // 2. 价格对比工具
+  // 2. 价格对比工具 - 联动搜索引擎
   // =============================================
-  const priceGame = document.getElementById("priceGame");
-  const priceBtn = document.getElementById("priceBtn");
+  const priceGameSearch = document.getElementById("priceGameSearch");
+  const priceSearchResults = document.getElementById("priceSearchResults");
   const priceResult = document.getElementById("priceResult");
   
-  const priceData = {
-    'elden-ring': {
-      name: '艾尔登法环',
-      platforms: [
-        { name: 'Steam', current: 298, original: 298, discount: 0 },
-        { name: 'Epic', current: 268, original: 298, discount: 10 },
-        { name: '杉果', current: 248, original: 298, discount: 17 },
-        { name: '凤凰商城', current: 238, original: 298, discount: 20 }
-      ]
-    },
-    'cyberpunk': {
-      name: '赛博朋克2077',
-      platforms: [
-        { name: 'Steam', current: 198, original: 298, discount: 33 },
-        { name: 'Epic', current: 178, original: 298, discount: 40 },
-        { name: 'GOG', current: 188, original: 298, discount: 37 },
-        { name: '杉果', current: 168, original: 298, discount: 44 }
-      ]
-    },
-    'baldurs-gate': {
-      name: '博德之门3',
-      platforms: [
-        { name: 'Steam', current: 298, original: 298, discount: 0 },
-        { name: 'Epic', current: 298, original: 298, discount: 0 },
-        { name: 'GOG', current: 278, original: 298, discount: 7 },
-        { name: '杉果', current: 268, original: 298, discount: 10 }
-      ]
-    },
-    'starfield': {
-      name: '星空',
-      platforms: [
-        { name: 'Steam', current: 298, original: 328, discount: 9 },
-        { name: 'Xbox Game Pass', current: 68, original: 328, discount: 79, note: '订阅制' },
-        { name: '微软商店', current: 298, original: 328, discount: 9 },
-        { name: '杉果', current: 278, original: 328, discount: 15 }
-      ]
-    },
-    'rdr2': {
-      name: '荒野大镖客2',
-      platforms: [
-        { name: 'Steam', current: 189, original: 299, discount: 37 },
-        { name: 'Epic', current: 179, original: 299, discount: 40 },
-        { name: 'Rockstar', current: 169, original: 299, discount: 43 },
-        { name: '杉果', current: 159, original: 299, discount: 47 }
-      ]
-    }
-  };
+  // 扩展的游戏价格数据库（模拟数据）
+  const gameDatabase = [
+    { id: 1, name: '艾尔登法环', enName: 'Elden Ring', platforms: [
+      { name: 'Steam', current: 298, original: 298, discount: 0 },
+      { name: 'Epic', current: 268, original: 298, discount: 10 },
+      { name: '杉果', current: 248, original: 298, discount: 17 }
+    ]},
+    { id: 2, name: '赛博朋克2077', enName: 'Cyberpunk 2077', platforms: [
+      { name: 'Steam', current: 198, original: 298, discount: 33 },
+      { name: 'Epic', current: 178, original: 298, discount: 40 },
+      { name: 'GOG', current: 188, original: 298, discount: 37 }
+    ]},
+    { id: 3, name: '博德之门3', enName: "Baldur's Gate 3", platforms: [
+      { name: 'Steam', current: 298, original: 298, discount: 0 },
+      { name: 'GOG', current: 278, original: 298, discount: 7 }
+    ]},
+    { id: 4, name: '黑神话：悟空', enName: 'Black Myth: Wukong', platforms: [
+      { name: 'Steam', current: 268, original: 268, discount: 0 },
+      { name: 'Epic', current: 268, original: 268, discount: 0 },
+      { name: 'WeGame', current: 248, original: 268, discount: 7 }
+    ]},
+    { id: 5, name: '星空', enName: 'Starfield', platforms: [
+      { name: 'Steam', current: 298, original: 328, discount: 9 },
+      { name: 'Xbox Game Pass', current: 68, original: 328, discount: 79, note: '订阅制' }
+    ]},
+    { id: 6, name: '荒野大镖客2', enName: 'Red Dead Redemption 2', platforms: [
+      { name: 'Steam', current: 189, original: 299, discount: 37 },
+      { name: 'Epic', current: 179, original: 299, discount: 40 },
+      { name: 'Rockstar', current: 169, original: 299, discount: 43 }
+    ]},
+    { id: 7, name: '霍格沃茨之遗', enName: 'Hogwarts Legacy', platforms: [
+      { name: 'Steam', current: 278, original: 298, discount: 7 },
+      { name: 'Epic', current: 268, original: 298, discount: 10 }
+    ]},
+    { id: 8, name: '战神：诸神黄昏', enName: 'God of War Ragnarök', platforms: [
+      { name: 'Steam', current: 398, original: 398, discount: 0 },
+      { name: 'Epic', current: 368, original: 398, discount: 8 }
+    ]},
+    { id: 9, name: '原神', enName: 'Genshin Impact', platforms: [
+      { name: '官方', current: 0, original: 0, discount: 0, note: '免费游玩' },
+      { name: 'Epic', current: 0, original: 0, discount: 0, note: '免费游玩' }
+    ]},
+    { id: 10, name: '绝地求生', enName: 'PUBG', platforms: [
+      { name: 'Steam', current: 0, original: 98, discount: 100, note: '免费游玩' }
+    ]},
+    { id: 11, name: 'CS2', enName: 'Counter-Strike 2', platforms: [
+      { name: 'Steam', current: 0, original: 0, discount: 0, note: '免费游玩' }
+    ]},
+    { id: 12, name: 'Dota 2', enName: 'Dota 2', platforms: [
+      { name: 'Steam', current: 0, original: 0, discount: 0, note: '免费游玩' }
+    ]},
+    { id: 13, name: '只狼：影逝二度', enName: 'Sekiro', platforms: [
+      { name: 'Steam', current: 268, original: 268, discount: 0 },
+      { name: 'Epic', current: 238, original: 268, discount: 11 }
+    ]},
+    { id: 14, name: '怪物猎人：世界', enName: 'Monster Hunter: World', platforms: [
+      { name: 'Steam', current: 158, original: 198, discount: 20 }
+    ]},
+    { id: 15, name: '巫师3：狂猎', enName: 'The Witcher 3', platforms: [
+      { name: 'Steam', current: 127, original: 127, discount: 0 },
+      { name: 'GOG', current: 99, original: 127, discount: 22 }
+    ]}
+  ];
   
-  priceBtn.addEventListener("click", () => {
-    const gameKey = priceGame.value;
-    const game = priceData[gameKey];
+  let searchTimeout = null;
+  let selectedGame = null;
+  
+  // 搜索游戏
+  priceGameSearch.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
     
+    // 清除之前的定时器
+    if (searchTimeout) clearTimeout(searchTimeout);
+    
+    if (query.length < 1) {
+      priceSearchResults.style.display = 'none';
+      return;
+    }
+    
+    // 延迟搜索，避免频繁触发
+    searchTimeout = setTimeout(() => {
+      const results = gameDatabase.filter(game => 
+        game.name.toLowerCase().includes(query) || 
+        game.enName.toLowerCase().includes(query)
+      ).slice(0, 10); // 最多显示10个结果
+      
+      if (results.length > 0) {
+        let html = '<div style="padding: 8px 0;">';
+        results.forEach(game => {
+          html += `
+            <div class="search-result-item" data-game-id="${game.id}" style="padding: 12px 16px; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(56, 189, 248, 0.1);">
+              <div style="font-size: 14px; font-weight: 600; color: var(--accent);">${game.name}</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${game.enName}</div>
+            </div>
+          `;
+        });
+        html += '</div>';
+        priceSearchResults.innerHTML = html;
+        priceSearchResults.style.display = 'block';
+        
+        // 添加点击事件
+        document.querySelectorAll('.search-result-item').forEach(item => {
+          item.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(56, 189, 248, 0.1)';
+          });
+          item.addEventListener('mouseleave', function() {
+            this.style.background = 'transparent';
+          });
+          item.addEventListener('click', function() {
+            const gameId = parseInt(this.dataset.gameId);
+            selectedGame = gameDatabase.find(g => g.id === gameId);
+            priceGameSearch.value = selectedGame.name;
+            priceSearchResults.style.display = 'none';
+            // 自动显示价格对比
+            showPriceComparison(selectedGame);
+          });
+        });
+      } else {
+        priceSearchResults.innerHTML = '<div style="padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px;">未找到相关游戏</div>';
+        priceSearchResults.style.display = 'block';
+      }
+    }, 300);
+  });
+  
+  // 点击外部关闭搜索结果
+  document.addEventListener('click', (e) => {
+    if (!priceGameSearch.contains(e.target) && !priceSearchResults.contains(e.target)) {
+      priceSearchResults.style.display = 'none';
+    }
+  });
+  
+  // 显示价格对比
+  function showPriceComparison(game) {
     const sortedPlatforms = [...game.platforms].sort((a, b) => a.current - b.current);
     const bestDeal = sortedPlatforms[0];
     
     let html = `
       <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:20px;font-weight:700;color:var(--accent);">《${game.name}》价格对比</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">最低价：<strong style="color:var(--danger);">¥${bestDeal.current}</strong> (${bestDeal.name})</div>
+        <div style="font-size:22px;font-weight:700;color:var(--accent);font-family:'Orbitron',sans-serif;">《${game.name}》</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${game.enName}</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-top:8px;">最低价：<strong style="color:var(--danger);font-size:18px;">¥${bestDeal.current}</strong> <span style="color:var(--accent);">(${bestDeal.name})</span></div>
       </div>
       <div class="price-comparison">
     `;
     
     sortedPlatforms.forEach(platform => {
+      const isBest = platform.name === bestDeal.name && platform.current > 0;
       html += `
-        <div class="platform-price" style="${platform.name === bestDeal.name ? 'border-color:var(--danger);box-shadow:0 0 20px rgba(239,68,68,0.3);' : ''}">
+        <div class="platform-price" style="${isBest ? 'border-color:var(--danger);box-shadow:0 0 20px rgba(239,68,68,0.3);transform:scale(1.02);' : ''}">
+          ${isBest ? '<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--danger);color:#fff;padding:2px 12px;border-radius:12px;font-size:11px;font-weight:700;">最优惠</div>' : ''}
           <div class="platform-name">${platform.name}</div>
-          <div class="platform-current">¥${platform.current}</div>
-          ${platform.discount > 0 ? `
+          <div class="platform-current">${platform.current === 0 ? '免费' : '¥' + platform.current}</div>
+          ${platform.discount > 0 && platform.current > 0 ? `
             <div class="platform-original">原价 ¥${platform.original}</div>
             <div class="platform-discount">-${platform.discount}%</div>
           ` : ''}
-          ${platform.note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${platform.note}</div>` : ''}
+          ${platform.note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:6px;padding:4px 8px;background:rgba(56,189,248,0.1);border-radius:4px;">${platform.note}</div>` : ''}
         </div>
       `;
     });
     
     html += `</div>`;
     
+    // 添加价格趋势提示
+    html += `
+      <div style="margin-top:20px;padding:14px;background:rgba(56,189,248,0.05);border-radius:8px;border-left:4px solid var(--accent);">
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+          💡 <strong style="color:var(--accent);">省钱小贴士</strong><br/>
+          • 关注平台大促：Steam夏季/冬季特卖、Epic周免等<br/>
+          • 对比第三方平台：杉果、凤凰商城等经常有额外折扣<br/>
+          • 订阅服务：Xbox Game Pass、EA Play可免费畅玩大量游戏
+        </div>
+      </div>
+    `;
+    
     priceResult.innerHTML = html;
     priceResult.classList.add('show');
-  });
+  }
 
   // =============================================
   // 3. 通关时间计算器
