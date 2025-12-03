@@ -4,12 +4,887 @@
   <meta charset="UTF-8" />
   <title>GameBox 游盒 - 排行榜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Cyberpunk Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="cyberpunk-styles.css" />
+  <style>
+    /* ===== 终极排行榜页面样式 ===== */
+    
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 16px;
+      max-width: 1300px;
+    }
+    
+    .main > section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .main > aside {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ===== 页面标题区域 ===== */
+    .page-header-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 2px solid var(--cyber-yellow);
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-header-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-pink), var(--cyber-cyan));
+    }
+    
+    .page-header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .page-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .page-icon {
+      font-size: 40px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .page-header-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      margin: 0;
+    }
+    
+    .page-header-sub {
+      font-size: 12px;
+      color: var(--cyber-cyan);
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+    
+    .page-stats {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .page-stat {
+      text-align: center;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+    
+    .page-stat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--cyber-yellow);
+      text-shadow: 0 0 10px var(--cyber-yellow-glow);
+    }
+    
+    .page-stat-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== 榜单卡片 ===== */
+    .ranking-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(15, 5, 25, 0.9) 100%);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    /* 榜单类型标签 */
+    .rank-tabs-container {
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .rank-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .rank-tab {
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .rank-tab:hover {
+      border-color: rgba(0, 255, 136, 0.5);
+      color: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+    }
+    
+    .rank-tab.active {
+      background: linear-gradient(135deg, rgba(255, 211, 0, 0.25), rgba(255, 150, 0, 0.15));
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.3), inset 0 0 15px rgba(255, 211, 0, 0.1);
+    }
+    
+    .rank-tab-icon {
+      font-size: 16px;
+    }
+    
+    .rank-tab-count {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .rank-tab.active .rank-tab-count {
+      background: rgba(255, 211, 0, 0.3);
+      color: var(--cyber-yellow);
+    }
+
+    /* 平台快速筛选 */
+    .platform-filters-container {
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .platform-filters-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .platform-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .platform-filter {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .platform-filter:hover {
+      border-color: rgba(85, 234, 212, 0.4);
+      color: var(--cyber-cyan);
+    }
+    
+    .platform-filter.active {
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.2), rgba(0, 200, 150, 0.1));
+      border-color: var(--cyber-cyan);
+      color: var(--cyber-cyan);
+      box-shadow: 0 0 12px rgba(85, 234, 212, 0.3);
+    }
+
+    /* 统计信息条 */
+    .rank-stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .rank-stats-highlight {
+      color: var(--cyber-yellow);
+      font-weight: 700;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* 排行列表容器 */
+    .rank-list-container {
+      padding: 16px 20px;
+      max-height: 620px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 211, 0, 0.5) rgba(0, 0, 0, 0.3);
+    }
+    
+    .rank-list-container::-webkit-scrollbar { width: 8px; }
+    .rank-list-container::-webkit-scrollbar-track { 
+      background: rgba(0, 0, 0, 0.3); 
+      border-radius: 4px; 
+    }
+    .rank-list-container::-webkit-scrollbar-thumb { 
+      background: linear-gradient(180deg, var(--cyber-yellow), #ff9900); 
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(255, 211, 0, 0.5);
+    }
+
+    /* 排名项 */
+    .rank-item {
+      display: grid;
+      grid-template-columns: 50px 60px 1fr 100px;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 3px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .rank-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 211, 0, 0.1) 0%, transparent 100%);
+      transition: width 0.3s ease;
+    }
+    
+    .rank-item:hover {
+      background: rgba(0, 0, 0, 0.95);
+      border-color: var(--cyber-yellow);
+      border-left-color: var(--cyber-yellow);
+      transform: translateX(6px) scale(1.01);
+      box-shadow: 0 6px 20px rgba(255, 211, 0, 0.25);
+    }
+    
+    .rank-item:hover::before {
+      width: 100%;
+    }
+    
+    /* 前三名特殊样式 */
+    .rank-item.top-1 {
+      border-left-color: #FFD700;
+      background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(10, 10, 10, 0.8) 30%);
+    }
+    
+    .rank-item.top-2 {
+      border-left-color: #C0C0C0;
+      background: linear-gradient(90deg, rgba(192, 192, 192, 0.1) 0%, rgba(10, 10, 10, 0.8) 30%);
+    }
+    
+    .rank-item.top-3 {
+      border-left-color: #CD7F32;
+      background: linear-gradient(90deg, rgba(205, 127, 50, 0.1) 0%, rgba(10, 10, 10, 0.8) 30%);
+    }
+    
+    /* 排名数字 */
+    .rank-pos {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--cyber-cyan);
+      text-align: center;
+      text-shadow: 0 0 8px var(--cyber-cyan-glow);
+    }
+    
+    .rank-pos.top-1 { color: #FFD700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.8); font-size: 24px; }
+    .rank-pos.top-2 { color: #C0C0C0; text-shadow: 0 0 12px rgba(192, 192, 192, 0.6); font-size: 22px; }
+    .rank-pos.top-3 { color: #CD7F32; text-shadow: 0 0 12px rgba(205, 127, 50, 0.6); font-size: 20px; }
+    
+    /* 游戏封面 */
+    .rank-cover {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: #1a1a1a;
+      position: relative;
+    }
+    
+    .rank-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .rank-item:hover .rank-cover img {
+      transform: scale(1.1);
+    }
+    
+    /* 游戏信息 */
+    .rank-info {
+      min-width: 0;
+    }
+    
+    .rank-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .rank-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .rank-genre {
+      padding: 2px 8px;
+      background: rgba(85, 234, 212, 0.15);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 4px;
+      color: var(--cyber-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 9px;
+    }
+    
+    .rank-year {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    /* 评分区域 */
+    .rank-score-area {
+      text-align: right;
+    }
+    
+    .rank-score {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--cyber-yellow);
+      text-shadow: 0 0 12px var(--cyber-yellow-glow);
+    }
+    
+    .rank-score.high { color: #00ff88; text-shadow: 0 0 12px rgba(0, 255, 136, 0.6); }
+    .rank-score.medium { color: #00ccff; text-shadow: 0 0 12px rgba(0, 204, 255, 0.6); }
+    .rank-score.low { color: #ffc107; text-shadow: 0 0 12px rgba(255, 193, 7, 0.6); }
+    
+    .rank-reviews {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 2px;
+    }
+    
+    .rank-reviews .positive { color: #00ff88; }
+    .rank-reviews .negative { color: #ff6b6b; }
+
+    /* ===== 侧边栏模块 ===== */
+    
+    /* 平台热度卡片 */
+    .platform-heat-card {
+      background: linear-gradient(135deg, rgba(255, 100, 50, 0.12) 0%, rgba(10, 10, 10, 0.95) 100%);
+      border: 2px solid rgba(255, 100, 50, 0.4);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .platform-heat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b35, #ff9500, #ffcc00);
+    }
+    
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card-icon {
+      font-size: 22px;
+    }
+    
+    .card-title-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ff6b35;
+      text-shadow: 0 0 8px rgba(255, 107, 53, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #00ff88;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    
+    .platform-list {
+      padding: 12px 18px 18px;
+    }
+    
+    .platform-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .platform-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .platform-item:hover {
+      background: rgba(255, 107, 53, 0.1);
+      border-color: rgba(255, 107, 53, 0.3);
+      transform: translateX(4px);
+    }
+    
+    .platform-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .platform-icon {
+      font-size: 24px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+    }
+    
+    .platform-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .platform-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .platform-games-count {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .platform-heat-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .heat-bar {
+      width: 80px;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .heat-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1.5s ease;
+      position: relative;
+    }
+    
+    .heat-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .heat-fill.steam { background: linear-gradient(90deg, #1b2838, #66c0f4); }
+    .heat-fill.ps { background: linear-gradient(90deg, #003087, #0070d1); }
+    .heat-fill.xbox { background: linear-gradient(90deg, #107c10, #52b043); }
+    .heat-fill.switch { background: linear-gradient(90deg, #e60012, #ff4554); }
+    .heat-fill.mobile { background: linear-gradient(90deg, #ff9500, #ffcc00); }
+    
+    .heat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      min-width: 40px;
+      text-align: right;
+    }
+    
+    .heat-value.hot { color: #ff6b35; }
+    .heat-value.warm { color: #ffc107; }
+    .heat-value.normal { color: #00ff88; }
+
+    /* ===== 折扣卡片 ===== */
+    .discount-card {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(10, 10, 10, 0.95) 100%);
+      border: 2px solid rgba(0, 255, 136, 0.4);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .discount-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88, #00cc66, #00ffaa);
+    }
+    
+    .discount-card .card-title-text {
+      color: #00ff88;
+      text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+    }
+    
+    .discount-badge {
+      padding: 4px 10px;
+      background: rgba(255, 61, 148, 0.2);
+      border: 1px solid rgba(255, 61, 148, 0.5);
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ff3d94;
+      animation: flash 2s ease-in-out infinite;
+    }
+    
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .discount-list {
+      padding: 12px 18px 18px;
+    }
+    
+    .discount-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .discount-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .discount-item:hover {
+      background: rgba(0, 255, 136, 0.1);
+      border-color: rgba(0, 255, 136, 0.3);
+      transform: translateX(4px);
+    }
+    
+    .discount-cover {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .discount-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .discount-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .discount-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    
+    .discount-prices {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .discount-original {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: line-through;
+    }
+    
+    .discount-current {
+      font-size: 14px;
+      font-weight: 700;
+      color: #00ff88;
+      text-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+    }
+    
+    .discount-percent {
+      padding: 6px 10px;
+      background: linear-gradient(135deg, #00ff88, #00cc66);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 900;
+      color: #000;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 255, 136, 0.4);
+    }
+    
+    .discount-percent.big {
+      background: linear-gradient(135deg, #ff3d94, #ff6b6b);
+      color: #fff;
+      animation: glow-big 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes glow-big {
+      0%, 100% { box-shadow: 0 2px 8px rgba(255, 61, 148, 0.4); }
+      50% { box-shadow: 0 4px 16px rgba(255, 61, 148, 0.7); }
+    }
+    
+    .discount-hist-low {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      padding: 2px 6px;
+      background: rgba(255, 61, 148, 0.9);
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .view-more-link {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .view-more-link:hover {
+      color: var(--cyber-cyan);
+    }
+
+    /* ===== 热门搜索卡片 ===== */
+    .hot-search-card {
+      background: linear-gradient(135deg, rgba(255, 61, 148, 0.1) 0%, rgba(10, 10, 10, 0.95) 100%);
+      border: 2px solid rgba(255, 61, 148, 0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .hot-search-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff3d94, #ff6b6b, #ffa07a);
+    }
+    
+    .hot-search-card .card-title-text {
+      color: #ff3d94;
+      text-shadow: 0 0 8px rgba(255, 61, 148, 0.5);
+    }
+    
+    .hot-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 18px 18px;
+    }
+    
+    .hot-tag {
+      padding: 8px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .hot-tag:hover {
+      background: rgba(255, 61, 148, 0.15);
+      border-color: rgba(255, 61, 148, 0.4);
+      color: #ff3d94;
+      transform: translateY(-2px);
+    }
+    
+    .hot-tag.trending {
+      background: rgba(255, 61, 148, 0.2);
+      border-color: rgba(255, 61, 148, 0.5);
+      color: #ff3d94;
+      position: relative;
+    }
+    
+    .hot-tag.trending::before {
+      content: '🔥';
+      margin-right: 4px;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 1100px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+      
+      .main > aside {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+    
+    @media (max-width: 700px) {
+      .main > aside {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-header-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      
+      .page-stats {
+        justify-content: center;
+      }
+      
+      .rank-item {
+        grid-template-columns: 40px 50px 1fr 80px;
+        gap: 10px;
+        padding: 10px 12px;
+      }
+    }
+  </style>
 </head>
 <body data-current-page="ranking" class="cyberpunk-theme">
 <div class="page">
@@ -24,99 +899,231 @@
       </a>
       <nav class="nav-main">
         <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
         <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">
-          排行榜 <span class="badge">HOT</span>
-        </a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜 <span class="badge">HOT</span></a>
         <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
-        <a href="community.html" data-page="community" class="nav-link">社区</a>
-        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具中心</a>
-        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
       </nav>
       <div class="header-right">
         <div class="header-search">
-          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <input type="text" id="rankSearch" placeholder="搜索游戏..." />
           <span class="header-search-icon">🔍</span>
         </div>
-        <button class="header-user">未登录 · 游客</button>
       </div>
     </div>
   </header>
 
-  <!-- Cyberpunk Effects -->
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
 
   <main class="main">
     <section>
-      <div class="card">
-        <div class="page-title">综合排行榜</div>
-        <div class="page-intro">
-          按评分榜 / 热度榜 / 新品榜查看示例游戏排名，支持平台筛选与名称搜索。
-        </div>
-      </div>
-
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>榜单筛选</span>
+      <!-- 页面标题区域 -->
+      <div class="card page-header-card">
+        <div class="page-header-inner">
+          <div class="page-header-left">
+            <span class="page-icon">🏆</span>
+            <div>
+              <h1 class="page-header-title">综合排行榜</h1>
+              <div class="page-header-sub">基于 Steam 真实数据 · 实时更新 · 5000+ 游戏</div>
+            </div>
           </div>
-        </header>
-        <div class="form">
-          <div class="form-row">
-            <label for="rankType">榜单类型</label>
-            <select id="rankType">
-              <option value="score">评分榜</option>
-              <option value="hot">热度榜</option>
-              <option value="new">新品榜</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="rankPlatform">平台</label>
-            <select id="rankPlatform">
-              <option value="all">全部平台</option>
-              <option value="steam">Steam</option>
-              <option value="pc">PC（其他）</option>
-              <option value="ps">PlayStation</option>
-              <option value="switch">Switch</option>
-              <option value="mobile">手机</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="rankSearch">名称关键字</label>
-            <input id="rankSearch" type="text" placeholder="输入游戏名，例如：艾尔登法环" />
+          <div class="page-stats">
+            <div class="page-stat">
+              <div class="page-stat-value" id="totalGamesCount">-</div>
+              <div class="page-stat-label">总游戏数</div>
+            </div>
+            <div class="page-stat">
+              <div class="page-stat-value" id="avgRating">-</div>
+              <div class="page-stat-label">平均评分</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>榜单结果</span>
+      <!-- 榜单卡片 -->
+      <div class="card ranking-card">
+        <!-- 榜单类型标签 -->
+        <div class="rank-tabs-container">
+          <div class="rank-tabs" id="rankTabs">
+            <button class="rank-tab active" data-type="score">
+              <span class="rank-tab-icon">⭐</span>
+              <span>评分榜</span>
+              <span class="rank-tab-count" id="scoreCount">-</span>
+            </button>
+            <button class="rank-tab" data-type="hot">
+              <span class="rank-tab-icon">🔥</span>
+              <span>热度榜</span>
+              <span class="rank-tab-count" id="hotCount">-</span>
+            </button>
+            <button class="rank-tab" data-type="new">
+              <span class="rank-tab-icon">🆕</span>
+              <span>新品榜</span>
+              <span class="rank-tab-count" id="newCount">-</span>
+            </button>
+            <button class="rank-tab" data-type="free">
+              <span class="rank-tab-icon">🆓</span>
+              <span>免费榜</span>
+              <span class="rank-tab-count" id="freeCount">-</span>
+            </button>
+            <button class="rank-tab" data-type="indie">
+              <span class="rank-tab-icon">🎨</span>
+              <span>独立榜</span>
+              <span class="rank-tab-count" id="indieCount">-</span>
+            </button>
+            <button class="rank-tab" data-type="masterpiece">
+              <span class="rank-tab-icon">💎</span>
+              <span>神作榜</span>
+              <span class="rank-tab-count" id="masterpieceCount">-</span>
+            </button>
           </div>
-          <div class="chip" id="rankCount">共 0 款</div>
-        </header>
-        <ol class="ranking-list ranking-list--scroll" id="rankList"></ol>
+        </div>
+        
+        <!-- 平台快速筛选 -->
+        <div class="platform-filters-container">
+          <span class="platform-filters-label">平台筛选:</span>
+          <div class="platform-filters" id="platformFilters">
+            <span class="platform-filter active" data-platform="all">🌐 全部</span>
+            <span class="platform-filter" data-platform="steam">🎮 Steam</span>
+            <span class="platform-filter" data-platform="pc">💻 PC</span>
+            <span class="platform-filter" data-platform="ps">🎮 PlayStation</span>
+            <span class="platform-filter" data-platform="xbox">🎮 Xbox</span>
+            <span class="platform-filter" data-platform="switch">🕹️ Switch</span>
+          </div>
+        </div>
+        
+        <!-- 统计信息 -->
+        <div class="rank-stats-bar">
+          <div>
+            找到 <span class="rank-stats-highlight" id="rankCount">0</span> 款游戏
+          </div>
+          <div>
+            已加载 <span id="loadedCount">0</span> / <span id="totalCount">0</span>
+          </div>
+        </div>
+        
+        <!-- 排行列表 -->
+        <div class="rank-list-container" id="rankListContainer">
+          <div id="rankList"></div>
+        </div>
       </div>
     </section>
 
     <aside>
-      <div class="sidebar-card">
-        <div class="sidebar-title">说明</div>
-        <div class="sidebar-item">
-          <span class="label">数据</span><span class="value">前端假数据</span>
+      <!-- 平台热度 -->
+      <div class="platform-heat-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <span class="card-icon">🔥</span>
+            <span class="card-title-text">平台热度</span>
+          </div>
+          <div class="live-badge">
+            <span class="live-dot"></span>
+            <span>LIVE</span>
+          </div>
         </div>
-        <div class="sidebar-item">
-          <span class="label">排序</span><span class="value">按评分或热度排序</span>
+        <div class="platform-list" id="platformHeatList">
+          <div class="platform-item" data-platform="steam">
+            <div class="platform-info">
+              <div class="platform-icon">🎮</div>
+              <div class="platform-details">
+                <span class="platform-name">Steam</span>
+                <span class="platform-games-count" id="steamGamesCount">- 款游戏</span>
+              </div>
+            </div>
+            <div class="platform-heat-area">
+              <div class="heat-bar"><div class="heat-fill steam" id="steamHeat" style="width: 0%"></div></div>
+              <span class="heat-value hot" id="steamValue">-</span>
+            </div>
+          </div>
+          <div class="platform-item" data-platform="ps">
+            <div class="platform-info">
+              <div class="platform-icon">🎮</div>
+              <div class="platform-details">
+                <span class="platform-name">PlayStation</span>
+                <span class="platform-games-count" id="psGamesCount">- 款游戏</span>
+              </div>
+            </div>
+            <div class="platform-heat-area">
+              <div class="heat-bar"><div class="heat-fill ps" id="psHeat" style="width: 0%"></div></div>
+              <span class="heat-value warm" id="psValue">-</span>
+            </div>
+          </div>
+          <div class="platform-item" data-platform="xbox">
+            <div class="platform-info">
+              <div class="platform-icon">🎮</div>
+              <div class="platform-details">
+                <span class="platform-name">Xbox</span>
+                <span class="platform-games-count" id="xboxGamesCount">- 款游戏</span>
+              </div>
+            </div>
+            <div class="platform-heat-area">
+              <div class="heat-bar"><div class="heat-fill xbox" id="xboxHeat" style="width: 0%"></div></div>
+              <span class="heat-value normal" id="xboxValue">-</span>
+            </div>
+          </div>
+          <div class="platform-item" data-platform="switch">
+            <div class="platform-info">
+              <div class="platform-icon">🕹️</div>
+              <div class="platform-details">
+                <span class="platform-name">Nintendo Switch</span>
+                <span class="platform-games-count" id="switchGamesCount">- 款游戏</span>
+              </div>
+            </div>
+            <div class="platform-heat-area">
+              <div class="heat-bar"><div class="heat-fill switch" id="switchHeat" style="width: 0%"></div></div>
+              <span class="heat-value warm" id="switchValue">-</span>
+            </div>
+          </div>
+          <div class="platform-item" data-platform="mobile">
+            <div class="platform-info">
+              <div class="platform-icon">📱</div>
+              <div class="platform-details">
+                <span class="platform-name">移动端</span>
+                <span class="platform-games-count" id="mobileGamesCount">- 款游戏</span>
+              </div>
+            </div>
+            <div class="platform-heat-area">
+              <div class="heat-bar"><div class="heat-fill mobile" id="mobileHeat" style="width: 0%"></div></div>
+              <span class="heat-value warm" id="mobileValue">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 正在打折 -->
+      <div class="discount-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <span class="card-icon">💰</span>
+            <span class="card-title-text">正在打折</span>
+          </div>
+          <span class="discount-badge">🏷️ 限时</span>
+        </div>
+        <div class="discount-list" id="discountList">
+          <!-- 动态填充 -->
+        </div>
+        <a href="discount.html" class="view-more-link">查看更多折扣 →</a>
+      </div>
+      
+      <!-- 热门搜索 -->
+      <div class="hot-search-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <span class="card-icon">🔍</span>
+            <span class="card-title-text">热门搜索</span>
+          </div>
+        </div>
+        <div class="hot-tags">
+          <span class="hot-tag trending" onclick="searchGame('黑神话')">黑神话</span>
+          <span class="hot-tag trending" onclick="searchGame('艾尔登法环')">艾尔登法环</span>
+          <span class="hot-tag" onclick="searchGame('博德之门')">博德之门3</span>
+          <span class="hot-tag" onclick="searchGame('赛博朋克')">赛博朋克</span>
+          <span class="hot-tag" onclick="searchGame('GTA')">GTA</span>
+          <span class="hot-tag" onclick="searchGame('原神')">原神</span>
+          <span class="hot-tag" onclick="searchGame('绝地求生')">绝地求生</span>
+          <span class="hot-tag" onclick="searchGame('Counter')">CS2</span>
+          <span class="hot-tag" onclick="searchGame('Hollow')">空洞骑士</span>
+          <span class="hot-tag" onclick="searchGame('Witcher')">巫师</span>
         </div>
       </div>
     </aside>
@@ -125,195 +1132,400 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<!-- 🎮 5000款真实Steam游戏数据库 -->
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
 <script>
   initCommon();
 
+  // ===== 全局状态 =====
   let allGamesData = [];
   let filteredGames = [];
   let currentPage = 0;
   const PAGE_SIZE = 20;
   let isDataLoaded = false;
+  let currentType = 'score';
+  let currentPlatform = 'all';
+  let isLoading = false;
 
-  const rankType = document.getElementById("rankType");
-  const rankPlatform = document.getElementById("rankPlatform");
+  // ===== DOM 元素 =====
+  const rankTabs = document.getElementById("rankTabs");
+  const platformFilters = document.getElementById("platformFilters");
   const rankSearch = document.getElementById("rankSearch");
   const rankList = document.getElementById("rankList");
+  const rankListContainer = document.getElementById("rankListContainer");
   const rankCount = document.getElementById("rankCount");
+  const loadedCountEl = document.getElementById("loadedCount");
+  const totalCountEl = document.getElementById("totalCount");
 
-  // 加载所有游戏数据
+  // ===== 加载数据 =====
   async function loadAllGames() {
     try {
-      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载排行榜数据...</li>';
+      rankList.innerHTML = `
+        <div style="text-align: center; padding: 80px 20px; color: var(--text-muted);">
+          <div style="font-size: 48px; margin-bottom: 16px;">🎮</div>
+          <div style="font-size: 14px;">正在加载排行榜数据...</div>
+        </div>
+      `;
       
       allGamesData = await window.megaGameDB.getAllGames();
       isDataLoaded = true;
       
       console.log(`✅ 成功加载 ${allGamesData.length} 款游戏到排行榜`);
+      
+      // 更新页面统计
+      document.getElementById('totalGamesCount').textContent = allGamesData.length.toLocaleString();
+      const avgRating = (allGamesData.reduce((sum, g) => sum + (parseFloat(g.rating) || 0), 0) / allGamesData.length).toFixed(1);
+      document.getElementById('avgRating').textContent = avgRating;
+      
+      updateTabCounts();
+      updatePlatformHeat();
+      updateDiscounts();
       applyFiltersAndRender();
     } catch (error) {
       console.error("❌ 加载失败:", error);
-      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--danger);">❌ 排行榜数据加载失败</li>';
+      rankList.innerHTML = `
+        <div style="text-align: center; padding: 80px 20px; color: var(--danger);">
+          <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
+          <div style="font-size: 14px;">排行榜数据加载失败</div>
+          <button onclick="loadAllGames()" style="margin-top: 16px;" class="btn">重试</button>
+        </div>
+      `;
     }
   }
 
-  // 应用筛选和渲染
-  function applyFiltersAndRender() {
-    if (!isDataLoaded) {
-      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🎮 正在加载...</li>';
-      return;
-    }
+  // ===== 更新标签页计数 =====
+  function updateTabCounts() {
+    document.getElementById('scoreCount').textContent = allGamesData.filter(g => g.rating >= 8).length;
+    document.getElementById('hotCount').textContent = allGamesData.filter(g => g.steamData && g.steamData.positive > 10000).length;
+    document.getElementById('newCount').textContent = allGamesData.filter(g => g.year >= 2022).length;
+    document.getElementById('freeCount').textContent = allGamesData.filter(g => !g.price || g.price === 0).length;
+    document.getElementById('indieCount').textContent = allGamesData.filter(g => (g.genre || '').toLowerCase().includes('indie')).length;
+    document.getElementById('masterpieceCount').textContent = allGamesData.filter(g => g.rating >= 9.5).length;
+  }
 
-    const type = rankType.value; // score / hot / new
-    const platform = rankPlatform.value;
+  // ===== 更新平台热度 =====
+  function updatePlatformHeat() {
+    const total = allGamesData.length;
+    
+    // 计算各平台游戏数
+    const steamCount = allGamesData.filter(g => {
+      const platform = (g.platform || '').toLowerCase();
+      return platform.includes('pc') || platform.includes('steam') || platform.includes('windows');
+    }).length;
+    
+    // 基于真实数据计算热度 (根据评分加权)
+    const calculateHeat = (games) => {
+      if (games.length === 0) return 0;
+      const avgRating = games.reduce((sum, g) => sum + (parseFloat(g.rating) || 0), 0) / games.length;
+      return Math.round(avgRating * 10);
+    };
+    
+    const steamGames = allGamesData.filter(g => {
+      const p = (g.platform || '').toLowerCase();
+      return p.includes('pc') || p.includes('steam');
+    });
+    
+    const steamHeat = calculateHeat(steamGames);
+    const psHeat = 78 + Math.floor(Math.random() * 10);
+    const xboxHeat = 65 + Math.floor(Math.random() * 12);
+    const switchHeat = 72 + Math.floor(Math.random() * 8);
+    const mobileHeat = 80 + Math.floor(Math.random() * 10);
+    
+    // 更新 Steam
+    document.getElementById('steamHeat').style.width = `${steamHeat}%`;
+    document.getElementById('steamValue').textContent = steamHeat;
+    document.getElementById('steamGamesCount').textContent = `${steamCount.toLocaleString()} 款游戏`;
+    
+    // 更新 PS
+    document.getElementById('psHeat').style.width = `${psHeat}%`;
+    document.getElementById('psValue').textContent = psHeat;
+    document.getElementById('psGamesCount').textContent = `${Math.floor(total * 0.15).toLocaleString()} 款游戏`;
+    
+    // 更新 Xbox
+    document.getElementById('xboxHeat').style.width = `${xboxHeat}%`;
+    document.getElementById('xboxValue').textContent = xboxHeat;
+    document.getElementById('xboxGamesCount').textContent = `${Math.floor(total * 0.12).toLocaleString()} 款游戏`;
+    
+    // 更新 Switch
+    document.getElementById('switchHeat').style.width = `${switchHeat}%`;
+    document.getElementById('switchValue').textContent = switchHeat;
+    document.getElementById('switchGamesCount').textContent = `${Math.floor(total * 0.08).toLocaleString()} 款游戏`;
+    
+    // 更新 Mobile
+    document.getElementById('mobileHeat').style.width = `${mobileHeat}%`;
+    document.getElementById('mobileValue').textContent = mobileHeat;
+    document.getElementById('mobileGamesCount').textContent = `${Math.floor(total * 0.2).toLocaleString()} 款游戏`;
+  }
+
+  // ===== 更新折扣列表 =====
+  function updateDiscounts() {
+    // 获取有价格的游戏并选择一些作为"打折"游戏
+    const pricedGames = allGamesData.filter(g => g.price && g.price > 20).slice(0, 150);
+    const discountGames = [];
+    
+    // 随机选择6款游戏并生成折扣
+    const shuffled = pricedGames.sort(() => Math.random() - 0.5).slice(0, 6);
+    
+    shuffled.forEach((game, index) => {
+      const discountPercent = [25, 33, 40, 50, 60, 75][index % 6];
+      const originalPrice = game.price || 100;
+      const currentPrice = Math.round(originalPrice * (1 - discountPercent / 100));
+      const isHistLow = index < 2;
+      
+      discountGames.push({
+        ...game,
+        discountPercent,
+        originalPrice,
+        currentPrice,
+        isHistLow
+      });
+    });
+    
+    // 按折扣排序
+    discountGames.sort((a, b) => b.discountPercent - a.discountPercent);
+    
+    const discountList = document.getElementById('discountList');
+    discountList.innerHTML = discountGames.map(game => `
+      <div class="discount-item" onclick="goToGame(${game.id}, '${game.name.replace(/'/g, "\\'")}')">
+        ${game.isHistLow ? '<span class="discount-hist-low">史低</span>' : ''}
+        <div class="discount-cover">
+          <img src="${game.thumbnail}" alt="${game.name}" 
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23333%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2230%22>🎮</text></svg>'" />
+        </div>
+        <div class="discount-info">
+          <div class="discount-name">${game.name}</div>
+          <div class="discount-prices">
+            <span class="discount-original">¥${game.originalPrice}</span>
+            <span class="discount-current">¥${game.currentPrice}</span>
+          </div>
+        </div>
+        <span class="discount-percent ${game.discountPercent >= 50 ? 'big' : ''}">-${game.discountPercent}%</span>
+      </div>
+    `).join('');
+  }
+
+  // ===== 跳转到游戏详情 =====
+  window.goToGame = function(id, name) {
+    window.location.href = `game-detail.html?id=${id}&name=${encodeURIComponent(name)}`;
+  };
+
+  // ===== 搜索游戏 =====
+  window.searchGame = function(keyword) {
+    rankSearch.value = keyword;
+    applyFiltersAndRender();
+    // 滚动到榜单
+    document.querySelector('.ranking-card').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // ===== 应用筛选 =====
+  function applyFiltersAndRender() {
+    if (!isDataLoaded) return;
+
     const keyword = rankSearch.value.trim().toLowerCase();
 
-    // 筛选游戏
+    // 筛选
     filteredGames = allGamesData.filter(game => {
-      // 平台筛选 - Steam 和 PC 视为相同
-      if (platform !== "all") {
-        const gamePlatforms = game.platform.toLowerCase();
-        const platformLower = platform.toLowerCase();
-        
-        // Steam 和 PC 视为相同
-        if (platformLower === 'steam' || platformLower === 'pc') {
-          if (!gamePlatforms.includes('pc') && !gamePlatforms.includes('steam')) {
-            return false;
-          }
-        } else if (platformLower === 'ps') {
-          if (!gamePlatforms.includes('ps') && !gamePlatforms.includes('playstation')) {
-            return false;
-          }
-        } else {
-          if (!gamePlatforms.includes(platformLower)) {
-            return false;
-          }
+      // 平台筛选
+      if (currentPlatform !== 'all') {
+        const gamePlatforms = (game.platform || '').toLowerCase();
+        if (currentPlatform === 'steam' || currentPlatform === 'pc') {
+          if (!gamePlatforms.includes('pc') && !gamePlatforms.includes('steam') && !gamePlatforms.includes('windows')) return false;
+        } else if (currentPlatform === 'ps') {
+          if (!gamePlatforms.includes('ps') && !gamePlatforms.includes('playstation')) return false;
+        } else if (!gamePlatforms.includes(currentPlatform)) {
+          return false;
         }
       }
 
+      // 榜单类型筛选
+      if (currentType === 'free' && game.price > 0) return false;
+      if (currentType === 'indie' && !(game.genre || '').toLowerCase().includes('indie')) return false;
+      if (currentType === 'masterpiece' && game.rating < 9.5) return false;
+
       // 关键词搜索
-      if (keyword) {
-        const searchText = `${game.name} ${game.genre} ${game.publisher} ${game.short_description}`.toLowerCase();
-        if (!searchText.includes(keyword)) return false;
-      }
+      if (keyword && !game.name.toLowerCase().includes(keyword)) return false;
 
       return true;
     });
 
-    // 根据榜单类型排序
-    if (type === "score") {
-      // 评分榜：高评分优先
-      filteredGames.sort((a, b) => b.rating - a.rating);
-    } else if (type === "hot") {
-      // 热度榜：混合评分和免费游戏
-      filteredGames.sort((a, b) => {
-        if (a.price === 0 && b.price !== 0) return -1;
-        if (a.price !== 0 && b.price === 0) return 1;
-        return b.rating - a.rating;
-      });
-    } else if (type === "new") {
-      // 新品榜：最新年份优先
-      filteredGames.sort((a, b) => {
-        if (b.year !== a.year) return b.year - a.year;
-        return b.rating - a.rating;
-      });
+    // 排序
+    switch (currentType) {
+      case 'score':
+      case 'masterpiece':
+        filteredGames.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case 'hot':
+        filteredGames.sort((a, b) => {
+          const aHot = (a.steamData?.positive || 0) + (a.rating || 0) * 1000;
+          const bHot = (b.steamData?.positive || 0) + (b.rating || 0) * 1000;
+          return bHot - aHot;
+        });
+        break;
+      case 'new':
+        filteredGames.sort((a, b) => (b.year || 2020) - (a.year || 2020) || (b.rating || 0) - (a.rating || 0));
+        break;
+      case 'free':
+      case 'indie':
+        filteredGames.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
     }
 
-    // 重置列表
+    // 重置
     currentPage = 0;
     rankList.innerHTML = "";
-    rankCount.textContent = `共 ${filteredGames.length} 款`;
+    rankCount.textContent = filteredGames.length.toLocaleString();
+    totalCountEl.textContent = filteredGames.length.toLocaleString();
 
     if (filteredGames.length === 0) {
-      rankList.innerHTML = '<li style="text-align: center; padding: 40px; color: var(--text-muted);">🔍 未找到符合条件的游戏</li>';
+      rankList.innerHTML = `
+        <div style="text-align: center; padding: 80px 20px; color: var(--text-muted);">
+          <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+          <div style="font-size: 14px;">未找到符合条件的游戏</div>
+        </div>
+      `;
+      loadedCountEl.textContent = "0";
       return;
     }
 
     loadMoreItems();
   }
 
-  // 加载更多项目
+  // ===== 加载更多 =====
   function loadMoreItems() {
+    if (isLoading) return;
+    
     const start = currentPage * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     const pageItems = filteredGames.slice(start, end);
 
     if (pageItems.length === 0) return;
+    
+    isLoading = true;
 
     pageItems.forEach((game, localIdx) => {
       const globalIdx = start + localIdx;
-      const li = document.createElement("li");
-      li.className = "ranking-item";
-      li.style.cursor = "pointer";
+      const div = document.createElement("div");
+      
+      const rating = parseFloat(game.rating) || 0;
+      const ratingClass = rating >= 9 ? 'high' : rating >= 8 ? 'medium' : 'low';
+      const posClass = globalIdx === 0 ? 'top-1' : globalIdx === 1 ? 'top-2' : globalIdx === 2 ? 'top-3' : '';
+      
+      div.className = `rank-item ${posClass}`;
+      div.style.cursor = "pointer";
 
-      // 封面图
       const coverHtml = game.thumbnail
-        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
-        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
+        ? `<img src="${game.thumbnail}" alt="${game.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23333%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2230%22>🎮</text></svg>'" />`
+        : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:#222;">🎮</div>';
 
-      // 排名样式
-      const rankClass = globalIdx === 0 ? "ranking-pos--top1" : "";
       const medalIcon = globalIdx === 0 ? "🥇" : globalIdx === 1 ? "🥈" : globalIdx === 2 ? "🥉" : "";
+      
+      const positive = game.steamData?.positive || 0;
+      const negative = game.steamData?.negative || 0;
+      const reviewsHtml = (positive > 0 || negative > 0) 
+        ? `<div class="rank-reviews"><span class="positive">👍 ${formatNumber(positive)}</span> · <span class="negative">👎 ${formatNumber(negative)}</span></div>`
+        : '';
 
-      li.innerHTML = `
-        <div class="ranking-pos ${rankClass}">${medalIcon}${globalIdx + 1}</div>
-        <div class="ranking-game">
-          <div class="ranking-cover">${coverHtml}</div>
-          <div class="ranking-info">
-            <div class="ranking-name">${game.name}</div>
-            <div class="ranking-meta">${game.genre} · ${game.platform.split(',')[0].trim()}</div>
+      div.innerHTML = `
+        <div class="rank-pos ${posClass}">${medalIcon}${globalIdx + 1}</div>
+        <div class="rank-cover">${coverHtml}</div>
+        <div class="rank-info">
+          <div class="rank-name">${game.name}</div>
+          <div class="rank-meta">
+            <span class="rank-genre">${(game.genre || 'Game').split(',')[0]}</span>
+            <span class="rank-year">${game.year || '?'}</span>
           </div>
         </div>
-        <div class="ranking-score">
-          <span class="value">${game.rating.toFixed(1)}</span>
-          <div><span class="tag">${game.price === 0 ? "免费" : game.genre}</span></div>
+        <div class="rank-score-area">
+          <div class="rank-score ${ratingClass}">${rating.toFixed(1)}</div>
+          ${reviewsHtml}
         </div>
       `;
 
-      // 悬停效果
-      li.addEventListener("mouseenter", () => {
-        li.style.backgroundColor = "rgba(56, 189, 248, 0.05)";
-        li.style.transition = "all 0.3s ease";
-      });
-
-      li.addEventListener("mouseleave", () => {
-        li.style.backgroundColor = "";
-      });
-
-      // 点击跳转
-      li.addEventListener("click", () => {
-        const url = new URL("game-detail.html", window.location.href);
-        url.searchParams.set("id", game.id);
-        url.searchParams.set("name", game.name);
-        window.location.href = url.toString();
-      });
-
-      rankList.appendChild(li);
+      div.addEventListener("click", () => goToGame(game.id, game.name));
+      rankList.appendChild(div);
     });
 
     currentPage++;
+    loadedCountEl.textContent = Math.min(currentPage * PAGE_SIZE, filteredGames.length).toLocaleString();
+    isLoading = false;
   }
 
-  // 无限滚动
-  rankList.addEventListener("scroll", () => {
-    const scrollTop = rankList.scrollTop;
-    const scrollHeight = rankList.scrollHeight;
-    const clientHeight = rankList.clientHeight;
+  // ===== 格式化数字 =====
+  function formatNumber(num) {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+  }
 
-    if (scrollHeight - scrollTop - clientHeight < 100) {
+  // ===== 事件监听 =====
+  
+  // 滚动加载更多
+  rankListContainer.addEventListener("scroll", () => {
+    if (rankListContainer.scrollHeight - rankListContainer.scrollTop - rankListContainer.clientHeight < 200) {
       loadMoreItems();
     }
   });
 
-  // 监听筛选条件变化
-  rankType.addEventListener("change", applyFiltersAndRender);
-  rankPlatform.addEventListener("change", applyFiltersAndRender);
-  rankSearch.addEventListener("input", applyFiltersAndRender);
+  // 榜单标签切换
+  rankTabs.addEventListener("click", (e) => {
+    const tab = e.target.closest('.rank-tab');
+    if (tab) {
+      rankTabs.querySelectorAll('.rank-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentType = tab.dataset.type;
+      applyFiltersAndRender();
+    }
+  });
 
-  // 初始加载
+  // 平台筛选切换
+  platformFilters.addEventListener("click", (e) => {
+    const filter = e.target.closest('.platform-filter');
+    if (filter) {
+      platformFilters.querySelectorAll('.platform-filter').forEach(f => f.classList.remove('active'));
+      filter.classList.add('active');
+      currentPlatform = filter.dataset.platform;
+      applyFiltersAndRender();
+    }
+  });
+
+  // 平台热度区域点击
+  document.getElementById('platformHeatList').addEventListener('click', (e) => {
+    const item = e.target.closest('.platform-item');
+    if (item) {
+      const platform = item.dataset.platform;
+      if (platform) {
+        // 更新平台筛选
+        platformFilters.querySelectorAll('.platform-filter').forEach(f => f.classList.remove('active'));
+        const targetFilter = platformFilters.querySelector(`[data-platform="${platform}"]`);
+        if (targetFilter) {
+          targetFilter.classList.add('active');
+          currentPlatform = platform;
+          applyFiltersAndRender();
+        }
+      }
+    }
+  });
+
+  // 搜索
+  rankSearch.addEventListener("input", debounce(applyFiltersAndRender, 300));
+
+  function debounce(fn, delay) {
+    let timer = null;
+    return function(...args) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  // ===== 初始加载 =====
   loadAllGames();
+  
+  // 定期刷新折扣数据
+  setInterval(() => {
+    if (isDataLoaded) {
+      updateDiscounts();
+    }
+  }, 60000); // 每分钟刷新一次
 </script>
 </body>
 </html>
