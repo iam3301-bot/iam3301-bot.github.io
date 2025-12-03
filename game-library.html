@@ -704,7 +704,7 @@
         <div class="sidebar-title">📊 数据统计</div>
         <div class="sidebar-item">
           <span class="label">数据来源</span>
-          <span class="value" style="color: #00ff88;">Steam</span>
+          <span class="value" style="color: #00ff88;">多平台</span>
         </div>
         <div class="sidebar-item">
           <span class="label">游戏总数</span>
@@ -713,6 +713,22 @@
         <div class="sidebar-item">
           <span class="label">筛选匹配</span>
           <span class="value" id="matchedCount">-</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">🎮 PC/Steam</span>
+          <span class="value" id="steamCount">-</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">🎮 PlayStation</span>
+          <span class="value" id="psCount">-</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">🎮 Xbox</span>
+          <span class="value" id="xboxCount">-</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">🕹️ Switch</span>
+          <span class="value" id="switchCount">-</span>
         </div>
       </div>
       
@@ -760,6 +776,8 @@
 <script src="cyber-effects.js"></script>
 <script src="real-5000-games-database.js"></script>
 <script src="mega-game-database-real.js"></script>
+<script src="chinese-game-names.js"></script>
+<script src="multi-platform-games.js"></script>
 <script>
   initCommon();
 
@@ -854,10 +872,36 @@
     try {
       libList.innerHTML = '<li style="text-align: center; padding: 60px; color: var(--text-muted); list-style: none;">🎮 正在加载游戏数据...</li>';
       
-      allGamesData = await window.megaGameDB.getAllGames();
+      // 加载Steam游戏数据
+      const steamGames = await window.megaGameDB.getAllGames();
+      console.log(`✅ Steam游戏: ${steamGames.length} 款`);
+      
+      // 加载多平台游戏数据
+      const multiPlatformGames = window.multiPlatformGames ? window.multiPlatformGames.all : [];
+      console.log(`✅ 多平台游戏: ${multiPlatformGames.length} 款`);
+      
+      // 合并数据，确保统一格式
+      allGamesData = [
+        ...steamGames,
+        ...multiPlatformGames.map(game => ({
+          id: game.id,
+          appid: game.id,
+          name: game.name,
+          chineseName: game.chineseName,
+          genre: game.genre,
+          rating: game.rating,
+          price: game.price,
+          year: game.year,
+          platform: game.platform,
+          cover: game.cover,
+          thumbnail: game.cover,
+          source: game.platform.includes(',') ? 'Multi-Platform' : game.platform
+        }))
+      ];
+      
       isDataLoaded = true;
       
-      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏`);
+      console.log(`✅ 成功加载 ${allGamesData.length} 款游戏 (Steam: ${steamGames.length}, 多平台: ${multiPlatformGames.length})`);
       
       if (totalGamesCountEl) {
         totalGamesCountEl.textContent = `${allGamesData.length}`;
@@ -877,6 +921,35 @@
     document.getElementById('topCount').textContent = allGamesData.filter(g => g.rating >= 9.5).length;
     document.getElementById('newCount').textContent = allGamesData.filter(g => g.year >= 2023).length;
     document.getElementById('actionCount').textContent = allGamesData.filter(g => (g.genre || '').toLowerCase().includes('action')).length;
+    
+    // 更新平台统计
+    const platformCounts = {
+      steam: 0,
+      ps: 0,
+      xbox: 0,
+      switch: 0
+    };
+    
+    allGamesData.forEach(game => {
+      const platform = (game.platform || game.source || '').toLowerCase();
+      if (platform.includes('steam') || platform.includes('pc')) platformCounts.steam++;
+      if (platform.includes('playstation') || platform.includes('ps')) platformCounts.ps++;
+      if (platform.includes('xbox')) platformCounts.xbox++;
+      if (platform.includes('switch')) platformCounts.switch++;
+    });
+    
+    if (document.getElementById('steamCount')) {
+      document.getElementById('steamCount').textContent = platformCounts.steam;
+    }
+    if (document.getElementById('psCount')) {
+      document.getElementById('psCount').textContent = platformCounts.ps;
+    }
+    if (document.getElementById('xboxCount')) {
+      document.getElementById('xboxCount').textContent = platformCounts.xbox;
+    }
+    if (document.getElementById('switchCount')) {
+      document.getElementById('switchCount').textContent = platformCounts.switch;
+    }
     document.getElementById('rpgCount').textContent = allGamesData.filter(g => (g.genre || '').toLowerCase().includes('rpg')).length;
   }
 
