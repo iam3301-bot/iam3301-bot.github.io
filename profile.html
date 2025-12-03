@@ -526,6 +526,24 @@
       background-color: #0a0f1a;
     }
     
+    /* 用户ID显示 */
+    .user-id-display {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    
+    .user-id-display::before {
+      content: 'ID: ';
+      color: var(--accent);
+    }
+    
     /* 未登录提示 */
     .login-prompt {
       text-align: center;
@@ -709,12 +727,13 @@
           <div class="user-info">
             <div class="user-name" id="userName">加载中...</div>
             <div class="user-email" id="userEmail">-</div>
+            <div class="user-id-display" id="userIdDisplay">-</div>
             <div class="user-badges" id="userBadges">
               <!-- 徽章动态生成 -->
             </div>
           </div>
           <div>
-            <a href="login.html" class="profile-btn secondary">编辑资料</a>
+            <a href="profile-edit.html" class="profile-btn secondary">✏️ 编辑资料</a>
           </div>
         </div>
         
@@ -976,10 +995,15 @@
   function renderUserInfo() {
     document.getElementById('userName').textContent = currentUser.username || '玩家';
     document.getElementById('userEmail').textContent = currentUser.email || '-';
+    document.getElementById('userIdDisplay').textContent = currentUser.id || '-';
     
-    // 头像
+    // 头像 - 优先使用自定义头像，其次Steam头像，最后表情
     const avatarEl = document.getElementById('userAvatar');
-    if (userData.steam?.linked && userData.steam?.avatar) {
+    if (userData.customAvatar) {
+      avatarEl.innerHTML = `<img src="${userData.customAvatar}" alt="Avatar" />`;
+    } else if (userData.useSteamAvatar && userData.steam?.linked && userData.steam?.avatar) {
+      avatarEl.innerHTML = `<img src="${userData.steam.avatar}" alt="Avatar" />`;
+    } else if (userData.steam?.linked && userData.steam?.avatar && !currentUser.avatar) {
       avatarEl.innerHTML = `<img src="${userData.steam.avatar}" alt="Avatar" />`;
     } else {
       avatarEl.textContent = currentUser.avatar || '🎮';
@@ -1134,17 +1158,18 @@
     }
     
     gamesList.innerHTML = sortedGames.map(game => `
-      <div class="steam-game-item">
+      <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${game.appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
         <div class="steam-game-img">
           <img src="${game.headerImage}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
         </div>
         <div class="steam-game-info">
           <div class="steam-game-name">${game.name}</div>
           <div class="steam-game-playtime">
-            总时长: ${SteamAPI.formatPlaytime(game.playtimeForever || 0)}
-            ${game.playtime2Weeks > 0 ? ` · 近两周: ${SteamAPI.formatPlaytime(game.playtime2Weeks)}` : ''}
+            <span style="color: #66c0f4;">⏱</span> ${SteamAPI.formatPlaytime(game.playtimeForever || 0)}
+            ${game.playtime2Weeks > 0 ? `<span style="color: #00ff88; margin-left: 8px;">🔥 近两周: ${SteamAPI.formatPlaytime(game.playtime2Weeks)}</span>` : ''}
           </div>
         </div>
+        <div style="font-size: 12px; color: var(--text-muted);">🔗</div>
       </div>
     `).join('');
   }

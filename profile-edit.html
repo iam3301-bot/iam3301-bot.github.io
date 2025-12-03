@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 编辑资料</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Cyberpunk Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css" />
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    /* 编辑资料页面专属样式 */
+    .edit-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .edit-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .edit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00ff88, #00ccff, #a855f7, #ff00ff);
+    }
+    
+    .edit-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    
+    .edit-header-icon {
+      font-size: 32px;
+    }
+    
+    .edit-header-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .edit-header-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* 用户ID显示 */
+    .user-id-section {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .user-id-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    
+    .user-id-value {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      color: var(--accent);
+      padding: 12px 16px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .copy-btn:hover {
+      color: #00ff88;
+    }
+    
+    /* 头像选择 */
+    .avatar-section {
+      margin-bottom: 32px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .current-avatar {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .avatar-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4fc3f7, #7c4dff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .avatar-preview-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .avatar-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .avatar-option {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 2px solid rgba(56, 189, 248, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .avatar-option:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+    
+    .avatar-option.selected {
+      border-color: #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    }
+    
+    /* 自定义头像上传 */
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    
+    .upload-btn {
+      padding: 12px 20px;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--accent);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      border-color: var(--accent);
+    }
+    
+    .upload-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    /* 表单样式 */
+    .form-section {
+      margin-bottom: 28px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    
+    .char-count {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* 按钮样式 */
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .save-btn {
+      flex: 1;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      border: none;
+      border-radius: 8px;
+      color: #0a0f1a;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+    }
+    
+    .save-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .cancel-btn {
+      padding: 16px 32px;
+      background: transparent;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--text-soft);
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .cancel-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    /* 消息提示 */
+    .edit-message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .edit-message.show {
+      display: block;
+    }
+    
+    .edit-message.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    
+    .edit-message.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+    
+    /* 未登录提示 */
+    .login-required {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .login-required-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+    }
+    
+    .login-required-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+    
+    .login-required-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    
+    .login-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      border-radius: 8px;
+      color: #0a0f1a;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+    }
+    
+    /* 颜色选择器 */
+    .color-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    
+    .color-option {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .color-option:hover {
+      transform: scale(1.1);
+    }
+    
+    .color-option.selected {
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .edit-card {
+        padding: 24px 16px;
+      }
+      
+      .current-avatar {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .cancel-btn {
+        order: 1;
+      }
+    }
+  </style>
+</head>
+<body data-current-page="profile" class="cyberpunk-theme">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="profile.html" data-page="profile" class="nav-link active">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user" id="headerUserBtn">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Cyberpunk Effects -->
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+
+  <main class="main" style="display: block;">
+    
+    <!-- 未登录提示 -->
+    <div id="loginRequired" class="edit-container" style="display: none;">
+      <div class="edit-card login-required">
+        <div class="login-required-icon">🔐</div>
+        <div class="login-required-title">请先登录</div>
+        <div class="login-required-text">登录后即可编辑您的个人资料</div>
+        <a href="login.html" class="login-btn">前往登录</a>
+      </div>
+    </div>
+    
+    <!-- 编辑表单 -->
+    <div id="editContainer" class="edit-container" style="display: none;">
+      <div class="edit-card">
+        <div class="edit-header">
+          <span class="edit-header-icon">✏️</span>
+          <div>
+            <div class="edit-header-title">编辑个人资料</div>
+            <div class="edit-header-subtitle">自定义您的头像和昵称，展示独特的游戏玩家身份</div>
+          </div>
+        </div>
+        
+        <!-- 消息提示 -->
+        <div id="editMessage" class="edit-message"></div>
+        
+        <!-- 用户唯一ID -->
+        <div class="user-id-section">
+          <div class="user-id-label">您的唯一用户ID (不可更改)</div>
+          <div class="user-id-value">
+            <span id="userIdDisplay">-</span>
+            <button class="copy-btn" onclick="copyUserId()" title="复制ID">📋</button>
+          </div>
+        </div>
+        
+        <!-- 头像选择 -->
+        <div class="avatar-section">
+          <div class="section-title">
+            <span>👤</span> 选择头像
+          </div>
+          
+          <div class="current-avatar">
+            <div class="avatar-preview" id="avatarPreview">🎮</div>
+            <div>
+              <div class="avatar-preview-label">当前头像预览</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                点击下方表情选择，或上传自定义图片
+              </div>
+            </div>
+          </div>
+          
+          <!-- 表情头像选项 -->
+          <div class="section-title" style="font-size: 13px; margin-bottom: 12px;">
+            <span>😊</span> 表情头像
+          </div>
+          <div class="avatar-options" id="emojiAvatars">
+            <!-- 动态生成 -->
+          </div>
+          
+          <!-- 游戏主题头像 -->
+          <div class="section-title" style="font-size: 13px; margin-bottom: 12px; margin-top: 20px;">
+            <span>🎮</span> 游戏主题
+          </div>
+          <div class="avatar-options" id="gameAvatars">
+            <!-- 动态生成 -->
+          </div>
+          
+          <!-- 自定义上传 -->
+          <div class="avatar-upload">
+            <input type="file" id="avatarFile" accept="image/*" style="display: none;" />
+            <button class="upload-btn" onclick="document.getElementById('avatarFile').click()">
+              📤 上传图片
+            </button>
+            <div class="upload-hint">
+              支持 JPG、PNG 格式，最大 2MB<br>
+              建议使用正方形图片以获得最佳效果
+            </div>
+          </div>
+        </div>
+        
+        <!-- 昵称编辑 -->
+        <div class="form-section">
+          <label class="form-label">昵称 / 用户名</label>
+          <input type="text" class="form-input" id="nicknameInput" 
+            placeholder="输入您想要的昵称" maxlength="20" />
+          <div class="char-count">
+            <span id="nicknameCount">0</span>/20
+          </div>
+          <div class="form-hint">
+            2-20个字符，支持中文、英文、数字和部分特殊字符
+          </div>
+        </div>
+        
+        <!-- 个性签名 (可选) -->
+        <div class="form-section">
+          <label class="form-label">个性签名 (可选)</label>
+          <input type="text" class="form-input" id="bioInput" 
+            placeholder="写一句话介绍自己..." maxlength="50" />
+          <div class="char-count">
+            <span id="bioCount">0</span>/50
+          </div>
+        </div>
+        
+        <!-- 按钮组 -->
+        <div class="btn-group">
+          <button class="save-btn" id="saveBtn">💾 保存修改</button>
+          <button class="cancel-btn" onclick="window.location.href='profile.html'">取消</button>
+        </div>
+      </div>
+      
+      <!-- 提示信息 -->
+      <div class="edit-card" style="padding: 20px;">
+        <div class="section-title" style="color: #00ff88; margin-bottom: 12px;">
+          <span>💡</span> 提示
+        </div>
+        <ul style="font-size: 13px; color: var(--text-soft); line-height: 2; margin: 0; padding-left: 20px;">
+          <li>您的用户ID是系统自动生成的唯一标识，无法更改</li>
+          <li>昵称和头像可以随时修改</li>
+          <li>如果绑定了Steam账号，可以选择使用Steam头像</li>
+          <li>上传的自定义头像会保存在浏览器本地</li>
+          <li>配置Supabase后，资料将自动同步到云端</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="footer">
+    GameBox 游盒 · 编辑资料 · Powered by Supabase
+  </footer>
+</div>
+
+<script src="common.js"></script>
+<script src="cyber-effects.js"></script>
+<script src="supabase-config.js"></script>
+<script>
+  // =============================================
+  // 页面初始化
+  // =============================================
+  
+  initCommon();
+  
+  // 表情头像列表
+  const emojiAvatars = [
+    '😀', '😎', '🤓', '🥳', '😈', '👻', '🤖', '👽',
+    '🦊', '🐱', '🐶', '🐼', '🦁', '🐯', '🐸', '🐵',
+    '🦄', '🐲', '🦅', '🦈', '🐙', '🦋', '🐢', '🦎'
+  ];
+  
+  // 游戏主题头像
+  const gameAvatars = [
+    '🎮', '🎲', '🎯', '🏆', '⚔️', '🛡️', '🗡️', '🔮',
+    '💎', '🔥', '⚡', '💀', '👾', '🚀', '🌟', '✨',
+    '🎪', '🎨', '🎭', '🎢', '🎡', '🎠', '🃏', '🀄'
+  ];
+  
+  let currentUser = null;
+  let userData = null;
+  let selectedAvatar = '🎮';
+  let selectedAvatarType = 'emoji'; // 'emoji', 'custom', 'steam'
+  let customAvatarUrl = null;
+  
+  // =============================================
+  // 初始化
+  // =============================================
+  
+  async function init() {
+    await GameBoxAuth.init();
+    
+    currentUser = await GameBoxAuth.getCurrentUser();
+    
+    if (currentUser) {
+      document.getElementById('loginRequired').style.display = 'none';
+      document.getElementById('editContainer').style.display = 'block';
+      
+      userData = UserDataManager.getData(currentUser.id);
+      
+      loadCurrentProfile();
+      renderAvatarOptions();
+      updateHeaderUser();
+    } else {
+      document.getElementById('loginRequired').style.display = 'block';
+      document.getElementById('editContainer').style.display = 'none';
+    }
+  }
+  
+  // =============================================
+  // 加载当前资料
+  // =============================================
+  
+  function loadCurrentProfile() {
+    // 用户ID
+    document.getElementById('userIdDisplay').textContent = currentUser.id;
+    
+    // 昵称
+    const nicknameInput = document.getElementById('nicknameInput');
+    nicknameInput.value = currentUser.username || '';
+    updateCharCount('nicknameInput', 'nicknameCount');
+    
+    // 个性签名
+    const bioInput = document.getElementById('bioInput');
+    bioInput.value = userData.bio || '';
+    updateCharCount('bioInput', 'bioCount');
+    
+    // 头像
+    if (userData.customAvatar) {
+      selectedAvatarType = 'custom';
+      customAvatarUrl = userData.customAvatar;
+      updateAvatarPreview(customAvatarUrl, 'custom');
+    } else if (userData.steam?.linked && userData.steam?.avatar) {
+      selectedAvatarType = 'steam';
+      updateAvatarPreview(userData.steam.avatar, 'steam');
+    } else {
+      selectedAvatar = currentUser.avatar || '🎮';
+      selectedAvatarType = 'emoji';
+      updateAvatarPreview(selectedAvatar, 'emoji');
+    }
+  }
+  
+  // =============================================
+  // 渲染头像选项
+  // =============================================
+  
+  function renderAvatarOptions() {
+    // 表情头像
+    const emojiContainer = document.getElementById('emojiAvatars');
+    emojiContainer.innerHTML = emojiAvatars.map(emoji => `
+      <div class="avatar-option ${selectedAvatarType === 'emoji' && selectedAvatar === emoji ? 'selected' : ''}"
+           onclick="selectEmoji('${emoji}')"
+           title="${emoji}">
+        ${emoji}
+      </div>
+    `).join('');
+    
+    // 游戏主题头像
+    const gameContainer = document.getElementById('gameAvatars');
+    gameContainer.innerHTML = gameAvatars.map(emoji => `
+      <div class="avatar-option ${selectedAvatarType === 'emoji' && selectedAvatar === emoji ? 'selected' : ''}"
+           onclick="selectEmoji('${emoji}')"
+           title="${emoji}">
+        ${emoji}
+      </div>
+    `).join('');
+    
+    // 如果有Steam头像，添加Steam选项
+    if (userData.steam?.linked && userData.steam?.avatar) {
+      const steamOption = document.createElement('div');
+      steamOption.className = `avatar-option ${selectedAvatarType === 'steam' ? 'selected' : ''}`;
+      steamOption.style.cssText = 'width: 60px; height: 60px; padding: 0; overflow: hidden;';
+      steamOption.innerHTML = `<img src="${userData.steam.avatar}" alt="Steam" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">`;
+      steamOption.onclick = () => selectSteamAvatar();
+      steamOption.title = 'Steam 头像';
+      
+      gameContainer.insertBefore(steamOption, gameContainer.firstChild);
+    }
+  }
+  
+  // =============================================
+  // 头像选择
+  // =============================================
+  
+  function selectEmoji(emoji) {
+    selectedAvatar = emoji;
+    selectedAvatarType = 'emoji';
+    customAvatarUrl = null;
+    updateAvatarPreview(emoji, 'emoji');
+    renderAvatarOptions();
+  }
+  
+  function selectSteamAvatar() {
+    if (userData.steam?.avatar) {
+      selectedAvatarType = 'steam';
+      customAvatarUrl = null;
+      updateAvatarPreview(userData.steam.avatar, 'steam');
+      renderAvatarOptions();
+    }
+  }
+  
+  function updateAvatarPreview(value, type) {
+    const preview = document.getElementById('avatarPreview');
+    
+    if (type === 'emoji') {
+      preview.innerHTML = value;
+      preview.style.background = 'linear-gradient(135deg, #4fc3f7, #7c4dff)';
+    } else {
+      preview.innerHTML = `<img src="${value}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+      preview.style.background = 'transparent';
+    }
+  }
+  
+  // 文件上传处理
+  document.getElementById('avatarFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // 验证文件类型
+    if (!file.type.startsWith('image/')) {
+      showMessage('请选择图片文件', 'error');
+      return;
+    }
+    
+    // 验证文件大小 (最大 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      showMessage('图片大小不能超过 2MB', 'error');
+      return;
+    }
+    
+    // 读取文件并转为 Base64
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      customAvatarUrl = event.target.result;
+      selectedAvatarType = 'custom';
+      updateAvatarPreview(customAvatarUrl, 'custom');
+      renderAvatarOptions();
+      showMessage('头像已选择，点击保存生效', 'success');
+    };
+    reader.readAsDataURL(file);
+  });
+  
+  // =============================================
+  // 字符计数
+  // =============================================
+  
+  function updateCharCount(inputId, countId) {
+    const input = document.getElementById(inputId);
+    const count = document.getElementById(countId);
+    count.textContent = input.value.length;
+  }
+  
+  document.getElementById('nicknameInput').addEventListener('input', function() {
+    updateCharCount('nicknameInput', 'nicknameCount');
+  });
+  
+  document.getElementById('bioInput').addEventListener('input', function() {
+    updateCharCount('bioInput', 'bioCount');
+  });
+  
+  // =============================================
+  // 保存资料
+  // =============================================
+  
+  document.getElementById('saveBtn').addEventListener('click', async function() {
+    const btn = this;
+    const nickname = document.getElementById('nicknameInput').value.trim();
+    const bio = document.getElementById('bioInput').value.trim();
+    
+    // 验证昵称
+    if (!nickname) {
+      showMessage('请输入昵称', 'error');
+      return;
+    }
+    
+    if (nickname.length < 2) {
+      showMessage('昵称至少需要2个字符', 'error');
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '保存中...';
+    
+    try {
+      // 准备更新数据
+      const updates = {
+        username: nickname
+      };
+      
+      // 根据头像类型设置
+      if (selectedAvatarType === 'emoji') {
+        updates.avatar = selectedAvatar;
+      } else if (selectedAvatarType === 'steam' && userData.steam?.avatar) {
+        updates.avatar = '🎮'; // 保留表情作为备用
+      }
+      
+      // 更新认证用户资料
+      const result = await GameBoxAuth.updateProfile(updates);
+      
+      if (result.success) {
+        // 更新本地用户数据
+        UserDataManager.saveData(currentUser.id, {
+          bio: bio,
+          customAvatar: selectedAvatarType === 'custom' ? customAvatarUrl : null,
+          usesteamAvatar: selectedAvatarType === 'steam'
+        });
+        
+        showMessage('资料保存成功！', 'success');
+        
+        // 2秒后跳转回用户中心
+        setTimeout(() => {
+          window.location.href = 'profile.html';
+        }, 1500);
+      } else {
+        showMessage(result.error || '保存失败，请重试', 'error');
+      }
+    } catch (error) {
+      showMessage('保存失败: ' + error.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '💾 保存修改';
+    }
+  });
+  
+  // =============================================
+  // 工具函数
+  // =============================================
+  
+  function showMessage(text, type) {
+    const msg = document.getElementById('editMessage');
+    msg.textContent = text;
+    msg.className = 'edit-message show ' + type;
+    
+    if (type === 'success') {
+      setTimeout(() => {
+        msg.classList.remove('show');
+      }, 3000);
+    }
+  }
+  
+  function copyUserId() {
+    const userId = document.getElementById('userIdDisplay').textContent;
+    navigator.clipboard.writeText(userId).then(() => {
+      showMessage('用户ID已复制到剪贴板', 'success');
+    }).catch(() => {
+      showMessage('复制失败，请手动复制', 'error');
+    });
+  }
+  
+  async function updateHeaderUser() {
+    const headerBtn = document.getElementById('headerUserBtn');
+    if (currentUser) {
+      headerBtn.textContent = currentUser.username;
+      headerBtn.style.color = 'var(--accent)';
+    }
+  }
+  
+  // =============================================
+  // 启动
+  // =============================================
+  
+  init();
+</script>
+</body>
+</html>
