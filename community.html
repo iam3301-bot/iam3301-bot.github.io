@@ -517,11 +517,25 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+
+<!-- Firebase SDK (可选 - 启用真实后端数据) -->
+<!-- 取消注释以下两行以启用Firebase支持: -->
+<!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> -->
+<!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script> -->
+<!-- <script src="firebase-service.js"></script> -->
+
+<!-- LocalStorage数据服务 (默认) -->
+<script src="community-data-service.js"></script>
+<script src="create-post-modal.js"></script>
 <script>
   initCommon();
 
-  // 示例帖子数据
-  const postData = [
+  // 使用真实社区数据服务
+  // 初始化时使用本地数据，异步加载完成后更新
+  let postData = [];
+  
+  // 旧的示例数据（作为备份）
+  const postDataBackup = [
     {
       id: "pinned-1",
       title: "【公告】社区使用指南 - 新人必读",
@@ -789,14 +803,76 @@
 
   // 发帖
   function createPost() {
-    alert("🎮 发帖功能需要登录后使用！\n\n这是一个前端示例项目，实际发帖功能需要后端支持。");
+    window.openCreatePostModal();
   }
 
-  // 初始化
-  renderPosts();
-  renderHotTopics();
-  renderOnlineUsers();
-  updateBoardCounts();
+  // 更新社区统计数据
+  async function updateCommunityStats() {
+    try {
+      let stats;
+      
+      // 优先使用Firebase，否则使用LocalStorage
+      if (window.firebaseService && window.firebaseService.isEnabled) {
+        stats = await window.firebaseService.getCommunityStats();
+      } else {
+        stats = window.communityDataService.getCommunityStats();
+      }
+      
+      document.getElementById('statPosts').textContent = stats.totalPosts.toLocaleString();
+      document.getElementById('statMembers').textContent = stats.totalMembers.toLocaleString();
+      document.getElementById('statReplies').textContent = stats.totalReplies.toLocaleString();
+      document.getElementById('statOnline').textContent = stats.onlineUsers;
+      
+      console.log('📊 社区统计:', stats);
+    } catch (error) {
+      console.error('❌ 更新统计失败:', error);
+    }
+  }
+
+  // 刷新帖子数据
+  async function refreshPostsData() {
+    try {
+      // 优先使用Firebase，否则使用LocalStorage
+      if (window.firebaseService && window.firebaseService.isEnabled) {
+        postData = await window.firebaseService.getAllPosts();
+      } else {
+        postData = window.communityDataService.getAllPosts();
+      }
+      
+      renderPosts();
+      updateBoardCounts();
+      updateCommunityStats();
+    } catch (error) {
+      console.error('❌ 刷新数据失败:', error);
+    }
+  }
+
+  // 初始化（异步）
+  async function initializeCommunity() {
+    await refreshPostsData();
+    renderHotTopics();
+    renderOnlineUsers();
+    
+    // 定期更新在线用户（每30秒）
+    setInterval(updateCommunityStats, 30000);
+    
+    // 如果启用了Firebase，订阅实时更新
+    if (window.firebaseService && window.firebaseService.isEnabled) {
+      window.firebaseService.subscribeToPostUpdates((update) => {
+        console.log('📡 实时更新:', update);
+        refreshPostsData();
+      });
+    }
+  }
+
+  // 启动初始化
+  initializeCommunity();
+  
+  // 每30秒刷新在线用户
+  setInterval(() => {
+    renderOnlineUsers();
+    updateCommunityStats();
+  }, 30000);
 </script>
 </body>
 </html>
