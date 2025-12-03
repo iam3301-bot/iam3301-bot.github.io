@@ -39,14 +39,23 @@
     const news = [];
     const today = new Date();
     
+    // 使用固定的随机种子生成稳定的日期偏移
+    function seededRandom(seed) {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    }
+    
     // 为每个模板生成多条变体新闻
     newsTemplates.forEach((template, idx) => {
       for (let i = 0; i < 5; i++) {
-        const daysAgo = Math.floor(Math.random() * 60); // 最近60天
+        // 使用固定种子生成稳定的日期偏移
+        const seed = idx * 100 + i;
+        const daysAgo = Math.floor(seededRandom(seed) * 60); // 最近60天
         const newsDate = new Date(today);
         newsDate.setDate(newsDate.getDate() - daysAgo);
         
-        const id = `news-${idx}-${i}-${Date.now()}`;
+        // 使用稳定的ID（不包含时间戳）
+        const id = `news-${idx}-${i}`;
         const variation = i === 0 ? "" : ` (第${i+1}期)`;
         
         news.push({
@@ -56,8 +65,8 @@
           type: template.type,
           date: newsDate.toISOString().split('T')[0],
           summary: template.summary,
-          views: Math.floor(Math.random() * 50000) + 1000,
-          comments: Math.floor(Math.random() * 500) + 10
+          views: Math.floor(seededRandom(seed + 10) * 50000) + 1000,
+          comments: Math.floor(seededRandom(seed + 20) * 500) + 10
         });
       }
     });
@@ -83,12 +92,16 @@
 
     extraGames.forEach((game, gameIdx) => {
       for (let i = 0; i < 30; i++) {
-        const daysAgo = Math.floor(Math.random() * 90);
+        // 使用固定种子生成稳定的数据
+        const seed = gameIdx * 1000 + i;
+        const daysAgo = Math.floor(seededRandom(seed) * 90);
         const newsDate = new Date(today);
         newsDate.setDate(newsDate.getDate() - daysAgo);
         
-        const type = extraTypes[Math.floor(Math.random() * extraTypes.length)];
-        const titleTemplate = extraTitles[Math.floor(Math.random() * extraTitles.length)];
+        const typeIndex = Math.floor(seededRandom(seed + 1) * extraTypes.length);
+        const titleIndex = Math.floor(seededRandom(seed + 2) * extraTitles.length);
+        const type = extraTypes[typeIndex];
+        const titleTemplate = extraTitles[titleIndex];
         
         news.push({
           id: `news-extra-${gameIdx}-${i}`,
@@ -97,8 +110,8 @@
           type: type,
           date: newsDate.toISOString().split('T')[0],
           summary: `关于《${game}》的最新动态，包括游戏更新、活动信息等内容。更多详情请关注官方公告。`,
-          views: Math.floor(Math.random() * 30000) + 500,
-          comments: Math.floor(Math.random() * 300) + 5
+          views: Math.floor(seededRandom(seed + 3) * 30000) + 500,
+          comments: Math.floor(seededRandom(seed + 4) * 300) + 5
         });
       }
     });

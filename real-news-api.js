@@ -47,21 +47,30 @@
           const data = await response.json();
           
           if (data.appnews && data.appnews.newsitems) {
-            return data.appnews.newsitems.map(item => ({
-              id: `steam-${game.appid}-${item.gid}`,
-              title: item.title,
-              game: game.name,
-              gameEn: game.nameEn,
-              type: item.tags?.includes('patchnotes') ? 'update' : 
-                    item.tags?.includes('event') ? 'event' : 'new',
-              date: new Date(item.date * 1000).toISOString().split('T')[0],
-              summary: item.contents.substring(0, 200) + '...',
-              url: item.url,
-              author: item.author || 'Steam',
-              source: 'Steam',
-              views: Math.floor(Math.random() * 10000) + 1000,
-              comments: Math.floor(Math.random() * 100) + 10
-            }));
+            return data.appnews.newsitems.map((item, idx) => {
+              // 使用gid生成稳定的随机数
+              const seed = parseInt(item.gid) || (game.appid * 1000 + idx);
+              const seededRandom = (s) => {
+                const x = Math.sin(s) * 10000;
+                return x - Math.floor(x);
+              };
+              
+              return {
+                id: `steam-${game.appid}-${item.gid}`,
+                title: item.title,
+                game: game.name,
+                gameEn: game.nameEn,
+                type: item.tags?.includes('patchnotes') ? 'update' : 
+                      item.tags?.includes('event') ? 'event' : 'new',
+                date: new Date(item.date * 1000).toISOString().split('T')[0],
+                summary: item.contents.substring(0, 200) + '...',
+                url: item.url,
+                author: item.author || 'Steam',
+                source: 'Steam',
+                views: Math.floor(seededRandom(seed) * 10000) + 1000,
+                comments: Math.floor(seededRandom(seed + 1) * 100) + 10
+              };
+            });
           }
           return [];
         } catch (err) {
@@ -257,11 +266,16 @@
       // 如果所有API都失败，返回备用数据
       if (allNews.length === 0) {
         console.warn('⚠️ 所有API请求失败，使用备用数据');
-        allNews = getFallbackNews();
+        allNews = await getFallbackNews();
+      }
+
+      // 确保allNews是数组
+      if (!Array.isArray(allNews)) {
+        allNews = [];
       }
 
       // 按日期排序
-      allNews.sort((a, b) => b.date.localeCompare(a.date));
+      allNews.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
       // 去重
       const uniqueNews = [];
@@ -284,16 +298,20 @@
       return uniqueNews;
     } catch (error) {
       console.error('❌ 聚合资讯失败:', error);
-      return getFallbackNews();
+      return await getFallbackNews();
     }
   }
 
   /**
    * 备用资讯数据（当所有API都失败时使用）
    */
-  function getFallbackNews() {
+  async function getFallbackNews() {
     console.log('ℹ️ 使用本地备用资讯数据');
-    return window.newsAPI ? window.newsAPI.getAllNews() : [];
+    if (window.newsAPI) {
+      const news = await window.newsAPI.getAllNews();
+      return Array.isArray(news) ? news : [];
+    }
+    return [];
   }
 
   /**
