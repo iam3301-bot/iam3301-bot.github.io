@@ -141,6 +141,47 @@ class SteamAPI {
   }
   
   /**
+   * 获取游戏最低配置
+   * @param {string} gameName - 游戏名称
+   * @returns {Promise<Object|null>} 最低配置对象或 null
+   */
+  async getMinimumRequirements(gameName) {
+    try {
+      // 1. 搜索游戏获取 appId
+      const searchResult = await this.searchGame(gameName);
+      
+      if (!searchResult || !searchResult.items || searchResult.items.length === 0) {
+        console.log(`[SteamAPI] 未找到游戏: ${gameName}`);
+        return null;
+      }
+      
+      const appId = searchResult.items[0].id;
+      
+      // 2. 获取游戏详情
+      const details = await this.getGameDetails(appId);
+      
+      if (!details || !details[appId] || !details[appId].success) {
+        console.log(`[SteamAPI] 无法获取游戏详情: ${gameName}`);
+        return null;
+      }
+      
+      const pcRequirements = details[appId].data.pc_requirements;
+      
+      if (!pcRequirements || !pcRequirements.minimum) {
+        console.log(`[SteamAPI] 游戏无最低配置: ${gameName}`);
+        return null;
+      }
+      
+      // 3. 解析 HTML 格式的配置
+      return this._parseRequirementsHTML(pcRequirements.minimum);
+      
+    } catch (error) {
+      console.error(`[SteamAPI] 获取最低配置失败:`, error);
+      return null;
+    }
+  }
+
+  /**
    * 获取游戏推荐配置
    * @param {string} gameName - 游戏名称
    * @returns {Promise<Object|null>} 推荐配置对象或 null
@@ -178,6 +219,44 @@ class SteamAPI {
     } catch (error) {
       console.error(`[SteamAPI] 获取推荐配置失败:`, error);
       return null;
+    }
+  }
+
+  /**
+   * 获取游戏完整系统配置（最低和推荐）
+   * @param {string} gameName - 游戏名称
+   * @returns {Promise<Object>} 包含 minimum 和 recommended 的对象
+   */
+  async getSystemRequirements(gameName) {
+    try {
+      // 1. 搜索游戏获取 appId
+      const searchResult = await this.searchGame(gameName);
+      
+      if (!searchResult || !searchResult.items || searchResult.items.length === 0) {
+        console.log(`[SteamAPI] 未找到游戏: ${gameName}`);
+        return { minimum: null, recommended: null };
+      }
+      
+      const appId = searchResult.items[0].id;
+      
+      // 2. 获取游戏详情
+      const details = await this.getGameDetails(appId);
+      
+      if (!details || !details[appId] || !details[appId].success) {
+        console.log(`[SteamAPI] 无法获取游戏详情: ${gameName}`);
+        return { minimum: null, recommended: null };
+      }
+      
+      const pcRequirements = details[appId].data.pc_requirements;
+      
+      return {
+        minimum: pcRequirements?.minimum ? this._parseRequirementsHTML(pcRequirements.minimum) : null,
+        recommended: pcRequirements?.recommended ? this._parseRequirementsHTML(pcRequirements.recommended) : null
+      };
+      
+    } catch (error) {
+      console.error(`[SteamAPI] 获取系统配置失败:`, error);
+      return { minimum: null, recommended: null };
     }
   }
   
