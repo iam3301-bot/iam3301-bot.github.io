@@ -487,7 +487,7 @@
   }
 
   // 加载更多新闻
-  window.loadMoreNews = async function() {
+  window.loadMoreNews = function() {
     const startIdx = currentPage * PAGE_SIZE;
     const endIdx = startIdx + PAGE_SIZE;
     const pageItems = currentFilteredList.slice(startIdx, endIdx);
@@ -497,7 +497,7 @@
       return;
     }
 
-    for (const n of pageItems) {
+    pageItems.forEach((n) => {
       const div = document.createElement("div");
       div.className = "news-card";
       
@@ -505,8 +505,8 @@
       const typeIcon = typeIcons[n.type] || "📰";
       const typeName = typeNames[n.type] || "资讯";
       
-      // 使用智能封面获取系统
-      const gameCover = await window.gameCoverFetcher.getGameCover(n.game || n.gameEn || '未知游戏');
+      // 使用智能封面获取系统（同步版本）
+      const gameCover = window.gameCoverFetcher.getGameCover(n.game || n.gameEn || '未知游戏');
       
       // 判断是否为热门或新资讯
       const isHot = n.views > 20000 || n.comments > 100;
@@ -548,7 +548,7 @@
       });
       
       newsList.appendChild(div);
-    }
+    });
     
     currentPage++;
     

@@ -137,9 +137,45 @@
   }
 
   /**
-   * 智能获取游戏封面（核心函数）
+   * 完整的静态游戏封面数据库（扩展版）
    */
-  async function getGameCover(gameName, options = {}) {
+  const staticCoverDatabase = {
+    ...steamAppIds,
+    // 将steamAppIds转换为封面URL
+    ...Object.fromEntries(
+      Object.entries(steamAppIds)
+        .filter(([_, appId]) => appId !== null)
+        .map(([name, appId]) => [name, `https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/${appId}/header.jpg`])
+    ),
+    // 补充news-api.js中的所有游戏
+    '塞尔达传说': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
+    '超级马力欧': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/s/super-mario-odyssey-switch/hero',
+    '最终幻想16': 'https://image.api.playstation.com/vulcan/ap/rnd/202212/0912/F7QdROH8k1hAyGIPOWyMPBhO.png',
+    '霍格沃茨之遗': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/990080/header.jpg',
+    '死亡空间': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1693980/header.jpg',
+    '生化危机4重制版': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg',
+    '最后生还者': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1888930/header.jpg',
+    '对马岛之魂': 'https://image.api.playstation.com/vulcan/ap/rnd/202010/0113/b3iB2zf2xHj9shC0XDTJLwZF.png',
+    '鬼泣5': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/601150/header.jpg',
+    '尼尔：自动人形': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/524220/header.jpg',
+    '双人成行': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1426210/header.jpg',
+    '胡闹厨房': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/448510/header.jpg',
+    'APEX英雄': 'https://media.contentapi.ea.com/content/dam/apex-legends/common/apex-section-bg.jpg.adapt.crop16x9.1023w.jpg',
+    '彩虹六号': 'https://staticctf.akamaized.net/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/3jKEguWyoQ8rvCqLa2mcv7/7c0bc5ecf5a7c49e0c7eb0bee6b5cf36/r6s-featured.jpg',
+    '使命召唤': 'https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/mw-wz/WZ-Season-Three-Announce-TOUT.jpg',
+    '战地': 'https://media.contentapi.ea.com/content/dam/battlefield/battlefield-2042/common/featured-tile-16x9.jpg.adapt.crop16x9.1023w.jpg',
+    '极限竞速': 'https://compass-ssl.xboxlive.com/assets/93/57/9357bc2e-e7f5-4cb3-9e0a-ca5b50bddb0f.jpg',
+    'GT赛车': 'https://gmedia.playstation.com/is/image/SIEPDC/gran-turismo-7-hero-banner-desktop-01-en-18nov21',
+    'FIFA': 'https://media.contentapi.ea.com/content/dam/ea/fifa/fifa-23/common/featured-tile-16x9.jpg.adapt.crop16x9.1023w.jpg',
+    'NBA 2K': 'https://cdn.2k.com/2k/global/News/News_Thumbnail_MAIN_16x9.jpg',
+    '鬼谷八荒': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1468810/header.jpg',
+    '仁王': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/485510/header.jpg'
+  };
+
+  /**
+   * 智能获取游戏封面（核心函数 - 纯静态版本）
+   */
+  function getGameCover(gameName, options = {}) {
     // 标准化游戏名称
     const normalizedName = gameName.replace(/《|》|【|】|\[|\]/g, '').trim();
     
@@ -150,39 +186,22 @@
 
     let coverUrl = null;
 
-    // 2. 优先尝试从Steam获取（最快最准确）
-    if (!options.skipSteam) {
-      coverUrl = await fetchSteamCover(normalizedName);
-      if (coverUrl) {
-        coverCache[normalizedName] = coverUrl;
-        return coverUrl;
-      }
+    // 2. 从静态数据库获取
+    if (staticCoverDatabase[normalizedName]) {
+      coverUrl = staticCoverDatabase[normalizedName];
+      coverCache[normalizedName] = coverUrl;
+      return coverUrl;
     }
 
-    // 3. 尝试从RAWG API获取
-    if (!options.skipRAWG) {
-      try {
-        const searchUrl = `https://api.rawg.io/api/games?key=d4e0e2eb13dc4b5a9dcf0a8e3e3d0a3e&search=${encodeURIComponent(normalizedName)}&page_size=3`;
-        const response = await fetch(searchUrl);
-        const data = await response.json();
-        
-        if (data.results && data.results.length > 0) {
-          // 寻找最匹配的结果
-          const exactMatch = data.results.find(game => 
-            game.name.toLowerCase().includes(normalizedName.toLowerCase()) ||
-            normalizedName.toLowerCase().includes(game.name.toLowerCase())
-          );
-          
-          const game = exactMatch || data.results[0];
-          coverUrl = game.background_image;
-          
-          if (coverUrl) {
-            coverCache[normalizedName] = coverUrl;
-            return coverUrl;
-          }
-        }
-      } catch (error) {
-        console.log(`RAWG搜索失败 [${normalizedName}]:`, error.message);
+    // 3. 模糊匹配
+    for (const [key, value] of Object.entries(staticCoverDatabase)) {
+      const normalizedKey = key.replace(/《|》|【|】|\[|\]|：|:/g, '').toLowerCase();
+      const searchNormalized = normalizedName.replace(/《|》|【|】|\[|\]|：|:/g, '').toLowerCase();
+      
+      if (normalizedKey.includes(searchNormalized) || searchNormalized.includes(normalizedKey)) {
+        coverUrl = value;
+        coverCache[normalizedName] = coverUrl;
+        return coverUrl;
       }
     }
 
@@ -195,23 +214,20 @@
   /**
    * 批量获取游戏封面
    */
-  async function getGameCovers(gameNames) {
+  function getGameCovers(gameNames) {
     const covers = {};
-    const promises = gameNames.map(async (name) => {
-      const cover = await getGameCover(name);
-      covers[name] = cover;
+    gameNames.forEach(name => {
+      covers[name] = getGameCover(name);
     });
-    
-    await Promise.all(promises);
     return covers;
   }
 
   /**
    * 预加载常见游戏的封面
    */
-  async function preloadCommonGameCovers() {
+  function preloadCommonGameCovers() {
     const commonGames = Object.keys(steamAppIds).slice(0, 20); // 预加载前20个常见游戏
-    const covers = await getGameCovers(commonGames);
+    const covers = getGameCovers(commonGames);
     console.log('✅ 预加载游戏封面完成:', Object.keys(covers).length, '款游戏');
     return covers;
   }

@@ -339,37 +339,16 @@
   let allNews = [];
 
   // 生成详细内容
-  async function generateDetailContent(news, gameCover) {
-    // 获取游戏截图（使用RAWG API）
+  function generateDetailContent(news, gameCover) {
+    // 使用游戏封面作为详情页截图
     let screenshots = '';
-    try {
-      const searchUrl = `https://api.rawg.io/api/games?key=d4e0e2eb13dc4b5a9dcf0a8e3e3d0a3e&search=${encodeURIComponent(news.game)}&page_size=1`;
-      const response = await fetch(searchUrl);
-      const data = await response.json();
-      
-      if (data.results && data.results.length > 0) {
-        const game = data.results[0];
-        // 使用游戏封面作为主要图片
-        if (game.background_image) {
-          screenshots = `
-            <div style="margin: 20px 0; text-align: center;">
-              <img src="${game.background_image}" alt="${news.game} 游戏截图" style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />
-              <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">《${news.game}》游戏画面</p>
-            </div>
-          `;
-        }
-      }
-    } catch (error) {
-      console.log('获取游戏截图失败:', error);
-      // 如果获取失败，使用游戏封面
-      if (gameCover) {
-        screenshots = `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${gameCover}" alt="${news.game} 游戏封面" style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />
-            <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">《${news.game}》游戏封面</p>
-          </div>
-        `;
-      }
+    if (gameCover) {
+      screenshots = `
+        <div style="margin: 20px 0; text-align: center;">
+          <img src="${gameCover}" alt="${news.game} 游戏画面" style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onerror="this.parentElement.style.display='none';" />
+          <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">《${news.game}》游戏画面</p>
+        </div>
+      `;
     }
     
     const templates = {
@@ -531,13 +510,13 @@
   }
 
   // 渲染资讯内容
-  async function renderNews() {
+  function renderNews() {
     const typeIcon = typeIcons[currentNews.type] || '📰';
     const typeName = typeNames[currentNews.type] || '资讯';
     const gameIcon = gameIcons[currentNews.game] || '🎮';
     
-    // 使用智能封面获取系统
-    const gameCover = await gameCoverFetcher.getGameCover(currentNews.game);
+    // 使用智能封面获取系统（同步版本）
+    const gameCover = gameCoverFetcher.getGameCover(currentNews.game);
     
     // 更新页面标题
     document.title = `${currentNews.title} - GameBox 游盒`;
@@ -560,7 +539,7 @@
     document.getElementById('newsComments').textContent = currentNews.comments;
     
     // 生成详细内容（包含游戏截图）
-    document.getElementById('newsContent').innerHTML = await generateDetailContent(currentNews, gameCover);
+    document.getElementById('newsContent').innerHTML = generateDetailContent(currentNews, gameCover);
     
     // 侧边栏
     document.getElementById('sidebarGame').textContent = currentNews.game;
