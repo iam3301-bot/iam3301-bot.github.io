@@ -31,7 +31,9 @@
     // 任天堂游戏
     '塞尔达传说': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
     '塞尔达传说：旷野之息': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
+    '塞尔达传说：王国之泪': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/t/the-legend-of-zelda-tears-of-the-kingdom-switch/hero',
     '超级马力欧': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/s/super-mario-odyssey-switch/hero',
+    '超级马力欧奥德赛': 'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/en_US/games/switch/s/super-mario-odyssey-switch/hero',
     
     // RPG游戏
     '最终幻想16': 'https://image.api.playstation.com/vulcan/ap/rnd/202212/0912/F7QdROH8k1hAyGIPOWyMPBhO.png',
@@ -40,14 +42,23 @@
     '巫师3': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg',
     '怪物猎人世界': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg',
     '怪物猎人': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg',
-    '怪物猎人：荒野': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg',
+    '怪物猎人：荒野': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2080690/header.jpg',
     '鬼谷八荒': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1468810/header.jpg',
     '仁王': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/485510/header.jpg',
+    '上古卷轴5': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/489830/header.jpg',
+    '辐射4': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/377160/header.jpg',
+    '霍格沃茨之遗': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/990080/header.jpg',
     
     // 动作冒险游戏
     'GTA 6': 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/ak73k52o94598a/c79e2f870d22444a9bd3bdda33ba96da.jpg',
     'GTA5': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg',
     'Grand Theft Auto V': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg',
+    '死亡空间': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1693980/header.jpg',
+    '生化危机4重制版': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg',
+    '生化危机4': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg',
+    '最后生还者': 'https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/eEJMd2U4HbZPbxthZzaAJtlN.png',
+    '对马岛之魂': 'https://image.api.playstation.com/vulcan/ap/rnd/202010/0222/niCY1rVHt1oNt7OPQO54vXZD.png',
+    '鬼泣5': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/601150/header.jpg',
     '霍格沃茨之遗': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/990080/header.jpg',
     '死亡空间': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1693980/header.jpg',
     '生化危机4': 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg',
