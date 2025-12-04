@@ -469,59 +469,132 @@
     
     .steam-games-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px;
-      max-height: 400px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      max-height: 500px;
       overflow-y: auto;
       padding-right: 8px;
+      padding-bottom: 8px;
     }
     
     .steam-game-item {
+      position: relative;
       display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 8px;
+      flex-direction: column;
+      background: linear-gradient(145deg, rgba(27, 40, 56, 0.9), rgba(42, 71, 94, 0.8));
+      border-radius: 12px;
+      overflow: hidden;
       transition: all 0.3s ease;
+      border: 1px solid rgba(102, 192, 244, 0.15);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
     
     .steam-game-item:hover {
-      background: rgba(102, 192, 244, 0.1);
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(102, 192, 244, 0.5);
+      box-shadow: 0 8px 30px rgba(102, 192, 244, 0.2), 0 0 20px rgba(102, 192, 244, 0.1);
     }
     
     .steam-game-img {
-      width: 120px;
-      height: 45px;
-      border-radius: 4px;
+      width: 100%;
+      height: 150px;
+      position: relative;
       overflow: hidden;
-      flex-shrink: 0;
+    }
+    
+    .steam-game-img::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to top, rgba(27, 40, 56, 1), transparent);
+      pointer-events: none;
     }
     
     .steam-game-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .steam-game-item:hover .steam-game-img img {
+      transform: scale(1.1);
     }
     
     .steam-game-info {
-      flex: 1;
-      min-width: 0;
+      padding: 16px;
+      position: relative;
+      z-index: 1;
+      margin-top: -30px;
     }
     
     .steam-game-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-soft);
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
     
     .steam-game-playtime {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .steam-game-playtime .recent-play {
+      background: linear-gradient(90deg, rgba(0, 255, 136, 0.2), transparent);
+      padding: 3px 8px;
+      border-radius: 12px;
+      color: #00ff88;
+      font-size: 11px;
+    }
+    
+    .steam-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, #66c0f4, #3d6a8e);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .view-store-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(102, 192, 244, 0.2);
+      border: 1px solid rgba(102, 192, 244, 0.4);
+      color: #66c0f4;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .steam-game-item:hover .view-store-btn {
+      opacity: 1;
+    }
+    
+    .view-store-btn:hover {
+      background: rgba(102, 192, 244, 0.4);
     }
     
     /* 绑定表单 */
@@ -601,6 +674,101 @@
     .profile-btn.danger:hover {
       background: rgba(239, 68, 68, 0.3);
       box-shadow: none;
+    }
+    
+    /* 账户操作按钮样式 */
+    .account-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+    
+    .account-action-btn:hover {
+      transform: translateX(5px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .account-action-btn .action-icon {
+      font-size: 24px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+    
+    .account-action-btn .action-info {
+      flex: 1;
+    }
+    
+    .account-action-btn .action-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+    
+    .account-action-btn .action-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .account-action-btn .action-arrow {
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+    }
+    
+    .account-action-btn:hover .action-arrow {
+      transform: translateX(5px);
+    }
+    
+    /* 切换账户按钮 - 蓝色主题 */
+    .account-action-btn.switch-btn {
+      border-color: rgba(102, 192, 244, 0.2);
+    }
+    
+    .account-action-btn.switch-btn:hover {
+      background: linear-gradient(135deg, rgba(102, 192, 244, 0.15), rgba(17, 24, 39, 0.95));
+      border-color: rgba(102, 192, 244, 0.4);
+    }
+    
+    .account-action-btn.switch-btn .action-icon {
+      background: rgba(102, 192, 244, 0.15);
+      color: #66c0f4;
+    }
+    
+    .account-action-btn.switch-btn .action-title {
+      color: #66c0f4;
+    }
+    
+    /* 退出登录按钮 - 红色主题 */
+    .account-action-btn.logout-btn {
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    
+    .account-action-btn.logout-btn:hover {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(17, 24, 39, 0.95));
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    
+    .account-action-btn.logout-btn .action-icon {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+    
+    .account-action-btn.logout-btn .action-title {
+      color: #ef4444;
     }
     
     /* 设置项 */
@@ -1081,13 +1249,35 @@
             </div>
             <a href="reset-password.html" class="profile-btn secondary" style="text-decoration: none;">修改</a>
           </div>
+        </div>
+        
+        <!-- 账户操作卡片 - 更明显的位置 -->
+        <div class="profile-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(17, 24, 39, 0.95)); border-color: rgba(239, 68, 68, 0.3);">
+          <div class="profile-card-header">
+            <span class="profile-card-icon">👤</span>
+            <span class="profile-card-title" style="color: #f87171;">账户操作</span>
+          </div>
           
-          <div class="settings-item">
-            <div>
-              <div class="settings-label">退出登录</div>
-              <div class="settings-desc">安全退出当前账号</div>
-            </div>
-            <button class="profile-btn danger" id="logoutBtn">退出</button>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- 切换账户 -->
+            <button class="account-action-btn switch-btn" id="switchAccountBtn">
+              <span class="action-icon">🔄</span>
+              <div class="action-info">
+                <div class="action-title">切换账户</div>
+                <div class="action-desc">登录其他 GameBox 账号</div>
+              </div>
+              <span class="action-arrow">→</span>
+            </button>
+            
+            <!-- 退出登录 -->
+            <button class="account-action-btn logout-btn" id="logoutBtn">
+              <span class="action-icon">🚪</span>
+              <div class="action-info">
+                <div class="action-title">退出登录</div>
+                <div class="action-desc">安全退出当前账号</div>
+              </div>
+              <span class="action-arrow">→</span>
+            </button>
           </div>
         </div>
       </div>
@@ -1417,21 +1607,103 @@
         break;
     }
     
-    gamesList.innerHTML = sortedGames.map(game => `
-      <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${game.appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
-        <div class="steam-game-img">
-          <img src="${game.headerImage}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
-        </div>
-        <div class="steam-game-info">
-          <div class="steam-game-name">${game.name}</div>
-          <div class="steam-game-playtime">
-            <span style="color: #66c0f4;">⏱</span> ${SteamAPI.formatPlaytime(game.playtimeForever || 0)}
-            ${game.playtime2Weeks > 0 ? `<span style="color: #00ff88; margin-left: 8px;">🔥 近两周: ${SteamAPI.formatPlaytime(game.playtime2Weeks)}</span>` : ''}
+    // 游戏名称到 AppID 的映射表（用于无有效 AppID 的情况）
+    const gameNameToAppId = {
+      'counter-strike 2': 730, 'cs2': 730, 'dota 2': 570, 'elden ring': 1245620,
+      'terraria': 105600, 'apex legends': 1172470, 'pubg': 578080, 'pubg: battlegrounds': 578080,
+      'gta v': 271590, 'grand theft auto v': 271590, 'rust': 252490, 'cyberpunk 2077': 1091500,
+      'valheim': 892970, 'red dead redemption 2': 1174180, 'monster hunter: world': 582010,
+      'dead by daylight': 381210, 'among us': 945360, 'stardew valley': 413150,
+      'fall guys': 1097150, 'destiny 2': 1085660, 'rainbow six siege': 359550,
+      'tom clancy\'s rainbow six siege': 359550, 'ark': 346110, 'ark: survival evolved': 346110,
+      'warframe': 230410, 'path of exile': 238960, 'the witcher 3': 292030,
+      'the witcher 3: wild hunt': 292030, 'civilization vi': 289070, 'sid meier\'s civilization vi': 289070,
+      'hollow knight': 367520, 'hades': 1145360, 'celeste': 504230, 'sekiro': 814380,
+      'dark souls iii': 374320, 'monster hunter rise': 1446780, 'persona 5 royal': 1687950,
+      'baldur\'s gate 3': 1086940, 'palworld': 1623730, 'lethal company': 1966720
+    };
+    
+    // 根据游戏名称查找 AppID
+    function findAppIdByName(gameName) {
+      if (!gameName) return null;
+      const normalized = gameName.toLowerCase().trim();
+      return gameNameToAppId[normalized] || null;
+    }
+    
+    gamesList.innerHTML = sortedGames.map(game => {
+      // 获取有效的 AppID（优先使用数据中的，否则用名称查找）
+      let appId = game.appId || game.appid || game.id;
+      let validAppId = appId && /^\d+$/.test(String(appId)) ? appId : null;
+      
+      // 如果没有有效 AppID，尝试用名称查找
+      if (!validAppId && game.name) {
+        validAppId = findAppIdByName(game.name);
+      }
+      
+      // 生成多级封面图 URL
+      let coverUrl = '';
+      let fallback1 = '';
+      let fallback2 = '';
+      
+      if (game.headerImage && game.headerImage.startsWith('http')) {
+        coverUrl = game.headerImage;
+      }
+      
+      if (validAppId) {
+        if (!coverUrl) {
+          coverUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/header.jpg`;
+        }
+        fallback1 = `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/capsule_616x353.jpg`;
+        fallback2 = `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/library_600x900.jpg`;
+      }
+      
+      // 生成占位符背景
+      const placeholderBg = `linear-gradient(135deg, #1b2838 0%, #2a475e 50%, #1b2838 100%)`;
+      const gameLetter = (game.name || 'G').charAt(0).toUpperCase();
+      
+      // 格式化游戏时间
+      const playtime = SteamAPI.formatPlaytime(game.playtimeForever || 0);
+      const hasRecentPlay = game.playtime2Weeks > 0;
+      const recentPlaytime = hasRecentPlay ? SteamAPI.formatPlaytime(game.playtime2Weeks) : '';
+      
+      return `
+        <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${validAppId || ''}', '_blank')" title="点击查看Steam商店页面">
+          <div class="steam-badge">
+            <span>🎮</span> Steam
           </div>
+          <div class="steam-game-img">
+            ${coverUrl 
+              ? `<img src="${coverUrl}" alt="${game.name}" 
+                  onerror="
+                    if (this.dataset.fallback === '1') {
+                      this.onerror = null;
+                      this.parentElement.innerHTML = '<div style=\\'background:${placeholderBg};width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;\\'><div style=\\'font-size:48px;color:rgba(102,192,244,0.5);\\'>${gameLetter}</div><div style=\\'font-size:12px;color:rgba(102,192,244,0.6);margin-top:8px;\\'>${game.name ? game.name.substring(0, 15) : ''}</div></div>';
+                    } else if (this.dataset.fallback === '0' && '${fallback1}') {
+                      this.dataset.fallback = '1';
+                      this.src = '${fallback1}';
+                    } else {
+                      this.dataset.fallback = '1';
+                      this.src = '${fallback2}';
+                    }
+                  " 
+                  data-fallback="0" />`
+              : `<div style="background:${placeholderBg};width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                  <div style="font-size:48px;color:rgba(102,192,244,0.5);">${gameLetter}</div>
+                  <div style="font-size:12px;color:rgba(102,192,244,0.6);margin-top:8px;">${game.name ? game.name.substring(0, 15) : ''}</div>
+                </div>`
+            }
+          </div>
+          <div class="steam-game-info">
+            <div class="steam-game-name">${game.name}</div>
+            <div class="steam-game-playtime">
+              <span>⏱ ${playtime}</span>
+              ${hasRecentPlay ? `<span class="recent-play">🔥 近两周 ${recentPlaytime}</span>` : ''}
+            </div>
+          </div>
+          <div class="view-store-btn">查看商店 →</div>
         </div>
-        <div style="font-size: 12px; color: var(--text-muted);">🔗</div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
   
   // =============================================
@@ -1598,6 +1870,326 @@
   document.getElementById('steamGamesSort').addEventListener('change', (e) => {
     renderSteamGames(userData.steam?.games || [], e.target.value);
   });
+  
+  // 切换账户 - 显示账户切换弹窗
+  document.getElementById('switchAccountBtn').addEventListener('click', () => {
+    showSwitchAccountModal();
+  });
+  
+  // 切换账户弹窗
+  function showSwitchAccountModal() {
+    const modal = document.createElement('div');
+    modal.id = 'switchAccountModal';
+    
+    // 获取所有已保存的账户
+    let savedAccounts = [];
+    try {
+      savedAccounts = JSON.parse(localStorage.getItem('gamebox_saved_accounts') || '[]');
+    } catch (e) {
+      savedAccounts = [];
+    }
+    
+    // 添加当前账户到已保存列表（如果不存在）
+    if (currentUser && !savedAccounts.find(acc => acc.id === currentUser.id)) {
+      savedAccounts.push({
+        id: currentUser.id,
+        email: currentUser.email,
+        username: currentUser.username,
+        avatar: userData?.avatar || ''
+      });
+      localStorage.setItem('gamebox_saved_accounts', JSON.stringify(savedAccounts));
+    }
+    
+    const accountsHtml = savedAccounts.length > 0 
+      ? savedAccounts.map(acc => `
+          <div class="saved-account-item ${acc.id === currentUser?.id ? 'current' : ''}" 
+               data-account-id="${acc.id}" 
+               onclick="${acc.id !== currentUser?.id ? 'switchToAccount(\'' + acc.id + '\')' : ''}">
+            <div class="account-avatar">
+              ${acc.avatar ? `<img src="${acc.avatar}" alt="">` : acc.username?.charAt(0)?.toUpperCase() || '?'}
+            </div>
+            <div class="account-info">
+              <div class="account-name">${acc.username || '未设置昵称'}</div>
+              <div class="account-email">${acc.email || ''}</div>
+            </div>
+            ${acc.id === currentUser?.id 
+              ? '<span class="current-badge">当前账户</span>' 
+              : '<span class="switch-arrow">切换 →</span>'}
+          </div>
+        `).join('')
+      : '<p style="color: var(--text-muted); text-align: center; padding: 20px;">暂无保存的账户</p>';
+    
+    modal.innerHTML = `
+      <div class="modal-overlay" onclick="document.getElementById('switchAccountModal').remove()">
+        <div class="switch-account-modal" onclick="event.stopPropagation()">
+          <div class="modal-header">
+            <h3>🔄 切换账户</h3>
+            <button class="modal-close" onclick="document.getElementById('switchAccountModal').remove()">×</button>
+          </div>
+          
+          <div class="saved-accounts-list">
+            ${accountsHtml}
+          </div>
+          
+          <div class="modal-actions">
+            <button class="add-account-btn" onclick="window.location.href='login.html?action=add_account'">
+              <span>➕</span> 添加其他账户
+            </button>
+            <button class="logout-all-btn" onclick="logoutAllAccounts()">
+              <span>🚪</span> 退出所有账户
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        .switch-account-modal {
+          background: linear-gradient(145deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95));
+          border: 1px solid rgba(102, 192, 244, 0.3);
+          border-radius: 20px;
+          padding: 0;
+          width: 90%;
+          max-width: 420px;
+          overflow: hidden;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+          animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 24px;
+          border-bottom: 1px solid rgba(102, 192, 244, 0.15);
+        }
+        
+        .modal-header h3 {
+          margin: 0;
+          color: #66c0f4;
+          font-size: 18px;
+        }
+        
+        .modal-close {
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          font-size: 24px;
+          cursor: pointer;
+          padding: 0;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: var(--text-soft);
+        }
+        
+        .saved-accounts-list {
+          padding: 12px;
+          max-height: 300px;
+          overflow-y: auto;
+        }
+        
+        .saved-account-item {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 14px 16px;
+          border-radius: 12px;
+          margin-bottom: 8px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid transparent;
+        }
+        
+        .saved-account-item:hover:not(.current) {
+          background: rgba(102, 192, 244, 0.1);
+          border-color: rgba(102, 192, 244, 0.3);
+        }
+        
+        .saved-account-item.current {
+          background: rgba(0, 255, 136, 0.08);
+          border-color: rgba(0, 255, 136, 0.3);
+          cursor: default;
+        }
+        
+        .account-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #1b2838, #2a475e);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          font-weight: bold;
+          color: #66c0f4;
+          overflow: hidden;
+        }
+        
+        .account-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        .account-info {
+          flex: 1;
+          min-width: 0;
+        }
+        
+        .account-name {
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--text-soft);
+          margin-bottom: 3px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .account-email {
+          font-size: 12px;
+          color: var(--text-muted);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .current-badge {
+          font-size: 11px;
+          color: #00ff88;
+          background: rgba(0, 255, 136, 0.15);
+          padding: 4px 10px;
+          border-radius: 20px;
+          font-weight: 600;
+        }
+        
+        .switch-arrow {
+          font-size: 12px;
+          color: #66c0f4;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+        
+        .saved-account-item:hover .switch-arrow {
+          opacity: 1;
+        }
+        
+        .modal-actions {
+          padding: 16px 20px;
+          border-top: 1px solid rgba(102, 192, 244, 0.15);
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        
+        .add-account-btn, .logout-all-btn {
+          width: 100%;
+          padding: 14px 20px;
+          border-radius: 10px;
+          border: none;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          transition: all 0.2s ease;
+        }
+        
+        .add-account-btn {
+          background: linear-gradient(135deg, rgba(102, 192, 244, 0.2), rgba(102, 192, 244, 0.1));
+          border: 1px solid rgba(102, 192, 244, 0.4);
+          color: #66c0f4;
+        }
+        
+        .add-account-btn:hover {
+          background: linear-gradient(135deg, rgba(102, 192, 244, 0.3), rgba(102, 192, 244, 0.2));
+        }
+        
+        .logout-all-btn {
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          color: #ef4444;
+        }
+        
+        .logout-all-btn:hover {
+          background: rgba(239, 68, 68, 0.2);
+        }
+      </style>
+    `;
+    
+    document.body.appendChild(modal);
+  }
+  
+  // 切换到指定账户
+  window.switchToAccount = async function(accountId) {
+    try {
+      // 先退出当前账户
+      await GameBoxAuth.signOut();
+      
+      // 获取目标账户信息
+      const savedAccounts = JSON.parse(localStorage.getItem('gamebox_saved_accounts') || '[]');
+      const targetAccount = savedAccounts.find(acc => acc.id === accountId);
+      
+      if (targetAccount) {
+        // 跳转到登录页并自动填充
+        window.location.href = `login.html?email=${encodeURIComponent(targetAccount.email)}&switch=true`;
+      } else {
+        window.location.href = 'login.html';
+      }
+    } catch (error) {
+      console.error('切换账户失败:', error);
+      showMessage('切换账户失败，请重试', 'error');
+    }
+  }
+  
+  // 退出所有账户
+  window.logoutAllAccounts = async function() {
+    if (confirm('确定要退出所有账户吗？这将清除所有已保存的登录信息。')) {
+      try {
+        // 清除保存的账户
+        localStorage.removeItem('gamebox_saved_accounts');
+        // 退出当前账户
+        await GameBoxAuth.signOut();
+        // 跳转到登录页
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('退出失败:', error);
+        showMessage('退出失败，请重试', 'error');
+      }
+    }
+  }
   
   // 登出
   document.getElementById('logoutBtn').addEventListener('click', async () => {
