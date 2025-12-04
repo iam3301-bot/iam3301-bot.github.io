@@ -1,0 +1,664 @@
+/**
+ * 🌃 赛博朋克2077完整主题样式
+ * Cyberpunk 2077 Complete Theme Styles
+ * 
+ * 标志性元素：
+ * - 霓虹金色边框 (Neon Golden Borders)
+ * - 数字代码背景 (Digital Code Background)
+ * - 故障效果 (Glitch Effects)
+ * - V字标志UI (V Logo UI Elements)
+ * - 夜之城风格 (Night City Style)
+ */
+
+/* ==========================================
+   主题根变量
+   ========================================== */
+:root.theme-cyberpunk {
+    /* 赛博朋克主色 - 霓虹金 */
+    --cyber-gold: #FFD700;
+    --cyber-gold-dark: #CC9900;
+    --cyber-gold-light: #FFEB3B;
+    
+    /* 青色辅助 */
+    --cyber-cyan: #00FFFF;
+    --cyber-blue: #0EA5E9;
+    --cyber-pink: #FF1493;
+    
+    /* 背景色 - 深黑 */
+    --cyber-bg-primary: #000000;
+    --cyber-bg-secondary: #0A0A0A;
+    --cyber-bg-card: rgba(10, 10, 10, 0.95);
+    
+    /* 文字色 */
+    --cyber-text-primary: #FFFFFF;
+    --cyber-text-secondary: #E0E0E0;
+    --cyber-text-gold: #FFD700;
+}
+
+/* ==========================================
+   全局背景 - 夜之城氛围
+   ========================================== */
+body.theme-cyberpunk {
+    background: #000000;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 网格背景 */
+body.theme-cyberpunk::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 霓虹渐变光晕 */
+body.theme-cyberpunk::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(255, 215, 0, 0.08) 0%,
+        transparent 40%
+    ),
+    radial-gradient(
+        circle at 70% 70%,
+        rgba(0, 255, 255, 0.06) 0%,
+        transparent 40%
+    );
+    pointer-events: none;
+    z-index: 0;
+    animation: cyberGlowShift 20s ease-in-out infinite;
+}
+
+@keyframes cyberGlowShift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-10%, -10%); }
+}
+
+/* ==========================================
+   霓虹金色边框系统
+   ========================================== */
+
+/* 卡片通用边框 */
+body.theme-cyberpunk .card,
+body.theme-cyberpunk .game-card,
+body.theme-cyberpunk .ranking-item,
+body.theme-cyberpunk .platform-item {
+    background: linear-gradient(
+        135deg,
+        rgba(10, 10, 10, 0.98) 0%,
+        rgba(20, 15, 0, 0.98) 100%
+    );
+    border: 2px solid transparent;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 霓虹边框效果 - 使用渐变背景 */
+body.theme-cyberpunk .card::before,
+body.theme-cyberpunk .game-card::before,
+body.theme-cyberpunk .ranking-item::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        #FFD700,
+        #00FFFF,
+        #FF1493,
+        #FFD700
+    );
+    border-radius: 8px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    animation: cyberBorderRotate 4s linear infinite;
+}
+
+@keyframes cyberBorderRotate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body.theme-cyberpunk .card:hover::before,
+body.theme-cyberpunk .game-card:hover::before,
+body.theme-cyberpunk .ranking-item:hover::before {
+    opacity: 1;
+}
+
+/* 悬停时的发光效果 */
+body.theme-cyberpunk .card:hover,
+body.theme-cyberpunk .game-card:hover,
+body.theme-cyberpunk .ranking-item:hover {
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.4),
+        0 0 40px rgba(255, 215, 0, 0.2),
+        inset 0 0 30px rgba(255, 215, 0, 0.05);
+    transform: translateY(-5px) scale(1.02);
+}
+
+/* ==========================================
+   V字标志装饰元素
+   ========================================== */
+body.theme-cyberpunk .card::after {
+    content: 'V';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 900;
+    color: rgba(255, 215, 0, 0.15);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    pointer-events: none;
+    transform: skewX(-5deg);
+}
+
+/* ==========================================
+   数字代码装饰
+   ========================================== */
+body.theme-cyberpunk .section-title::before,
+body.theme-cyberpunk h1::before,
+body.theme-cyberpunk h2::before {
+    content: '< ';
+    color: #FFD700;
+    font-family: 'Courier New', monospace;
+    margin-right: 8px;
+    opacity: 0.8;
+    animation: cyberBlink 2s ease-in-out infinite;
+}
+
+body.theme-cyberpunk .section-title::after,
+body.theme-cyberpunk h1::after,
+body.theme-cyberpunk h2::after {
+    content: ' />';
+    color: #FFD700;
+    font-family: 'Courier New', monospace;
+    margin-left: 8px;
+    opacity: 0.8;
+    animation: cyberBlink 2s ease-in-out infinite reverse;
+}
+
+@keyframes cyberBlink {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
+}
+
+/* ==========================================
+   按钮 - 霓虹风格
+   ========================================== */
+body.theme-cyberpunk button,
+body.theme-cyberpunk .btn {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 12px 30px;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.3),
+        inset 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+/* 按钮扫描线效果 */
+body.theme-cyberpunk button::before,
+body.theme-cyberpunk .btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 215, 0, 0.3),
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+}
+
+body.theme-cyberpunk button:hover::before,
+body.theme-cyberpunk .btn:hover::before {
+    left: 200%;
+}
+
+body.theme-cyberpunk button:hover,
+body.theme-cyberpunk .btn:hover {
+    background: linear-gradient(135deg, #FFD700 0%, #CC9900 100%);
+    color: #000000;
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.6),
+        0 0 40px rgba(255, 215, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+body.theme-cyberpunk button:active,
+body.theme-cyberpunk .btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.4),
+        inset 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================
+   输入框 - 夜之城风格
+   ========================================== */
+body.theme-cyberpunk input[type="text"],
+body.theme-cyberpunk input[type="email"],
+body.theme-cyberpunk input[type="password"],
+body.theme-cyberpunk input[type="search"],
+body.theme-cyberpunk textarea {
+    background: rgba(10, 10, 10, 0.8);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: #FFD700;
+    font-family: 'Courier New', monospace;
+    padding: 12px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-cyberpunk input:focus,
+body.theme-cyberpunk textarea:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.4),
+        inset 0 0 20px rgba(255, 215, 0, 0.05);
+    background: rgba(10, 10, 10, 0.95);
+}
+
+body.theme-cyberpunk input::placeholder,
+body.theme-cyberpunk textarea::placeholder {
+    color: rgba(255, 215, 0, 0.4);
+    font-style: italic;
+}
+
+/* ==========================================
+   滚动条 - 霓虹金色
+   ========================================== */
+body.theme-cyberpunk ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+body.theme-cyberpunk ::-webkit-scrollbar-track {
+    background: rgba(10, 10, 10, 0.8);
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-cyberpunk ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #FFD700 0%, #CC9900 100%);
+    border-radius: 10px;
+    border: 2px solid rgba(10, 10, 10, 0.8);
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.6),
+        inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+body.theme-cyberpunk ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #FFEB3B 0%, #FFD700 100%);
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.9),
+        inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* Firefox */
+body.theme-cyberpunk * {
+    scrollbar-width: thin;
+    scrollbar-color: #FFD700 rgba(10, 10, 10, 0.8);
+}
+
+/* ==========================================
+   下拉框 - 夜之城风格
+   ========================================== */
+body.theme-cyberpunk select {
+    appearance: none;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 15, 0, 0.95) 100%);
+    background-image: 
+        linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 15, 0, 0.95) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23FFD700' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: left center, right 12px center;
+    background-size: auto, 12px;
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    color: #FFD700;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    padding: 10px 36px 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.2),
+        inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-cyberpunk select:hover {
+    border-color: rgba(255, 215, 0, 0.7);
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.4),
+        inset 0 0 30px rgba(255, 215, 0, 0.05);
+}
+
+body.theme-cyberpunk select:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 
+        0 0 25px rgba(255, 215, 0, 0.6),
+        inset 0 0 40px rgba(255, 215, 0, 0.1);
+}
+
+body.theme-cyberpunk select option {
+    background: #0A0A0A;
+    color: #FFD700;
+    padding: 10px;
+}
+
+/* ==========================================
+   评分显示 - 霓虹风格
+   ========================================== */
+body.theme-cyberpunk .rating,
+body.theme-cyberpunk .score {
+    background: linear-gradient(135deg, #FFD700 0%, #CC9900 100%);
+    color: #000000;
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 4px;
+    box-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.6),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: inline-block;
+}
+
+/* 评分装饰边角 */
+body.theme-cyberpunk .rating::before,
+body.theme-cyberpunk .rating::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 2px solid #000000;
+}
+
+body.theme-cyberpunk .rating::before {
+    top: -2px;
+    left: -2px;
+    border-right: none;
+    border-bottom: none;
+}
+
+body.theme-cyberpunk .rating::after {
+    bottom: -2px;
+    right: -2px;
+    border-left: none;
+    border-top: none;
+}
+
+/* ==========================================
+   标签和徽章
+   ========================================== */
+body.theme-cyberpunk .tag,
+body.theme-cyberpunk .badge {
+    background: transparent;
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.3),
+        inset 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+body.theme-cyberpunk .tag::before,
+body.theme-cyberpunk .badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+body.theme-cyberpunk .tag:hover::before,
+body.theme-cyberpunk .badge:hover::before {
+    left: 100%;
+}
+
+/* ==========================================
+   导航栏 - 夜之城风格
+   ========================================== */
+body.theme-cyberpunk nav,
+body.theme-cyberpunk header {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.98) 0%, rgba(10, 10, 10, 0.95) 100%);
+    border-bottom: 2px solid #FFD700;
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.2),
+        0 0 40px rgba(255, 215, 0, 0.1);
+    position: relative;
+}
+
+/* 导航栏扫描线 */
+body.theme-cyberpunk nav::after,
+body.theme-cyberpunk header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FFD700, transparent);
+    animation: cyberScanline 3s linear infinite;
+}
+
+@keyframes cyberScanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ==========================================
+   链接样式
+   ========================================== */
+body.theme-cyberpunk a {
+    color: #FFD700;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+body.theme-cyberpunk a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, #FFD700, #00FFFF);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-cyberpunk a:hover::after {
+    width: 100%;
+}
+
+body.theme-cyberpunk a:hover {
+    color: #FFEB3B;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+/* ==========================================
+   故障效果 (Glitch Effect)
+   ========================================== */
+@keyframes cyberGlitch {
+    0% {
+        transform: translate(0);
+        opacity: 1;
+    }
+    20% {
+        transform: translate(-2px, 2px);
+        opacity: 0.8;
+    }
+    40% {
+        transform: translate(2px, -2px);
+        opacity: 0.8;
+    }
+    60% {
+        transform: translate(-2px, -2px);
+        opacity: 0.8;
+    }
+    80% {
+        transform: translate(2px, 2px);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(0);
+        opacity: 1;
+    }
+}
+
+body.theme-cyberpunk .glitch-effect {
+    animation: cyberGlitch 0.3s ease-in-out infinite;
+}
+
+/* 标题故障效果 */
+body.theme-cyberpunk h1:hover,
+body.theme-cyberpunk h2:hover {
+    animation: cyberGlitch 0.2s ease-in-out 3;
+}
+
+/* ==========================================
+   加载动画 - V字旋转
+   ========================================== */
+body.theme-cyberpunk .loading {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: 20px auto;
+}
+
+body.theme-cyberpunk .loading::before {
+    content: 'V';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 32px;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.4);
+    animation: cyberLoadingSpin 2s linear infinite;
+}
+
+body.theme-cyberpunk .loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    border-top-color: #FFD700;
+    border-right-color: #00FFFF;
+    border-radius: 50%;
+    animation: cyberLoadingSpin 1s linear infinite;
+}
+
+@keyframes cyberLoadingSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   响应式设计
+   ========================================== */
+@media (max-width: 768px) {
+    body.theme-cyberpunk ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    body.theme-cyberpunk button,
+    body.theme-cyberpunk .btn {
+        padding: 10px 20px;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    body.theme-cyberpunk select {
+        font-size: 13px;
+        padding: 8px 32px 8px 12px;
+    }
+    
+    body.theme-cyberpunk .card::after {
+        font-size: 12px;
+    }
+}
+
+/* ==========================================
+   打印样式
+   ========================================== */
+@media print {
+    body.theme-cyberpunk {
+        background: white;
+        color: black;
+    }
+    
+    body.theme-cyberpunk::before,
+    body.theme-cyberpunk::after {
+        display: none;
+    }
+    
+    body.theme-cyberpunk * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        animation: none !important;
+    }
+}

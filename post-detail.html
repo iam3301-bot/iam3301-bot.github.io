@@ -741,12 +741,33 @@
     });
   }
 
-  // 点赞评论
-  window.likeComment = function(commentId) {
-    const comment = comments.find(c => c.id === commentId);
-    if (comment) {
-      comment.likes++;
-      renderComments();
+  // 点赞评论 - 使用真实的 communityDataService API
+  window.likeComment = async function(commentId) {
+    // 使用真实的评论点赞API
+    if (window.communityDataService && typeof window.communityDataService.likeComment === 'function') {
+      try {
+        const result = window.communityDataService.likeComment(commentId);
+        const likeResult = result instanceof Promise ? await result : result;
+        
+        if (likeResult.success) {
+          // 更新本地评论列表中的点赞数
+          const comment = comments.find(c => c.id === commentId);
+          if (comment) {
+            comment.likes = likeResult.likes;
+          }
+          renderComments();
+          console.log(`${likeResult.liked ? '👍' : '👎'} 评论点赞状态更新:`, commentId, likeResult.likes);
+        }
+      } catch (e) {
+        console.error('评论点赞失败:', e);
+      }
+    } else {
+      // 降级到本地模式
+      const comment = comments.find(c => c.id === commentId);
+      if (comment) {
+        comment.likes = (comment.likes || 0) + 1;
+        renderComments();
+      }
     }
   };
 
@@ -804,12 +825,12 @@
     }
   }
 
-  // 发表评论
+  // 发表评论 - 使用真实的 communityDataService API
   const btnComment = document.getElementById("btnComment");
   const newCommentEl = document.getElementById("newComment");
   const commentMsg = document.getElementById("commentMsg");
 
-  btnComment.addEventListener("click", () => {
+  btnComment.addEventListener("click", async () => {
     const text = newCommentEl.value.trim();
     if (!text) {
       commentMsg.textContent = "❌ 评论内容不能为空";
@@ -817,62 +838,155 @@
       return;
     }
     
-    const user = getCurrentUser();
-    const name = user ? (user.nickname || user.username || "已登录玩家") : "游客";
+    // 禁用按钮，防止重复提交
+    btnComment.disabled = true;
+    btnComment.textContent = "💬 发布中...";
+    
+    try {
+      // 使用真实的评论API
+      if (window.communityDataService && typeof window.communityDataService.addComment === 'function') {
+        const user = getCurrentUser();
+        const userName = user ? (user.nickname || user.username || "已登录玩家") : "游客";
+        const userAvatar = user?.avatar || "👤";
+        
+        const commentData = {
+          author: userName,
+          avatar: userAvatar,
+          content: text
+        };
+        
+        const result = window.communityDataService.addComment(postId, commentData);
+        const addResult = result instanceof Promise ? await result : result;
+        
+        if (addResult.success) {
+          // 添加到本地评论列表
+          comments.push(addResult.comment);
+          
+          // 更新UI
+          newCommentEl.value = "";
+          commentMsg.textContent = "✅ 评论发布成功！";
+          commentMsg.style.color = "var(--cyber-cyan)";
+          
+          // 更新回复数
+          currentPost.replies = (currentPost.replies || 0) + 1;
+          document.getElementById('postReplies').textContent = currentPost.replies;
+          document.getElementById('sidebarReplies').textContent = currentPost.replies;
+          
+          // 重新渲染评论列表
+          renderComments();
+          
+          // 滚动到最新评论
+          setTimeout(() => {
+            const commentListEl = document.getElementById('commentList');
+            commentListEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 100);
+          
+          console.log('✅ 评论发布成功:', addResult.comment);
+          
+          // 3秒后清除提示
+          setTimeout(() => {
+            const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
+            commentMsg.textContent = isSupabase ? "💡 评论已保存到云数据库" : "💡 评论已保存到本地存储";
+            commentMsg.style.color = "var(--text-soft)";
+          }, 3000);
+        } else {
+          throw new Error(addResult.error || '评论发布失败');
+        }
+      } else {
+        // 降级到本地模式
+        const user = getCurrentUser();
+        const name = user ? (user.nickname || user.username || "已登录玩家") : "游客";
 
-    const newComment = {
-      id: Date.now(),
-      author: name,
-      avatar: "👤",
-      time: Date.now(), // 存储时间戳
-      timeText: "刚刚",
-      content: text,
-      likes: 0
-    };
-    
-    comments.push(newComment);
-    
-    // 保存评论到 localStorage（真实存储）
-    saveComments(comments);
-    
-    newCommentEl.value = "";
-    commentMsg.textContent = "✅ 评论发布成功！（已保存）";
-    commentMsg.style.color = "var(--cyber-cyan)";
-    
-    // 更新回复数
-    currentPost.replies = (currentPost.replies || 0) + 1;
-    document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
-    document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
-    
-    // 如果是真实帖子，更新回复数
-    if (window.communityDataService && currentPost.id) {
-      window.communityDataService.updatePost(currentPost.id, { replies: currentPost.replies });
+        const newComment = {
+          id: Date.now(),
+          author: name,
+          avatar: "👤",
+          time: Date.now(),
+          timeText: "刚刚",
+          content: text,
+          likes: 0
+        };
+        
+        comments.push(newComment);
+        saveComments(comments);
+        
+        newCommentEl.value = "";
+        commentMsg.textContent = "✅ 评论发布成功！（本地存储）";
+        commentMsg.style.color = "var(--cyber-cyan)";
+        
+        currentPost.replies = (currentPost.replies || 0) + 1;
+        document.getElementById('postReplies').textContent = currentPost.replies;
+        document.getElementById('sidebarReplies').textContent = currentPost.replies;
+        
+        renderComments();
+      }
+    } catch (e) {
+      console.error('评论发布失败:', e);
+      commentMsg.textContent = `❌ 评论发布失败: ${e.message}`;
+      commentMsg.style.color = "var(--danger)";
+    } finally {
+      // 恢复按钮状态
+      btnComment.disabled = false;
+      btnComment.textContent = "💬 发表评论";
     }
-    
-    renderComments();
-    
-    // 3秒后清除提示
-    setTimeout(() => {
-      commentMsg.textContent = "💡 评论已保存到浏览器本地存储";
-      commentMsg.style.color = "var(--text-soft)";
-    }, 3000);
   });
 
-  // 点赞按钮
+  // 点赞按钮 - 使用真实的 communityDataService API
   const btnLike = document.getElementById("btnLike");
   let liked = false;
 
-  btnLike.addEventListener("click", () => {
-    if (!liked) {
-      currentPost.likes++;
-      liked = true;
-      btnLike.classList.add('active');
-      document.getElementById('likeCount').textContent = currentPost.likes;
-      document.getElementById('sidebarLikes').textContent = currentPost.likes;
+  // 检查初始点赞状态
+  async function checkInitialLikeStatus() {
+    if (window.communityDataService && typeof window.communityDataService.isPostLiked === 'function') {
+      try {
+        const result = window.communityDataService.isPostLiked(postId);
+        liked = result instanceof Promise ? await result : result;
+        if (liked) {
+          btnLike.classList.add('active');
+        }
+      } catch (e) {
+        console.error('检查点赞状态失败:', e);
+      }
+    }
+  }
+
+  btnLike.addEventListener("click", async () => {
+    // 使用真实的点赞API
+    if (window.communityDataService && typeof window.communityDataService.likePost === 'function') {
+      try {
+        const result = window.communityDataService.likePost(postId);
+        const likeResult = result instanceof Promise ? await result : result;
+        
+        if (likeResult.success) {
+          liked = likeResult.liked;
+          currentPost.likes = likeResult.likes;
+          
+          if (liked) {
+            btnLike.classList.add('active');
+          } else {
+            btnLike.classList.remove('active');
+          }
+          
+          document.getElementById('likeCount').textContent = currentPost.likes;
+          document.getElementById('sidebarLikes').textContent = currentPost.likes;
+          
+          console.log(`${liked ? '👍' : '👎'} 点赞状态更新:`, currentPost.likes);
+        }
+      } catch (e) {
+        console.error('点赞操作失败:', e);
+        alert('点赞失败，请稍后重试');
+      }
     } else {
-      currentPost.likes--;
-      liked = false;
-      btnLike.classList.remove('active');
+      // 降级到本地模式
+      if (!liked) {
+        currentPost.likes++;
+        liked = true;
+        btnLike.classList.add('active');
+      } else {
+        currentPost.likes--;
+        liked = false;
+        btnLike.classList.remove('active');
+      }
       document.getElementById('likeCount').textContent = currentPost.likes;
       document.getElementById('sidebarLikes').textContent = currentPost.likes;
     }
@@ -923,16 +1037,48 @@
     renderPost();
     renderComments();
     
+    // 检查初始点赞状态
+    await checkInitialLikeStatus();
+    
     // 记录页面访问
     if (window.communityDataService?.logPageView) {
       window.communityDataService.logPageView('post_detail');
     }
     
-    console.log('✅ 帖子详情页加载完成');
+    // 显示数据源状态
+    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
+    console.log(`✅ 帖子详情页加载完成 [数据源: ${isSupabase ? 'Supabase 云数据库 ✅' : '本地存储 ⚠️'}]`);
+    
+    // 显示数据源提示
+    const dataSourceTip = document.getElementById('commentMsg');
+    if (dataSourceTip) {
+      dataSourceTip.textContent = isSupabase 
+        ? '💡 已连接云数据库，评论和点赞实时同步' 
+        : '💡 本地存储模式，数据仅保存在当前浏览器';
+      dataSourceTip.style.color = 'var(--text-soft)';
+    }
   }
   
   // 启动初始化
   initPostDetail();
+  
+  // 监听点赞实时更新事件
+  window.addEventListener('post-like-update', (e) => {
+    if (e.detail && e.detail.postId === postId) {
+      currentPost.likes = e.detail.likes;
+      liked = e.detail.liked;
+      document.getElementById('likeCount').textContent = currentPost.likes;
+      document.getElementById('sidebarLikes').textContent = currentPost.likes;
+      if (liked) {
+        btnLike.classList.add('active');
+      } else {
+        btnLike.classList.remove('active');
+      }
+      console.log('📡 收到点赞实时更新:', e.detail);
+    }
+  });
 </script>
+<!-- 全局主题系统 -->
+<script src="global-theme-system.js"></script>
 </body>
 </html>

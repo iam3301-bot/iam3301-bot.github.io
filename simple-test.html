@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>简单测试</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 30px;
+    }
+    .instruction {
+      text-align: center;
+      font-size: 24px;
+      color: #0f0;
+      margin: 30px 0;
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.5; }
+    }
+    .arrow {
+      position: fixed;
+      bottom: 100px;
+      right: 100px;
+      font-size: 64px;
+      animation: bounce 1s infinite;
+      pointer-events: none;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 GameBox 主题系统</h1>
+  
+  <div class="instruction">
+    ⬇️ 看右下角！应该有个 🎨 按钮 ⬇️
+  </div>
+  
+  <div class="arrow">↘️</div>
+  
+  <div style="text-align: center; margin-top: 50px;">
+    <p style="font-size: 20px;">如果你看到了 🎨 主题按钮：</p>
+    <p style="font-size: 18px; color: #0f0;">✅ 主题系统正常工作</p>
+    <p style="font-size: 18px; margin-top: 30px;">点击它查看 7 个游戏主题：</p>
+    <ul style="list-style: none; padding: 0; font-size: 18px;">
+      <li>🐵 黑神话：悟空</li>
+      <li>⚔️ 巫师3</li>
+      <li>🚗 GTA5</li>
+      <li>🤠 荒野大镖客2</li>
+      <li>🐉 博德之门3</li>
+      <li>💍 艾尔登法环</li>
+      <li>🌃 赛博朋克</li>
+    </ul>
+  </div>
+  
+  <div style="text-align: center; margin-top: 50px; padding: 30px; background: #222; border-radius: 10px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <h3>🔍 调试信息</h3>
+    <div id="debug" style="text-align: left; font-family: monospace; font-size: 14px;"></div>
+  </div>
+  
+  <script>
+    // 检测主题系统
+    function checkSystem() {
+      const debug = document.getElementById('debug');
+      const checks = [];
+      
+      // 检查1
+      if (window.globalThemeManager) {
+        checks.push('✅ globalThemeManager: 已加载');
+        const theme = window.globalThemeManager.getCurrentTheme();
+        checks.push(`   当前主题: ${theme.name} ${theme.icon}`);
+      } else {
+        checks.push('❌ globalThemeManager: 未找到');
+      }
+      
+      // 检查2
+      const switcher = document.getElementById('globalThemeSwitcher');
+      if (switcher) {
+        checks.push('✅ 主题切换器DOM: 已创建');
+        const rect = switcher.getBoundingClientRect();
+        checks.push(`   位置: ${rect.right}px, ${rect.bottom}px`);
+        checks.push(`   可见: ${switcher.style.display !== 'none'}`);
+      } else {
+        checks.push('❌ 主题切换器DOM: 未找到');
+      }
+      
+      // 检查3
+      const button = document.querySelector('.theme-switcher-btn');
+      if (button) {
+        checks.push('✅ 主题按钮: 已创建');
+        checks.push(`   内容: "${button.textContent.trim()}"`);
+      } else {
+        checks.push('❌ 主题按钮: 未找到');
+      }
+      
+      // 检查4
+      const panel = document.querySelector('.theme-switcher-panel');
+      if (panel) {
+        const options = panel.querySelectorAll('.theme-option');
+        checks.push(`✅ 主题面板: ${options.length} 个主题`);
+      } else {
+        checks.push('❌ 主题面板: 未找到');
+      }
+      
+      debug.innerHTML = checks.join('<br>');
+    }
+    
+    // 延迟检查
+    setTimeout(checkSystem, 1500);
+    
+    // 监听主题切换
+    window.addEventListener('globalthemechange', (e) => {
+      alert(`主题已切换到: ${e.detail.theme.name} ${e.detail.theme.icon}`);
+      checkSystem();
+    });
+  </script>
+  
+  <!-- 全局主题系统 -->
+  <script src="global-theme-system.js"></script>
+</body>
+</html>

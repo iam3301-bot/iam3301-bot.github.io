@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题系统测试</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .test-header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .test-card {
+      padding: 30px;
+      border-radius: 12px;
+      border: 2px solid;
+    }
+    
+    .test-card h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+    
+    .test-card p {
+      margin: 10px 0;
+    }
+    
+    .test-button {
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 8px;
+      border: 2px solid;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .test-input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 2px solid;
+      font-size: 16px;
+    }
+    
+    select.test-select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 2px solid;
+      font-size: 16px;
+    }
+    
+    .theme-info {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 9998;
+    }
+    
+    .scroll-test {
+      height: 300px;
+      overflow-y: scroll;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-info" id="themeInfo">
+    <div><strong>当前主题:</strong> <span id="currentTheme">加载中...</span></div>
+    <div><strong>主题图标:</strong> <span id="themeIcon">-</span></div>
+    <div style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
+      右下角应该有 🎨 主题按钮
+    </div>
+  </div>
+
+  <div class="test-container">
+    <div class="test-header">
+      <h1>🎮 GameBox 主题系统测试</h1>
+      <p style="font-size: 20px; opacity: 0.8;">测试所有组件的主题适配效果</p>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-card card">
+        <h2>🎨 卡片组件</h2>
+        <p>这是一个测试卡片</p>
+        <p>包含多种元素：</p>
+        <ul>
+          <li>列表项 1</li>
+          <li>列表项 2</li>
+          <li>列表项 3</li>
+        </ul>
+      </div>
+
+      <div class="test-card card">
+        <h2>🔘 按钮测试</h2>
+        <button class="test-button">普通按钮</button>
+        <button class="test-button is-active">激活按钮</button>
+        <button class="test-button" disabled>禁用按钮</button>
+      </div>
+
+      <div class="test-card card">
+        <h2>📝 表单元素</h2>
+        <input type="text" class="test-input" placeholder="输入框测试">
+        <select class="test-select">
+          <option>选项 1</option>
+          <option>选项 2</option>
+          <option>选项 3</option>
+        </select>
+        <textarea class="test-input" rows="3" placeholder="文本域测试"></textarea>
+      </div>
+
+      <div class="test-card card">
+        <h2>🔗 链接测试</h2>
+        <p><a href="#">这是一个链接</a></p>
+        <p><a href="#">悬停查看效果</a></p>
+        <p><a href="#">第三个链接</a></p>
+      </div>
+    </div>
+
+    <div class="scroll-test card">
+      <h3>📜 滚动条测试</h3>
+      <p>向下滚动查看自定义滚动条效果</p>
+      <div style="height: 600px;">
+        <p>这是一段很长的内容...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa.</p>
+        <p>这是一段很长的内容...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa.</p>
+        <p>滚动到底部了！</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <h2>✨ 主题切换测试</h2>
+      <p style="font-size: 18px;">
+        点击右下角的 <strong>🎨 主题</strong> 按钮
+      </p>
+      <p style="font-size: 16px; opacity: 0.7;">
+        选择不同主题，观察页面变化
+      </p>
+      <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          🐵 黑神话：悟空
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          ⚔️ 巫师3
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          🚗 GTA5
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          🤠 荒野大镖客2
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          🐉 博德之门3
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          💍 艾尔登法环
+        </div>
+        <div style="padding: 15px; border: 2px dashed; border-radius: 8px; opacity: 0.6;">
+          🌃 赛博朋克
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 监听主题变化
+    window.addEventListener('globalthemechange', (e) => {
+      updateThemeInfo();
+      console.log('主题已切换:', e.detail.theme.name);
+    });
+
+    function updateThemeInfo() {
+      if (window.globalThemeManager) {
+        const theme = window.globalThemeManager.getCurrentTheme();
+        document.getElementById('currentTheme').textContent = theme.name;
+        document.getElementById('themeIcon').textContent = theme.icon;
+      }
+    }
+
+    // 页面加载后更新
+    setTimeout(updateThemeInfo, 1000);
+  </script>
+
+  <!-- 全局主题系统 -->
+  <script src="global-theme-system.js"></script>
+</body>
+</html>

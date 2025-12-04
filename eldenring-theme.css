@@ -1,0 +1,44 @@
+/**
+ * 🗡️ 艾尔登法环完整主题 - 黄金树、卢恩符文
+ */
+:root.theme-eldenring {
+    --er-gold: #DAA520;
+    --er-dark: #1A1410;
+}
+
+body.theme-eldenring {
+    background: linear-gradient(180deg, #1A1410 0%, #2A2010 50%, #1A1410 100%);
+}
+
+body.theme-eldenring::after {
+    content: '🌳';
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    font-size: 150px;
+    opacity: 0.05;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+body.theme-eldenring .card {
+    background: rgba(26, 20, 16, 0.95);
+    border: 2px solid rgba(218, 165, 32, 0.4);
+    box-shadow: 0 0 15px rgba(218, 165, 32, 0.3);
+}
+
+body.theme-eldenring button {
+    background: linear-gradient(135deg, #DAA520, #B8860B);
+    border: 2px solid #DAA520;
+    color: #1A1410;
+    font-weight: 900;
+}
+
+body.theme-eldenring ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #DAA520, #B8860B);
+}
+
+body.theme-eldenring h1, body.theme-eldenring h2 {
+    color: #DAA520;
+    text-shadow: 0 0 15px rgba(218, 165, 32, 0.7);
+}

@@ -1,0 +1,123 @@
+/**
+ * 🤠 荒野大镖客2完整主题样式
+ * Red Dead Redemption 2 Complete Theme Styles
+ * 
+ * 标志性元素：金黄、马鞍棕、西部风格
+ */
+
+:root.theme-rdr2 {
+    --rdr2-gold: #D4AF37;
+    --rdr2-brown: #8B4513;
+    --rdr2-red: #CD5C5C;
+    --rdr2-bg-primary: #2B1810;
+    --rdr2-bg-secondary: #3D2817;
+    --rdr2-text-primary: #F5DEB3;
+}
+
+body.theme-rdr2 {
+    background: linear-gradient(180deg, #2B1810 0%, #3D2817 50%, #2B1810 100%);
+    background-attachment: fixed;
+}
+
+body.theme-rdr2::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212, 175, 55, 0.02) 2px, rgba(212, 175, 55, 0.02) 4px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body.theme-rdr2::after {
+    content: '🤠';
+    position: fixed;
+    right: 5%;
+    bottom: 10%;
+    font-size: 180px;
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+body.theme-rdr2 .card,
+body.theme-rdr2 .game-card {
+    background: linear-gradient(135deg, rgba(43, 24, 16, 0.98), rgba(61, 40, 23, 0.98));
+    border: 2px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+}
+
+body.theme-rdr2 .card:hover {
+    border-color: #D4AF37;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 40px rgba(212, 175, 55, 0.1);
+    transform: translateY(-3px);
+}
+
+body.theme-rdr2 button,
+body.theme-rdr2 .btn {
+    background: linear-gradient(135deg, #3D2817, #2B1810);
+    border: 3px solid #D4AF37;
+    color: #D4AF37;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 12px 30px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+}
+
+body.theme-rdr2 button:hover {
+    background: linear-gradient(135deg, #D4AF37, #8B4513);
+    color: #2B1810;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+    transform: translateY(-2px);
+}
+
+body.theme-rdr2 input,
+body.theme-rdr2 textarea,
+body.theme-rdr2 select {
+    background: rgba(43, 24, 16, 0.9);
+    border: 2px solid rgba(212, 175, 55, 0.4);
+    color: #F5DEB3;
+    padding: 10px 16px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-rdr2 ::-webkit-scrollbar {
+    width: 12px;
+}
+
+body.theme-rdr2 ::-webkit-scrollbar-track {
+    background: rgba(43, 24, 16, 0.9);
+}
+
+body.theme-rdr2 ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #D4AF37, #8B4513);
+    border: 2px solid rgba(43, 24, 16, 0.9);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+body.theme-rdr2 .rating {
+    background: linear-gradient(135deg, #D4AF37, #8B4513);
+    color: #2B1810;
+    padding: 8px 16px;
+    font-weight: 900;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+body.theme-rdr2 h1,
+body.theme-rdr2 h2 {
+    color: #D4AF37;
+    font-family: 'Special Elite', serif;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 2px 2px 0 #000;
+}
+
+body.theme-rdr2 a {
+    color: #D4AF37;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+@media (max-width: 768px) {
+    body.theme-rdr2 button { padding: 10px 20px; }
+}

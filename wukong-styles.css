@@ -1,0 +1,424 @@
+/**
+ * 《黑神话：悟空》主题样式
+ * Black Myth: Wukong Theme Styles
+ * 
+ * 特色：金色主调、中国风、佛光效果、祥云图案
+ */
+
+/* 主题变量覆盖 */
+:root.theme-wukong {
+    /* 主色调 - 金色系 */
+    --primary-gold: #FFD700;
+    --secondary-gold: #FFA500;
+    --dark-gold: #B8860B;
+    --light-gold: #FFDF00;
+    
+    /* 辅助色 - 中国红与墨色 */
+    --chinese-red: #DC143C;
+    --ink-black: #1A1A1A;
+    --jade-green: #2ECC71;
+    
+    /* 背景色 */
+    --bg-primary: #0D0D0D;
+    --bg-secondary: #1A1A1A;
+    --bg-card: rgba(26, 26, 26, 0.9);
+    
+    /* 文字色 */
+    --text-primary: #FFD700;
+    --text-secondary: #DDDDDD;
+    --text-muted: #999999;
+}
+
+/* 全局背景效果 */
+body.theme-wukong {
+    background: linear-gradient(
+        180deg,
+        #0D0D0D 0%,
+        #1A0F00 50%,
+        #0D0D0D 100%
+    );
+    background-attachment: fixed;
+    position: relative;
+}
+
+body.theme-wukong::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 165, 0, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 滚动条样式 - 金色 */
+body.theme-wukong ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+body.theme-wukong ::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 10px;
+}
+
+body.theme-wukong ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 10px;
+    border: 2px solid rgba(26, 26, 26, 0.8);
+}
+
+body.theme-wukong ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #FFDF00 0%, #FFB520 100%);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Firefox 滚动条 */
+body.theme-wukong * {
+    scrollbar-width: thin;
+    scrollbar-color: #FFD700 rgba(26, 26, 26, 0.8);
+}
+
+/* 下拉框样式 */
+body.theme-wukong select {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 30, 10, 0.95) 100%);
+    color: #FFD700;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 8px 32px 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-image: 
+        linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 30, 10, 0.95) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23FFD700' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: left center, right 10px center;
+    background-size: auto, 12px;
+}
+
+body.theme-wukong select:hover {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    background-color: rgba(40, 30, 10, 0.98);
+}
+
+body.theme-wukong select:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-wukong select option {
+    background: #1A1A1A;
+    color: #FFD700;
+    padding: 8px;
+}
+
+/* 输入框样式 */
+body.theme-wukong input[type="text"],
+body.theme-wukong input[type="email"],
+body.theme-wukong input[type="password"],
+body.theme-wukong input[type="search"],
+body.theme-wukong textarea {
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: #FFD700;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+body.theme-wukong input:focus,
+body.theme-wukong textarea:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    background: rgba(26, 26, 26, 0.95);
+}
+
+body.theme-wukong input::placeholder,
+body.theme-wukong textarea::placeholder {
+    color: rgba(255, 215, 0, 0.5);
+}
+
+/* 按钮样式 */
+body.theme-wukong button,
+body.theme-wukong .btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1A1A1A;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-wukong button::before,
+body.theme-wukong .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+body.theme-wukong button:hover::before,
+body.theme-wukong .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+body.theme-wukong button:hover,
+body.theme-wukong .btn:hover {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+body.theme-wukong button:active,
+body.theme-wukong .btn:active {
+    transform: translateY(0);
+}
+
+/* 卡片样式 */
+body.theme-wukong .card,
+body.theme-wukong .game-card {
+    background: linear-gradient(
+        135deg,
+        rgba(26, 26, 26, 0.95) 0%,
+        rgba(40, 30, 10, 0.95) 100%
+    );
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-wukong .card::before,
+body.theme-wukong .game-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    border-radius: 12px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+body.theme-wukong .card:hover,
+body.theme-wukong .game-card:hover {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    transform: translateY(-5px);
+}
+
+body.theme-wukong .card:hover::before,
+body.theme-wukong .game-card:hover::before {
+    opacity: 0.3;
+    animation: wukongBorderGlow 2s linear infinite;
+}
+
+@keyframes wukongBorderGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 标题样式 */
+body.theme-wukong h1,
+body.theme-wukong h2,
+body.theme-wukong h3 {
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    position: relative;
+}
+
+body.theme-wukong h1::after,
+body.theme-wukong h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #FFD700, transparent);
+}
+
+/* 链接样式 */
+body.theme-wukong a {
+    color: #FFD700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+body.theme-wukong a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    transition: width 0.3s ease;
+}
+
+body.theme-wukong a:hover::after {
+    width: 100%;
+}
+
+body.theme-wukong a:hover {
+    color: #FFDF00;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* 导航栏样式 */
+body.theme-wukong nav,
+body.theme-wukong header {
+    background: linear-gradient(
+        135deg,
+        rgba(13, 13, 13, 0.98) 0%,
+        rgba(26, 15, 0, 0.98) 100%
+    );
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.1);
+}
+
+/* 侧边栏样式 */
+body.theme-wukong .sidebar {
+    background: linear-gradient(
+        180deg,
+        rgba(13, 13, 13, 0.95) 0%,
+        rgba(26, 15, 0, 0.95) 100%
+    );
+    border-left: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+/* 标签样式 */
+body.theme-wukong .tag,
+body.theme-wukong .badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1A1A1A;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+}
+
+/* 进度条样式 */
+body.theme-wukong .progress-bar {
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 8px;
+}
+
+body.theme-wukong .progress-fill {
+    background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transition: width 0.3s ease;
+}
+
+/* 价格标签 */
+body.theme-wukong .price {
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-wukong .original-price {
+    color: #999999;
+    text-decoration: line-through;
+    font-size: 16px;
+}
+
+body.theme-wukong .discount-badge {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    color: #FFD700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+}
+
+/* 图片容器 */
+body.theme-wukong .game-cover,
+body.theme-wukong .image-container {
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+body.theme-wukong .game-cover:hover,
+body.theme-wukong .image-container:hover {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+    transform: scale(1.05);
+}
+
+/* 加载动画 */
+body.theme-wukong .loading {
+    border: 4px solid rgba(255, 215, 0, 0.2);
+    border-top: 4px solid #FFD700;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: wukongSpin 1s linear infinite;
+}
+
+@keyframes wukongSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    body.theme-wukong ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    body.theme-wukong select {
+        font-size: 13px;
+        padding: 6px 28px 6px 10px;
+    }
+    
+    body.theme-wukong button,
+    body.theme-wukong .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    body.theme-wukong {
+        background: white;
+        color: black;
+    }
+    
+    body.theme-wukong .wukong-effects-container {
+        display: none !important;
+    }
+}

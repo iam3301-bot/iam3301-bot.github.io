@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑神话：悟空主题测试 - GameBox</title>
+    
+    <!-- 悟空主题样式 -->
+    <link rel="stylesheet" href="wukong-styles.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: #FFA500;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-card {
+            padding: 30px;
+        }
+        
+        .demo-card h3 {
+            margin-bottom: 20px;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .demo-inputs input,
+        .demo-inputs select,
+        .demo-inputs textarea {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .demo-inputs textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .demo-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .demo-progress {
+            margin-top: 15px;
+        }
+        
+        .demo-progress p {
+            margin-bottom: 10px;
+            color: #DDDDDD;
+        }
+        
+        .demo-prices {
+            margin-top: 20px;
+        }
+        
+        .price-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .controls h2 {
+            margin-bottom: 20px;
+        }
+        
+        .loading-demo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="theme-wukong">
+    <div class="container">
+        <div class="header">
+            <h1>🐵 黑神话：悟空主题</h1>
+            <p>Black Myth: Wukong Theme Demo</p>
+        </div>
+        
+        <div class="demo-grid">
+            <!-- 按钮演示 -->
+            <div class="card demo-card">
+                <h3>🎮 按钮样式</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">各种交互按钮效果</p>
+                <div class="demo-buttons">
+                    <button>主要按钮</button>
+                    <button>立即购买</button>
+                    <button>加入愿望单</button>
+                    <button>了解更多</button>
+                </div>
+            </div>
+            
+            <!-- 输入框演示 -->
+            <div class="card demo-card">
+                <h3>📝 表单元素</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">输入框和下拉选择</p>
+                <div class="demo-inputs">
+                    <input type="text" placeholder="输入游戏名称搜索...">
+                    <select>
+                        <option>选择游戏类型</option>
+                        <option>动作游戏</option>
+                        <option>角色扮演</option>
+                        <option>冒险游戏</option>
+                    </select>
+                    <textarea placeholder="输入您的评论..."></textarea>
+                </div>
+            </div>
+            
+            <!-- 标签演示 -->
+            <div class="card demo-card">
+                <h3>🏷️ 标签和徽章</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">游戏分类和特性标签</p>
+                <div class="demo-tags">
+                    <span class="tag">动作</span>
+                    <span class="tag">RPG</span>
+                    <span class="tag">中国风</span>
+                    <span class="badge">新品</span>
+                    <span class="badge">热门</span>
+                    <span class="badge">独占</span>
+                </div>
+            </div>
+            
+            <!-- 进度条演示 -->
+            <div class="card demo-card">
+                <h3>📊 进度指示</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">下载和成就进度</p>
+                <div class="demo-progress">
+                    <p>下载进度: 75%</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="demo-progress">
+                    <p>成就完成度: 45%</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 价格演示 -->
+            <div class="card demo-card">
+                <h3>💰 价格展示</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">促销价格和折扣</p>
+                <div class="demo-prices">
+                    <div class="price-item">
+                        <span class="price">¥268</span>
+                        <span class="discount-badge">-20%</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price">¥168</span>
+                        <span class="original-price">¥268</span>
+                        <span class="discount-badge">-37%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 加载动画演示 -->
+            <div class="card demo-card">
+                <h3>⏳ 加载动画</h3>
+                <p style="color: #DDDDDD; margin-bottom: 15px;">数据加载中...</p>
+                <div class="loading-demo">
+                    <div class="loading"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <h2>✨ 特效控制</h2>
+            <p style="color: #DDDDDD; margin-bottom: 20px;">体验黑神话：悟空的独特视觉效果</p>
+            <div class="demo-buttons">
+                <button onclick="toggleEffects()">切换特效</button>
+                <button onclick="testRipple()">测试点击涟漪</button>
+                <button onclick="location.reload()">重置页面</button>
+                <button onclick="window.location.href='index.html'">返回首页</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 悟空特效系统 -->
+    <script src="wukong-effects.js"></script>
+    
+    <script>
+        console.log('🐵 黑神话：悟空主题测试页面加载完成！');
+        
+        function toggleEffects() {
+            if (window.wukongEffects) {
+                window.wukongEffects.toggle(!window.wukongEffects.isActive);
+                alert(window.wukongEffects.isActive ? '特效已开启' : '特效已关闭');
+            }
+        }
+        
+        function testRipple() {
+            alert('请在页面任意位置点击，查看金色涟漪效果！');
+        }
+        
+        // 检查特效系统状态
+        setTimeout(() => {
+            if (window.wukongEffects) {
+                console.log('✅ 悟空特效系统运行中');
+                console.log('特效状态:', {
+                    isActive: window.wukongEffects.isActive,
+                    config: window.wukongEffects.config
+                });
+            } else {
+                console.warn('⚠️ 悟空特效系统未初始化');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
