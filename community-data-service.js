@@ -822,6 +822,213 @@
     return { success: false, error: '帖子不存在' };
   }
 
+  // =============================================
+  // 活动追踪系统 - 真实且可追溯的数据记录
+  // =============================================
+  
+  const ACTIVITY_LOG_KEY = 'gamebox_activity_log';
+  const MAX_ACTIVITY_LOGS = 500; // 保留最近500条活动记录
+  
+  /**
+   * 记录用户活动 - 生成可追溯的活动日志
+   */
+  function logActivity(action, details = {}) {
+    try {
+      const logsJson = localStorage.getItem(ACTIVITY_LOG_KEY);
+      let logs = logsJson ? JSON.parse(logsJson) : [];
+      
+      const currentUser = getCurrentUserId();
+      const activity = {
+        id: `act-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+        action: action,
+        userId: currentUser,
+        timestamp: new Date().toISOString(),
+        epochTime: Date.now(),
+        details: details,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent.substring(0, 100) : 'unknown',
+        sessionId: getSessionId()
+      };
+      
+      logs.unshift(activity);
+      
+      // 限制日志数量
+      if (logs.length > MAX_ACTIVITY_LOGS) {
+        logs = logs.slice(0, MAX_ACTIVITY_LOGS);
+      }
+      
+      localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(logs));
+      
+      // 如果配置了 Supabase，同步到服务器
+      if (useSupabase && supabaseClient) {
+        syncActivityToServer(activity);
+      }
+      
+      console.log(`📝 活动记录: ${action}`, details);
+      return activity;
+    } catch (e) {
+      console.error('记录活动失败:', e);
+      return null;
+    }
+  }
+  
+  /**
+   * 获取会话ID
+   */
+  function getSessionId() {
+    let sessionId = sessionStorage.getItem('gamebox_session_id');
+    if (!sessionId) {
+      sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      sessionStorage.setItem('gamebox_session_id', sessionId);
+    }
+    return sessionId;
+  }
+  
+  /**
+   * 同步活动到服务器
+   */
+  async function syncActivityToServer(activity) {
+    if (!useSupabase || !supabaseClient) return;
+    
+    try {
+      await supabaseClient
+        .from('activity_logs')
+        .insert([{
+          id: activity.id,
+          action: activity.action,
+          user_id: activity.userId,
+          details: activity.details,
+          session_id: activity.sessionId,
+          created_at: activity.timestamp
+        }]);
+    } catch (e) {
+      // 静默失败，不影响主流程
+      console.debug('活动同步失败:', e);
+    }
+  }
+  
+  /**
+   * 获取活动日志
+   */
+  function getActivityLogs(options = {}) {
+    try {
+      const logsJson = localStorage.getItem(ACTIVITY_LOG_KEY);
+      let logs = logsJson ? JSON.parse(logsJson) : [];
+      
+      // 过滤选项
+      if (options.action) {
+        logs = logs.filter(l => l.action === options.action);
+      }
+      if (options.userId) {
+        logs = logs.filter(l => l.userId === options.userId);
+      }
+      if (options.since) {
+        logs = logs.filter(l => l.epochTime >= options.since);
+      }
+      if (options.limit) {
+        logs = logs.slice(0, options.limit);
+      }
+      
+      return logs;
+    } catch (e) {
+      console.error('获取活动日志失败:', e);
+      return [];
+    }
+  }
+  
+  /**
+   * 获取活动统计摘要
+   */
+  function getActivitySummary(hours = 24) {
+    const since = Date.now() - hours * 60 * 60 * 1000;
+    const logs = getActivityLogs({ since });
+    
+    const summary = {
+      totalActivities: logs.length,
+      uniqueUsers: new Set(logs.map(l => l.userId)).size,
+      byAction: {},
+      timeRange: {
+        start: new Date(since).toISOString(),
+        end: new Date().toISOString()
+      }
+    };
+    
+    logs.forEach(log => {
+      summary.byAction[log.action] = (summary.byAction[log.action] || 0) + 1;
+    });
+    
+    return summary;
+  }
+  
+  /**
+   * 导出活动日志为 JSON（用于数据追溯）
+   */
+  function exportActivityLogs() {
+    const logs = getActivityLogs();
+    const exportData = {
+      exportTime: new Date().toISOString(),
+      totalRecords: logs.length,
+      logs: logs
+    };
+    
+    return JSON.stringify(exportData, null, 2);
+  }
+  
+  // 包装原有函数以添加活动追踪
+  const originalCreatePost = createPost;
+  createPost = async function(postData) {
+    const result = await originalCreatePost(postData);
+    if (result.success) {
+      logActivity('CREATE_POST', {
+        postId: result.post.id,
+        title: result.post.title,
+        board: result.post.board
+      });
+    }
+    return result;
+  };
+  
+  const originalAddComment = addComment;
+  addComment = async function(postId, commentData) {
+    const result = await originalAddComment(postId, commentData);
+    if (result.success) {
+      logActivity('ADD_COMMENT', {
+        postId: postId,
+        commentId: result.comment.id
+      });
+    }
+    return result;
+  };
+  
+  const originalLikePost = likePost;
+  likePost = async function(postId) {
+    const result = await originalLikePost(postId);
+    if (result.success) {
+      logActivity(result.liked ? 'LIKE_POST' : 'UNLIKE_POST', {
+        postId: postId,
+        newLikeCount: result.likes
+      });
+    }
+    return result;
+  };
+  
+  // 记录页面访问
+  function logPageView(pageName) {
+    logActivity('PAGE_VIEW', { page: pageName });
+  }
+  
+  // 记录用户登录
+  function logUserLogin(userId) {
+    logActivity('USER_LOGIN', { userId: userId });
+  }
+  
+  // 记录平台绑定
+  function logPlatformBinding(platform, accountInfo) {
+    logActivity('PLATFORM_BIND', {
+      platform: platform,
+      accountName: accountInfo.username || accountInfo.personaName || 'unknown'
+    });
+  }
+
   // 导出API
   window.communityDataService = {
     initCommunityData,
@@ -836,11 +1043,22 @@
     getOnlineUsers,
     getOnlineUserCount,
     likePost,
-    updateStats
+    updateStats,
+    // 活动追踪 API
+    logActivity,
+    getActivityLogs,
+    getActivitySummary,
+    exportActivityLogs,
+    logPageView,
+    logUserLogin,
+    logPlatformBinding
   };
 
   // 初始化
   initCommunityData();
   
-  console.log('✅ 社区数据服务已加载 (支持实时更新)');
+  // 记录服务初始化
+  logActivity('SERVICE_INIT', { service: 'communityDataService' });
+  
+  console.log('✅ 社区数据服务已加载 (支持实时更新 + 活动追踪)');
 })();

@@ -187,6 +187,103 @@
       color: var(--text-muted);
     }
     
+    /* 平台绑定汇总 */
+    .platform-summary {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(31, 41, 55, 0.8));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .platform-summary-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .platform-summary-title::before {
+      content: '🎮';
+    }
+    
+    .platform-summary-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .platform-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .platform-chip:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .platform-chip-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .platform-chip-icon.steam {
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+    }
+    
+    .platform-chip-icon.epic {
+      background: linear-gradient(135deg, #2f2f2f, #1a1a1a);
+    }
+    
+    .platform-chip-icon.xbox {
+      background: linear-gradient(135deg, #107c10, #0e6b0e);
+    }
+    
+    .platform-chip-icon.playstation {
+      background: linear-gradient(135deg, #003087, #00246d);
+    }
+    
+    .platform-chip-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .platform-chip-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    
+    .platform-chip-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    .platform-chip-badge {
+      padding: 3px 8px;
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #0a0f1a;
+    }
+    
     /* Steam 区域 - 小黑盒风格 */
     .steam-section {
       background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(20, 30, 45, 0.9));
@@ -1072,6 +1169,14 @@
           </div>
         </div>
         
+        <!-- 平台绑定汇总 -->
+        <div class="platform-summary" id="platformSummary" style="display: none;">
+          <div class="platform-summary-title">已绑定平台</div>
+          <div class="platform-summary-grid" id="platformSummaryGrid">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+        
         <!-- Steam 绑定区域 - 小黑盒风格 -->
         <div class="steam-section" id="steamSection">
           <div class="steam-header">
@@ -1517,21 +1622,135 @@
     const ownedGames = getLocalArray('ownedGames');
     const wishlistGames = getLocalArray('wishlistGames');
     
-    // 总游戏数 (本地 + Steam)
+    // 计算所有平台的总游戏数
     let totalOwned = ownedGames.length;
+    let totalPlaytime = 0;
+    
+    // Steam
     if (userData.steam?.linked && userData.steam?.gameCount) {
-      totalOwned = Math.max(totalOwned, userData.steam.gameCount);
+      totalOwned += userData.steam.gameCount;
+      totalPlaytime += userData.steam.totalPlaytime || 0;
     }
+    
+    // Epic Games
+    const epicAccounts = userData.epicAccounts || [];
+    epicAccounts.forEach(account => {
+      totalOwned += account.gameCount || 0;
+    });
+    
+    // Xbox
+    const xboxAccounts = userData.xboxAccounts || [];
+    xboxAccounts.forEach(account => {
+      totalOwned += account.gameCount || 0;
+    });
+    
+    // PlayStation
+    const playstationAccounts = userData.playstationAccounts || [];
+    playstationAccounts.forEach(account => {
+      totalOwned += account.gameCount || 0;
+    });
     
     document.getElementById('statOwnedGames').textContent = totalOwned;
     document.getElementById('statWishlistGames').textContent = wishlistGames.length;
     
     // 游戏时长
-    let totalPlaytime = userData.steam?.totalPlaytime || 0;
     document.getElementById('statPlaytime').textContent = formatPlaytimeShort(totalPlaytime);
     
     // 等级
     document.getElementById('statLevel').textContent = 'Lv.' + calculateLevel();
+    
+    // 在控制台记录平台统计
+    console.log('📊 平台数据统计:', {
+      本地: ownedGames.length,
+      Steam: userData.steam?.gameCount || 0,
+      Epic: epicAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0),
+      Xbox: xboxAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0),
+      PlayStation: playstationAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0),
+      总计: totalOwned
+    });
+    
+    // 渲染平台汇总
+    renderPlatformSummary();
+  }
+  
+  // 渲染平台绑定汇总
+  function renderPlatformSummary() {
+    const summaryEl = document.getElementById('platformSummary');
+    const gridEl = document.getElementById('platformSummaryGrid');
+    
+    const platforms = [];
+    
+    // Steam
+    if (userData.steam?.linked) {
+      platforms.push({
+        name: 'Steam',
+        icon: '🎮',
+        iconClass: 'steam',
+        count: userData.steam.gameCount || 0,
+        accounts: 1,
+        username: userData.steam.personaName || 'Steam用户'
+      });
+    }
+    
+    // Epic
+    const epicAccounts = userData.epicAccounts || [];
+    if (epicAccounts.length > 0) {
+      const totalEpicGames = epicAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0);
+      platforms.push({
+        name: 'Epic',
+        icon: 'E',
+        iconClass: 'epic',
+        count: totalEpicGames,
+        accounts: epicAccounts.length,
+        username: epicAccounts[0]?.username || 'Epic用户'
+      });
+    }
+    
+    // Xbox
+    const xboxAccounts = userData.xboxAccounts || [];
+    if (xboxAccounts.length > 0) {
+      const totalXboxGames = xboxAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0);
+      platforms.push({
+        name: 'Xbox',
+        icon: 'X',
+        iconClass: 'xbox',
+        count: totalXboxGames,
+        accounts: xboxAccounts.length,
+        username: xboxAccounts[0]?.username || 'Xbox用户'
+      });
+    }
+    
+    // PlayStation
+    const psAccounts = userData.playstationAccounts || [];
+    if (psAccounts.length > 0) {
+      const totalPSGames = psAccounts.reduce((sum, a) => sum + (a.gameCount || 0), 0);
+      platforms.push({
+        name: 'PlayStation',
+        icon: 'P',
+        iconClass: 'playstation',
+        count: totalPSGames,
+        accounts: psAccounts.length,
+        username: psAccounts[0]?.username || 'PSN用户'
+      });
+    }
+    
+    if (platforms.length === 0) {
+      summaryEl.style.display = 'none';
+      return;
+    }
+    
+    summaryEl.style.display = 'block';
+    
+    gridEl.innerHTML = platforms.map(p => `
+      <div class="platform-chip" onclick="window.location.href='accounts.html'">
+        <div class="platform-chip-icon ${p.iconClass}">${p.icon}</div>
+        <div class="platform-chip-info">
+          <div class="platform-chip-name">${p.name}</div>
+          <div class="platform-chip-count">${p.username}</div>
+        </div>
+        <div class="platform-chip-badge">${p.count} 游戏</div>
+      </div>
+    `).join('');
   }
   
   function calculateLevel() {
@@ -1544,10 +1763,30 @@
     // Steam 数据
     if (userData.steam?.linked) {
       points += userData.steam.gameCount * 5;
-      points += Math.floor(userData.steam.totalPlaytime / 60); // 每小时1点
+      points += Math.floor((userData.steam.totalPlaytime || 0) / 60); // 每小时1点
     }
     
+    // Epic Games 数据
+    const epicAccounts = userData.epicAccounts || [];
+    epicAccounts.forEach(account => {
+      points += (account.gameCount || 0) * 3;
+    });
+    
+    // Xbox 数据
+    const xboxAccounts = userData.xboxAccounts || [];
+    xboxAccounts.forEach(account => {
+      points += (account.gameCount || 0) * 3;
+    });
+    
+    // PlayStation 数据
+    const playstationAccounts = userData.playstationAccounts || [];
+    playstationAccounts.forEach(account => {
+      points += (account.gameCount || 0) * 3;
+    });
+    
     // 计算等级
+    if (points >= 2000) return 15;
+    if (points >= 1500) return 12;
     if (points >= 1000) return 10;
     if (points >= 500) return 8;
     if (points >= 300) return 6;
