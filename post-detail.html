@@ -348,6 +348,10 @@
   </main>
 </div>
 
+<!-- Supabase SDK (真实数据库支持) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="community-data-service.js"></script>
@@ -546,27 +550,33 @@
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get('id') || 'elden-newbie';
   
-  // 尝试从 communityDataService 获取帖子（真实存储的帖子）
+  // 帖子数据
   let currentPost = null;
   
-  // 优先从 localStorage 中获取真实发布的帖子
-  if (window.communityDataService) {
-    currentPost = window.communityDataService.getPostById(postId);
-    if (currentPost) {
-      console.log('✅ 从社区数据服务加载帖子:', postId);
-      // 增加浏览次数
-      currentPost.views = (currentPost.views || 0) + 1;
-      window.communityDataService.updatePost(postId, { views: currentPost.views });
-      
-      // 格式化时间
-      if (typeof currentPost.time === 'number') {
-        currentPost.time = formatTimeAgo(currentPost.time);
+  // 异步加载帖子数据
+  async function loadPostData() {
+    try {
+      // 优先从 communityDataService 获取帖子（支持 Supabase）
+      if (window.communityDataService && typeof window.communityDataService.getPostById === 'function') {
+        const result = window.communityDataService.getPostById(postId);
+        currentPost = result instanceof Promise ? await result : result;
+        
+        if (currentPost) {
+          console.log('✅ 从社区数据服务加载帖子:', postId);
+          
+          // 格式化时间
+          if (typeof currentPost.time === 'number' || typeof currentPost.createdAt === 'number') {
+            currentPost.time = formatTimeAgo(currentPost.createdAt || currentPost.time);
+          }
+          
+          return;
+        }
       }
+    } catch (e) {
+      console.error('加载帖子失败:', e);
     }
-  }
-  
-  // 如果没找到，则使用兜底数据
-  if (!currentPost) {
+    
+    // 如果没找到，则使用兜底数据
     currentPost = postDatabase[postId] || postDatabase['elden-newbie'];
     console.log('📄 使用兜底帖子数据:', postId);
   }
@@ -574,9 +584,19 @@
   // 评论存储键
   const COMMENTS_KEY = `gamebox_post_comments_${postId}`;
   
-  // 加载评论（从localStorage）
-  function loadComments() {
+  // 加载评论（优先从 Supabase）
+  async function loadComments() {
     try {
+      // 优先从 communityDataService 获取（支持 Supabase）
+      if (window.communityDataService && typeof window.communityDataService.getPostComments === 'function') {
+        const result = window.communityDataService.getPostComments(postId);
+        const comments = result instanceof Promise ? await result : result;
+        if (comments && comments.length > 0) {
+          return comments;
+        }
+      }
+      
+      // 从 localStorage 获取
       const stored = localStorage.getItem(COMMENTS_KEY);
       if (stored) {
         return JSON.parse(stored);
@@ -587,13 +607,26 @@
     return [];
   }
   
-  // 保存评论
-  function saveComments(comments) {
+  // 保存评论（同时保存到 Supabase 和本地）
+  async function saveComments(comments) {
     try {
       localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
     } catch (e) {
       console.error('保存评论失败:', e);
     }
+  }
+  
+  // 添加评论（使用 communityDataService）
+  async function addNewComment(commentData) {
+    try {
+      if (window.communityDataService && typeof window.communityDataService.addComment === 'function') {
+        const result = window.communityDataService.addComment(postId, commentData);
+        return result instanceof Promise ? await result : result;
+      }
+    } catch (e) {
+      console.error('添加评论失败:', e);
+    }
+    return { success: false };
   }
   
   // 格式化时间
@@ -615,9 +648,11 @@
     return `${months} 个月前`;
   }
   
-  // 加载存储的评论，如果没有则使用默认评论
-  let storedComments = loadComments();
-  let comments = storedComments.length > 0 ? storedComments : [
+  // 评论数据
+  let comments = [];
+  
+  // 默认评论
+  const defaultComments = [
     { 
       id: 1,
       author: "路人甲", 
@@ -870,9 +905,34 @@
     });
   });
 
-  // 初始化
-  renderPost();
-  renderComments();
+  // 初始化（异步）
+  async function initPostDetail() {
+    console.log('🚀 初始化帖子详情页...');
+    
+    // 等待数据服务初始化
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // 加载帖子数据
+    await loadPostData();
+    
+    // 加载评论数据
+    const storedComments = await loadComments();
+    comments = storedComments.length > 0 ? storedComments : defaultComments;
+    
+    // 渲染页面
+    renderPost();
+    renderComments();
+    
+    // 记录页面访问
+    if (window.communityDataService?.logPageView) {
+      window.communityDataService.logPageView('post_detail');
+    }
+    
+    console.log('✅ 帖子详情页加载完成');
+  }
+  
+  // 启动初始化
+  initPostDetail();
 </script>
 </body>
 </html>

@@ -518,13 +518,11 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 
-<!-- Firebase SDK (可选 - 启用真实后端数据) -->
-<!-- 取消注释以下两行以启用Firebase支持: -->
-<!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> -->
-<!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script> -->
-<!-- <script src="firebase-service.js"></script> -->
+<!-- Supabase SDK (真实数据库支持) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 
-<!-- LocalStorage数据服务 (默认) -->
+<!-- 社区数据服务 (自动检测 Supabase 或 LocalStorage) -->
 <script src="community-data-service.js"></script>
 <script src="create-post-modal.js"></script>
 <script>
@@ -760,19 +758,29 @@
   }
 
   // 渲染在线用户 - 使用实时数据
-  function renderOnlineUsers() {
+  async function renderOnlineUsers() {
     const container = document.getElementById("onlineUsers");
-    // 从实时数据服务获取在线用户
-    const realOnlineUsers = window.communityDataService.getOnlineUsers() || onlineUsers;
-    const displayUsers = realOnlineUsers.slice(0, 6);
-    const remainingCount = Math.max(0, realOnlineUsers.length - 6);
-    
-    container.innerHTML = displayUsers.map(user => `
-      <div class="online-user">
-        <span class="online-dot"></span>
-        <span>${user}</span>
-      </div>
-    `).join('') + (remainingCount > 0 ? `<div class="online-user" style="color: var(--text-muted);">+${remainingCount} 更多</div>` : '');
+    try {
+      // 从实时数据服务获取在线用户（支持异步）
+      let realOnlineUsers;
+      if (typeof window.communityDataService.getOnlineUsers === 'function') {
+        const result = window.communityDataService.getOnlineUsers();
+        realOnlineUsers = result instanceof Promise ? await result : result;
+      }
+      realOnlineUsers = realOnlineUsers || onlineUsers;
+      
+      const displayUsers = realOnlineUsers.slice(0, 6);
+      const remainingCount = Math.max(0, realOnlineUsers.length - 6);
+      
+      container.innerHTML = displayUsers.map(user => `
+        <div class="online-user">
+          <span class="online-dot"></span>
+          <span>${user}</span>
+        </div>
+      `).join('') + (remainingCount > 0 ? `<div class="online-user" style="color: var(--text-muted);">+${remainingCount} 更多</div>` : '');
+    } catch (e) {
+      console.error('渲染在线用户失败:', e);
+    }
   }
 
   // 更新板块计数
@@ -816,11 +824,12 @@
     try {
       let stats;
       
-      // 优先使用Firebase，否则使用LocalStorage实时服务
-      if (window.firebaseService && window.firebaseService.isEnabled) {
-        stats = await window.firebaseService.getCommunityStats();
+      // 使用社区数据服务获取统计（自动选择 Supabase 或本地存储）
+      if (window.communityDataService && typeof window.communityDataService.getCommunityStats === 'function') {
+        const result = window.communityDataService.getCommunityStats();
+        stats = result instanceof Promise ? await result : result;
       } else {
-        stats = window.communityDataService.getCommunityStats();
+        stats = { totalPosts: 0, totalMembers: 5678, totalReplies: 12345, onlineUsers: 89 };
       }
       
       // 动画效果更新数字
@@ -830,9 +839,11 @@
       animateNumber('statOnline', stats.onlineUsers);
       
       // 同时更新在线用户列表
-      renderOnlineUsers();
+      await renderOnlineUsers();
       
-      console.log('📊 社区统计实时更新:', stats);
+      // 显示数据来源
+      const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
+      console.log(`📊 社区统计更新 [${isSupabase ? 'Supabase' : '本地存储'}]:`, stats);
     } catch (error) {
       console.error('❌ 更新统计失败:', error);
     }
@@ -874,47 +885,75 @@
   // 刷新帖子数据
   async function refreshPostsData() {
     try {
-      // 优先使用Firebase，否则使用LocalStorage
-      if (window.firebaseService && window.firebaseService.isEnabled) {
-        postData = await window.firebaseService.getAllPosts();
+      // 使用社区数据服务获取帖子（自动选择 Supabase 或本地存储）
+      if (window.communityDataService && typeof window.communityDataService.getAllPosts === 'function') {
+        const result = window.communityDataService.getAllPosts();
+        postData = result instanceof Promise ? await result : result;
       } else {
-        postData = window.communityDataService.getAllPosts();
+        postData = postDataBackup;
+      }
+      
+      // 确保 postData 是数组
+      if (!Array.isArray(postData)) {
+        postData = postDataBackup;
       }
       
       renderPosts();
       updateBoardCounts();
-      updateCommunityStats();
+      await updateCommunityStats();
+      
+      // 记录页面访问
+      if (window.communityDataService?.logPageView) {
+        window.communityDataService.logPageView('community');
+      }
     } catch (error) {
       console.error('❌ 刷新数据失败:', error);
+      // 使用备份数据
+      postData = postDataBackup;
+      renderPosts();
+      updateBoardCounts();
     }
   }
 
   // 初始化（异步）
   async function initializeCommunity() {
+    console.log('🚀 初始化社区页面...');
+    
+    // 显示加载状态
+    const postListEl = document.getElementById('postList');
+    if (postListEl) {
+      postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🔄 正在加载社区数据...</div>';
+    }
+    
+    // 等待数据服务初始化
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // 加载数据
     await refreshPostsData();
     renderHotTopics();
-    renderOnlineUsers();
+    await renderOnlineUsers();
     
-    // 定期更新在线用户（每30秒）
+    // 定期更新（每30秒）
     setInterval(updateCommunityStats, 30000);
     
-    // 如果启用了Firebase，订阅实时更新
-    if (window.firebaseService && window.firebaseService.isEnabled) {
-      window.firebaseService.subscribeToPostUpdates((update) => {
-        console.log('📡 实时更新:', update);
-        refreshPostsData();
-      });
+    // 检查数据来源并显示状态
+    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
+    console.log(`✅ 社区页面初始化完成 [数据源: ${isSupabase ? 'Supabase 云数据库' : '本地存储'}]`);
+    
+    // 如果 Supabase 未配置，显示提示
+    if (!isSupabase) {
+      console.log('💡 提示: 配置 Supabase 可启用云端数据同步，详见 BACKEND_SETUP.md');
     }
   }
 
   // 启动初始化
   initializeCommunity();
   
-  // 每10秒刷新在线用户和统计数据（更实时）
-  setInterval(() => {
-    renderOnlineUsers();
-    updateCommunityStats();
-  }, 10000);
+  // 每15秒刷新在线用户和统计数据（更实时）
+  setInterval(async () => {
+    await renderOnlineUsers();
+    await updateCommunityStats();
+  }, 15000);
   
   // 监听社区数据更新事件
   window.addEventListener('community-stats-update', () => {
@@ -922,8 +961,15 @@
   });
   
   window.addEventListener('community-update', (e) => {
-    console.log('📡 收到社区更新:', e.detail);
+    console.log('📡 收到社区实时更新:', e.detail);
     refreshPostsData();
+  });
+  
+  // 页面可见性变化时刷新数据
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      refreshPostsData();
+    }
   });
 </script>
 </body>
