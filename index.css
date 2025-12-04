@@ -2239,14 +2239,14 @@ mark {
 }
 
 .ranking-list--scroll::-webkit-scrollbar-thumb {
-  border-radius: 999px;
+  border-radius: 4px;
   background: linear-gradient(
     180deg,
     rgba(148, 163, 184, 0.85),
     rgba(75, 85, 99, 0.95)
   );
-  border: 2px solid rgba(2, 6, 23, 0.95); /* 外围留一圈深色，融入背景 */
-  box-shadow: 0 0 6px rgba(15, 23, 42, 0.9);
+  /* 移除边框，让主题样式控制 */
+  box-shadow: 0 0 6px rgba(15, 23, 42, 0.6);
 }
 
 .ranking-list--scroll::-webkit-scrollbar-thumb:hover {
@@ -2255,6 +2255,7 @@ mark {
     rgba(248, 250, 252, 0.9),
     rgba(148, 163, 184, 1)
   );
+  box-shadow: 0 0 10px rgba(15, 23, 42, 0.8);
 }
 
 /* ========== 游戏详情页美化 ========== */

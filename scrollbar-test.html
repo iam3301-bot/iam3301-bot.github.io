@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>滚动条测试</title>
+  <link rel="stylesheet" href="themes/cyberpunk2077.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 200vh;
+      background: #0a0e27;
+      color: #e2e8f0;
+      font-family: Arial, sans-serif;
+    }
+    .test-box {
+      background: rgba(26, 35, 50, 0.9);
+      border: 2px solid #00F0FF;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="theme-cyberpunk2077">
+  <h1>滚动条样式测试</h1>
+  
+  <div class="test-box">
+    <h2>测试说明</h2>
+    <p>这是一个纯净的测试页面，只加载了cyberpunk2077.css主题文件。</p>
+    <p>请向下滚动页面，查看滚动条是否正确显示为青色到粉红的渐变。</p>
+  </div>
+  
+  <div class="test-box">
+    <h2>预期效果</h2>
+    <ul>
+      <li>滚动条宽度：8px</li>
+      <li>滚动条颜色：青色(#00F0FF)到粉红(#FF003C)的渐变</li>
+      <li>滚动条圆角：4px</li>
+      <li>无边框</li>
+      <li>轻微发光效果</li>
+    </ul>
+  </div>
+  
+  <div class="test-box">
+    <h2>填充内容</h2>
+    <p>下面是一些填充内容，用来让页面产生滚动条...</p>
+    <p style="height: 100px;">空白区域1</p>
+    <p style="height: 100px;">空白区域2</p>
+    <p style="height: 100px;">空白区域3</p>
+    <p style="height: 100px;">空白区域4</p>
+    <p style="height: 100px;">空白区域5</p>
+  </div>
+
+  <script>
+    console.log('Body classes:', document.body.className);
+    console.log('Theme CSS loaded:', !!document.querySelector('link[href*="cyberpunk2077"]'));
+    
+    // 检查滚动条样式
+    setTimeout(() => {
+      const scrollbarStyles = window.getComputedStyle(document.documentElement);
+      console.log('Computed styles available');
+    }, 1000);
+  </script>
+</body>
+</html>
