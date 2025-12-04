@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>切换账号 - GameBox 游盒</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    body {
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .switch-container {
+      max-width: 450px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .switch-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1);
+    }
+    
+    .switch-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00F0FF, #FF003C);
+    }
+    
+    .switch-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .switch-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #00F0FF;
+      margin-bottom: 8px;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .switch-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .current-account {
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .current-account-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 8px;
+    }
+    
+    .current-account-info {
+      font-size: 16px;
+      color: #00F0FF;
+      font-weight: 600;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #00F0FF;
+      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1);
+    }
+    
+    .switch-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #00F0FF, #00ccff);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 12px;
+    }
+    
+    .switch-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
+    }
+    
+    .cancel-btn {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      text-align: center;
+    }
+    
+    .message.error {
+      background: rgba(255, 0, 60, 0.1);
+      border: 1px solid rgba(255, 0, 60, 0.3);
+      color: #FF003C;
+    }
+    
+    .message.success {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <div class="switch-container">
+    <div class="switch-card">
+      <div class="switch-header">
+        <div class="switch-title">🔄 切换账号</div>
+        <div class="switch-subtitle">登录到其他 GameBox 账号</div>
+      </div>
+      
+      <div class="current-account">
+        <div class="current-account-label">当前账号</div>
+        <div class="current-account-info" id="currentAccount">加载中...</div>
+      </div>
+      
+      <div id="messageBox"></div>
+      
+      <form id="switchForm">
+        <div class="form-group">
+          <label class="form-label" for="email">邮箱地址</label>
+          <input type="email" id="email" class="form-input" placeholder="请输入邮箱" required />
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">密码</label>
+          <input type="password" id="password" class="form-input" placeholder="请输入密码" required />
+        </div>
+        
+        <button type="submit" class="switch-btn">🔄 切换到此账号</button>
+        <button type="button" class="cancel-btn" onclick="window.location.href='profile.html'">取消</button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="supabase-config.js"></script>
+  <script src="common.js"></script>
+  <script src="cyber-effects.js"></script>
+  <script>
+    // 初始化赛博朋克效果
+    if (typeof initCyberpunkEffects === 'function') {
+      initCyberpunkEffects();
+    }
+    
+    // 显示当前账号信息
+    function displayCurrentAccount() {
+      const userData = GameBoxAuth.getCurrentUser();
+      const currentAccountEl = document.getElementById('currentAccount');
+      
+      if (userData) {
+        currentAccountEl.textContent = `${userData.username || '未知用户'} (${userData.email || ''})`;
+      } else {
+        currentAccountEl.textContent = '未登录';
+      }
+    }
+    
+    // 显示消息
+    function showMessage(message, type = 'error') {
+      const messageBox = document.getElementById('messageBox');
+      messageBox.innerHTML = `<div class="message ${type}">${message}</div>`;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          messageBox.innerHTML = '';
+        }, 3000);
+      }
+    }
+    
+    // 处理表单提交
+    document.getElementById('switchForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        showMessage('请填写完整的登录信息', 'error');
+        return;
+      }
+      
+      try {
+        // 先登出当前账号
+        await GameBoxAuth.signOut();
+        
+        // 登录新账号
+        const result = await GameBoxAuth.signIn(email, password);
+        
+        if (result.success) {
+          showMessage('切换成功！正在跳转...', 'success');
+          setTimeout(() => {
+            window.location.href = 'profile.html';
+          }, 1500);
+        } else {
+          showMessage(result.message || '登录失败，请检查邮箱和密码', 'error');
+        }
+      } catch (error) {
+        console.error('切换账号失败:', error);
+        showMessage('切换失败：' + error.message, 'error');
+      }
+    });
+    
+    // 页面加载时显示当前账号
+    displayCurrentAccount();
+  </script>
+</body>
+</html>

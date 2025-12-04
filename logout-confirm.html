@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>退出登录 - GameBox 游盒</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    body {
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .logout-container {
+      max-width: 450px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .logout-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(255, 0, 60, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(255, 0, 60, 0.1);
+    }
+    
+    .logout-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #FF003C, #ff0066);
+    }
+    
+    .logout-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .logout-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .logout-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF003C;
+      margin-bottom: 8px;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .logout-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .current-account {
+      background: rgba(255, 0, 60, 0.1);
+      border: 1px solid rgba(255, 0, 60, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .current-account-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 8px;
+    }
+    
+    .current-account-info {
+      font-size: 16px;
+      color: #FF003C;
+      font-weight: 600;
+    }
+    
+    .warning-box {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid rgba(255, 165, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .warning-box-title {
+      font-size: 14px;
+      color: #ffa500;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .warning-box-text {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+    
+    .logout-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #FF003C, #ff0066);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 12px;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 0, 60, 0.4);
+    }
+    
+    .cancel-btn {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="logout-container">
+    <div class="logout-card">
+      <div class="logout-header">
+        <div class="logout-icon">🚪</div>
+        <div class="logout-title">退出登录</div>
+        <div class="logout-subtitle">确认要退出当前账号吗？</div>
+      </div>
+      
+      <div class="current-account">
+        <div class="current-account-label">当前登录账号</div>
+        <div class="current-account-info" id="currentAccount">加载中...</div>
+      </div>
+      
+      <div class="warning-box">
+        <div class="warning-box-title">⚠️ 注意</div>
+        <div class="warning-box-text">
+          • 退出后需要重新登录才能访问用户中心<br>
+          • 您的所有数据已安全保存<br>
+          • 可以随时重新登录此账号
+        </div>
+      </div>
+      
+      <button class="logout-btn" id="confirmLogoutBtn">🚪 确认退出</button>
+      <button class="cancel-btn" onclick="window.location.href='profile.html'">取消</button>
+    </div>
+  </div>
+  
+  <script src="supabase-config.js"></script>
+  <script src="common.js"></script>
+  <script src="cyber-effects.js"></script>
+  <script>
+    // 初始化赛博朋克效果
+    if (typeof initCyberpunkEffects === 'function') {
+      initCyberpunkEffects();
+    }
+    
+    // 显示当前账号信息
+    function displayCurrentAccount() {
+      const userData = GameBoxAuth.getCurrentUser();
+      const currentAccountEl = document.getElementById('currentAccount');
+      
+      if (userData) {
+        currentAccountEl.textContent = `${userData.username || '未知用户'} (${userData.email || ''})`;
+      } else {
+        currentAccountEl.textContent = '未登录';
+        // 如果未登录，直接跳转到登录页
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1000);
+      }
+    }
+    
+    // 处理退出登录
+    document.getElementById('confirmLogoutBtn').addEventListener('click', async () => {
+      try {
+        await GameBoxAuth.signOut();
+        // 跳转到登录页
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('退出登录失败:', error);
+        alert('退出失败：' + error.message);
+      }
+    });
+    
+    // 页面加载时显示当前账号
+    displayCurrentAccount();
+  </script>
+</body>
+</html>

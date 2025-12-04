@@ -194,20 +194,14 @@
       }
     }
     
-    // 切换账号 - 登出并跳转到登录页
-    document.getElementById('switchAccountBtn').addEventListener('click', async () => {
-      if (confirm('切换到其他账号？\n\n当前账号数据已保存，您可以登录其他账号。')) {
-        await GameBoxAuth.signOut();
-        window.location.href = 'login.html?action=switch';
-      }
+    // 切换账号 - 跳转到切换账号页面
+    document.getElementById('switchAccountBtn').addEventListener('click', () => {
+      window.location.href = 'switch-account.html';
     });
     
-    // 退出登录 - 登出并跳转到登录页
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      if (confirm('确定要退出登录吗？\n\n退出后需要重新登录才能访问用户中心。')) {
-        await GameBoxAuth.signOut();
-        window.location.href = 'login.html';
-      }
+    // 退出登录 - 跳转到退出登录确认页面
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      window.location.href = 'logout-confirm.html';
     });
     
     // 页面加载时初始化
