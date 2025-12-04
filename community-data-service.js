@@ -735,13 +735,17 @@ ON CONFLICT (id) DO NOTHING;
     if (useSupabase && supabaseClient) {
       try {
         // 检查是否已点赞
-        const { data: existingLike } = await supabaseClient
+        const { data: existingLike, error: checkError } = await supabaseClient
           .from('community_likes')
           .select('id')
           .eq('target_type', 'post')
           .eq('target_id', postId)
           .eq('user_id', userId)
-          .single();
+          .maybeSingle();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+          throw checkError;
+        }
 
         if (existingLike) {
           // 取消点赞
@@ -750,9 +754,10 @@ ON CONFLICT (id) DO NOTHING;
             .delete()
             .eq('id', existingLike.id);
           isLiked = false;
+          console.log('👎 取消点赞:', postId);
         } else {
           // 添加点赞
-          await supabaseClient
+          const { error: insertError } = await supabaseClient
             .from('community_likes')
             .insert([{
               id: `like-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
@@ -761,7 +766,10 @@ ON CONFLICT (id) DO NOTHING;
               user_id: userId,
               created_at: new Date().toISOString()
             }]);
+
+          if (insertError) throw insertError;
           isLiked = true;
+          console.log('👍 点赞成功:', postId);
         }
 
         // 更新帖子点赞数
@@ -773,15 +781,21 @@ ON CONFLICT (id) DO NOTHING;
 
         await supabaseClient
           .from('community_posts')
-          .update({ likes: count || 0 })
+          .update({ likes: count || 0, updated_at: new Date().toISOString() })
           .eq('id', postId);
 
         // 记录活动
         await logActivity(isLiked ? 'LIKE_POST' : 'UNLIKE_POST', { postId, likes: count });
 
+        // 触发实时更新事件
+        window.dispatchEvent(new CustomEvent('post-like-update', { 
+          detail: { postId, liked: isLiked, likes: count || 0 } 
+        }));
+
         return { success: true, liked: isLiked, likes: count || 0 };
       } catch (e) {
         console.error('点赞操作失败:', e);
+        // 降级到本地存储
       }
     }
 
@@ -801,6 +815,12 @@ ON CONFLICT (id) DO NOTHING;
         isLiked = true;
       }
       localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(posts));
+      
+      // 触发实时更新事件
+      window.dispatchEvent(new CustomEvent('post-like-update', { 
+        detail: { postId, liked: isLiked, likes: post.likes } 
+      }));
+      
       return { success: true, liked: isLiked, likes: post.likes };
     }
     
@@ -808,27 +828,163 @@ ON CONFLICT (id) DO NOTHING;
   }
 
   /**
-   * 检查是否已点赞
+   * 检查是否已点赞帖子
    */
   async function isPostLiked(postId) {
     const userId = getCurrentUserId() || getAnonymousUserId();
 
     if (useSupabase && supabaseClient) {
       try {
-        const { data } = await supabaseClient
+        const { data, error } = await supabaseClient
           .from('community_likes')
           .select('id')
           .eq('target_type', 'post')
           .eq('target_id', postId)
           .eq('user_id', userId)
-          .single();
+          .maybeSingle();
+        
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
         return !!data;
       } catch (e) {
+        console.debug('检查点赞状态失败:', e);
         return false;
       }
     }
 
     return !!localStorage.getItem(`like_post_${postId}_${userId}`);
+  }
+
+  /**
+   * 点赞/取消点赞评论
+   */
+  async function likeComment(commentId) {
+    const userId = getCurrentUserId() || getAnonymousUserId();
+    const likeKey = `like_comment_${commentId}_${userId}`;
+    
+    let isLiked = false;
+
+    if (useSupabase && supabaseClient) {
+      try {
+        // 检查是否已点赞
+        const { data: existingLike, error: checkError } = await supabaseClient
+          .from('community_likes')
+          .select('id')
+          .eq('target_type', 'comment')
+          .eq('target_id', commentId)
+          .eq('user_id', userId)
+          .maybeSingle();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+          throw checkError;
+        }
+
+        if (existingLike) {
+          // 取消点赞
+          await supabaseClient
+            .from('community_likes')
+            .delete()
+            .eq('id', existingLike.id);
+          isLiked = false;
+        } else {
+          // 添加点赞
+          const { error: insertError } = await supabaseClient
+            .from('community_likes')
+            .insert([{
+              id: `like-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+              target_type: 'comment',
+              target_id: commentId,
+              user_id: userId,
+              created_at: new Date().toISOString()
+            }]);
+
+          if (insertError) throw insertError;
+          isLiked = true;
+        }
+
+        // 更新评论点赞数
+        const { count } = await supabaseClient
+          .from('community_likes')
+          .select('id', { count: 'exact', head: true })
+          .eq('target_type', 'comment')
+          .eq('target_id', commentId);
+
+        await supabaseClient
+          .from('community_comments')
+          .update({ likes: count || 0 })
+          .eq('id', commentId);
+
+        // 记录活动
+        await logActivity(isLiked ? 'LIKE_COMMENT' : 'UNLIKE_COMMENT', { commentId, likes: count });
+
+        return { success: true, liked: isLiked, likes: count || 0 };
+      } catch (e) {
+        console.error('评论点赞操作失败:', e);
+      }
+    }
+
+    // 本地存储模式
+    const liked = localStorage.getItem(likeKey);
+    
+    // 从本地存储获取评论数据
+    try {
+      const allComments = JSON.parse(localStorage.getItem(STORAGE_KEY_COMMENTS) || '{}');
+      
+      // 遍历所有帖子的评论查找目标评论
+      for (const postId in allComments) {
+        const comments = allComments[postId];
+        const comment = comments.find(c => c.id === commentId);
+        
+        if (comment) {
+          if (liked) {
+            comment.likes = Math.max(0, (comment.likes || 0) - 1);
+            localStorage.removeItem(likeKey);
+            isLiked = false;
+          } else {
+            comment.likes = (comment.likes || 0) + 1;
+            localStorage.setItem(likeKey, 'true');
+            isLiked = true;
+          }
+          
+          localStorage.setItem(STORAGE_KEY_COMMENTS, JSON.stringify(allComments));
+          return { success: true, liked: isLiked, likes: comment.likes };
+        }
+      }
+    } catch (e) {
+      console.error('本地评论点赞失败:', e);
+    }
+    
+    return { success: false, error: '评论不存在' };
+  }
+
+  /**
+   * 检查是否已点赞评论
+   */
+  async function isCommentLiked(commentId) {
+    const userId = getCurrentUserId() || getAnonymousUserId();
+
+    if (useSupabase && supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('community_likes')
+          .select('id')
+          .eq('target_type', 'comment')
+          .eq('target_id', commentId)
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
+        return !!data;
+      } catch (e) {
+        console.debug('检查评论点赞状态失败:', e);
+        return false;
+      }
+    }
+
+    return !!localStorage.getItem(`like_comment_${commentId}_${userId}`);
   }
 
   // =============================================
@@ -854,11 +1010,10 @@ ON CONFLICT (id) DO NOTHING;
           .eq('id', 1)
           .single();
 
-        // 计算真实回复数
-        const { data: posts } = await supabaseClient
-          .from('community_posts')
-          .select('replies');
-        const totalReplies = posts ? posts.reduce((sum, p) => sum + (p.replies || 0), 0) : 0;
+        // 计算真实回复数（从评论表获取）
+        const { count: totalComments } = await supabaseClient
+          .from('community_comments')
+          .select('id', { count: 'exact', head: true });
 
         // 获取在线用户数
         const onlineUsers = await getOnlineUserCount();
@@ -866,12 +1021,15 @@ ON CONFLICT (id) DO NOTHING;
         // 计算会员增长
         const memberGrowth = stats ? calculateMemberGrowth(stats.start_time) : 0;
 
-        return {
+        const result = {
           totalPosts: postsCount || 0,
           totalMembers: (stats?.total_members || 5678) + memberGrowth,
-          totalReplies: (stats?.total_replies || 0) + totalReplies,
+          totalReplies: (stats?.total_replies || 12345) + (totalComments || 0),
           onlineUsers: onlineUsers
         };
+
+        console.log('📊 Supabase 统计数据:', result);
+        return result;
       } catch (e) {
         console.error('获取 Supabase 统计失败:', e);
       }
@@ -1352,6 +1510,8 @@ ON CONFLICT (id) DO NOTHING;
     // 点赞功能
     likePost,
     isPostLiked,
+    likeComment,
+    isCommentLiked,
     
     // 统计功能
     getCommunityStats,
@@ -1368,7 +1528,12 @@ ON CONFLICT (id) DO NOTHING;
     // 辅助函数
     logPageView: (pageName) => logActivity('PAGE_VIEW', { page: pageName }),
     logUserLogin: (userId) => logActivity('USER_LOGIN', { userId }),
-    logPlatformBinding: (platform, info) => logActivity('PLATFORM_BIND', { platform, account: info?.username })
+    logPlatformBinding: (platform, info) => logActivity('PLATFORM_BIND', { platform, account: info?.username }),
+    
+    // 用户信息获取
+    getCurrentUserId,
+    getCurrentUsername,
+    getCurrentUserAvatar
   };
 
   // 自动初始化
