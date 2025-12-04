@@ -529,6 +529,11 @@
       root.style.setProperty('--theme-text-secondary', colors.text.secondary);
       root.style.setProperty('--theme-text-muted', colors.text.muted);
       
+      // 兼容旧版变量名
+      root.style.setProperty('--text-main', colors.text.primary);
+      root.style.setProperty('--text-soft', colors.text.secondary);
+      root.style.setProperty('--text-muted', colors.text.muted);
+      
       root.style.setProperty('--theme-border', colors.border);
       root.style.setProperty('--theme-success', colors.success);
       root.style.setProperty('--theme-warning', colors.warning);
@@ -702,7 +707,16 @@
           box-shadow: 0 0 15px var(--theme-primary) !important;
         }
         
-        .ranking-rank {
+        /* 游戏名称和信息 */
+        .ranking-name {
+          color: var(--theme-text-primary) !important;
+        }
+        
+        .ranking-meta {
+          color: var(--theme-primary) !important;
+        }
+        
+        .ranking-rank, .ranking-pos {
           background: var(--theme-bg-secondary) !important;
           color: var(--theme-primary) !important;
           border-color: var(--theme-border) !important;
