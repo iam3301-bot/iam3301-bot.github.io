@@ -915,6 +915,71 @@
     }
   }
   
+  // 知名游戏 AppID 映射表 (用于没有 AppID 时的降级方案)
+  const KNOWN_GAMES = {
+    'terraria': 105600,
+    'counter-strike 2': 730,
+    'cs2': 730,
+    'counter strike 2': 730,
+    'pubg: battlegrounds': 578080,
+    'pubg battlegrounds': 578080,
+    'playerunknown\'s battlegrounds': 578080,
+    'dota 2': 570,
+    'elden ring': 1245620,
+    'cyberpunk 2077': 1091500,
+    'black myth: wukong': 2358720,
+    'black myth wukong': 2358720,
+    'baldur\'s gate 3': 1086940,
+    'baldurs gate 3': 1086940,
+    'monster hunter: world': 582010,
+    'monster hunter world': 582010,
+    'hollow knight': 367520,
+    'hollow knight: silksong': 1030300,
+    'stardew valley': 413150,
+    'hades': 1145360,
+    'celeste': 504230,
+    'dead cells': 588650,
+    'the witcher 3': 292030,
+    'witcher 3': 292030,
+    'red dead redemption 2': 1174180,
+    'gta v': 271590,
+    'grand theft auto v': 271590,
+    'rust': 252490,
+    'ark': 346110,
+    'valheim': 892970,
+    'satisfactory': 526870,
+    'factorio': 427520,
+    'rimworld': 294100,
+    'don\'t starve together': 322330,
+    'dont starve together': 322330,
+    'persona 5 royal': 1687950,
+    'persona 4 golden': 1113000,
+    'persona 3 reload': 2161700,
+    'yu-gi-oh! master duel': 1449850,
+    'yugioh master duel': 1449850,
+    'wallpaper engine': 431960,
+    '3dmark': 223850,
+    'split fiction': 2001120,
+    'the alters': 1578060,
+    'battlefield 1': 1238840,
+    'battlefield v': 1238810,
+    'mydockfinder': 1454190,
+    'tmodloader': 1281930,
+    'forza horizon 5': 1551360,
+    'forza horizon 4': 1293830,
+    'hogwarts legacy': 1817070,
+    'delta force': 2507950,
+    'yakuza: like a dragon': 1235140,
+    'yakuza like a dragon': 1235140,
+  };
+  
+  // 通过游戏名获取 AppID
+  function getAppIdByName(name) {
+    if (!name) return null;
+    const normalizedName = name.toLowerCase().trim();
+    return KNOWN_GAMES[normalizedName] || null;
+  }
+
   // 渲染单个游戏卡片 - 全封面设计
   function renderGameCard(game) {
     const playtimeText = formatPlaytime(game.playtimeForever);
@@ -923,54 +988,49 @@
     
     // 获取 Steam AppID - 必须是纯数字
     let gameId = game.appId || game.appid || game.id;
+    
     // 确保 gameId 是有效的 Steam AppID (纯数字)
     if (gameId && !/^\d+$/.test(String(gameId))) {
-      console.warn('无效的 Steam AppID:', gameId, '游戏:', game.name);
       gameId = null;
     }
     
-    // 调试信息
-    console.log('渲染游戏卡片:', { 
-      name: game.name, 
-      appId: gameId, 
-      originalId: game.id,
-      source: game.source, 
-      thumbnail: game.thumbnail 
-    });
+    // 如果没有有效 AppID，尝试通过游戏名匹配
+    if (!gameId && game.name) {
+      gameId = getAppIdByName(game.name);
+      if (gameId) {
+        console.log(`🎯 通过游戏名匹配 AppID: ${game.name} -> ${gameId}`);
+      }
+    }
     
-    // Steam 高清封面图 URL (多重降级策略)
+    // Steam 高清封面图 URL
     const steamCoverUrl = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg` : '';
-    const steamCoverFallback1 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg` : '';
-    const steamCoverFallback2 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900.jpg` : '';
+    const steamCoverFallback = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg` : '';
     
     // 确定封面 URL
     let coverUrl = '';
-    // 优先使用已有的有效 thumbnail (必须是完整 URL)
     if (game.thumbnail && game.thumbnail.startsWith('http')) {
       coverUrl = game.thumbnail;
     } else if (gameId) {
       coverUrl = steamCoverUrl;
     }
     
-    // 安全处理游戏名称（用于 HTML 属性）
+    // 安全处理游戏名称
     const safeName = (game.name || 'Unknown').replace(/['"<>&]/g, '').substring(0, 25);
     
-    // 创建占位符 HTML
+    // 占位符 HTML
     const placeholderHTML = `<div class="cover-placeholder" data-name="${safeName}">🎮</div>`;
     
     // 封面图显示逻辑
     let coverImg;
     if (coverUrl) {
-      // 有封面 URL 时显示图片
       coverImg = `<img 
         src="${coverUrl}" 
         alt="${safeName}" 
         loading="lazy"
         style="width:100%;height:100%;object-fit:cover;"
-        onerror="this.onerror=null;this.src='${steamCoverFallback1 || coverUrl}';this.onerror=function(){this.src='${steamCoverFallback2 || coverUrl}';this.onerror=function(){this.parentElement.innerHTML='${placeholderHTML.replace(/'/g, "\\'")}';};}" 
+        onerror="this.onerror=null;this.src='${steamCoverFallback || coverUrl}';this.onerror=function(){this.parentElement.innerHTML='${placeholderHTML.replace(/'/g, "\\'")}';}" 
       />`;
     } else {
-      // 没有封面时显示占位符
       coverImg = placeholderHTML;
     }
     
