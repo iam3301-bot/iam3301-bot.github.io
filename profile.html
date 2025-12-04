@@ -1932,7 +1932,7 @@
           </div>
           
           <div class="modal-actions">
-            <button class="add-account-btn" onclick="window.location.href='login.html?action=add_account'">
+            <button class="add-account-btn" onclick="showAddAccountForm()">
               <span>➕</span> 添加其他账户
             </button>
             <button class="logout-all-btn" onclick="logoutAllAccounts()">
@@ -2188,6 +2188,250 @@
         console.error('退出失败:', error);
         showMessage('退出失败，请重试', 'error');
       }
+    }
+  }
+  
+  // 显示添加账户表单
+  window.showAddAccountForm = function() {
+    // 关闭切换账户弹窗
+    const switchModal = document.getElementById('switchAccountModal');
+    if (switchModal) switchModal.remove();
+    
+    const modal = document.createElement('div');
+    modal.id = 'addAccountModal';
+    modal.innerHTML = `
+      <div class="modal-overlay" onclick="document.getElementById('addAccountModal').remove()">
+        <div class="add-account-modal" onclick="event.stopPropagation()">
+          <div class="modal-header">
+            <h3>➕ 添加其他账户</h3>
+            <button class="modal-close" onclick="document.getElementById('addAccountModal').remove()">×</button>
+          </div>
+          
+          <div class="add-account-content">
+            <p class="add-account-note">
+              登录其他 GameBox 账户，登录后将自动保存到账户列表中，方便快速切换。
+            </p>
+            
+            <form id="addAccountForm" onsubmit="handleAddAccount(event)">
+              <div class="form-group">
+                <label>邮箱地址</label>
+                <input type="email" id="addAccountEmail" placeholder="请输入邮箱" required />
+              </div>
+              
+              <div class="form-group">
+                <label>登录密码</label>
+                <input type="password" id="addAccountPassword" placeholder="请输入密码" required />
+              </div>
+              
+              <div id="addAccountError" class="error-message" style="display: none;"></div>
+              
+              <button type="submit" class="submit-btn" id="addAccountSubmitBtn">
+                <span>登录并添加</span>
+              </button>
+            </form>
+            
+            <div class="form-footer">
+              <p>没有账户？<a href="login.html?tab=register" target="_blank">立即注册</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        .add-account-modal {
+          background: linear-gradient(145deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95));
+          border: 1px solid rgba(102, 192, 244, 0.3);
+          border-radius: 20px;
+          padding: 0;
+          width: 90%;
+          max-width: 400px;
+          overflow: hidden;
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+          animation: slideUp 0.3s ease;
+        }
+        
+        .add-account-content {
+          padding: 24px;
+        }
+        
+        .add-account-note {
+          color: var(--text-muted);
+          font-size: 13px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+          padding: 12px;
+          background: rgba(102, 192, 244, 0.1);
+          border-radius: 8px;
+          border-left: 3px solid #66c0f4;
+        }
+        
+        .form-group {
+          margin-bottom: 16px;
+        }
+        
+        .form-group label {
+          display: block;
+          font-size: 13px;
+          color: var(--text-soft);
+          margin-bottom: 8px;
+          font-weight: 500;
+        }
+        
+        .form-group input {
+          width: 100%;
+          padding: 14px 16px;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(102, 192, 244, 0.2);
+          border-radius: 10px;
+          color: var(--text-soft);
+          font-size: 14px;
+          transition: all 0.2s;
+          box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+          outline: none;
+          border-color: #66c0f4;
+          background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .error-message {
+          color: #ef4444;
+          font-size: 13px;
+          padding: 10px 12px;
+          background: rgba(239, 68, 68, 0.1);
+          border-radius: 8px;
+          margin-bottom: 16px;
+        }
+        
+        .submit-btn {
+          width: 100%;
+          padding: 14px 24px;
+          background: linear-gradient(135deg, #66c0f4, #3d6a8e);
+          border: none;
+          border-radius: 10px;
+          color: #fff;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 20px rgba(102, 192, 244, 0.4);
+        }
+        
+        .submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        
+        .form-footer {
+          text-align: center;
+          margin-top: 16px;
+          padding-top: 16px;
+          border-top: 1px solid rgba(102, 192, 244, 0.15);
+        }
+        
+        .form-footer p {
+          color: var(--text-muted);
+          font-size: 13px;
+        }
+        
+        .form-footer a {
+          color: #66c0f4;
+          text-decoration: none;
+        }
+        
+        .form-footer a:hover {
+          text-decoration: underline;
+        }
+      </style>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 聚焦到邮箱输入框
+    setTimeout(() => {
+      document.getElementById('addAccountEmail')?.focus();
+    }, 100);
+  }
+  
+  // 处理添加账户表单提交
+  window.handleAddAccount = async function(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('addAccountEmail').value.trim();
+    const password = document.getElementById('addAccountPassword').value;
+    const submitBtn = document.getElementById('addAccountSubmitBtn');
+    const errorEl = document.getElementById('addAccountError');
+    
+    if (!email || !password) {
+      errorEl.textContent = '请填写邮箱和密码';
+      errorEl.style.display = 'block';
+      return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>登录中...</span>';
+    errorEl.style.display = 'none';
+    
+    try {
+      // 尝试登录新账户
+      const result = await GameBoxAuth.signIn(email, password);
+      
+      if (result.success) {
+        // 登录成功，将新账户添加到保存列表
+        let savedAccounts = [];
+        try {
+          savedAccounts = JSON.parse(localStorage.getItem('gamebox_saved_accounts') || '[]');
+        } catch (e) {
+          savedAccounts = [];
+        }
+        
+        // 检查是否已存在
+        const existingIndex = savedAccounts.findIndex(acc => acc.email === email);
+        const newAccount = {
+          id: result.user.id,
+          email: result.user.email,
+          username: result.user.username || email.split('@')[0],
+          avatar: ''
+        };
+        
+        if (existingIndex >= 0) {
+          savedAccounts[existingIndex] = newAccount;
+        } else {
+          savedAccounts.push(newAccount);
+        }
+        
+        localStorage.setItem('gamebox_saved_accounts', JSON.stringify(savedAccounts));
+        
+        // 关闭弹窗
+        document.getElementById('addAccountModal')?.remove();
+        
+        // 显示成功消息
+        showMessage('账户添加成功！已切换到新账户', 'success');
+        
+        // 刷新页面以更新用户信息
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        errorEl.textContent = result.error || '登录失败，请检查邮箱和密码';
+        errorEl.style.display = 'block';
+      }
+    } catch (error) {
+      console.error('添加账户失败:', error);
+      errorEl.textContent = '登录失败: ' + error.message;
+      errorEl.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>登录并添加</span>';
     }
   }
   

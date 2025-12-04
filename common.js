@@ -36,11 +36,10 @@ function initAuthButton() {
   btn.addEventListener("click", () => {
     const user = getCurrentUser();
     if (user) {
-      if (confirm("确定要退出登录吗？")) {
-        localStorage.removeItem("currentUser");
-        location.reload();
-      }
+      // 已登录：直接跳转到用户中心
+      window.location.href = "profile.html";
     } else {
+      // 未登录：跳转到登录页
       window.location.href = "login.html";
     }
   });
