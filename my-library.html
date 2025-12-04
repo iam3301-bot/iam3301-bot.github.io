@@ -9,6 +9,268 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 我的游戏页面专属样式 */
+    .library-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      border-color: #66c0f4;
+      box-shadow: 0 0 20px rgba(102, 192, 244, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .stat-card .icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .stat-card .value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #66c0f4;
+    }
+    
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    .stat-card.steam {
+      border-color: rgba(102, 192, 244, 0.5);
+      background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(42, 71, 94, 0.9));
+    }
+    
+    /* 游戏卡片增强 */
+    .game-card-enhanced {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .game-card-enhanced:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(56, 189, 248, 0.2);
+    }
+    
+    .game-card-enhanced .game-cover {
+      height: 140px;
+      background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .game-card-enhanced .game-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .game-card-enhanced .playtime-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #66c0f4;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .game-card-enhanced .steam-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+      color: #66c0f4;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .game-card-enhanced .game-info {
+      padding: 12px;
+    }
+    
+    .game-card-enhanced .game-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .game-card-enhanced .game-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .game-card-enhanced .recent-play {
+      color: #00ff88;
+      font-size: 11px;
+    }
+    
+    /* Steam 连接提示 */
+    .steam-connect-banner {
+      background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(42, 71, 94, 0.9));
+      border: 2px dashed rgba(102, 192, 244, 0.4);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .steam-connect-banner h3 {
+      color: #66c0f4;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .steam-connect-banner p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    
+    .steam-connect-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+      border: 2px solid #66c0f4;
+      border-radius: 8px;
+      color: #66c0f4;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .steam-connect-btn:hover {
+      background: linear-gradient(135deg, #2a475e, #3d6a8a);
+      box-shadow: 0 0 20px rgba(102, 192, 244, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    /* 选项卡增强 */
+    .tab-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+      padding: 10px 20px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .tab-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .tab-btn .count {
+      background: rgba(56, 189, 248, 0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    
+    /* 游戏列表网格 */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-state .icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    
+    .empty-state h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--text-soft);
+    }
+    
+    .empty-state p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    /* 排序和筛选 */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .filter-bar select {
+      padding: 8px 12px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body data-current-page="my" class="cyberpunk-theme">
 <div class="page">
@@ -39,7 +301,7 @@
           <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
           <span class="header-search-icon">🔍</span>
         </div>
-        <button class="header-user">未登录 · 游客</button>
+        <button class="header-user" id="headerUser">未登录 · 游客</button>
       </div>
     </div>
   </header>
@@ -48,251 +310,506 @@
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
   <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
 
   <main class="main">
     <section>
       <div class="card">
-        <div class="page-title">我的游戏</div>
-        <div class="page-intro">
-          这里从浏览器 localStorage 中读取“已拥有”和“想玩”的游戏 ID，并转成可阅读列表。
+        <div class="page-title">🎮 我的游戏库</div>
+        <div class="page-intro" id="libraryIntro">
+          管理您的游戏收藏，查看Steam同步的游戏数据和游玩时长。
         </div>
       </div>
 
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>列表类型</span></div>
-        </header>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-          <button class="btn btn-primary btn-inline" id="tabOwned">已拥有</button>
-          <button class="btn btn-inline" id="tabWish">想玩</button>
+      <!-- 统计卡片 -->
+      <div class="library-stats" id="libraryStats">
+        <div class="stat-card steam">
+          <div class="icon">🎮</div>
+          <div class="value" id="statSteamGames">0</div>
+          <div class="label">Steam 游戏</div>
         </div>
-        <div class="form">
-          <div class="form-row">
-            <label for="mySearch">按名称搜索</label>
-            <input id="mySearch" type="text" placeholder="例如：艾尔登法环" />
+        <div class="stat-card">
+          <div class="icon">✅</div>
+          <div class="value" id="statOwnedGames">0</div>
+          <div class="label">本地已拥有</div>
+        </div>
+        <div class="stat-card">
+          <div class="icon">⭐</div>
+          <div class="value" id="statWishlistGames">0</div>
+          <div class="label">想玩列表</div>
+        </div>
+        <div class="stat-card steam">
+          <div class="icon">⏱️</div>
+          <div class="value" id="statTotalPlaytime">0h</div>
+          <div class="label">总游戏时长</div>
+        </div>
+      </div>
+
+      <!-- Steam 连接提示（未绑定时显示） -->
+      <div class="steam-connect-banner" id="steamConnectBanner" style="display: none;">
+        <h3>🎮 连接您的 Steam 账号</h3>
+        <p>绑定 Steam 账号后，可以自动同步您的游戏库、游玩时长和成就数据</p>
+        <a href="steam-binding.html" class="steam-connect-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95 0-5.52-4.48-10-10-10z"/>
+          </svg>
+          连接 Steam 账号
+        </a>
+      </div>
+
+      <!-- 选项卡 -->
+      <div class="card">
+        <div class="tab-container">
+          <button class="tab-btn active" data-tab="steam">
+            🎮 Steam 游戏 <span class="count" id="tabSteamCount">0</span>
+          </button>
+          <button class="tab-btn" data-tab="owned">
+            ✅ 本地已拥有 <span class="count" id="tabOwnedCount">0</span>
+          </button>
+          <button class="tab-btn" data-tab="wishlist">
+            ⭐ 想玩列表 <span class="count" id="tabWishlistCount">0</span>
+          </button>
+          <button class="tab-btn" data-tab="recent">
+            🔥 最近游玩 <span class="count" id="tabRecentCount">0</span>
+          </button>
+        </div>
+        
+        <!-- 筛选和排序 -->
+        <div class="filter-bar">
+          <div class="form-row" style="margin: 0;">
+            <input id="gameSearch" type="text" placeholder="搜索游戏..." style="max-width: 300px;" />
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <select id="sortBy">
+              <option value="playtime">按游戏时长</option>
+              <option value="recent">按最近游玩</option>
+              <option value="name">按名称</option>
+            </select>
           </div>
         </div>
       </div>
 
+      <!-- 游戏列表 -->
       <div class="card">
-        <header class="card-header">
-          <div class="card-title"><span class="dot"></span><span>我的列表</span></div>
-          <div class="chip" id="myCount">共 0 款</div>
-        </header>
-        <div id="myList" class="game-list"></div>
+        <div class="games-grid" id="gamesList"></div>
       </div>
     </section>
 
     <aside>
       <div class="sidebar-card">
-        <div class="sidebar-title">说明</div>
+        <div class="sidebar-title">📊 游戏库概览</div>
         <div class="sidebar-item">
-          <span class="label">数据来源</span><span class="value">game-detail 标记结果</span>
+          <span class="label">数据来源</span>
+          <span class="value" id="dataSource">Steam + 本地标记</span>
         </div>
         <div class="sidebar-item">
-          <span class="label">存储</span><span class="value">localStorage</span>
+          <span class="label">最后同步</span>
+          <span class="value" id="lastSync">-</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="label">Steam 状态</span>
+          <span class="value" id="steamStatus">未连接</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-card">
+        <div class="sidebar-title">🎯 快捷操作</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <a href="game-library.html" class="btn btn-inline" style="text-align: center;">浏览游戏库</a>
+          <a href="profile.html" class="btn btn-inline" style="text-align: center;">用户中心</a>
+          <button class="btn btn-inline" onclick="syncSteamData()">🔄 同步 Steam</button>
+        </div>
+      </div>
+      
+      <div class="sidebar-card">
+        <div class="sidebar-title">💡 使用提示</div>
+        <div style="font-size: 12px; color: var(--text-muted); line-height: 1.8;">
+          <p>• 绑定 Steam 自动同步游戏数据</p>
+          <p>• 本地标记的游戏保存在浏览器</p>
+          <p>• 游戏时长来自 Steam 官方数据</p>
+          <p>• 点击游戏卡片查看详细信息</p>
         </div>
       </div>
     </aside>
   </main>
 </div>
 
-
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="supabase-config.js"></script>
 <script src="mega-game-database.js"></script>
 <script>
   initCommon();
-
-  const myListEl = document.getElementById("myList");
-  const myCountEl = document.getElementById("myCount");
-  const mySearchEl = document.getElementById("mySearch");
-  const tabOwned = document.getElementById("tabOwned");
-  const tabWish = document.getElementById("tabWish");
-
-  let currentType = "owned"; // owned / wish
+  
+  // 初始化
+  let currentTab = 'steam';
+  let steamGames = [];
+  let ownedGames = [];
+  let wishlistGames = [];
   let allGamesData = [];
-  let isDataLoaded = false;
-
-  // 加载游戏数据
-  async function loadGamesData() {
+  let currentUser = null;
+  let userData = null;
+  
+  // 初始化页面
+  async function init() {
+    // 初始化认证
+    await GameBoxAuth.init();
+    SteamAPI.init();
+    
+    currentUser = await GameBoxAuth.getCurrentUser();
+    
+    if (currentUser) {
+      userData = UserDataManager.getData(currentUser.id);
+      document.getElementById('headerUser').textContent = currentUser.username || '玩家';
+    }
+    
+    // 加载本地游戏数据库
     try {
       allGamesData = await window.megaGameDB.getAllGames();
-      isDataLoaded = true;
-      console.log(`✅ 游戏数据加载完成：${allGamesData.length} 款`);
-      renderMyList();
-    } catch (error) {
-      console.error("❌ 加载游戏数据失败:", error);
-      myListEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--danger);">❌ 数据加载失败</div>';
+      console.log(`✅ 游戏数据库加载完成: ${allGamesData.length} 款`);
+    } catch (e) {
+      console.error('加载游戏数据库失败:', e);
+    }
+    
+    // 加载各类游戏数据
+    loadSteamGames();
+    loadLocalGames();
+    updateStats();
+    renderGames();
+    updateSidebarInfo();
+    
+    // 检查 Steam 绑定状态
+    checkSteamStatus();
+  }
+  
+  // 检查 Steam 绑定状态
+  function checkSteamStatus() {
+    const steamLinked = userData?.steam?.linked;
+    const steamBanner = document.getElementById('steamConnectBanner');
+    const steamStatusEl = document.getElementById('steamStatus');
+    
+    if (steamLinked) {
+      steamBanner.style.display = 'none';
+      steamStatusEl.textContent = '✅ 已连接';
+      steamStatusEl.style.color = '#00ff88';
+    } else {
+      steamBanner.style.display = 'block';
+      steamStatusEl.textContent = '❌ 未连接';
+      steamStatusEl.style.color = '#ff5555';
     }
   }
-
-  // 获取列表
-  function getList(key) {
+  
+  // 加载 Steam 游戏
+  function loadSteamGames() {
+    steamGames = [];
+    
+    if (userData?.steam?.linked && userData.steam.games) {
+      steamGames = userData.steam.games.map(game => ({
+        id: game.appId || game.appid,
+        name: game.name,
+        playtimeForever: game.playtimeForever || game.playtime_forever || 0,
+        playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
+        thumbnail: game.headerImage || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId || game.appid}/header.jpg`,
+        source: 'steam',
+        lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
+      }));
+      
+      console.log(`✅ 加载 Steam 游戏: ${steamGames.length} 款`);
+    }
+    
+    // 也检查 steam_binding
+    const steamBinding = localStorage.getItem('steam_binding');
+    if (steamBinding && steamGames.length === 0) {
+      try {
+        const bindingData = JSON.parse(steamBinding);
+        if (bindingData.games && bindingData.games.length > 0) {
+          steamGames = bindingData.games.map(game => ({
+            id: game.appid || game.appId,
+            name: game.name,
+            playtimeForever: game.playtimeForever || game.playtime_forever || 0,
+            playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
+            thumbnail: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid || game.appId}/header.jpg`,
+            source: 'steam',
+            lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
+          }));
+          console.log(`✅ 从 steam_binding 加载游戏: ${steamGames.length} 款`);
+        }
+      } catch (e) {
+        console.error('解析 steam_binding 失败:', e);
+      }
+    }
+  }
+  
+  // 加载本地标记的游戏
+  function loadLocalGames() {
+    // 已拥有
+    const ownedIds = getLocalList('ownedGames');
+    ownedGames = ownedIds.map(id => {
+      const game = findGameById(id);
+      return game ? { ...game, source: 'local' } : {
+        id: id,
+        name: id,
+        source: 'local',
+        thumbnail: ''
+      };
+    });
+    
+    // 想玩
+    const wishlistIds = getLocalList('wishlistGames');
+    wishlistGames = wishlistIds.map(id => {
+      const game = findGameById(id);
+      return game ? { ...game, source: 'local' } : {
+        id: id,
+        name: id,
+        source: 'local',
+        thumbnail: ''
+      };
+    });
+  }
+  
+  // 获取本地列表
+  function getLocalList(key) {
     try {
-      const raw = localStorage.getItem(key);
-      if (!raw) return [];
-      return JSON.parse(raw);
+      return JSON.parse(localStorage.getItem(key) || '[]');
     } catch {
       return [];
     }
   }
-
-  // 保存列表
-  function saveList(key, list) {
-    try {
-      localStorage.setItem(key, JSON.stringify(list));
-    } catch (error) {
-      console.error("保存失败:", error);
-    }
-  }
-
+  
   // 根据ID查找游戏
   function findGameById(id) {
-    return allGamesData.find(g => g.id === id || g.name.toLowerCase() === id.toLowerCase());
+    return allGamesData.find(g => 
+      g.id === id || 
+      g.name?.toLowerCase() === id?.toLowerCase()
+    );
   }
-
-  // 移除游戏
-  function removeGame(id, type) {
-    const key = type === "owned" ? "ownedGames" : "wishlistGames";
-    const list = getList(key);
-    const newList = list.filter(gid => gid !== id);
-    saveList(key, newList);
-    renderMyList();
+  
+  // 更新统计
+  function updateStats() {
+    const totalPlaytime = steamGames.reduce((sum, g) => sum + (g.playtimeForever || 0), 0);
+    const recentGames = steamGames.filter(g => g.playtime2Weeks > 0);
+    
+    document.getElementById('statSteamGames').textContent = steamGames.length;
+    document.getElementById('statOwnedGames').textContent = ownedGames.length;
+    document.getElementById('statWishlistGames').textContent = wishlistGames.length;
+    document.getElementById('statTotalPlaytime').textContent = formatPlaytimeShort(totalPlaytime);
+    
+    // 更新选项卡计数
+    document.getElementById('tabSteamCount').textContent = steamGames.length;
+    document.getElementById('tabOwnedCount').textContent = ownedGames.length;
+    document.getElementById('tabWishlistCount').textContent = wishlistGames.length;
+    document.getElementById('tabRecentCount').textContent = recentGames.length;
   }
-
-  // 渲染我的游戏列表
-  function renderMyList() {
-    if (!isDataLoaded) {
-      myListEl.innerHTML = '<div style="grid-column: 1/-1; padding:20px;text-align:center;color:var(--text-muted);">🎮 正在加载游戏数据...</div>';
-      return;
+  
+  // 格式化时长（短）
+  function formatPlaytimeShort(minutes) {
+    if (!minutes) return '0h';
+    const hours = Math.floor(minutes / 60);
+    if (hours < 1) return `${minutes}m`;
+    return `${hours}h`;
+  }
+  
+  // 格式化时长（长）
+  function formatPlaytime(minutes) {
+    if (!minutes) return '未游玩';
+    if (minutes < 60) return `${minutes} 分钟`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours < 24) return mins > 0 ? `${hours} 小时 ${mins} 分钟` : `${hours} 小时`;
+    const days = Math.floor(hours / 24);
+    const remainHours = hours % 24;
+    return `${days} 天 ${remainHours} 小时`;
+  }
+  
+  // 渲染游戏列表
+  function renderGames() {
+    const container = document.getElementById('gamesList');
+    const searchText = document.getElementById('gameSearch').value.toLowerCase();
+    const sortBy = document.getElementById('sortBy').value;
+    
+    let games = [];
+    
+    switch (currentTab) {
+      case 'steam':
+        games = [...steamGames];
+        break;
+      case 'owned':
+        games = [...ownedGames];
+        break;
+      case 'wishlist':
+        games = [...wishlistGames];
+        break;
+      case 'recent':
+        games = steamGames.filter(g => g.playtime2Weeks > 0);
+        break;
     }
-
-    const kw = mySearchEl.value.trim().toLowerCase();
-    const ids = currentType === "owned" ? getList("ownedGames") : getList("wishlistGames");
-
-    // 根据ID查找完整游戏信息
-    let games = ids.map(id => {
-      const game = findGameById(id);
-      return game || {
-        id: id,
-        name: `未知游戏 (${id})`,
-        genre: "Unknown",
-        platform: "PC",
-        rating: 0,
-        price: 0,
-        thumbnail: ""
-      };
-    });
-
+    
     // 搜索过滤
-    if (kw) {
+    if (searchText) {
       games = games.filter(g => 
-        g.name.toLowerCase().includes(kw) || 
-        g.genre.toLowerCase().includes(kw)
+        g.name?.toLowerCase().includes(searchText)
       );
     }
-
-    myListEl.innerHTML = "";
-    myCountEl.textContent = `共 ${games.length} 款`;
-
-    if (!games.length) {
-      const emptyIcon = currentType === "owned" ? "📦" : "⭐";
-      const emptyText = currentType === "owned" 
-        ? "当前列表为空，去游戏详情页标记\"已拥有\"吧！" 
-        : "当前想玩列表为空，去游戏详情页标记\"想玩\"吧！";
-      myListEl.innerHTML =
-        `<div style="grid-column: 1/-1; font-size:12px;color:var(--text-muted);padding:40px;text-align:center;">${emptyIcon}<br><br>${emptyText}</div>`;
+    
+    // 排序
+    switch (sortBy) {
+      case 'playtime':
+        games.sort((a, b) => (b.playtimeForever || 0) - (a.playtimeForever || 0));
+        break;
+      case 'recent':
+        games.sort((a, b) => (b.playtime2Weeks || 0) - (a.playtime2Weeks || 0));
+        break;
+      case 'name':
+        games.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        break;
+    }
+    
+    // 渲染
+    if (games.length === 0) {
+      renderEmptyState(container);
       return;
     }
-
-    games.forEach(game => {
-      const div = document.createElement("div");
-      div.className = "game-card";
-      div.style.cursor = "pointer";
-      
-      const statusIcon = currentType === "owned" ? "✅" : "⭐";
-      const statusText = currentType === "owned" ? "已拥有" : "想玩";
-      
-      // 封面图
-      const coverHtml = game.thumbnail
-        ? `<img src="${game.thumbnail}" alt="${game.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);\\'>🎮</div>'" />`
-        : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎮</div>';
-      
-      div.innerHTML = `
-        <div class="game-cover">${coverHtml}</div>
-        <div class="game-title">${statusIcon} ${game.name}</div>
-        <div class="game-meta">${game.genre} · ${game.platform.split(',')[0].trim()}</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-          <div style="color: var(--accent); font-weight: 600;">
-            ⭐ ${game.rating.toFixed(1)}
-          </div>
-          <button class="btn-remove" data-id="${game.id}" style="padding: 4px 12px; font-size: 11px; background: var(--danger); color: white; border: none; border-radius: 4px; cursor: pointer;">
-            移除
-          </button>
-        </div>
-      `;
-      
-      // 悬停效果
-      div.addEventListener("mouseenter", () => {
-        div.style.transform = "translateY(-4px)";
-        div.style.boxShadow = "0 8px 24px rgba(56, 189, 248, 0.3)";
-        div.style.transition = "all 0.3s ease";
-      });
-      
-      div.addEventListener("mouseleave", () => {
-        div.style.transform = "translateY(0)";
-        div.style.boxShadow = "";
-      });
-      
-      // 点击跳转
-      div.addEventListener("click", (e) => {
-        // 如果点击的是移除按钮，不跳转
-        if (e.target.classList.contains("btn-remove")) {
-          e.stopPropagation();
-          const gameId = e.target.getAttribute("data-id");
-          if (confirm(`确定要从${statusText}列表中移除《${game.name}》吗？`)) {
-            removeGame(gameId, currentType);
-          }
-          return;
+    
+    container.innerHTML = games.map(game => renderGameCard(game)).join('');
+    
+    // 绑定点击事件
+    container.querySelectorAll('.game-card-enhanced').forEach(card => {
+      card.addEventListener('click', () => {
+        const gameId = card.dataset.id;
+        const gameName = card.dataset.name;
+        if (game.source === 'steam') {
+          window.open(`https://store.steampowered.com/app/${gameId}`, '_blank');
+        } else {
+          window.location.href = `game-detail.html?id=${gameId}&name=${encodeURIComponent(gameName)}`;
         }
-        
-        const url = new URL("game-detail.html", window.location.href);
-        url.searchParams.set("id", game.id);
-        url.searchParams.set("name", game.name);
-        window.location.href = url.toString();
       });
-      
-      myListEl.appendChild(div);
     });
   }
-
-  // Tab 切换
-  tabOwned.addEventListener("click", () => {
-    currentType = "owned";
-    tabOwned.classList.add("active");
-    tabWish.classList.remove("active");
-    renderMyList();
+  
+  // 渲染单个游戏卡片
+  function renderGameCard(game) {
+    const playtimeText = formatPlaytime(game.playtimeForever);
+    const recentText = game.playtime2Weeks > 0 ? `近两周: ${formatPlaytime(game.playtime2Weeks)}` : '';
+    const isSteam = game.source === 'steam';
+    
+    const coverImg = game.thumbnail 
+      ? `<img src="${game.thumbnail}" alt="${game.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#1b2838,#2a475e);\\'>🎮</div>'" />`
+      : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#1b2838,#2a475e);">🎮</div>';
+    
+    return `
+      <div class="game-card-enhanced" data-id="${game.id}" data-name="${game.name}">
+        <div class="game-cover">
+          ${coverImg}
+          ${isSteam ? '<div class="steam-badge"><svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg> Steam</div>' : ''}
+          ${game.playtimeForever > 0 ? `<div class="playtime-badge">⏱️ ${formatPlaytimeShort(game.playtimeForever)}</div>` : ''}
+        </div>
+        <div class="game-info">
+          <div class="game-title">${game.name}</div>
+          <div class="game-meta">
+            <span>${isSteam ? '🎮 Steam' : '📌 本地'}</span>
+            <span>${playtimeText}</span>
+          </div>
+          ${recentText ? `<div class="recent-play">🔥 ${recentText}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+  
+  // 渲染空状态
+  function renderEmptyState(container) {
+    let message = '';
+    let action = '';
+    
+    switch (currentTab) {
+      case 'steam':
+        if (userData?.steam?.linked) {
+          message = '您的 Steam 游戏库为空';
+          action = '<button class="btn btn-primary" onclick="syncSteamData()">🔄 同步 Steam 数据</button>';
+        } else {
+          message = '尚未连接 Steam 账号';
+          action = '<a href="steam-binding.html" class="btn btn-primary">🎮 连接 Steam</a>';
+        }
+        break;
+      case 'owned':
+        message = '还没有标记已拥有的游戏';
+        action = '<a href="game-library.html" class="btn btn-primary">🎮 浏览游戏库</a>';
+        break;
+      case 'wishlist':
+        message = '想玩列表为空';
+        action = '<a href="game-library.html" class="btn btn-primary">🎮 发现新游戏</a>';
+        break;
+      case 'recent':
+        message = '最近两周没有游玩记录';
+        action = '';
+        break;
+    }
+    
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <div class="icon">📦</div>
+        <h3>${message}</h3>
+        <p>开始探索并添加您喜欢的游戏吧！</p>
+        ${action}
+      </div>
+    `;
+  }
+  
+  // 更新侧边栏信息
+  function updateSidebarInfo() {
+    const lastSync = userData?.steam?.lastSync;
+    if (lastSync) {
+      const date = new Date(lastSync);
+      document.getElementById('lastSync').textContent = date.toLocaleDateString('zh-CN');
+    }
+  }
+  
+  // 同步 Steam 数据
+  async function syncSteamData() {
+    if (!currentUser) {
+      alert('请先登录');
+      window.location.href = 'login.html';
+      return;
+    }
+    
+    if (!userData?.steam?.linked) {
+      if (confirm('您还未绑定 Steam 账号，是否前往绑定？')) {
+        window.location.href = 'steam-binding.html';
+      }
+      return;
+    }
+    
+    try {
+      const result = await UserDataManager.syncSteam(currentUser.id);
+      if (result.success) {
+        userData = UserDataManager.getData(currentUser.id);
+        loadSteamGames();
+        updateStats();
+        renderGames();
+        updateSidebarInfo();
+        alert('✅ Steam 数据同步成功！');
+      } else {
+        alert('❌ 同步失败: ' + result.error);
+      }
+    } catch (error) {
+      alert('❌ 同步失败: ' + error.message);
+    }
+  }
+  
+  // 选项卡切换
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      renderGames();
+    });
   });
-
-  tabWish.addEventListener("click", () => {
-    currentType = "wish";
-    tabWish.classList.add("active");
-    tabOwned.classList.remove("active");
-    renderMyList();
-  });
-
-  // 搜索
-  mySearchEl.addEventListener("input", renderMyList);
-
+  
+  // 搜索和排序
+  document.getElementById('gameSearch').addEventListener('input', renderGames);
+  document.getElementById('sortBy').addEventListener('change', renderGames);
+  
   // 初始化
-  loadGamesData();
+  init();
 </script>
 </body>
 </html>

@@ -350,10 +350,11 @@
 
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
+<script src="community-data-service.js"></script>
 <script>
   initCommon();
 
-  // 示例帖子数据（从community.html复制）
+  // 示例帖子数据（兜底数据）
   const postDatabase = {
     "pinned-1": {
       id: "pinned-1",
@@ -545,9 +546,78 @@
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get('id') || 'elden-newbie';
   
-  // 当前帖子数据
-  let currentPost = postDatabase[postId] || postDatabase['elden-newbie'];
-  let comments = [
+  // 尝试从 communityDataService 获取帖子（真实存储的帖子）
+  let currentPost = null;
+  
+  // 优先从 localStorage 中获取真实发布的帖子
+  if (window.communityDataService) {
+    currentPost = window.communityDataService.getPostById(postId);
+    if (currentPost) {
+      console.log('✅ 从社区数据服务加载帖子:', postId);
+      // 增加浏览次数
+      currentPost.views = (currentPost.views || 0) + 1;
+      window.communityDataService.updatePost(postId, { views: currentPost.views });
+      
+      // 格式化时间
+      if (typeof currentPost.time === 'number') {
+        currentPost.time = formatTimeAgo(currentPost.time);
+      }
+    }
+  }
+  
+  // 如果没找到，则使用兜底数据
+  if (!currentPost) {
+    currentPost = postDatabase[postId] || postDatabase['elden-newbie'];
+    console.log('📄 使用兜底帖子数据:', postId);
+  }
+  
+  // 评论存储键
+  const COMMENTS_KEY = `gamebox_post_comments_${postId}`;
+  
+  // 加载评论（从localStorage）
+  function loadComments() {
+    try {
+      const stored = localStorage.getItem(COMMENTS_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error('加载评论失败:', e);
+    }
+    return [];
+  }
+  
+  // 保存评论
+  function saveComments(comments) {
+    try {
+      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+    } catch (e) {
+      console.error('保存评论失败:', e);
+    }
+  }
+  
+  // 格式化时间
+  function formatTimeAgo(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return '刚刚';
+    if (minutes < 60) return `${minutes} 分钟前`;
+    
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} 小时前`;
+    
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days} 天前`;
+    
+    const months = Math.floor(days / 30);
+    return `${months} 个月前`;
+  }
+  
+  // 加载存储的评论，如果没有则使用默认评论
+  let storedComments = loadComments();
+  let comments = storedComments.length > 0 ? storedComments : [
     { 
       id: 1,
       author: "路人甲", 
@@ -610,13 +680,15 @@
     comments.forEach((c) => {
       const div = document.createElement("div");
       div.className = "comment-item";
+      // 处理时间显示（支持时间戳和文本）
+      const displayTime = typeof c.time === 'number' ? formatTimeAgo(c.time) : (c.timeText || c.time);
       div.innerHTML = `
         <div class="comment-header">
           <div class="comment-author">
             <div class="comment-avatar">${c.avatar}</div>
             <div>
               <div class="comment-author-name">${c.author}</div>
-              <div class="comment-meta">发布于 ${c.time}</div>
+              <div class="comment-meta">发布于 ${displayTime}</div>
             </div>
           </div>
         </div>
@@ -717,26 +789,36 @@
       id: Date.now(),
       author: name,
       avatar: "👤",
-      time: "刚刚",
+      time: Date.now(), // 存储时间戳
+      timeText: "刚刚",
       content: text,
       likes: 0
     };
     
     comments.push(newComment);
+    
+    // 保存评论到 localStorage（真实存储）
+    saveComments(comments);
+    
     newCommentEl.value = "";
-    commentMsg.textContent = "✅ 评论发布成功！";
+    commentMsg.textContent = "✅ 评论发布成功！（已保存）";
     commentMsg.style.color = "var(--cyber-cyan)";
     
     // 更新回复数
-    currentPost.replies = currentPost.replies + 1;
+    currentPost.replies = (currentPost.replies || 0) + 1;
     document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
     document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
+    
+    // 如果是真实帖子，更新回复数
+    if (window.communityDataService && currentPost.id) {
+      window.communityDataService.updatePost(currentPost.id, { replies: currentPost.replies });
+    }
     
     renderComments();
     
     // 3秒后清除提示
     setTimeout(() => {
-      commentMsg.textContent = "提示：当前为演示版本，评论数据仅保存在本地内存中";
+      commentMsg.textContent = "💡 评论已保存到浏览器本地存储";
       commentMsg.style.color = "var(--text-soft)";
     }, 3000);
   });
