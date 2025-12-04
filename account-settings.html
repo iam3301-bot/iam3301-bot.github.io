@@ -176,8 +176,10 @@
   <script src="common.js"></script>
   <script src="cyber-effects.js"></script>
   <script>
-    // 初始化 Cyberpunk 特效
-    initCyberpunkEffects();
+    // 初始化赛博朋克效果
+    if (typeof initCyberpunkEffects === 'function') {
+      initCyberpunkEffects();
+    }
     
     // 加载用户信息
     async function loadUserInfo() {
