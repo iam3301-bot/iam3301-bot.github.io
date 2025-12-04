@@ -476,39 +476,31 @@ body.theme-wukong::after {
 /* ==========================================
    滚动条 - 金色龙纹
    ========================================== */
-.theme-wukong ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+body.theme-wukong ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.theme-wukong ::-webkit-scrollbar-track {
+body.theme-wukong ::-webkit-scrollbar-track {
   background: rgba(26, 15, 10, 0.9);
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-.theme-wukong ::-webkit-scrollbar-thumb {
+body.theme-wukong ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, 
     #FFD700 0%, 
     #DAA520 50%, 
     #B8860B 100%);
-  border-radius: 6px;
-  border: 1px solid rgba(139, 69, 20, 0.4);
-  box-shadow: 
-    0 0 10px rgba(255, 215, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
 
-.theme-wukong ::-webkit-scrollbar-thumb:hover {
+body.theme-wukong ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, 
     #FFA500 0%, 
     #FFD700 50%, 
     #DAA520 100%);
-  box-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.8),
-    0 0 40px rgba(255, 140, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
 /* ==========================================

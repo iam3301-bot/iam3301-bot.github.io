@@ -493,36 +493,31 @@ body.theme-eldenring::after {
 /* ==========================================
    滚动条
    ========================================== */
-.theme-eldenring ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+body.theme-eldenring ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.theme-eldenring ::-webkit-scrollbar-track {
+body.theme-eldenring ::-webkit-scrollbar-track {
   background: rgba(15, 10, 10, 0.9);
-  border: 1px solid rgba(218, 165, 32, 0.2);
   border-radius: 4px;
 }
 
-.theme-eldenring ::-webkit-scrollbar-thumb {
+body.theme-eldenring ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, 
-    rgba(218, 165, 32, 0.8) 0%, 
-    rgba(184, 134, 11, 0.9) 50%, 
-    rgba(139, 115, 85, 0.7) 100%);
+    rgba(218, 165, 32, 0.9) 0%, 
+    rgba(184, 134, 11, 1) 50%, 
+    rgba(139, 115, 85, 0.8) 100%);
   border-radius: 4px;
-  box-shadow: 
-    0 0 10px rgba(218, 165, 32, 0.5),
-    inset 0 1px 0 rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.4);
 }
 
-.theme-eldenring ::-webkit-scrollbar-thumb:hover {
+body.theme-eldenring ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, 
-    rgba(255, 215, 0, 0.9) 0%, 
+    rgba(255, 215, 0, 1) 0%, 
     rgba(218, 165, 32, 1) 50%, 
-    rgba(184, 134, 11, 0.8) 100%);
-  box-shadow: 
-    0 0 20px rgba(218, 165, 32, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.5);
+    rgba(184, 134, 11, 0.9) 100%);
+  box-shadow: 0 0 15px rgba(218, 165, 32, 0.7);
 }
 
 /* ==========================================

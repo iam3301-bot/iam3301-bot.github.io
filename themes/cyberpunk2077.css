@@ -429,29 +429,25 @@ body.theme-cyberpunk2077::after {
 /* ==========================================
    滚动条
    ========================================== */
-.theme-cyberpunk2077 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+body.theme-cyberpunk2077 ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.theme-cyberpunk2077 ::-webkit-scrollbar-track {
-  background: rgba(10, 14, 39, 0.8);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+body.theme-cyberpunk2077 ::-webkit-scrollbar-track {
+  background: rgba(10, 14, 39, 0.9);
+  border-radius: 4px;
 }
 
-.theme-cyberpunk2077 ::-webkit-scrollbar-thumb {
+body.theme-cyberpunk2077 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #00F0FF 0%, #FF003C 100%);
-  border-radius: 0;
-  box-shadow: 
-    0 0 10px rgba(0, 240, 255, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
 }
 
-.theme-cyberpunk2077 ::-webkit-scrollbar-thumb:hover {
+body.theme-cyberpunk2077 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #00F0FF 0%, #FF003C 50%, #FFED4E 100%);
-  box-shadow: 
-    0 0 20px rgba(0, 240, 255, 0.8),
-    0 0 40px rgba(255, 0, 60, 0.4);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.7);
 }
 
 /* ==========================================
