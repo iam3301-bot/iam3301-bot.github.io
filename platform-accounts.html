@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>游戏平台账号管理 - GameBox 游盒</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    .platforms-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .platforms-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .platforms-header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      color: var(--accent);
+      margin-bottom: 15px;
+      text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+    }
+
+    .platforms-header .icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .platforms-header p {
+      color: var(--text-muted);
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* 提示信息 */
+    .info-banner {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .info-banner .icon {
+      font-size: 24px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .info-banner .content {
+      flex: 1;
+    }
+
+    .info-banner h3 {
+      color: var(--accent);
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .info-banner p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* 平台卡片网格 */
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .platform-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 2px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .platform-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--accent), #00ff88);
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .platform-card:hover::before {
+      opacity: 0.1;
+    }
+
+    .platform-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(56, 189, 248, 0.3);
+    }
+
+    .platform-card.connected {
+      border-color: #10b981;
+    }
+
+    .platform-card.connected::before {
+      background: linear-gradient(45deg, #10b981, #00ff88);
+    }
+
+    /* 平台头部 */
+    .platform-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .platform-icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .platform-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      color: var(--text-soft);
+      margin-bottom: 5px;
+    }
+
+    .platform-status {
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .platform-status.connected {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+
+    .platform-status.pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    .platform-status.disconnected {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    /* 平台数据 */
+    .platform-data {
+      margin-bottom: 20px;
+    }
+
+    .platform-data-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .platform-data-label {
+      color: var(--text-muted);
+    }
+
+    .platform-data-value {
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+
+    /* 平台操作按钮 */
+    .platform-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .platform-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Rajdhani', sans-serif;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .platform-btn.primary {
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      color: #000;
+    }
+
+    .platform-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    .platform-btn.secondary {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .platform-btn.secondary:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .platform-btn.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid #ef4444;
+    }
+
+    .platform-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .platform-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 配置部分 */
+    .config-section {
+      display: none;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 15px;
+      animation: slideDown 0.3s ease;
+    }
+
+    .config-section.active {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .config-section h4 {
+      color: var(--accent);
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .config-input-group {
+      margin-bottom: 15px;
+    }
+
+    .config-input-group label {
+      display: block;
+      color: var(--text-soft);
+      font-size: 13px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .config-input-group input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 6px;
+      color: var(--text-soft);
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .config-input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+
+    .config-input-group .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .config-input-group .hint a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .config-input-group .hint a:hover {
+      text-decoration: underline;
+    }
+
+    /* 返回按钮 */
+    .back-button {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .back-button a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .back-button a:hover {
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .platforms-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .platforms-header h1 {
+        font-size: 32px;
+      }
+
+      .platform-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="platforms-container">
+    <!-- 页面头部 -->
+    <div class="platforms-header">
+      <span class="icon">🎮</span>
+      <h1>其他平台</h1>
+      <p>管理您的 Epic Games、Xbox 和 PlayStation 平台账号</p>
+    </div>
+
+    <!-- 提示信息 -->
+    <div class="info-banner">
+      <span class="icon">💡</span>
+      <div class="content">
+        <h3>配置说明：各平台需要对应的 API 密钥</h3>
+        <p><strong>Epic Games:</strong> 暂无公开 API，支持手动录入账号信息<br>
+        <strong>Xbox:</strong> 需要 OpenXBL API Key（免费申请）<br>
+        <strong>PlayStation:</strong> 需要 PSN NPSSO Token 和代理服务器<br><br>
+        请点击各平台卡片中的"配置"按钮进行设置。</p>
+      </div>
+    </div>
+
+    <!-- 平台卡片网格 -->
+    <div class="platforms-grid">
+      <!-- Epic Games 卡片 -->
+      <div class="platform-card" id="epicCard">
+        <div class="platform-header">
+          <div class="platform-icon" style="background: linear-gradient(135deg, #2a2a2a, #0078f2);">
+            🎯
+          </div>
+          <div class="platform-info">
+            <h3>Epic Games</h3>
+            <span class="platform-status disconnected" id="epicStatus">未绑定</span>
+          </div>
+        </div>
+
+        <div class="platform-data" id="epicData">
+          <div class="platform-data-item">
+            <span class="platform-data-label">状态</span>
+            <span class="platform-data-value">暂无 API 支持</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">游戏数量</span>
+            <span class="platform-data-value">-</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">最后同步</span>
+            <span class="platform-data-value">从未同步</span>
+          </div>
+        </div>
+
+        <div class="platform-actions">
+          <button class="platform-btn primary" onclick="toggleConfig('epic')" id="epicBindBtn">
+            💾 手动录入 Epic 账号
+          </button>
+          <button class="platform-btn secondary" onclick="showEpicHelp()">
+            📚 查看帮助
+          </button>
+        </div>
+
+        <!-- 配置区域 -->
+        <div class="config-section" id="epicConfig">
+          <h4>手动录入 Epic 账号信息</h4>
+          <div class="config-input-group">
+            <label>Epic 用户名</label>
+            <input type="text" id="epicUsername" placeholder="输入您的 Epic Games 用户名">
+            <p class="hint">
+              请访问 <a href="https://store.epicgames.com/library" target="_blank">Epic 游戏库</a> 查看您的账号信息
+            </p>
+          </div>
+          <div class="config-input-group">
+            <label>游戏数量（选填）</label>
+            <input type="number" id="epicGameCount" placeholder="您拥有的游戏数量" min="0">
+            <p class="hint">可以在 Epic 游戏库中统计您的游戏数量</p>
+          </div>
+          <button class="platform-btn primary" onclick="saveEpicManual()">
+            💾 保存 Epic 账号信息
+          </button>
+        </div>
+      </div>
+
+      <!-- Xbox 卡片 -->
+      <div class="platform-card" id="xboxCard">
+        <div class="platform-header">
+          <div class="platform-icon" style="background: linear-gradient(135deg, #0e7a0d, #107c10);">
+            🎮
+          </div>
+          <div class="platform-info">
+            <h3>Xbox</h3>
+            <span class="platform-status disconnected" id="xboxStatus">未配置</span>
+          </div>
+        </div>
+
+        <div class="platform-data" id="xboxData">
+          <div class="platform-data-item">
+            <span class="platform-data-label">玩家代号</span>
+            <span class="platform-data-value" id="xboxGamertag">未绑定</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">Gamerscore</span>
+            <span class="platform-data-value" id="xboxGamerscore">-</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">游戏数量</span>
+            <span class="platform-data-value" id="xboxGameCount">-</span>
+          </div>
+        </div>
+
+        <div class="platform-actions">
+          <button class="platform-btn primary" id="xboxConnectBtn" onclick="bindXboxAccount()">
+            🔗 绑定 Xbox 账号
+          </button>
+          <button class="platform-btn secondary" onclick="toggleConfig('xbox')">
+            ⚙️ 配置 API Key
+          </button>
+        </div>
+
+        <!-- 配置区域 -->
+        <div class="config-section" id="xboxConfig">
+          <h4>配置 OpenXBL API Key</h4>
+          <div class="config-input-group">
+            <label>OpenXBL API Key</label>
+            <input type="text" id="xboxApiKey" placeholder="粘贴您的 OpenXBL API Key" maxlength="64">
+            <p class="hint">
+              前往 <a href="https://xbl.io/" target="_blank">OpenXBL (xbl.io)</a> 注册并获取免费 API Key
+            </p>
+          </div>
+          <button class="platform-btn primary" onclick="saveXboxApiKey()">
+            💾 保存 API Key
+          </button>
+          <button class="platform-btn danger" onclick="clearXboxApiKey()" style="margin-top: 10px;">
+            🗑️ 清除配置
+          </button>
+        </div>
+      </div>
+
+      <!-- PlayStation 卡片 -->
+      <div class="platform-card" id="psnCard">
+        <div class="platform-header">
+          <div class="platform-icon" style="background: linear-gradient(135deg, #003087, #0070d1);">
+            🎯
+          </div>
+          <div class="platform-info">
+            <h3>PlayStation</h3>
+            <span class="platform-status disconnected" id="psnStatus">未配置</span>
+          </div>
+        </div>
+
+        <div class="platform-data" id="psnData">
+          <div class="platform-data-item">
+            <span class="platform-data-label">PSN ID</span>
+            <span class="platform-data-value" id="psnOnlineId">未绑定</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">奖杯等级</span>
+            <span class="platform-data-value" id="psnTrophyLevel">-</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">游戏数量</span>
+            <span class="platform-data-value" id="psnGameCount">-</span>
+          </div>
+        </div>
+
+        <div class="platform-actions">
+          <button class="platform-btn primary" id="psnConnectBtn" onclick="bindPsnAccount()">
+            🔗 绑定 PSN 账号
+          </button>
+          <button class="platform-btn secondary" onclick="toggleConfig('psn')">
+            ⚙️ 配置 PSN API
+          </button>
+        </div>
+
+        <!-- 配置区域 -->
+        <div class="config-section" id="psnConfig">
+          <h4>配置 PlayStation Network API</h4>
+          <div class="config-input-group">
+            <label>NPSSO Token</label>
+            <input type="text" id="psnNpsso" placeholder="粘贴您的 NPSSO Token（64字符）" maxlength="64">
+            <p class="hint">
+              访问 <a href="https://ca.account.sony.com/api/v1/ssocookie" target="_blank">Sony SSO Cookie 页面</a> 登录后复制 npsso 值
+            </p>
+          </div>
+          <div class="config-input-group">
+            <label>代理服务器地址（可选）</label>
+            <input type="text" id="psnProxyUrl" placeholder="http://localhost:3001" value="http://localhost:3001">
+            <p class="hint">PSN API 需要后端代理服务器，默认使用本地 3001 端口</p>
+          </div>
+          <button class="platform-btn primary" onclick="savePsnConfig()">
+            💾 认证并保存
+          </button>
+          <button class="platform-btn danger" onclick="clearPsnConfig()" style="margin-top: 10px;">
+            🗑️ 清除配置
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 返回按钮 -->
+    <div class="back-button">
+      <a href="profile.html">← 返回用户中心</a>
+    </div>
+  </div>
+
+  <script src="platform-api-service.js"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    // =============================================
+    // 平台账号管理脚本
+    // =============================================
+
+    // 切换配置面板显示
+    function toggleConfig(platform) {
+      const configSection = document.getElementById(`${platform}Config`);
+      configSection.classList.toggle('active');
+    }
+
+    // =============================================
+    // Epic Games 手动录入
+    // =============================================
+    function saveEpicManual() {
+      const username = document.getElementById('epicUsername').value.trim();
+      const gameCount = parseInt(document.getElementById('epicGameCount').value) || 0;
+
+      if (!username) {
+        alert('请输入您的 Epic Games 用户名');
+        return;
+      }
+
+      // 保存到 localStorage
+      const epicData = {
+        platform: 'epic',
+        username: username,
+        gameCount: gameCount,
+        isManual: true,
+        boundAt: new Date().toISOString()
+      };
+
+      localStorage.setItem('epic_binding', JSON.stringify(epicData));
+
+      // 更新显示
+      updateEpicDisplay(epicData);
+      
+      alert('✅ Epic Games 账号信息已保存！');
+      toggleConfig('epic');
+    }
+
+    function updateEpicDisplay(data) {
+      if (data) {
+        document.getElementById('epicStatus').textContent = '已手动录入';
+        document.getElementById('epicStatus').className = 'platform-status pending';
+        document.getElementById('epicCard').classList.add('connected');
+
+        const dataHTML = `
+          <div class="platform-data-item">
+            <span class="platform-data-label">用户名</span>
+            <span class="platform-data-value">${data.username}</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">游戏数量</span>
+            <span class="platform-data-value">${data.gameCount || 0}</span>
+          </div>
+          <div class="platform-data-item">
+            <span class="platform-data-label">录入时间</span>
+            <span class="platform-data-value">${new Date(data.boundAt).toLocaleDateString('zh-CN')}</span>
+          </div>
+        `;
+        document.getElementById('epicData').innerHTML = dataHTML;
+      }
+    }
+
+    // =============================================
+    // Xbox API 配置
+    // =============================================
+    function saveXboxApiKey() {
+      const apiKey = document.getElementById('xboxApiKey').value.trim();
+
+      if (!apiKey) {
+        alert('请输入 OpenXBL API Key');
+        return;
+      }
+
+      // 保存到 PlatformAPIService
+      const result = window.PlatformAPIService.xbox.setApiKey(apiKey);
+
+      if (result) {
+        alert('✅ Xbox API Key 已保存！\n\n现在可以绑定 Xbox 账号了。');
+        updateXboxDisplay();
+        toggleConfig('xbox');
+
+        // 启用绑定按钮
+        document.getElementById('xboxConnectBtn').disabled = false;
+        document.getElementById('xboxConnectBtn').textContent = '🔗 绑定 Xbox 账号';
+      } else {
+        alert('❌ API Key 保存失败');
+      }
+    }
+
+    function clearXboxApiKey() {
+      if (confirm('确定要清除 Xbox API Key 配置吗？')) {
+        window.PlatformAPIService.xbox.clearApiKey();
+        document.getElementById('xboxApiKey').value = '';
+        alert('✅ Xbox API Key 已清除');
+        updateXboxDisplay();
+        document.getElementById('xboxConnectBtn').disabled = true;
+        document.getElementById('xboxConnectBtn').textContent = '🔗 绑定 Xbox 账号（需先配置 API Key）';
+      }
+    }
+
+    function updateXboxDisplay() {
+      const status = window.PlatformAPIService.getStatus().xbox;
+      
+      if (status.enabled) {
+        document.getElementById('xboxStatus').textContent = 'API 已配置';
+        document.getElementById('xboxStatus').className = 'platform-status pending';
+      } else {
+        document.getElementById('xboxStatus').textContent = '未配置';
+        document.getElementById('xboxStatus').className = 'platform-status disconnected';
+      }
+
+      // 检查是否已绑定账号
+      const binding = localStorage.getItem('xbox_binding');
+      if (binding) {
+        try {
+          const data = JSON.parse(binding);
+          document.getElementById('xboxGamertag').textContent = data.username || data.gamertag || '未知';
+          document.getElementById('xboxGamerscore').textContent = data.gamerscore || 0;
+          document.getElementById('xboxGameCount').textContent = data.gameCount || 0;
+          document.getElementById('xboxStatus').textContent = '已绑定';
+          document.getElementById('xboxStatus').className = 'platform-status connected';
+          document.getElementById('xboxCard').classList.add('connected');
+        } catch (e) {}
+      }
+    }
+
+    // =============================================
+    // PlayStation API 配置
+    // =============================================
+    async function savePsnConfig() {
+      const npsso = document.getElementById('psnNpsso').value.trim();
+      const proxyUrl = document.getElementById('psnProxyUrl').value.trim();
+
+      if (!npsso) {
+        alert('请输入 NPSSO Token');
+        return;
+      }
+
+      if (npsso.length < 60) {
+        alert('NPSSO Token 格式不正确（应为 64 字符）');
+        return;
+      }
+
+      // 设置代理 URL
+      if (proxyUrl) {
+        window.PlatformAPIService.playstation.setProxyUrl(proxyUrl);
+      }
+
+      // 认证
+      const result = await window.PlatformAPIService.playstation.authenticate(npsso);
+
+      if (result.success) {
+        alert('✅ PSN API 认证成功！\n\n现在可以绑定 PSN 账号了。');
+        updatePsnDisplay();
+        toggleConfig('psn');
+
+        // 启用绑定按钮
+        document.getElementById('psnConnectBtn').disabled = false;
+        document.getElementById('psnConnectBtn').textContent = '🔗 绑定 PSN 账号';
+      } else {
+        alert('❌ PSN 认证失败\n\n' + (result.error || '未知错误') + '\n\n' + (result.hint || ''));
+      }
+    }
+
+    function clearPsnConfig() {
+      if (confirm('确定要清除 PSN API 配置吗？')) {
+        window.PlatformAPIService.playstation.clearConfig();
+        document.getElementById('psnNpsso').value = '';
+        alert('✅ PSN API 配置已清除');
+        updatePsnDisplay();
+        document.getElementById('psnConnectBtn').disabled = true;
+        document.getElementById('psnConnectBtn').textContent = '🔗 绑定 PSN 账号（需先配置 API）';
+      }
+    }
+
+    function updatePsnDisplay() {
+      const status = window.PlatformAPIService.getStatus().playstation;
+      
+      if (status.enabled) {
+        document.getElementById('psnStatus').textContent = 'API 已配置';
+        document.getElementById('psnStatus').className = 'platform-status pending';
+      } else {
+        document.getElementById('psnStatus').textContent = '未配置';
+        document.getElementById('psnStatus').className = 'platform-status disconnected';
+      }
+
+      // 检查是否已绑定账号
+      const binding = localStorage.getItem('psn_binding');
+      if (binding) {
+        try {
+          const data = JSON.parse(binding);
+          document.getElementById('psnOnlineId').textContent = data.username || '未知';
+          document.getElementById('psnTrophyLevel').textContent = data.trophyLevel || 0;
+          document.getElementById('psnGameCount').textContent = data.gameCount || 0;
+          document.getElementById('psnStatus').textContent = '已绑定';
+          document.getElementById('psnStatus').className = 'platform-status connected';
+          document.getElementById('psnCard').classList.add('connected');
+        } catch (e) {}
+      }
+    }
+
+    // =============================================
+    // 页面初始化
+    // =============================================
+    // 账号绑定功能
+    // =============================================
+    
+    function showEpicHelp() {
+      alert(`Epic Games 账号绑定帮助
+      
+📚 Epic Games 暂无公开 API
+
+Epic Games 目前不提供公开的用户数据 API，因此我们无法自动获取您的游戏库和游玩数据。
+
+如何查看您的 Epic 用户名：
+1. 打开 Epic Games Launcher
+2. 点击右上角的用户头像
+3. 查看显示名称（Display Name）
+
+💡 提示：您可以手动输入用户名和游戏数量进行标记。`);
+    }
+    
+    async function bindXboxAccount() {
+      if (!window.PlatformAPIService.xbox.isEnabled()) {
+        alert('请先配置 Xbox API Key');
+        toggleConfig('xbox');
+        return;
+      }
+      
+      const gamertag = prompt('请输入您的 Xbox Gamertag (玩家标签):');
+      if (!gamertag) return;
+      
+      const btn = document.getElementById('xboxConnectBtn');
+      btn.disabled = true;
+      btn.textContent = '绑定中...';
+      
+      try {
+        const result = await window.PlatformAPIService.bindAccount('xbox', gamertag);
+        
+        if (result.success) {
+          // 保存绑定数据
+          localStorage.setItem('xbox_binding', JSON.stringify(result.account));
+          
+          // 更新显示
+          document.getElementById('xboxGamertag').textContent = result.account.username || gamertag;
+          document.getElementById('xboxGamerscore').textContent = result.account.gamerscore || 0;
+          document.getElementById('xboxGameCount').textContent = result.account.gameCount || 0;
+          document.getElementById('xboxStatus').textContent = '已绑定';
+          document.getElementById('xboxStatus').className = 'platform-status connected';
+          document.getElementById('xboxCard').classList.add('connected');
+          
+          alert('✅ Xbox 账号绑定成功！\n\n' + 
+                `Gamertag: ${result.account.username}\n` +
+                `Gamerscore: ${result.account.gamerscore || 0}\n` +
+                `游戏数量: ${result.account.gameCount || 0}`);
+        } else {
+          alert('❌ 绑定失败：' + (result.error || '未知错误'));
+        }
+      } catch (error) {
+        alert('❌ 绑定失败：' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔗 绑定 Xbox 账号';
+      }
+    }
+    
+    async function bindPsnAccount() {
+      if (!window.PlatformAPIService.playstation.isEnabled()) {
+        alert('请先配置 PSN NPSSO Token');
+        toggleConfig('psn');
+        return;
+      }
+      
+      const onlineId = prompt('请输入您的 PSN Online ID:');
+      if (!onlineId) return;
+      
+      const btn = document.getElementById('psnConnectBtn');
+      btn.disabled = true;
+      btn.textContent = '绑定中...';
+      
+      try {
+        const result = await window.PlatformAPIService.bindAccount('playstation', onlineId);
+        
+        if (result.success) {
+          // 保存绑定数据
+          localStorage.setItem('psn_binding', JSON.stringify(result.account));
+          
+          // 更新显示
+          document.getElementById('psnOnlineId').textContent = result.account.username || onlineId;
+          document.getElementById('psnTrophyLevel').textContent = result.account.trophyLevel || 0;
+          document.getElementById('psnGameCount').textContent = result.account.gameCount || 0;
+          document.getElementById('psnStatus').textContent = '已绑定';
+          document.getElementById('psnStatus').className = 'platform-status connected';
+          document.getElementById('psnCard').classList.add('connected');
+          
+          alert('✅ PlayStation 账号绑定成功！\n\n' + 
+                `Online ID: ${result.account.username}\n` +
+                `奖杯等级: ${result.account.trophyLevel || 0}\n` +
+                `游戏数量: ${result.account.gameCount || 0}`);
+        } else {
+          alert('❌ 绑定失败：' + (result.error || '未知错误'));
+        }
+      } catch (error) {
+        alert('❌ 绑定失败：' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔗 绑定 PSN 账号';
+      }
+    }
+    
+    // =============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 加载 Epic 数据
+      const epicData = localStorage.getItem('epic_binding');
+      if (epicData) {
+        try {
+          updateEpicDisplay(JSON.parse(epicData));
+          document.getElementById('epicUsername').value = JSON.parse(epicData).username || '';
+          document.getElementById('epicGameCount').value = JSON.parse(epicData).gameCount || '';
+        } catch (e) {}
+      }
+
+      // 加载 Xbox 配置
+      const xboxApiKey = localStorage.getItem('xbox_api_key');
+      if (xboxApiKey) {
+        document.getElementById('xboxApiKey').value = xboxApiKey;
+      }
+      // 检查 Xbox API 是否已启用
+      if (window.PlatformAPIService && window.PlatformAPIService.xbox.isEnabled()) {
+        document.getElementById('xboxStatus').textContent = 'API 已配置';
+        document.getElementById('xboxStatus').className = 'platform-status pending';
+      }
+      updateXboxDisplay();
+
+      // 加载 PSN 配置
+      const psnConfig = localStorage.getItem('psn_api_config');
+      if (psnConfig) {
+        try {
+          const config = JSON.parse(psnConfig);
+          if (config.npsso) {
+            document.getElementById('psnNpsso').value = config.npsso;
+          }
+          if (config.proxyUrl) {
+            document.getElementById('psnProxyUrl').value = config.proxyUrl;
+          }
+        } catch (e) {}
+      }
+      // 检查 PSN API 是否已启用
+      if (window.PlatformAPIService && window.PlatformAPIService.playstation.isEnabled()) {
+        document.getElementById('psnStatus').textContent = 'API 已配置';
+        document.getElementById('psnStatus').className = 'platform-status pending';
+      }
+      updatePsnDisplay();
+
+      console.log('✅ 平台账号管理页面已初始化');
+    });
+  </script>
+</body>
+</html>
