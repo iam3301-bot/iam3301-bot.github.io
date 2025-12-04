@@ -1079,12 +1079,34 @@
         apiKeyConfigured: !!steamApiKey
       };
 
-      // 保存到本地存储
-      localStorage.setItem('steam_binding', JSON.stringify(bindingData));
-
       // 同步到 UserDataManager（使用正确的存储格式）
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      const userId = currentUser.id || 'guest';
+      
+      // 【重要】获取正确的用户 ID - 从 gamebox_session 获取
+      let userId = currentUser.id;
+      if (!userId) {
+        // 尝试从 session 获取
+        try {
+          const session = JSON.parse(localStorage.getItem('gamebox_session') || '{}');
+          userId = session?.user?.id;
+        } catch (e) {}
+      }
+      
+      // 如果仍然没有用户 ID，说明用户未登录
+      if (!userId) {
+        console.error('[Steam Binding] 错误：无法获取用户 ID，用户可能未登录');
+        alert('请先登录后再绑定 Steam 账号');
+        return;
+      }
+      
+      console.log('[Steam Binding] 保存绑定数据，用户 ID:', userId);
+      
+      // 【修复】使用用户专属的 key 保存绑定数据
+      bindingData.userId = userId; // 记录绑定的用户 ID
+      localStorage.setItem('steam_binding_' + userId, JSON.stringify(bindingData));
+      
+      // 清除旧的全局 steam_binding（如果存在）
+      localStorage.removeItem('steam_binding');
       
       // 重要：使用与 UserDataManager 相同的存储键格式
       const STORAGE_KEY = 'gamebox_user_data';

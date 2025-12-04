@@ -1375,45 +1375,76 @@
     
     currentUser = await GameBoxAuth.getCurrentUser();
     
+    // 调试：输出当前用户信息
+    console.log('[Profile] ========== 用户中心初始化 ==========');
+    console.log('[Profile] 当前用户:', currentUser);
+    console.log('[Profile] 用户 ID:', currentUser?.id);
+    
     if (currentUser) {
       loginPrompt.style.display = 'none';
       profileContent.style.display = 'grid';
       
-      // 加载用户数据
+      // 加载用户数据 - 严格按用户 ID 获取
       userData = UserDataManager.getData(currentUser.id);
       
-      // 检查是否有通过绑定向导保存的 Steam 数据
-      // 优先使用 steam_binding 中的最新数据
-      const steamBinding = localStorage.getItem('steam_binding');
-      if (steamBinding) {
+      // 【重要修复】检查是否有通过绑定向导保存的 Steam 数据
+      // 使用用户专属的 key: steam_binding_{userId}
+      const userSteamBindingKey = 'steam_binding_' + currentUser.id;
+      const steamBinding = localStorage.getItem(userSteamBindingKey);
+      
+      // 【迁移旧数据】如果存在旧的全局 steam_binding，检查是否属于当前用户
+      const oldGlobalBinding = localStorage.getItem('steam_binding');
+      if (oldGlobalBinding && !steamBinding) {
         try {
-          const bindingData = JSON.parse(steamBinding);
-          // 检查绑定数据是否比现有数据更新
-          const bindingTime = new Date(bindingData.boundAt || 0).getTime();
-          const existingTime = new Date(userData.steam?.lastSync || 0).getTime();
-          
-          // 如果绑定数据存在且更新，或者当前没有绑定
-          if (!userData.steam?.linked || bindingTime > existingTime || !userData.steam?.steamId) {
-            userData.steam = {
-              linked: true,
-              steamId: bindingData.steamId,
-              personaName: bindingData.personaName,
-              avatar: bindingData.avatar,
-              profileUrl: bindingData.profileUrl,
-              lastSync: bindingData.boundAt,
-              games: bindingData.games || [],
-              gameCount: bindingData.gameCount || 0,
-              totalPlaytime: bindingData.totalPlaytime || 0
-            };
-            // 保存更新后的数据
-            UserDataManager.saveData(currentUser.id, userData);
-            console.log('[Profile] 已从绑定向导同步 Steam 数据', {
-              steamId: bindingData.steamId,
-              gameCount: bindingData.gameCount
-            });
+          const oldData = JSON.parse(oldGlobalBinding);
+          // 只有当旧数据的绑定用户 ID 匹配当前用户时才迁移
+          if (oldData.userId === currentUser.id) {
+            console.log('[Profile] 迁移旧的 Steam 绑定数据到用户专属存储');
+            localStorage.setItem(userSteamBindingKey, oldGlobalBinding);
+            localStorage.removeItem('steam_binding'); // 清除旧的全局数据
           }
         } catch (e) {
-          console.error('解析 steam_binding 数据失败:', e);
+          // 忽略解析错误
+        }
+      }
+      
+      // 使用用户专属的绑定数据
+      const userSteamBinding = localStorage.getItem(userSteamBindingKey);
+      if (userSteamBinding) {
+        try {
+          const bindingData = JSON.parse(userSteamBinding);
+          
+          // 验证绑定数据的用户 ID（双重确认）
+          if (bindingData.userId && bindingData.userId !== currentUser.id) {
+            console.warn('[Profile] Steam 绑定数据的用户 ID 不匹配，忽略');
+          } else {
+            // 检查绑定数据是否比现有数据更新
+            const bindingTime = new Date(bindingData.boundAt || 0).getTime();
+            const existingTime = new Date(userData.steam?.lastSync || 0).getTime();
+            
+            // 如果绑定数据存在且更新，或者当前没有绑定
+            if (!userData.steam?.linked || bindingTime > existingTime || !userData.steam?.steamId) {
+              userData.steam = {
+                linked: true,
+                steamId: bindingData.steamId,
+                personaName: bindingData.personaName,
+                avatar: bindingData.avatar,
+                profileUrl: bindingData.profileUrl,
+                lastSync: bindingData.boundAt,
+                games: bindingData.games || [],
+                gameCount: bindingData.gameCount || 0,
+                totalPlaytime: bindingData.totalPlaytime || 0
+              };
+              // 保存更新后的数据
+              UserDataManager.saveData(currentUser.id, userData);
+              console.log('[Profile] 已从绑定向导同步 Steam 数据', {
+                steamId: bindingData.steamId,
+                gameCount: bindingData.gameCount
+              });
+            }
+          }
+        } catch (e) {
+          console.error('[Profile] 解析 steam_binding 数据失败:', e);
         }
       }
       
@@ -1423,9 +1454,11 @@
       console.log('[Profile] 用户数据加载完成:', {
         userId: currentUser.id,
         steamLinked: userData.steam?.linked,
+        steamPersonaName: userData.steam?.personaName,
         steamId: userData.steam?.steamId,
         gameCount: userData.steam?.gameCount
       });
+      console.log('[Profile] ========================================');
       
       renderUserInfo();
       renderStats();

@@ -699,33 +699,40 @@
       console.log(`✅ 加载 Steam 游戏: ${steamGames.length} 款`, steamGames.slice(0, 2));
     }
     
-    // 也检查 steam_binding
-    const steamBinding = localStorage.getItem('steam_binding');
-    if (steamBinding && steamGames.length === 0) {
-      try {
-        const bindingData = JSON.parse(steamBinding);
-        console.log('📦 steam_binding 数据:', bindingData.games?.slice(0, 2));
-        
-        if (bindingData.games && bindingData.games.length > 0) {
-          steamGames = bindingData.games.map(game => {
-            const appId = game.appid || game.appId || game.id;
-            const validAppId = appId && /^\d+$/.test(String(appId)) ? appId : null;
-            
-            return {
-              id: validAppId,
-              appId: validAppId,
-              name: game.name,
-              playtimeForever: game.playtimeForever || game.playtime_forever || 0,
-              playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
-              thumbnail: validAppId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/header.jpg` : '',
-              source: 'steam',
-              lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
-            };
-          });
-          console.log(`✅ 从 steam_binding 加载游戏: ${steamGames.length} 款`);
+    // 也检查用户专属的 steam_binding（使用当前用户 ID）
+    if (steamGames.length === 0 && currentUser?.id) {
+      const userSteamBindingKey = 'steam_binding_' + currentUser.id;
+      const steamBinding = localStorage.getItem(userSteamBindingKey);
+      
+      if (steamBinding) {
+        try {
+          const bindingData = JSON.parse(steamBinding);
+          console.log('📦 用户专属 steam_binding 数据:', bindingData.games?.slice(0, 2));
+          
+          // 验证绑定数据的用户 ID
+          if (bindingData.userId && bindingData.userId !== currentUser.id) {
+            console.warn('[Library] Steam 绑定数据的用户 ID 不匹配，忽略');
+          } else if (bindingData.games && bindingData.games.length > 0) {
+            steamGames = bindingData.games.map(game => {
+              const appId = game.appid || game.appId || game.id;
+              const validAppId = appId && /^\d+$/.test(String(appId)) ? appId : null;
+              
+              return {
+                id: validAppId,
+                appId: validAppId,
+                name: game.name,
+                playtimeForever: game.playtimeForever || game.playtime_forever || 0,
+                playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
+                thumbnail: validAppId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/header.jpg` : '',
+                source: 'steam',
+                lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
+              };
+            });
+            console.log(`✅ 从 steam_binding_${currentUser.id} 加载游戏: ${steamGames.length} 款`);
+          }
+        } catch (e) {
+          console.error('解析 steam_binding 失败:', e);
         }
-      } catch (e) {
-        console.error('解析 steam_binding 失败:', e);
       }
     }
   }

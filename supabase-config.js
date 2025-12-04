@@ -203,8 +203,9 @@ const LOCAL_AUTH = {
     };
     localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
     
-    // 兼容其他页面
+    // 兼容其他页面 - 【重要】必须包含 id 字段用于数据隔离
     localStorage.setItem('currentUser', JSON.stringify({
+      id: user.id,  // 用户唯一标识，用于数据存储隔离
       username: user.username,
       nickname: user.username,
       email: user.email
@@ -1548,17 +1549,54 @@ const SteamAPI = {
 const UserDataManager = {
   STORAGE_KEY: 'gamebox_user_data',
   
-  // 获取用户数据
+  // 获取用户数据 - 严格按用户 ID 隔离
   getData(userId) {
+    // 调试日志
+    console.log('[UserDataManager] getData 被调用, userId:', userId);
+    
+    // 严格检查 userId
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+      console.error('[UserDataManager] 错误：userId 无效！返回空默认数据');
+      return this._getDefaultData();
+    }
+    
     const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
-    return allData[userId] || this._getDefaultData();
+    
+    // 调试：显示所有存储的用户 ID
+    console.log('[UserDataManager] 存储中的所有用户 ID:', Object.keys(allData));
+    
+    const userData = allData[userId];
+    if (userData) {
+      console.log('[UserDataManager] 找到用户 [' + userId + '] 的数据');
+      console.log('[UserDataManager] Steam 绑定状态:', userData.steam?.linked ? '已绑定 - ' + userData.steam?.personaName : '未绑定');
+    } else {
+      console.log('[UserDataManager] 用户 [' + userId + '] 无数据，返回默认');
+    }
+    
+    return userData || this._getDefaultData();
   },
   
-  // 保存用户数据（实时保存，永不删除）
+  // 保存用户数据（实时保存，永不删除）- 严格按用户 ID 隔离
   saveData(userId, data) {
+    // 调试日志
+    console.log('[UserDataManager] saveData 被调用, userId:', userId);
+    
+    // 严格检查 userId
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+      console.error('[UserDataManager] 错误：saveData 的 userId 无效！数据未保存');
+      return null;
+    }
+    
     const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
-    allData[userId] = { ...this.getData(userId), ...data, updatedAt: new Date().toISOString() };
+    
+    // 获取该用户的现有数据（避免递归调用日志）
+    const existingData = allData[userId] || this._getDefaultData();
+    
+    // 合并数据
+    allData[userId] = { ...existingData, ...data, updatedAt: new Date().toISOString() };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allData));
+    
+    console.log('[UserDataManager] 用户 [' + userId + '] 数据已保存');
     
     // 自动备份到永久存储
     this._backupUserData(userId, allData[userId]);
