@@ -355,13 +355,20 @@
         }
         
         .theme-option-icon {
-          font-size: 32px;
+          font-size: 28px;
           line-height: 1;
           flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .theme-option-info {
           flex: 1;
+          min-width: 0;
+          overflow: hidden;
         }
         
         .theme-option-name {
@@ -369,11 +376,17 @@
           font-weight: 700;
           color: #fff;
           margin-bottom: 4px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .theme-option-desc {
           font-size: 11px;
           color: rgba(255, 255, 255, 0.6);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .theme-option-check {
