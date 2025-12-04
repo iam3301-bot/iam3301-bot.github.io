@@ -280,29 +280,61 @@
     
     /* 社交登录按钮 */
     .social-login {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
     
     .social-btn {
-      flex: 1;
-      padding: 12px;
+      padding: 12px 16px;
       background: rgba(17, 24, 39, 0.8);
       border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 8px;
       color: var(--text-soft);
       font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      font-family: 'Rajdhani', sans-serif;
     }
     
     .social-btn:hover {
       border-color: var(--accent);
       background: rgba(56, 189, 248, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    }
+    
+    .social-btn:active {
+      transform: translateY(0);
+    }
+    
+    /* 第三方登录按钮特定样式 */
+    .social-btn-google:hover {
+      border-color: #4285f4;
+      background: rgba(66, 133, 244, 0.1);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+    }
+    
+    .social-btn-github:hover {
+      border-color: #24292e;
+      background: rgba(36, 41, 46, 0.2);
+      box-shadow: 0 4px 12px rgba(36, 41, 46, 0.4);
+    }
+    
+    .social-btn-wechat:hover {
+      border-color: #07c160;
+      background: rgba(7, 193, 96, 0.1);
+      box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+    }
+    
+    .social-btn-qq:hover {
+      border-color: #12b7f5;
+      background: rgba(18, 183, 245, 0.1);
+      box-shadow: 0 4px 12px rgba(18, 183, 245, 0.3);
     }
     
     /* 额外链接 */
@@ -593,11 +625,32 @@
           
           <!-- 社交登录 -->
           <div class="social-login">
-            <button type="button" class="social-btn" id="googleLoginBtn">
-              <span>🔵</span> Google
+            <button type="button" class="social-btn social-btn-google" id="googleLoginBtn" title="使用 Google 账号登录">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="margin-right: 8px;">
+                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Google
             </button>
-            <button type="button" class="social-btn" id="githubLoginBtn">
-              <span>⚫</span> GitHub
+            <button type="button" class="social-btn social-btn-github" id="githubLoginBtn" title="使用 GitHub 账号登录">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="margin-right: 8px;">
+                <path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
+            </button>
+            <button type="button" class="social-btn social-btn-wechat" id="wechatLoginBtn" title="使用微信账号登录">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="margin-right: 8px;">
+                <path fill="currentColor" d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.858c-.135-.01-.27-.019-.406-.019zm-2.579 3.158c.545 0 .984.45.984 1.01 0 .56-.439 1.01-.984 1.01-.545 0-.984-.45-.984-1.01 0-.56.439-1.01.984-1.01zm4.655 0c.545 0 .984.45.984 1.01 0 .56-.439 1.01-.984 1.01-.545 0-.984-.45-.984-1.01 0-.56.439-1.01.984-1.01z"/>
+              </svg>
+              微信
+            </button>
+            <button type="button" class="social-btn social-btn-qq" id="qqLoginBtn" title="使用 QQ 账号登录">
+              <svg viewBox="0 0 24 24" width="18" height="18" style="margin-right: 8px;">
+                <path fill="currentColor" d="M21.395 15.035a39.548 39.548 0 0 0-.803-2.264l-1.079-2.695c.001-.032.014-.562.014-.836C19.526 4.632 17.081 0 12 0S4.474 4.632 4.474 9.241c0 .274.013.804.014.836l-1.08 2.695a39.548 39.548 0 0 0-.802 2.264c-1.021 3.283-.69 4.643-.438 4.673.54.065 1.131-2.427 1.843-3.229.426-.482.91-.731 1.229-.894.495 3.14 3.66 5.625 7.76 5.625s7.265-2.485 7.76-5.625c.318.163.803.412 1.229.894.712.802 1.302 3.294 1.843 3.229.252-.03.583-1.39-.437-4.673z"/>
+              </svg>
+              QQ
             </button>
           </div>
           
@@ -675,9 +728,11 @@
 </div>
 
 <script src="common.js"></script>
-<script src="cyber-effects.js"></script>
+<parameter name="cyber-effects.js"></script>
 <!-- GameBox 认证系统 -->
 <script src="supabase-config.js"></script>
+<!-- OAuth 第三方登录管理 -->
+<script src="oauth-providers.js"></script>
 <script>
   // =============================================
   // 页面初始化
@@ -1219,22 +1274,67 @@ const SUPABASE_CONFIG = {
   // OAuth 社交登录
   // =============================================
   
+  // Google 登录
   document.getElementById('googleLoginBtn').addEventListener('click', async () => {
-    const result = await GameBoxAuth.signInWithGoogle();
-    
-    if (!result.success) {
-      showMessage(result.error, 'info');
+    try {
+      showMessage('正在跳转到 Google 登录...', 'info');
+      await window.OAuthManager.signInWithGoogle();
+    } catch (error) {
+      showMessage(error.message || 'Google 登录失败', 'error');
     }
-    // 如果成功，会自动跳转到 Google 登录页面
   });
   
+  // GitHub 登录
   document.getElementById('githubLoginBtn').addEventListener('click', async () => {
-    const result = await GameBoxAuth.signInWithGitHub();
-    
-    if (!result.success) {
-      showMessage(result.error, 'info');
+    try {
+      showMessage('正在跳转到 GitHub 登录...', 'info');
+      await window.OAuthManager.signInWithGitHub();
+    } catch (error) {
+      showMessage(error.message || 'GitHub 登录失败', 'error');
     }
-    // 如果成功，会自动跳转到 GitHub 登录页面
+  });
+  
+  // 微信登录
+  document.getElementById('wechatLoginBtn').addEventListener('click', async () => {
+    try {
+      showMessage('正在打开微信登录二维码...', 'info');
+      await window.OAuthManager.signInWithWeChat();
+    } catch (error) {
+      showMessage(error.message || '微信登录失败', 'error');
+    }
+  });
+  
+  // QQ 登录
+  document.getElementById('qqLoginBtn').addEventListener('click', async () => {
+    try {
+      showMessage('正在跳转到 QQ 登录...', 'info');
+      await window.OAuthManager.signInWithQQ();
+    } catch (error) {
+      showMessage(error.message || 'QQ 登录失败', 'error');
+    }
+  });
+  
+  // 监听 OAuth 回调消息
+  window.addEventListener('message', (event) => {
+    // 验证消息来源
+    if (event.origin !== window.location.origin) {
+      return;
+    }
+    
+    if (event.data.type === 'oauth_success') {
+      const user = event.data.user;
+      const provider = event.data.provider;
+      
+      showMessage(`${provider} 登录成功！欢迎回来，${user.username}`, 'success');
+      
+      // 更新UI显示
+      setTimeout(() => {
+        checkAuthStatus();
+      }, 500);
+      
+    } else if (event.data.type === 'oauth_error') {
+      showMessage(`登录失败: ${event.data.error}`, 'error');
+    }
   });
   
   // =============================================

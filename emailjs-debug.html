@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmailJS 调试工具 - GameBox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .config-section {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .config-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .config-item:last-child {
+      border-bottom: none;
+    }
+    
+    .config-label {
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .config-value {
+      color: #667eea;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .status.enabled {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .status.disabled {
+      background: #f44336;
+      color: white;
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 600;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .logs {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .log-item {
+      margin-bottom: 8px;
+      padding: 4px;
+    }
+    
+    .log-success { color: #4caf50; }
+    .log-error { color: #f44336; }
+    .log-warn { color: #ff9800; }
+    .log-info { color: #2196f3; }
+    
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .alert.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .alert.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .alert.warning {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .checklist {
+      background: #fff9e6;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .checklist h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    
+    .checklist-item {
+      margin-bottom: 12px;
+      padding-left: 25px;
+      position: relative;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .checklist-item:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #4caf50;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #e83e8c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📧 EmailJS 调试工具</h1>
+    <p class="subtitle">诊断并修复 GameBox 验证码发送问题</p>
+    
+    <!-- 配置信息 -->
+    <div class="config-section">
+      <h3 style="margin-bottom: 15px; color: #333;">当前配置</h3>
+      <div class="config-item">
+        <span class="config-label">Service ID:</span>
+        <span class="config-value" id="serviceId">-</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">Template ID:</span>
+        <span class="config-value" id="templateId">-</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">Public Key:</span>
+        <span class="config-value" id="publicKey">-</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">状态:</span>
+        <span class="status" id="statusBadge">-</span>
+      </div>
+    </div>
+    
+    <!-- 测试表单 -->
+    <div class="test-section">
+      <h3 style="margin-bottom: 20px; color: #333;">发送测试邮件</h3>
+      
+      <div class="form-group">
+        <label for="testEmail">收件邮箱:</label>
+        <input type="email" id="testEmail" placeholder="请输入您的邮箱地址" value="2784422912@qq.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="testCode">验证码:</label>
+        <input type="text" id="testCode" placeholder="6位数字验证码" value="123456" maxlength="6">
+      </div>
+      
+      <button class="btn" id="sendBtn" onclick="testSendEmail()">🚀 发送测试邮件</button>
+    </div>
+    
+    <div id="alertBox"></div>
+    
+    <!-- 执行日志 -->
+    <div style="margin-top: 30px;">
+      <h3 style="margin-bottom: 15px; color: #333;">执行日志</h3>
+      <div class="logs" id="logs"></div>
+    </div>
+    
+    <!-- 排查清单 -->
+    <div class="checklist">
+      <h3>❓ 如果收不到邮件，请检查：</h3>
+      <div class="checklist-item">
+        <strong>EmailJS 服务连接状态</strong><br>
+        访问 <a href="https://dashboard.emailjs.com/admin" target="_blank">EmailJS Dashboard</a>，确认邮件服务已正确连接
+      </div>
+      <div class="checklist-item">
+        <strong>QQ 邮箱授权码</strong><br>
+        QQ邮箱必须使用<strong>授权码</strong>而不是QQ密码！<br>
+        获取方式: QQ邮箱 → 设置 → 账户 → POP3/IMAP/SMTP → 开启服务 → 获取授权码
+      </div>
+      <div class="checklist-item">
+        <strong>模板变量配置</strong><br>
+        在 EmailJS 模板编辑器中，确保使用了正确的变量：<br>
+        • To Email: <code>{{to_email}}</code><br>
+        • 验证码: <code>{{verification_code}}</code><br>
+        • 应用名称: <code>{{app_name}}</code>
+      </div>
+      <div class="checklist-item">
+        <strong>邮箱垃圾箱</strong><br>
+        检查垃圾邮件/广告邮件文件夹，首次发送可能被拦截
+      </div>
+      <div class="checklist-item">
+        <strong>EmailJS 后台测试</strong><br>
+        在 EmailJS 模板编辑器中点击 "Test it" 按钮，使用测试数据直接发送
+      </div>
+    </div>
+  </div>
+
+  <!-- 加载 EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="supabase-config.js"></script>
+  
+  <script>
+    // 日志函数
+    function log(message, type = 'info') {
+      const logs = document.getElementById('logs');
+      const item = document.createElement('div');
+      item.className = `log-item log-${type}`;
+      const time = new Date().toLocaleTimeString();
+      item.innerHTML = `<span style="color:#888;">[${time}]</span> ${message}`;
+      logs.appendChild(item);
+      logs.scrollTop = logs.scrollHeight;
+    }
+    
+    // 显示提示
+    function showAlert(message, type) {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.innerHTML = `<div class="alert ${type}">${message}</div>`;
+      setTimeout(() => {
+        alertBox.innerHTML = '';
+      }, 5000);
+    }
+    
+    // 初始化 - 显示配置信息
+    function initConfig() {
+      log('🔧 加载 EmailJS 配置...', 'info');
+      
+      const config = EMAIL_SERVICE_CONFIG.emailjs;
+      
+      document.getElementById('serviceId').textContent = config.serviceId;
+      document.getElementById('templateId').textContent = config.templateId;
+      document.getElementById('publicKey').textContent = config.publicKey;
+      
+      const statusBadge = document.getElementById('statusBadge');
+      if (config.enabled) {
+        statusBadge.textContent = '✓ 已启用';
+        statusBadge.className = 'status enabled';
+        log('✓ EmailJS 服务已启用', 'success');
+      } else {
+        statusBadge.textContent = '✗ 未启用';
+        statusBadge.className = 'status disabled';
+        log('✗ EmailJS 服务未启用', 'error');
+      }
+      
+      log(`Service ID: ${config.serviceId}`, 'info');
+      log(`Template ID: ${config.templateId}`, 'info');
+      log(`Public Key: ${config.publicKey.substring(0, 20)}...`, 'info');
+    }
+    
+    // 测试发送邮件
+    async function testSendEmail() {
+      const email = document.getElementById('testEmail').value.trim();
+      const code = document.getElementById('testCode').value.trim();
+      const btn = document.getElementById('sendBtn');
+      
+      if (!email) {
+        showAlert('❌ 请输入邮箱地址', 'error');
+        return;
+      }
+      
+      if (!code || code.length !== 6) {
+        showAlert('❌ 请输入6位验证码', 'error');
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ 发送中...';
+      
+      log('📤 开始发送测试邮件...', 'info');
+      log(`收件人: ${email}`, 'info');
+      log(`验证码: ${code}`, 'info');
+      
+      try {
+        // 检查 EmailJS SDK
+        if (typeof emailjs === 'undefined') {
+          throw new Error('EmailJS SDK 未加载');
+        }
+        log('✓ EmailJS SDK 已加载', 'success');
+        
+        // 获取配置
+        const config = EMAIL_SERVICE_CONFIG.emailjs;
+        
+        if (!config.enabled) {
+          throw new Error('EmailJS 服务未启用');
+        }
+        log('✓ EmailJS 服务已启用', 'success');
+        
+        // 初始化 EmailJS
+        log('🔧 初始化 EmailJS...', 'info');
+        emailjs.init(config.publicKey);
+        log('✓ EmailJS 初始化完成', 'success');
+        
+        // 准备参数
+        const templateParams = {
+          to_email: email,
+          verification_code: code,
+          app_name: 'GameBox 游盒',
+          message: `您的验证码是: ${code}，有效期5分钟。`
+        };
+        
+        log('📋 邮件参数:', 'info');
+        log(JSON.stringify(templateParams, null, 2), 'info');
+        
+        // 发送邮件
+        log('📨 调用 EmailJS API...', 'info');
+        const result = await emailjs.send(
+          config.serviceId,
+          config.templateId,
+          templateParams
+        );
+        
+        log('✓ EmailJS API 调用成功!', 'success');
+        log(`响应状态: ${result.status}`, 'success');
+        log(`响应文本: ${result.text}`, 'success');
+        
+        showAlert('✅ 邮件发送成功！请检查收件箱（包括垃圾邮件文件夹）', 'success');
+        
+      } catch (error) {
+        log(`❌ 发送失败: ${error.message}`, 'error');
+        log(`错误详情: ${JSON.stringify(error)}`, 'error');
+        
+        let errorMsg = '发送失败！';
+        
+        if (error.text) {
+          errorMsg += ` ${error.text}`;
+        } else if (error.message) {
+          errorMsg += ` ${error.message}`;
+        }
+        
+        showAlert(`❌ ${errorMsg}`, 'error');
+        
+        // 提供解决建议
+        if (error.text && error.text.includes('Service')) {
+          log('💡 建议: 检查 Service ID 是否正确', 'warn');
+        } else if (error.text && error.text.includes('Template')) {
+          log('💡 建议: 检查 Template ID 是否正确', 'warn');
+        } else if (error.text && error.text.includes('public key')) {
+          log('💡 建议: 检查 Public Key 是否正确', 'warn');
+        } else {
+          log('💡 建议: 检查 EmailJS Dashboard 中服务是否已连接', 'warn');
+          log('💡 建议: 如果使用QQ邮箱，确认使用的是授权码而非密码', 'warn');
+        }
+        
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 发送测试邮件';
+      }
+    }
+    
+    // 页面加载完成后初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      log('🚀 EmailJS 调试工具已启动', 'success');
+      initConfig();
+    });
+  </script>
+</body>
+</html>
