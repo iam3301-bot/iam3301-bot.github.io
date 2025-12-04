@@ -56,20 +56,23 @@
       background: linear-gradient(135deg, rgba(27, 40, 56, 0.95), rgba(42, 71, 94, 0.9));
     }
     
-    /* 游戏卡片增强 - 全封面设计 */
+    /* 游戏卡片增强 - 精美卡片设计 */
     .game-card-enhanced {
       position: relative;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      aspect-ratio: 16 / 9;
-      background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+      aspect-ratio: 92 / 43; /* Steam header.jpg 比例 460x215 */
+      background: linear-gradient(145deg, #1a2634 0%, #0d1421 100%);
+      border: 1px solid rgba(102, 192, 244, 0.15);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     
     .game-card-enhanced:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 16px 48px rgba(102, 192, 244, 0.3);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(102, 192, 244, 0.25), 0 0 0 1px rgba(102, 192, 244, 0.5);
+      border-color: rgba(102, 192, 244, 0.6);
     }
     
     .game-card-enhanced .game-cover {
@@ -85,73 +88,103 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
     }
     
     .game-card-enhanced:hover .game-cover img {
-      transform: scale(1.1);
+      transform: scale(1.08);
+      filter: brightness(1.1);
     }
     
-    .game-card-enhanced .game-cover-placeholder {
+    /* 封面占位符 - 美观的渐变背景 */
+    .game-card-enhanced .cover-placeholder {
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 64px;
-      background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+      font-size: 48px;
+      background: linear-gradient(145deg, #1e3a5f 0%, #0d1f35 50%, #0a1628 100%);
+      color: rgba(102, 192, 244, 0.4);
     }
     
-    /* 卡片信息覆盖层 */
+    .game-card-enhanced .cover-placeholder::after {
+      content: attr(data-name);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+      max-width: 80%;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    /* 卡片信息覆盖层 - 更精致的渐变 */
     .game-card-enhanced .game-overlay {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
-      padding: 60px 16px 16px 16px;
-      transition: all 0.3s ease;
+      background: linear-gradient(to top, 
+        rgba(0,0,0,0.95) 0%, 
+        rgba(0,0,0,0.85) 30%,
+        rgba(0,0,0,0.5) 60%, 
+        transparent 100%);
+      padding: 50px 16px 14px 16px;
+      transition: all 0.35s ease;
     }
     
     .game-card-enhanced:hover .game-overlay {
-      background: linear-gradient(to top, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+      background: linear-gradient(to top, 
+        rgba(0,0,0,0.98) 0%, 
+        rgba(0,0,0,0.9) 40%,
+        rgba(0,0,0,0.6) 70%, 
+        transparent 100%);
+      padding-bottom: 18px;
     }
     
+    /* 游戏时长徽章 */
     .game-card-enhanced .playtime-badge {
       position: absolute;
       top: 12px;
       right: 12px;
-      background: rgba(0, 0, 0, 0.85);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 30, 48, 0.9) 100%);
       color: #66c0f4;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(102, 192, 244, 0.4);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(102, 192, 244, 0.3);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
     
+    /* Steam 徽章 */
     .game-card-enhanced .steam-badge {
       position: absolute;
       top: 12px;
       left: 12px;
-      background: rgba(27, 40, 56, 0.95);
+      background: linear-gradient(135deg, rgba(27, 40, 56, 0.95) 0%, rgba(42, 71, 94, 0.9) 100%);
       color: #66c0f4;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(102, 192, 244, 0.4);
+      gap: 5px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     
     .game-card-enhanced .game-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #fff;
       margin-bottom: 8px;
@@ -290,11 +323,26 @@
       font-size: 11px;
     }
     
-    /* 游戏列表网格 - 大封面卡片 */
+    /* 游戏列表网格 - 响应式美观布局 */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 4px;
+    }
+    
+    @media (min-width: 1400px) {
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+      }
     }
     
     /* 无限滚动加载提示 */
@@ -857,42 +905,66 @@
     const isSteam = game.source === 'steam';
     const gameId = game.id;
     
-    // 使用Steam高清横版封面图
+    // Steam 高清封面图 URL (多重降级策略)
+    // 优先级: header.jpg (460x215) -> capsule_616x353.jpg -> library_600x900.jpg
+    const steamCoverUrl = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg` : '';
+    const steamCoverFallback1 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg` : '';
+    const steamCoverFallback2 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900.jpg` : '';
+    
+    // 确定封面 URL
     let coverUrl = '';
     if (isSteam && gameId) {
-      // library_600x900.jpg 是竖版, header.jpg(460x215), capsule_616x353.jpg(616x353)
-      coverUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg`;
+      coverUrl = steamCoverUrl;
     } else if (game.thumbnail) {
       coverUrl = game.thumbnail;
     }
     
-    // 封面图显示逻辑
+    // 封面图显示逻辑 - 多级降级 + 美观占位符
     const coverImg = coverUrl 
       ? `<img src="${coverUrl}" alt="${game.name}" loading="lazy" 
-           onerror="this.onerror=null; this.src='https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg'; 
-           this.onerror=function(){this.parentElement.innerHTML='<div class=cover-placeholder>🎮</div>';}" />`
-      : '<div class="cover-placeholder">🎮</div>';
+           onerror="this.onerror=function(){
+             this.onerror=function(){
+               this.parentElement.innerHTML='<div class=\\'cover-placeholder\\' data-name=\\'${game.name.replace(/'/g, "").substring(0, 20)}\\'>🎮</div>';
+             };
+             this.src='${steamCoverFallback2}';
+           };
+           this.src='${steamCoverFallback1}';" />`
+      : `<div class="cover-placeholder" data-name="${game.name.substring(0, 20)}">🎮</div>`;
     
     // 点击事件处理
     const clickHandler = isSteam 
       ? `onclick="window.open('https://store.steampowered.com/app/${gameId}', '_blank')"` 
       : `onclick="window.location.href='game-detail.html?id=${gameId}&name=${encodeURIComponent(game.name)}'" `;
     
+    // Steam 徽章 SVG
+    const steamBadge = isSteam ? `
+      <div class="steam-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        Steam
+      </div>` : '';
+    
+    // 游戏时长徽章
+    const playtimeBadge = game.playtimeForever > 0 
+      ? `<div class="playtime-badge">🎮 ${formatPlaytimeShort(game.playtimeForever)}</div>` 
+      : '';
+    
     return `
       <div class="game-card-enhanced" data-id="${gameId}" data-name="${game.name}" ${clickHandler}>
         <div class="game-cover">
           ${coverImg}
         </div>
-        ${isSteam ? '<div class="steam-badge"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg> Steam</div>' : ''}
-        ${game.playtimeForever > 0 ? `<div class="playtime-badge">⏱️ ${formatPlaytimeShort(game.playtimeForever)}</div>` : ''}
+        ${steamBadge}
+        ${playtimeBadge}
         <div class="game-overlay">
           <div class="game-title">${game.name}</div>
           <div class="game-meta">
-            <span>${playtimeText}</span>
-            ${recentText ? `<span class="recent-play">🔥 ${recentText}</span>` : ''}
+            <span>总计 ${playtimeText}</span>
           </div>
+          ${recentText ? `<div class="recent-play">🔥 ${recentText}</div>` : ''}
         </div>
-        <div class="view-btn">${isSteam ? '🔗 Steam 商店' : '📖 查看详情'}</div>
+        <div class="view-btn">${isSteam ? '🔗 Steam 商店' : '📖 详情'}</div>
       </div>
     `;
   }
