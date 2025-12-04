@@ -2919,56 +2919,9 @@ header .btn-secondary {
   }
 }
 
-/* ===== 🎮 赛博朋克风格滚动条 ===== */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
-  border-left: 1px solid rgba(255, 211, 0, 0.2);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, 
-    var(--cyber-yellow) 0%, 
-    var(--cyber-pink) 50%, 
-    var(--cyber-cyan) 100%);
-  border-radius: 0;
-  border: 1px solid rgba(255, 211, 0, 0.4);
-  box-shadow: 
-    0 0 10px rgba(255, 211, 0, 0.5),
-    inset 0 0 5px rgba(255, 255, 255, 0.2);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, 
-    #FFE44D 0%, 
-    #FF5CA8 50%, 
-    #7FFFEA 100%);
-  box-shadow: 
-    0 0 15px rgba(255, 211, 0, 0.8),
-    0 0 25px rgba(255, 61, 148, 0.5),
-    inset 0 0 8px rgba(255, 255, 255, 0.3);
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(180deg, 
-    var(--cyber-cyan) 0%, 
-    var(--cyber-pink) 50%, 
-    var(--cyber-yellow) 100%);
-}
-
-::-webkit-scrollbar-corner {
-  background: #0a0a0a;
-}
-
-/* Firefox scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--cyber-yellow) #0a0a0a;
-}
+/* ===== 🎮 滚动条样式由主题系统控制 ===== */
+/* 全局滚动条样式已移至各主题CSS文件中 */
+/* 这样可以让每个主题有独特的滚动条效果 */
 
 /* ===== 🎮 赛博朋克下拉框/选择框 ===== */
 select,
