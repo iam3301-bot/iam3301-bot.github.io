@@ -68,10 +68,10 @@ const EMAIL_SERVICE_CONFIG = {
   // 4. 获取 Service ID, Template ID, Public Key
   // =============================================
   emailjs: {
-    serviceId: 'service_mjvb7y5',  // EmailJS Service ID
+    serviceId: 'service_bymjkqh',  // EmailJS Service ID (QQ Mail SMTP)
     templateId: 'template_df6t50r',     // EmailJS Template ID  
     publicKey: 'Z6VWjqql5Idf6t027',   // EmailJS Public Key
-    enabled: true  // 已启用真实邮件发送
+    enabled: true  // 已启用真实邮件发送 (使用QQ邮箱授权码)
   },
   
   // =============================================
