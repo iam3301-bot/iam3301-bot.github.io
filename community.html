@@ -759,15 +759,20 @@
     `).join('');
   }
 
-  // 渲染在线用户
+  // 渲染在线用户 - 使用实时数据
   function renderOnlineUsers() {
     const container = document.getElementById("onlineUsers");
-    container.innerHTML = onlineUsers.slice(0, 6).map(user => `
+    // 从实时数据服务获取在线用户
+    const realOnlineUsers = window.communityDataService.getOnlineUsers() || onlineUsers;
+    const displayUsers = realOnlineUsers.slice(0, 6);
+    const remainingCount = Math.max(0, realOnlineUsers.length - 6);
+    
+    container.innerHTML = displayUsers.map(user => `
       <div class="online-user">
         <span class="online-dot"></span>
         <span>${user}</span>
       </div>
-    `).join('') + `<div class="online-user" style="color: var(--text-muted);">+${onlineUsers.length - 6} 更多</div>`;
+    `).join('') + (remainingCount > 0 ? `<div class="online-user" style="color: var(--text-muted);">+${remainingCount} 更多</div>` : '');
   }
 
   // 更新板块计数
@@ -806,27 +811,64 @@
     window.openCreatePostModal();
   }
 
-  // 更新社区统计数据
+  // 更新社区统计数据 - 实时更新
   async function updateCommunityStats() {
     try {
       let stats;
       
-      // 优先使用Firebase，否则使用LocalStorage
+      // 优先使用Firebase，否则使用LocalStorage实时服务
       if (window.firebaseService && window.firebaseService.isEnabled) {
         stats = await window.firebaseService.getCommunityStats();
       } else {
         stats = window.communityDataService.getCommunityStats();
       }
       
-      document.getElementById('statPosts').textContent = stats.totalPosts.toLocaleString();
-      document.getElementById('statMembers').textContent = stats.totalMembers.toLocaleString();
-      document.getElementById('statReplies').textContent = stats.totalReplies.toLocaleString();
-      document.getElementById('statOnline').textContent = stats.onlineUsers;
+      // 动画效果更新数字
+      animateNumber('statPosts', stats.totalPosts);
+      animateNumber('statMembers', stats.totalMembers);
+      animateNumber('statReplies', stats.totalReplies);
+      animateNumber('statOnline', stats.onlineUsers);
       
-      console.log('📊 社区统计:', stats);
+      // 同时更新在线用户列表
+      renderOnlineUsers();
+      
+      console.log('📊 社区统计实时更新:', stats);
     } catch (error) {
       console.error('❌ 更新统计失败:', error);
     }
+  }
+  
+  // 数字动画效果
+  function animateNumber(elementId, targetValue) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const currentValue = parseInt(element.textContent.replace(/,/g, '')) || 0;
+    if (currentValue === targetValue) return;
+    
+    // 如果变化不大，直接设置
+    if (Math.abs(targetValue - currentValue) < 5) {
+      element.textContent = targetValue.toLocaleString();
+      return;
+    }
+    
+    // 动画效果
+    const duration = 500;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(currentValue + (targetValue - currentValue) * easeOut);
+      element.textContent = value.toLocaleString();
+      
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+    
+    requestAnimationFrame(update);
   }
 
   // 刷新帖子数据
@@ -868,11 +910,21 @@
   // 启动初始化
   initializeCommunity();
   
-  // 每30秒刷新在线用户
+  // 每10秒刷新在线用户和统计数据（更实时）
   setInterval(() => {
     renderOnlineUsers();
     updateCommunityStats();
-  }, 30000);
+  }, 10000);
+  
+  // 监听社区数据更新事件
+  window.addEventListener('community-stats-update', () => {
+    updateCommunityStats();
+  });
+  
+  window.addEventListener('community-update', (e) => {
+    console.log('📡 收到社区更新:', e.detail);
+    refreshPostsData();
+  });
 </script>
 </body>
 </html>
