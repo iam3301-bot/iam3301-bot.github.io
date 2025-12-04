@@ -303,6 +303,22 @@
       this.fontLinkElement = link;
     }
     
+    // 加载主题CSS文件
+    loadThemeCSS(themeId) {
+      // 移除旧的主题CSS
+      const oldLink = document.getElementById('theme-css-link');
+      if (oldLink) {
+        oldLink.remove();
+      }
+      
+      // 加载新的主题CSS
+      const link = document.createElement('link');
+      link.id = 'theme-css-link';
+      link.rel = 'stylesheet';
+      link.href = `themes/${themeId}.css`;
+      document.head.appendChild(link);
+    }
+    
     // 应用主题
     applyTheme(themeId, animate = true) {
       if (!GAME_THEMES[themeId]) {
@@ -329,6 +345,9 @@
       // 添加新主题类
       body.classList.add(`theme-${themeId}`);
       body.dataset.theme = themeId;
+      
+      // 加载主题专属CSS
+      this.loadThemeCSS(themeId);
       
       // 特殊处理：赛博朋克2077主题启用特效
       if (themeId === 'cyberpunk2077') {
@@ -1024,8 +1043,8 @@
       style.textContent = `
         .global-theme-switcher {
           position: fixed;
-          bottom: 30px;
-          right: 30px;
+          top: 20px;
+          left: 20px;
           z-index: 999999;
         }
         
@@ -1056,8 +1075,8 @@
         
         .theme-switcher-panel {
           position: absolute;
-          bottom: calc(100% + 15px);
-          right: 0;
+          top: calc(100% + 15px);
+          left: 0;
           min-width: 320px;
           max-height: 70vh;
           overflow-y: auto;
@@ -1161,8 +1180,8 @@
         
         @media (max-width: 768px) {
           .global-theme-switcher {
-            bottom: 20px;
-            right: 20px;
+            top: 15px;
+            left: 15px;
           }
           
           .theme-switcher-btn {

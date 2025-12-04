@@ -1,0 +1,706 @@
+/**
+ * ███████╗ RED DEAD REDEMPTION 2 ███████╗
+ * 荒野大镖客2 - 艺术级完美主题
+ * 西部荒野 · 黄昏救赎 · 牛仔传奇
+ * 
+ * Design Philosophy:
+ * - 复古纸张质感营造历史感
+ * - 金色夕阳渐变呈现黄昏氛围
+ * - 木纹和皮革展现西部粗犷
+ * - 西部字体传递牛仔精神
+ * - 沙尘动效模拟荒野环境
+ */
+
+/* ==========================================
+   全局背景系统 - 荒野黄昏
+   ========================================== */
+body.theme-rdr2 {
+  background: #2B1810;
+  background-image: 
+    /* 黄昏渐变 */
+    radial-gradient(ellipse at bottom center, rgba(212, 175, 55, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at top, rgba(139, 69, 19, 0.3) 0%, transparent 60%),
+    /* 地平线光晕 */
+    linear-gradient(180deg, 
+      rgba(61, 40, 23, 0.8) 0%,
+      rgba(43, 24, 16, 0.9) 40%,
+      rgba(139, 69, 19, 0.3) 70%,
+      rgba(212, 175, 55, 0.15) 85%,
+      rgba(205, 92, 92, 0.1) 100%
+    );
+  background-attachment: fixed;
+  position: relative;
+  color: #F5DEB3;
+}
+
+/* 沙尘暴效果 */
+body.theme-rdr2::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, rgba(222, 184, 135, 0.3), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(222, 184, 135, 0.2), transparent),
+    radial-gradient(2px 2px at 60% 40%, rgba(210, 180, 140, 0.25), transparent),
+    radial-gradient(1px 1px at 80% 80%, rgba(222, 184, 135, 0.2), transparent),
+    radial-gradient(3px 3px at 15% 60%, rgba(210, 180, 140, 0.15), transparent),
+    radial-gradient(1px 1px at 70% 20%, rgba(222, 184, 135, 0.2), transparent);
+  background-size: 100% 100%;
+  animation: dustStorm 15s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+}
+
+@keyframes dustStorm {
+  0% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% { 
+    transform: translate(100px, -50px) rotate(5deg);
+    opacity: 0.5;
+  }
+}
+
+/* 夕阳余晖动画 */
+body.theme-rdr2::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: radial-gradient(ellipse at bottom center,
+    rgba(212, 175, 55, 0.2) 0%,
+    rgba(205, 92, 92, 0.1) 30%,
+    transparent 70%
+  );
+  animation: sunsetGlow 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sunsetGlow {
+  0% { 
+    opacity: 0.6;
+    transform: scaleY(1);
+  }
+  100% { 
+    opacity: 0.9;
+    transform: scaleY(1.2);
+  }
+}
+
+/* ==========================================
+   卡片系统 - 木板与皮革
+   ========================================== */
+.theme-rdr2 .card,
+.theme-rdr2 .game-card,
+.theme-rdr2 .ranking-item,
+.theme-rdr2 .community-post {
+  background: linear-gradient(145deg, 
+    rgba(74, 52, 37, 0.98) 0%, 
+    rgba(61, 40, 28, 0.95) 50%,
+    rgba(67, 45, 32, 0.96) 100%) !important;
+  /* 木纹边框 */
+  border: 3px solid rgba(139, 115, 85, 0.8) !important;
+  border-radius: 4px !important;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(212, 175, 55, 0.3),
+    0 0 25px rgba(212, 175, 55, 0.2),
+    inset 0 2px 1px rgba(212, 175, 55, 0.2),
+    inset 0 -2px 1px rgba(61, 40, 28, 0.5),
+    inset 4px 0 8px rgba(0, 0, 0, 0.4),
+    inset -4px 0 8px rgba(0, 0, 0, 0.4) !important;
+  position: relative !important;
+  overflow: hidden;
+  transition: all 0.4s ease !important;
+}
+
+/* 木纹纹理 */
+.theme-rdr2 .card,
+.theme-rdr2 .game-card {
+  background-image: 
+    /* 木纹线条 */
+    repeating-linear-gradient(
+      90deg,
+      rgba(139, 69, 19, 0.1) 0px,
+      transparent 3px,
+      transparent 6px,
+      rgba(101, 67, 33, 0.08) 6px,
+      rgba(101, 67, 33, 0.08) 8px,
+      transparent 8px,
+      transparent 15px
+    ),
+    /* 木材颗粒 */
+    repeating-linear-gradient(
+      0deg,
+      rgba(139, 69, 19, 0.03) 0px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(145deg, 
+      rgba(74, 52, 37, 0.98) 0%, 
+      rgba(61, 40, 28, 0.95) 50%,
+      rgba(67, 45, 32, 0.96) 100%) !important;
+}
+
+/* 顶部装饰 - 皮革缝线 */
+.theme-rdr2 .card::before,
+.theme-rdr2 .game-card::before,
+.theme-rdr2 .ranking-item::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 4px,
+    rgba(212, 175, 55, 0.4) 4px,
+    rgba(212, 175, 55, 0.4) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* 底部金色线条 */
+.theme-rdr2 .card::after,
+.theme-rdr2 .game-card::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 115, 85, 0.5) 10%,
+    rgba(212, 175, 55, 0.6) 50%,
+    rgba(139, 115, 85, 0.5) 90%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+/* 复古纸张噪点效果 */
+.theme-rdr2 .card:hover::before,
+.theme-rdr2 .game-card:hover::before {
+  animation: vintageFlicker 0.2s steps(3) infinite;
+}
+
+@keyframes vintageFlicker {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.8; }
+}
+
+/* 卡片悬停 - 夕阳光芒 */
+.theme-rdr2 .card:hover,
+.theme-rdr2 .game-card:hover,
+.theme-rdr2 .ranking-item:hover {
+  transform: translateY(-8px) translateX(3px) !important;
+  border-color: rgba(212, 175, 55, 0.9) !important;
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.9),
+    0 0 0 2px rgba(212, 175, 55, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.4),
+    0 0 80px rgba(205, 92, 92, 0.2),
+    inset 0 2px 1px rgba(212, 175, 55, 0.4),
+    inset 0 -2px 1px rgba(61, 40, 28, 0.6),
+    inset 6px 0 12px rgba(212, 175, 55, 0.15),
+    inset -6px 0 12px rgba(212, 175, 55, 0.15) !important;
+  animation: sunsetPulse 2s ease-in-out infinite;
+}
+
+@keyframes sunsetPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.9),
+      0 0 40px rgba(212, 175, 55, 0.4),
+      0 0 80px rgba(205, 92, 92, 0.2);
+  }
+  50% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.9),
+      0 0 50px rgba(212, 175, 55, 0.6),
+      0 0 100px rgba(205, 92, 92, 0.3);
+  }
+}
+
+/* ==========================================
+   文字系统 - 西部字体
+   ========================================== */
+.theme-rdr2 .card-title,
+.theme-rdr2 .game-card h3,
+.theme-rdr2 h1, 
+.theme-rdr2 h2, 
+.theme-rdr2 h3 {
+  font-family: 'Rye', 'Smokum', 'Courier New', serif !important;
+  font-weight: 700 !important;
+  color: #D4AF37 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(212, 175, 55, 0.6),
+    0 0 30px rgba(212, 175, 55, 0.3),
+    /* 描边效果 */
+    -1px -1px 0 rgba(61, 40, 28, 0.8),
+    1px -1px 0 rgba(61, 40, 28, 0.8),
+    -1px 1px 0 rgba(61, 40, 28, 0.8),
+    1px 1px 0 rgba(61, 40, 28, 0.8) !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* 排行榜游戏名称 - 西部风格 */
+.theme-rdr2 .ranking-name {
+  font-family: 'Special Elite', 'Courier New', monospace !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #F5DEB3 !important;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(212, 175, 55, 0.5),
+    0 0 20px rgba(212, 175, 55, 0.2) !important;
+  letter-spacing: 1px !important;
+}
+
+/* 平台信息 - 金色点缀 */
+.theme-rdr2 .ranking-meta,
+.theme-rdr2 .platform-badge {
+  color: #DAA520 !important;
+  font-weight: 600 !important;
+  font-family: 'Special Elite', monospace !important;
+  text-shadow: 
+    0 0 8px rgba(218, 165, 32, 0.7),
+    1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 次要文字 - 西部手写 */
+.theme-rdr2 p,
+.theme-rdr2 .description {
+  font-family: 'Special Elite', 'Covered By Your Grace', Georgia, serif !important;
+  color: #DEB887 !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==========================================
+   按钮系统 - 牛仔动作
+   ========================================== */
+.theme-rdr2 button,
+.theme-rdr2 .btn,
+.theme-rdr2 a.button {
+  background: linear-gradient(135deg, 
+    rgba(139, 115, 85, 0.4) 0%, 
+    rgba(139, 69, 19, 0.3) 50%,
+    rgba(101, 67, 33, 0.4) 100%) !important;
+  border: 2px solid rgba(212, 175, 55, 0.7) !important;
+  border-radius: 4px !important;
+  color: #F5DEB3 !important;
+  font-family: 'Rye', 'Special Elite', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  padding: 12px 30px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.4s ease !important;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(212, 175, 55, 0.4) !important;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(212, 175, 55, 0.2),
+    inset 0 1px 0 rgba(212, 175, 55, 0.3),
+    inset 0 -1px 0 rgba(61, 40, 28, 0.4) !important;
+}
+
+/* 按钮金光流动 */
+.theme-rdr2 button::before,
+.theme-rdr2 .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.3) 30%,
+    rgba(212, 175, 55, 0.5) 50%,
+    rgba(212, 175, 55, 0.3) 70%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+  z-index: 0;
+}
+
+/* 按钮悬停 - 黄昏光辉 */
+.theme-rdr2 button:hover,
+.theme-rdr2 .btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(212, 175, 55, 0.5) 0%, 
+    rgba(139, 69, 19, 0.4) 50%,
+    rgba(205, 92, 92, 0.4) 100%) !important;
+  border-color: #D4AF37 !important;
+  color: #FFFFFF !important;
+  transform: translateY(-3px) translateX(2px) !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(212, 175, 55, 0.5),
+    0 0 60px rgba(205, 92, 92, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(61, 40, 28, 0.5) !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(212, 175, 55, 0.9),
+    0 0 30px rgba(205, 92, 92, 0.5) !important;
+  animation: gunsmoke 0.6s ease-out;
+}
+
+.theme-rdr2 button:hover::before,
+.theme-rdr2 .btn:hover::before {
+  left: 100%;
+}
+
+@keyframes gunsmoke {
+  0% { 
+    transform: translateY(-3px) translateX(2px) scale(1);
+  }
+  50% { 
+    transform: translateY(-3px) translateX(2px) scale(1.05);
+  }
+  100% { 
+    transform: translateY(-3px) translateX(2px) scale(1);
+  }
+}
+
+/* 按钮激活 */
+.theme-rdr2 button:active,
+.theme-rdr2 .btn:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.6),
+    inset 0 3px 10px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* ==========================================
+   输入框系统
+   ========================================== */
+.theme-rdr2 input[type="text"],
+.theme-rdr2 input[type="search"],
+.theme-rdr2 textarea,
+.theme-rdr2 select {
+  background: rgba(43, 24, 16, 0.9) !important;
+  border: 2px solid rgba(139, 115, 85, 0.5) !important;
+  border-radius: 4px !important;
+  color: #F5DEB3 !important;
+  font-family: 'Special Elite', 'Courier New', monospace !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(212, 175, 55, 0.1) !important;
+}
+
+.theme-rdr2 input:focus,
+.theme-rdr2 textarea:focus,
+.theme-rdr2 select:focus {
+  outline: none !important;
+  border-color: #D4AF37 !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(212, 175, 55, 0.4),
+    0 0 40px rgba(212, 175, 55, 0.2) !important;
+  background: rgba(43, 24, 16, 0.95) !important;
+}
+
+/* ==========================================
+   链接系统
+   ========================================== */
+.theme-rdr2 a {
+  color: #D4AF37 !important;
+  text-decoration: none !important;
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4) !important;
+}
+
+.theme-rdr2 a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #D4AF37, #CD5C5C);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.theme-rdr2 a:hover {
+  color: #CD5C5C !important;
+  text-shadow: 
+    0 0 15px rgba(212, 175, 55, 0.8),
+    0 0 30px rgba(205, 92, 92, 0.5) !important;
+}
+
+.theme-rdr2 a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================
+   徽章和标签 - 西部印章
+   ========================================== */
+.theme-rdr2 .badge,
+.theme-rdr2 .tag,
+.theme-rdr2 .label {
+  background: linear-gradient(135deg, 
+    rgba(139, 115, 85, 0.5) 0%, 
+    rgba(139, 69, 19, 0.4) 100%) !important;
+  border: 2px solid rgba(212, 175, 55, 0.6) !important;
+  border-radius: 3px !important;
+  color: #F5DEB3 !important;
+  font-family: 'Special Elite', monospace !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 4px 12px !important;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(212, 175, 55, 0.2),
+    inset 0 1px 0 rgba(212, 175, 55, 0.3) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ==========================================
+   滚动条 - 皮革质感
+   ========================================== */
+body.theme-rdr2 ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-rdr2 ::-webkit-scrollbar-track {
+  background: rgba(43, 24, 16, 0.9);
+  border-radius: 4px;
+}
+
+body.theme-rdr2 ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, 
+    rgba(212, 175, 55, 0.8) 0%, 
+    rgba(139, 115, 85, 0.9) 50%, 
+    rgba(139, 69, 19, 0.8) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+body.theme-rdr2 ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, 
+    rgba(212, 175, 55, 1) 0%, 
+    rgba(139, 115, 85, 1) 50%, 
+    rgba(205, 92, 92, 0.8) 100%);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+}
+
+/* ==========================================
+   导航栏 - 木板门楣
+   ========================================== */
+.theme-rdr2 nav,
+.theme-rdr2 .navbar {
+  background: linear-gradient(180deg, 
+    rgba(74, 52, 37, 0.98) 0%, 
+    rgba(61, 40, 28, 0.95) 100%) !important;
+  border-bottom: 3px solid rgba(139, 115, 85, 0.8) !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(212, 175, 55, 0.2),
+    inset 0 -2px 1px rgba(212, 175, 55, 0.2) !important;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* 导航栏木纹 */
+.theme-rdr2 nav::before,
+.theme-rdr2 .navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(139, 69, 19, 0.1) 0px,
+    transparent 3px,
+    transparent 8px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Logo样式 - 西部烙印 */
+.theme-rdr2 .logo {
+  color: #D4AF37 !important;
+  font-family: 'Rye', 'Smokum', serif !important;
+  font-weight: 900 !important;
+  font-size: 26px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(212, 175, 55, 0.7),
+    0 0 40px rgba(212, 175, 55, 0.4),
+    0 0 60px rgba(205, 92, 92, 0.3),
+    -1px -1px 0 rgba(61, 40, 28, 0.8),
+    1px -1px 0 rgba(61, 40, 28, 0.8),
+    -1px 1px 0 rgba(61, 40, 28, 0.8),
+    1px 1px 0 rgba(61, 40, 28, 0.8) !important;
+  animation: logoSunset 4s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes logoSunset {
+  0%, 100% { 
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      0 0 20px rgba(212, 175, 55, 0.7),
+      0 0 40px rgba(212, 175, 55, 0.4);
+  }
+  50% { 
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      0 0 30px rgba(212, 175, 55, 0.9),
+      0 0 60px rgba(205, 92, 92, 0.5);
+  }
+}
+
+/* ==========================================
+   特殊动画效果
+   ========================================== */
+
+/* 马蹄印 */
+@keyframes hoofprints {
+  0% { opacity: 0; transform: translateX(-20px) scale(0.8); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(20px) scale(1); }
+}
+
+/* 子弹轨迹 */
+@keyframes bulletTrail {
+  0% { transform: translateX(-100%) scaleX(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%) scaleX(1); opacity: 0; }
+}
+
+/* 沙尘飘散 */
+@keyframes dustFloat {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translate(50px, -30px) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+
+/* ==========================================
+   响应式设计 - 移动端优化
+   ========================================== */
+@media (max-width: 768px) {
+  .theme-rdr2 .card,
+  .theme-rdr2 .game-card,
+  .theme-rdr2 .ranking-item {
+    border-width: 2px !important;
+  }
+  
+  .theme-rdr2 .card-title,
+  .theme-rdr2 h1,
+  .theme-rdr2 h2 {
+    letter-spacing: 1px !important;
+    font-size: 1.2em !important;
+  }
+  
+  .theme-rdr2 button,
+  .theme-rdr2 .btn {
+    padding: 10px 24px !important;
+    letter-spacing: 1px !important;
+  }
+  
+  body.theme-rdr2::before {
+    animation-duration: 12s !important;
+  }
+}
+
+/* ==========================================
+   打印样式
+   ========================================== */
+@media print {
+  body.theme-rdr2::before,
+  body.theme-rdr2::after,
+  .theme-rdr2 .card::before,
+  .theme-rdr2 .card::after {
+    display: none !important;
+  }
+  
+  .theme-rdr2 * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==========================================
+   可访问性增强
+   ========================================== */
+.theme-rdr2 *:focus-visible {
+  outline: 3px solid #D4AF37 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .theme-rdr2 .card,
+  .theme-rdr2 .game-card {
+    border-width: 4px !important;
+  }
+  
+  .theme-rdr2 .card-title,
+  .theme-rdr2 h1,
+  .theme-rdr2 h2 {
+    text-shadow: 2px 2px 0 #000 !important;
+    font-weight: 900 !important;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .theme-rdr2 *,
+  .theme-rdr2 *::before,
+  .theme-rdr2 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

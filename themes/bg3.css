@@ -1,0 +1,496 @@
+/**
+ * ███████╗ BALDUR'S GATE 3 ███████╗
+ * 博德之门3 - 艺术级完美主题
+ * 魔法书卷 · D&D奇幻 · 紫金魔法
+ * 
+ * Design Philosophy:
+ * - 魔法书页质感营造D&D氛围
+ * - 紫金双色展现魔法与火焰
+ * - 魔法阵旋转体现施法仪式
+ * - 奇幻字体传递龙与地下城精神
+ * - 骰子元素呼应D&D游戏机制
+ */
+
+/* ==========================================
+   全局背景系统 - 魔法书页
+   ========================================== */
+body.theme-bg3 {
+  background: #1a0f1a;
+  background-image: 
+    /* 魔法阵底纹 */
+    radial-gradient(ellipse at 30% 40%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(251, 146, 60, 0.12) 0%, transparent 50%),
+    /* 羊皮纸纹理 */
+    repeating-linear-gradient(
+      45deg,
+      rgba(139, 69, 19, 0.02) 0px,
+      transparent 2px,
+      transparent 4px
+    ),
+    linear-gradient(180deg, #2a1a2a 0%, #1a0f1a 100%);
+  background-attachment: fixed;
+  position: relative;
+  color: #f3e5ab;
+}
+
+/* 魔法粒子飘浮 */
+body.theme-bg3::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 25% 35%, rgba(147, 51, 234, 0.8), transparent),
+    radial-gradient(1px 1px at 45% 65%, rgba(251, 146, 60, 0.7), transparent),
+    radial-gradient(2px 2px at 65% 45%, rgba(147, 51, 234, 0.6), transparent),
+    radial-gradient(1px 1px at 85% 75%, rgba(251, 146, 60, 0.7), transparent),
+    radial-gradient(2px 2px at 15% 70%, rgba(147, 51, 234, 0.5), transparent),
+    radial-gradient(1px 1px at 75% 25%, rgba(251, 146, 60, 0.6), transparent);
+  background-size: 100% 100%;
+  animation: magicParticles 10s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+@keyframes magicParticles {
+  0% { transform: translateY(0); opacity: 0.5; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-100%); opacity: 0.5; }
+}
+
+/* 魔法阵旋转 */
+body.theme-bg3::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  margin: -400px 0 0 -400px;
+  background-image: 
+    radial-gradient(circle, transparent 48%, rgba(147, 51, 234, 0.03) 49%, transparent 50%),
+    radial-gradient(circle, transparent 68%, rgba(251, 146, 60, 0.02) 69%, transparent 70%);
+  animation: magicCircle 30s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+@keyframes magicCircle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   卡片系统 - 魔法书边框
+   ========================================== */
+.theme-bg3 .card,
+.theme-bg3 .game-card,
+.theme-bg3 .ranking-item,
+.theme-bg3 .community-post {
+  background: linear-gradient(145deg, 
+    rgba(42, 26, 42, 0.98) 0%, 
+    rgba(34, 20, 34, 0.95) 50%,
+    rgba(38, 23, 38, 0.96) 100%) !important;
+  /* 紫金双重边框 */
+  border: 2px solid transparent !important;
+  border-image: linear-gradient(135deg, #9333ea 0%, #fb923c 100%) 1 !important;
+  border-radius: 10px !important;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(147, 51, 234, 0.3),
+    0 0 60px rgba(251, 146, 60, 0.2),
+    inset 0 2px 1px rgba(147, 51, 234, 0.2),
+    inset 0 -2px 1px rgba(251, 146, 60, 0.2) !important;
+  position: relative !important;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 顶部魔法装饰 */
+.theme-bg3 .card::before,
+.theme-bg3 .game-card::before,
+.theme-bg3 .ranking-item::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  right: 15px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #9333ea 0px,
+    #9333ea 8px,
+    transparent 8px,
+    transparent 12px,
+    #fb923c 12px,
+    #fb923c 16px,
+    transparent 16px,
+    transparent 20px
+  );
+  opacity: 0.6;
+  z-index: 1;
+  animation: spellCast 2s linear infinite;
+}
+
+@keyframes spellCast {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(20px); }
+}
+
+/* 魔法书页纹理 */
+.theme-bg3 .card::after,
+.theme-bg3 .game-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(147, 51, 234, 0.02) 0px,
+      transparent 2px,
+      transparent 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 卡片悬停 - 魔法爆发 */
+.theme-bg3 .card:hover,
+.theme-bg3 .game-card:hover,
+.theme-bg3 .ranking-item:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(147, 51, 234, 0.6),
+    0 0 80px rgba(251, 146, 60, 0.4),
+    inset 0 2px 1px rgba(147, 51, 234, 0.4),
+    inset 0 -2px 1px rgba(251, 146, 60, 0.4) !important;
+  animation: magicBurst 1.5s ease-in-out infinite;
+}
+
+@keyframes magicBurst {
+  0%, 100% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.9),
+      0 0 40px rgba(147, 51, 234, 0.6),
+      0 0 80px rgba(251, 146, 60, 0.4);
+  }
+  50% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.9),
+      0 0 50px rgba(147, 51, 234, 0.8),
+      0 0 100px rgba(251, 146, 60, 0.6);
+  }
+}
+
+/* ==========================================
+   文字系统 - 奇幻字体
+   ========================================== */
+.theme-bg3 .card-title,
+.theme-bg3 .game-card h3,
+.theme-bg3 h1, 
+.theme-bg3 h2, 
+.theme-bg3 h3 {
+  font-family: 'Spectral', 'IM Fell DW Pica', serif !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #9333ea 0%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 0 15px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 30px rgba(251, 146, 60, 0.4)) !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* 排行榜名称 */
+.theme-bg3 .ranking-name {
+  font-family: 'Spectral', serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #f3e5ab !important;
+  text-shadow: 
+    0 0 10px rgba(147, 51, 234, 0.6),
+    0 0 20px rgba(251, 146, 60, 0.3),
+    1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 平台信息 */
+.theme-bg3 .ranking-meta,
+.theme-bg3 .platform-badge {
+  color: #fb923c !important;
+  font-weight: 600 !important;
+  text-shadow: 
+    0 0 8px rgba(251, 146, 60, 0.8),
+    1px 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 次要文字 */
+.theme-bg3 p,
+.theme-bg3 .description {
+  font-family: 'IM Fell DW Pica', Georgia, serif !important;
+  color: #d4c4a8 !important;
+  line-height: 1.9 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==========================================
+   按钮系统 - 施法动作
+   ========================================== */
+.theme-bg3 button,
+.theme-bg3 .btn,
+.theme-bg3 a.button {
+  background: linear-gradient(135deg, 
+    rgba(147, 51, 234, 0.3) 0%, 
+    rgba(251, 146, 60, 0.3) 100%) !important;
+  border: 2px solid transparent !important;
+  border-image: linear-gradient(135deg, #9333ea, #fb923c) 1 !important;
+  border-radius: 8px !important;
+  color: #f3e5ab !important;
+  font-family: 'Spectral', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  padding: 12px 32px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.4s ease !important;
+  text-shadow: 0 0 10px rgba(147, 51, 234, 0.5) !important;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(147, 51, 234, 0.3),
+    inset 0 1px 0 rgba(147, 51, 234, 0.3) !important;
+}
+
+/* 按钮魔法流动 */
+.theme-bg3 button::before,
+.theme-bg3 .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(147, 51, 234, 0.4) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+}
+
+/* 按钮悬停 - 魔法咏唱 */
+.theme-bg3 button:hover,
+.theme-bg3 .btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(147, 51, 234, 0.5) 0%, 
+    rgba(251, 146, 60, 0.5) 100%) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(147, 51, 234, 0.6),
+    0 0 60px rgba(251, 146, 60, 0.4) !important;
+  text-shadow: 
+    0 0 15px rgba(147, 51, 234, 0.9),
+    0 0 30px rgba(251, 146, 60, 0.6) !important;
+  animation: d20Roll 0.6s ease-in-out;
+}
+
+.theme-bg3 button:hover::before,
+.theme-bg3 .btn:hover::before {
+  left: 100%;
+}
+
+@keyframes d20Roll {
+  0%, 100% { transform: translateY(-3px) scale(1.05) rotate(0deg); }
+  25% { transform: translateY(-3px) scale(1.05) rotate(90deg); }
+  50% { transform: translateY(-3px) scale(1.05) rotate(180deg); }
+  75% { transform: translateY(-3px) scale(1.05) rotate(270deg); }
+}
+
+/* ==========================================
+   输入框系统
+   ========================================== */
+.theme-bg3 input[type="text"],
+.theme-bg3 input[type="search"],
+.theme-bg3 textarea,
+.theme-bg3 select {
+  background: rgba(26, 15, 26, 0.9) !important;
+  border: 2px solid rgba(147, 51, 234, 0.4) !important;
+  border-radius: 8px !important;
+  color: #f3e5ab !important;
+  font-family: 'IM Fell DW Pica', serif !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(147, 51, 234, 0.2) !important;
+}
+
+.theme-bg3 input:focus,
+.theme-bg3 textarea:focus,
+.theme-bg3 select:focus {
+  outline: none !important;
+  border-color: #9333ea !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(147, 51, 234, 0.5),
+    0 0 40px rgba(251, 146, 60, 0.3) !important;
+}
+
+/* ==========================================
+   链接系统
+   ========================================== */
+.theme-bg3 a {
+  color: #9333ea !important;
+  text-decoration: none !important;
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(147, 51, 234, 0.5) !important;
+}
+
+.theme-bg3 a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #9333ea, #fb923c);
+  transition: width 0.3s ease;
+}
+
+.theme-bg3 a:hover {
+  color: #fb923c !important;
+  text-shadow: 
+    0 0 15px rgba(147, 51, 234, 0.8),
+    0 0 30px rgba(251, 146, 60, 0.6) !important;
+}
+
+.theme-bg3 a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================
+   徽章和标签
+   ========================================== */
+.theme-bg3 .badge,
+.theme-bg3 .tag,
+.theme-bg3 .label {
+  background: linear-gradient(135deg, 
+    rgba(147, 51, 234, 0.4) 0%, 
+    rgba(251, 146, 60, 0.4) 100%) !important;
+  border: 2px solid #9333ea !important;
+  border-radius: 6px !important;
+  color: #f3e5ab !important;
+  font-family: 'Spectral', serif !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  padding: 4px 12px !important;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(147, 51, 234, 0.3) !important;
+}
+
+/* ==========================================
+   滚动条
+   ========================================== */
+body.theme-bg3 ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-bg3 ::-webkit-scrollbar-track {
+  background: rgba(26, 15, 26, 0.9);
+  border-radius: 4px;
+}
+
+body.theme-bg3 ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9333ea 0%, #fb923c 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4);
+}
+
+body.theme-bg3 ::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.7);
+}
+
+/* ==========================================
+   导航栏
+   ========================================== */
+.theme-bg3 nav,
+.theme-bg3 .navbar {
+  background: linear-gradient(180deg, 
+    rgba(42, 26, 42, 0.98) 0%, 
+    rgba(34, 20, 34, 0.95) 100%) !important;
+  border-bottom: 2px solid transparent !important;
+  border-image: linear-gradient(90deg, #9333ea, #fb923c) 1 !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(147, 51, 234, 0.3) !important;
+}
+
+/* Logo样式 */
+.theme-bg3 .logo {
+  font-family: 'Spectral', serif !important;
+  font-weight: 900 !important;
+  font-size: 26px !important;
+  letter-spacing: 3px !important;
+  background: linear-gradient(135deg, #9333ea 0%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.8)) drop-shadow(0 0 40px rgba(251, 146, 60, 0.5)) !important;
+  animation: logoMagic 3s ease-in-out infinite;
+}
+
+@keyframes logoMagic {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.8)) drop-shadow(0 0 40px rgba(251, 146, 60, 0.5));
+  }
+  50% { 
+    filter: drop-shadow(0 0 30px rgba(147, 51, 234, 1)) drop-shadow(0 0 60px rgba(251, 146, 60, 0.7));
+  }
+}
+
+/* ==========================================
+   响应式设计
+   ========================================== */
+@media (max-width: 768px) {
+  .theme-bg3 .card,
+  .theme-bg3 .game-card {
+    border-width: 1px !important;
+  }
+  
+  .theme-bg3 button,
+  .theme-bg3 .btn {
+    padding: 10px 24px !important;
+  }
+}
+
+/* ==========================================
+   可访问性增强
+   ========================================== */
+.theme-bg3 *:focus-visible {
+  outline: 3px solid #9333ea !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px rgba(147, 51, 234, 0.3) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-bg3 *,
+  .theme-bg3 *::before,
+  .theme-bg3 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

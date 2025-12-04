@@ -1,0 +1,623 @@
+/**
+ * ███████╗ CYBERPUNK 2077 ███████╗
+ * 赛博朋克2077 - 艺术级完美主题
+ * 夜之城 · 霓虹与矩阵 · 故障艺术
+ * 
+ * Design Philosophy:
+ * - 扫描线纹理营造未来科技感
+ * - 霓虹发光模拟夜之城灯光
+ * - Glitch故障艺术体现赛博朋克精髓
+ * - 切角面板设计呼应游戏UI
+ * - 青色粉红配色致敬经典赛博朋克美学
+ */
+
+/* ==========================================
+   全局背景系统 - 夜之城氛围
+   ========================================== */
+body.theme-cyberpunk2077 {
+  background: #0a0e27;
+  background-image: 
+    /* 扫描线纹理 */
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 240, 255, 0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(0, 240, 255, 0.03) 3px
+    ),
+    /* 网格背景 */
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    /* 深度渐变 */
+    radial-gradient(ellipse at top, rgba(22, 33, 62, 0.8) 0%, #0a0e27 50%),
+    radial-gradient(ellipse at bottom, rgba(255, 0, 60, 0.05) 0%, transparent 70%);
+  background-size: 100% 100%, 100% 100%, 50px 50px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+  color: #e2e8f0;
+}
+
+/* 动态扫描线效果 */
+body.theme-cyberpunk2077::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 240, 255, 0.08) 0px,
+    rgba(0, 240, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlines 8s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(20px); }
+}
+
+/* 赛博网格动画 */
+body.theme-cyberpunk2077::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.06) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.06) 2px, transparent 2px);
+  background-size: 100px 100px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  animation: cyberGrid 20s linear infinite;
+}
+
+@keyframes cyberGrid {
+  0% { transform: perspective(500px) rotateX(60deg) scale(1.2); }
+  100% { transform: perspective(500px) rotateX(60deg) scale(1.2) translateY(100px); }
+}
+
+/* ==========================================
+   卡片系统 - 赛博面板艺术
+   ========================================== */
+.theme-cyberpunk2077 .card,
+.theme-cyberpunk2077 .game-card,
+.theme-cyberpunk2077 .ranking-item,
+.theme-cyberpunk2077 .community-post {
+  background: linear-gradient(135deg, 
+    rgba(26, 35, 50, 0.95) 0%, 
+    rgba(16, 21, 35, 0.9) 100%) !important;
+  border: 2px solid #00F0FF !important;
+  border-radius: 0 !important;
+  box-shadow: 
+    0 0 20px rgba(0, 240, 255, 0.4),
+    0 0 40px rgba(255, 0, 60, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(0, 240, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 0, 60, 0.2) !important;
+  position: relative !important;
+  backdrop-filter: blur(10px);
+  /* 切角设计 - 赛博朋克标志性特征 */
+  clip-path: polygon(
+    0 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% 100%,
+    12px 100%,
+    0 calc(100% - 12px)
+  );
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden;
+}
+
+/* 顶部霓虹装饰线 */
+.theme-cyberpunk2077 .card::before,
+.theme-cyberpunk2077 .game-card::before,
+.theme-cyberpunk2077 .ranking-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    #00F0FF 20%,
+    #FF003C 50%,
+    #FFED4E 80%,
+    transparent 100%
+  );
+  animation: neonFlow 3s linear infinite;
+  z-index: 1;
+}
+
+@keyframes neonFlow {
+  0% { transform: translateX(-100%); opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0.5; }
+}
+
+/* 扫描线纹理叠加 */
+.theme-cyberpunk2077 .card::after,
+.theme-cyberpunk2077 .game-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 240, 255, 0.03) 0px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: cardScanlines 6s linear infinite;
+}
+
+@keyframes cardScanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(10px); }
+}
+
+/* 卡片悬停效果 - 故障艺术 */
+.theme-cyberpunk2077 .card:hover,
+.theme-cyberpunk2077 .game-card:hover,
+.theme-cyberpunk2077 .ranking-item:hover {
+  transform: translateY(-8px) !important;
+  border-color: #FF003C !important;
+  box-shadow: 
+    0 0 30px rgba(0, 240, 255, 0.6),
+    0 0 60px rgba(255, 0, 60, 0.4),
+    0 12px 48px rgba(0, 0, 0, 0.8),
+    inset 0 2px 0 rgba(0, 240, 255, 0.5),
+    inset 0 -2px 0 rgba(255, 0, 60, 0.4) !important;
+  animation: glitchPulse 0.3s ease-in-out;
+}
+
+@keyframes glitchPulse {
+  0%, 100% { transform: translateY(-8px) translateX(0); }
+  25% { transform: translateY(-8px) translateX(-2px); }
+  75% { transform: translateY(-8px) translateX(2px); }
+}
+
+/* ==========================================
+   文字系统 - 数字化字体
+   ========================================== */
+.theme-cyberpunk2077 .card-title,
+.theme-cyberpunk2077 .game-card h3,
+.theme-cyberpunk2077 h1, 
+.theme-cyberpunk2077 h2, 
+.theme-cyberpunk2077 h3 {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
+  font-weight: 700 !important;
+  color: #00F0FF !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  text-shadow: 
+    0 0 10px rgba(0, 240, 255, 0.8),
+    0 0 20px rgba(0, 240, 255, 0.5),
+    0 0 30px rgba(0, 240, 255, 0.3),
+    2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* 排行榜游戏名称 */
+.theme-cyberpunk2077 .ranking-name {
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #FFFFFF !important;
+  text-shadow: 
+    0 0 8px rgba(0, 240, 255, 0.6),
+    0 0 15px rgba(0, 240, 255, 0.4),
+    1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* 平台信息 - 霓虹粉色 */
+.theme-cyberpunk2077 .ranking-meta,
+.theme-cyberpunk2077 .platform-badge {
+  color: #FF003C !important;
+  font-weight: 600 !important;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 60, 0.8),
+    0 0 12px rgba(255, 0, 60, 0.4) !important;
+}
+
+/* 次要文字 */
+.theme-cyberpunk2077 p,
+.theme-cyberpunk2077 .description {
+  font-family: 'Rajdhani', sans-serif !important;
+  color: #94a3b8 !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ==========================================
+   按钮系统 - 交互式霓虹
+   ========================================== */
+.theme-cyberpunk2077 button,
+.theme-cyberpunk2077 .btn,
+.theme-cyberpunk2077 a.button {
+  background: linear-gradient(135deg, 
+    rgba(0, 240, 255, 0.2) 0%, 
+    rgba(255, 0, 60, 0.2) 100%) !important;
+  border: 2px solid #00F0FF !important;
+  border-radius: 0 !important;
+  color: #FFFFFF !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  padding: 12px 28px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8) !important;
+  box-shadow: 
+    0 0 15px rgba(0, 240, 255, 0.4),
+    inset 0 1px 0 rgba(0, 240, 255, 0.3) !important;
+}
+
+/* 按钮扫描线效果 */
+.theme-cyberpunk2077 button::before,
+.theme-cyberpunk2077 .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+  z-index: 0;
+}
+
+/* 按钮悬停 - 霓虹呼吸 */
+.theme-cyberpunk2077 button:hover,
+.theme-cyberpunk2077 .btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(0, 240, 255, 0.4) 0%, 
+    rgba(255, 0, 60, 0.4) 100%) !important;
+  border-color: #FF003C !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 0 25px rgba(0, 240, 255, 0.6),
+    0 0 50px rgba(255, 0, 60, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 0, 60, 0.4) !important;
+  text-shadow: 
+    0 0 15px rgba(255, 0, 60, 0.9),
+    0 0 30px rgba(0, 240, 255, 0.6) !important;
+  animation: neonPulse 1.5s ease-in-out infinite;
+}
+
+.theme-cyberpunk2077 button:hover::before,
+.theme-cyberpunk2077 .btn:hover::before {
+  left: 100%;
+}
+
+@keyframes neonPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 25px rgba(0, 240, 255, 0.6),
+      0 0 50px rgba(255, 0, 60, 0.4);
+  }
+  50% { 
+    box-shadow: 
+      0 0 35px rgba(0, 240, 255, 0.8),
+      0 0 70px rgba(255, 0, 60, 0.6);
+  }
+}
+
+/* 按钮激活状态 */
+.theme-cyberpunk2077 button:active,
+.theme-cyberpunk2077 .btn:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 
+    0 0 15px rgba(0, 240, 255, 0.5),
+    inset 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==========================================
+   输入框系统
+   ========================================== */
+.theme-cyberpunk2077 input[type="text"],
+.theme-cyberpunk2077 input[type="search"],
+.theme-cyberpunk2077 textarea,
+.theme-cyberpunk2077 select {
+  background: rgba(10, 14, 39, 0.8) !important;
+  border: 2px solid rgba(0, 240, 255, 0.4) !important;
+  border-radius: 0 !important;
+  color: #e2e8f0 !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 10px rgba(0, 240, 255, 0.2) !important;
+}
+
+.theme-cyberpunk2077 input:focus,
+.theme-cyberpunk2077 textarea:focus,
+.theme-cyberpunk2077 select:focus {
+  outline: none !important;
+  border-color: #00F0FF !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(0, 240, 255, 0.5),
+    0 0 40px rgba(0, 240, 255, 0.2) !important;
+  background: rgba(10, 14, 39, 0.95) !important;
+}
+
+/* ==========================================
+   链接系统
+   ========================================== */
+.theme-cyberpunk2077 a {
+  color: #00F0FF !important;
+  text-decoration: none !important;
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 5px rgba(0, 240, 255, 0.5) !important;
+}
+
+.theme-cyberpunk2077 a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00F0FF, #FF003C);
+  transition: width 0.3s ease;
+}
+
+.theme-cyberpunk2077 a:hover {
+  color: #FF003C !important;
+  text-shadow: 
+    0 0 10px rgba(255, 0, 60, 0.8),
+    0 0 20px rgba(0, 240, 255, 0.5) !important;
+}
+
+.theme-cyberpunk2077 a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================
+   徽章和标签
+   ========================================== */
+.theme-cyberpunk2077 .badge,
+.theme-cyberpunk2077 .tag,
+.theme-cyberpunk2077 .label {
+  background: linear-gradient(135deg, 
+    rgba(0, 240, 255, 0.3) 0%, 
+    rgba(255, 0, 60, 0.3) 100%) !important;
+  border: 1px solid #00F0FF !important;
+  border-radius: 0 !important;
+  color: #FFFFFF !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 4px 12px !important;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+  box-shadow: 
+    0 0 10px rgba(0, 240, 255, 0.3),
+    inset 0 1px 0 rgba(0, 240, 255, 0.2) !important;
+}
+
+/* ==========================================
+   滚动条
+   ========================================== */
+body.theme-cyberpunk2077 ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-cyberpunk2077 ::-webkit-scrollbar-track {
+  background: rgba(10, 14, 39, 0.9);
+  border-radius: 4px;
+}
+
+body.theme-cyberpunk2077 ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00F0FF 0%, #FF003C 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+body.theme-cyberpunk2077 ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00F0FF 0%, #FF003C 50%, #FFED4E 100%);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.7);
+}
+
+/* ==========================================
+   导航栏
+   ========================================== */
+.theme-cyberpunk2077 nav,
+.theme-cyberpunk2077 .navbar {
+  background: linear-gradient(180deg, 
+    rgba(10, 14, 39, 0.95) 0%, 
+    rgba(16, 21, 35, 0.9) 100%) !important;
+  border-bottom: 2px solid #00F0FF !important;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(0, 240, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 240, 255, 0.3) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Logo样式 */
+.theme-cyberpunk2077 .logo {
+  color: #00F0FF !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  text-shadow: 
+    0 0 20px rgba(0, 240, 255, 1),
+    0 0 40px rgba(0, 240, 255, 0.6),
+    0 0 60px rgba(0, 240, 255, 0.3) !important;
+  animation: logoGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 20px rgba(0, 240, 255, 1),
+      0 0 40px rgba(0, 240, 255, 0.6),
+      0 0 60px rgba(0, 240, 255, 0.3);
+  }
+  50% { 
+    text-shadow: 
+      0 0 30px rgba(0, 240, 255, 1),
+      0 0 60px rgba(0, 240, 255, 0.8),
+      0 0 90px rgba(255, 0, 60, 0.4);
+  }
+}
+
+/* ==========================================
+   特殊动画效果
+   ========================================== */
+
+/* Glitch故障效果 */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate(2px, -2px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(-1px, 1px);
+    opacity: 0.85;
+  }
+  80% {
+    transform: translate(1px, -1px);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+/* 数字流动效果 */
+@keyframes digitalFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+/* ==========================================
+   响应式设计 - 移动端优化
+   ========================================== */
+@media (max-width: 768px) {
+  .theme-cyberpunk2077 .card,
+  .theme-cyberpunk2077 .game-card,
+  .theme-cyberpunk2077 .ranking-item {
+    border-width: 1px !important;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 8px) 0,
+      100% 8px,
+      100% 100%,
+      8px 100%,
+      0 calc(100% - 8px)
+    );
+  }
+  
+  .theme-cyberpunk2077 .card-title,
+  .theme-cyberpunk2077 h1,
+  .theme-cyberpunk2077 h2 {
+    letter-spacing: 1.5px !important;
+    font-size: 1.2em !important;
+  }
+  
+  .theme-cyberpunk2077 button,
+  .theme-cyberpunk2077 .btn {
+    padding: 10px 20px !important;
+    letter-spacing: 1px !important;
+  }
+}
+
+/* ==========================================
+   打印样式
+   ========================================== */
+@media print {
+  body.theme-cyberpunk2077::before,
+  body.theme-cyberpunk2077::after,
+  .theme-cyberpunk2077 .card::before,
+  .theme-cyberpunk2077 .card::after {
+    display: none !important;
+  }
+  
+  .theme-cyberpunk2077 * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==========================================
+   可访问性增强
+   ========================================== */
+.theme-cyberpunk2077 *:focus-visible {
+  outline: 2px solid #00F0FF !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.3) !important;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .theme-cyberpunk2077 .card,
+  .theme-cyberpunk2077 .game-card {
+    border-width: 3px !important;
+  }
+  
+  .theme-cyberpunk2077 .card-title,
+  .theme-cyberpunk2077 h1,
+  .theme-cyberpunk2077 h2 {
+    text-shadow: none !important;
+    font-weight: 900 !important;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .theme-cyberpunk2077 *,
+  .theme-cyberpunk2077 *::before,
+  .theme-cyberpunk2077 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
