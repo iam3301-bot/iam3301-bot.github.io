@@ -1113,44 +1113,165 @@ const SteamAPI = {
     // https://steamcommunity.com/id/customurl
     // https://steamcommunity.com/profiles/76561198xxxxxxxxx
     // 76561198xxxxxxxxx (直接 ID)
+    // STEAM_X:Y:Z (旧格式)
+    // [U:1:XXXXXX] (新格式)
+    // 十六进制格式（如 Steam 客户端的某些显示）
     
     let steamId = profileUrl.trim();
     
-    // 如果已经是纯数字 ID
+    // 如果为空
+    if (!steamId) {
+      return { success: false, error: '请输入 Steam ID 或个人资料链接' };
+    }
+    
+    console.log('[Steam API] 正在解析 Steam ID:', steamId);
+    
+    // 如果已经是纯数字 ID (17位 SteamID64)
     if (/^\d{17}$/.test(steamId)) {
+      console.log('[Steam API] 识别为 SteamID64');
       return { success: true, steamId: steamId };
     }
     
-    // 从 URL 提取
+    // 从 URL 提取 (profiles/数字格式)
     const profileMatch = steamId.match(/steamcommunity\.com\/profiles\/(\d{17})/);
     if (profileMatch) {
+      console.log('[Steam API] 从 profiles URL 提取');
       return { success: true, steamId: profileMatch[1] };
     }
     
-    // 自定义 URL 格式
+    // 自定义 URL 格式 (id/自定义名称)
     const customMatch = steamId.match(/steamcommunity\.com\/id\/([^\/\?]+)/);
     if (customMatch) {
       const vanityUrl = customMatch[1];
+      console.log('[Steam API] 检测到自定义 URL:', vanityUrl);
       
-      if (!this.isEnabled()) {
-        return { 
-          success: false, 
-          error: '解析自定义 URL 需要 Steam API Key。请直接输入您的 SteamID64，或使用个人资料链接格式: steamcommunity.com/profiles/您的ID' 
-        };
+      // 尝试使用 CORS 代理解析
+      try {
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+          `https://steamcommunity.com/id/${vanityUrl}/?xml=1`
+        )}`;
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+        
+        // 从 XML 响应中提取 steamID64
+        const steamIdMatch = data.contents.match(/<steamID64>(\d{17})<\/steamID64>/);
+        if (steamIdMatch) {
+          return { success: true, steamId: steamIdMatch[1] };
+        }
+      } catch (e) {
+        console.error('解析自定义 URL 失败:', e);
       }
       
-      // 使用故障转移请求
-      const url = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_CONFIG.apiKey}&vanityurl=${vanityUrl}`;
-      const result = await this._fetchWithFailover(url);
+      // 如果代理失败且有 API Key，使用官方 API
+      if (this.isEnabled()) {
+        const url = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_CONFIG.apiKey}&vanityurl=${vanityUrl}`;
+        const result = await this._fetchWithFailover(url);
+        
+        if (result.success && result.data.response && result.data.response.success === 1) {
+          return { success: true, steamId: result.data.response.steamid };
+        }
+      }
       
-      if (result.success && result.data.response && result.data.response.success === 1) {
-        return { success: true, steamId: result.data.response.steamid };
-      } else {
-        return { success: false, error: result.error || '无法解析该 Steam 个人资料' };
+      return { success: false, error: '无法解析该自定义 URL。请使用 SteamID64 格式（17位数字）或完整的个人资料链接' };
+    }
+    
+    // 尝试解析旧格式 STEAM_X:Y:Z
+    const oldFormatMatch = steamId.match(/^STEAM_(\d):(\d):(\d+)$/i);
+    if (oldFormatMatch) {
+      console.log('[Steam API] 识别为旧格式 STEAM_X:Y:Z');
+      const Y = parseInt(oldFormatMatch[2]);
+      const Z = parseInt(oldFormatMatch[3]);
+      // 转换为 SteamID64: (Z * 2) + 76561197960265728 + Y
+      const id64 = BigInt(Z) * BigInt(2) + BigInt('76561197960265728') + BigInt(Y);
+      return { success: true, steamId: id64.toString() };
+    }
+    
+    // 尝试解析新格式 [U:1:XXXXXX]
+    const newFormatMatch = steamId.match(/^\[U:1:(\d+)\]$/);
+    if (newFormatMatch) {
+      console.log('[Steam API] 识别为新格式 [U:1:xxx]');
+      const accountId = parseInt(newFormatMatch[1]);
+      // 转换为 SteamID64: accountId + 76561197960265728
+      const id64 = BigInt(accountId) + BigInt('76561197960265728');
+      return { success: true, steamId: id64.toString() };
+    }
+    
+    // 如果是纯数字但不是17位，可能是 AccountID
+    if (/^\d+$/.test(steamId) && steamId.length < 17) {
+      console.log('[Steam API] 尝试解析为 AccountID');
+      const accountId = parseInt(steamId);
+      if (accountId > 0) {
+        const id64 = BigInt(accountId) + BigInt('76561197960265728');
+        return { success: true, steamId: id64.toString() };
       }
     }
     
-    return { success: false, error: '无效的 Steam 个人资料链接或 ID' };
+    // 尝试解析十六进制格式 (如 Steam 登录令牌等)
+    // 格式如: 6F051DB2782265D282FBD7BA874A9AC1 (32位十六进制)
+    if (/^[0-9A-Fa-f]{32}$/.test(steamId)) {
+      console.log('[Steam API] 检测到32位十六进制格式，这不是有效的 Steam ID 格式');
+      return { 
+        success: false, 
+        error: '您输入的是32位十六进制字符串，这不是有效的 Steam ID 格式。\n\n' +
+               '请使用以下方法获取正确的 Steam ID：\n' +
+               '1. 打开 Steam 客户端 → 查看 → 设置 → 界面 → 显示 Steam URL 地址栏\n' +
+               '2. 点击您的个人资料，查看地址栏中的数字\n' +
+               '3. 或访问 steamid.io 输入您的 Steam 个人资料链接查询\n\n' +
+               '正确的 Steam ID 格式示例：76561198012345678'
+      };
+    }
+    
+    // 最后尝试：如果输入的是用户名，尝试通过 XML 页面解析
+    if (/^[a-zA-Z0-9_-]+$/.test(steamId)) {
+      console.log('[Steam API] 尝试作为自定义用户名解析:', steamId);
+      try {
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+          `https://steamcommunity.com/id/${steamId}/?xml=1`
+        )}`;
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+        
+        const steamIdMatch = data.contents.match(/<steamID64>(\d{17})<\/steamID64>/);
+        if (steamIdMatch) {
+          console.log('[Steam API] 成功从自定义用户名解析到 ID:', steamIdMatch[1]);
+          return { success: true, steamId: steamIdMatch[1] };
+        }
+        
+        // 检查是否是用户名不存在的情况
+        if (data.contents.includes('<error>') || data.contents.includes('The specified profile could not be found')) {
+          return { 
+            success: false, 
+            error: `找不到名为 "${steamId}" 的 Steam 用户。\n请确认您输入的自定义 URL 名称是否正确，或使用 SteamID64 格式。`
+          };
+        }
+      } catch (e) {
+        console.error('解析用户名失败:', e);
+      }
+    }
+    
+    // 如果包含非法字符，给出提示
+    if (/[^a-zA-Z0-9_\-:\/\.\[\] ]/.test(steamId)) {
+      return { 
+        success: false, 
+        error: '输入包含无效字符。Steam ID 只能包含字母、数字和特定符号。\n\n' +
+               '请使用以下格式之一：\n' +
+               '• SteamID64: 76561198012345678（17位数字）\n' +
+               '• 个人资料链接: https://steamcommunity.com/profiles/xxx 或 /id/xxx\n' +
+               '• 自定义URL名称: 如 "gaben"'
+      };
+    }
+    
+    return { 
+      success: false, 
+      error: '无法识别您输入的 Steam ID 格式。\n\n' +
+             '请使用以下格式之一：\n' +
+             '• SteamID64: 76561198012345678（17位数字）\n' +
+             '• 个人资料链接: steamcommunity.com/profiles/xxx 或 /id/xxx\n' +
+             '• 旧格式: STEAM_0:1:12345678\n' +
+             '• 新格式: [U:1:12345678]\n' +
+             '• 自定义URL名称（英文字母数字，如 "gaben"）\n\n' +
+             '💡 提示：访问 https://steamid.io 可以轻松查询您的 Steam ID'
+    };
   },
   
   // 获取用户信息

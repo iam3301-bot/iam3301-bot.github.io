@@ -1057,7 +1057,16 @@
         return;
       }
 
-      // 保存绑定信息
+      // 准备游戏列表数据
+      const gamesList = steamUserData.games?.games?.map(game => ({
+        appid: game.appid,
+        name: game.name,
+        playtimeForever: game.playtime_forever || 0,
+        imgIconUrl: game.img_icon_url,
+        imgLogoUrl: game.img_logo_url
+      })) || [];
+
+      // 保存绑定信息到 steam_binding
       const bindingData = {
         steamId: steamUserData.steamid,
         personaName: steamUserData.personaname,
@@ -1065,7 +1074,7 @@
         profileUrl: steamUserData.profileurl,
         gameCount: steamUserData.games?.game_count || 0,
         totalPlaytime: steamUserData.games?.games?.reduce((sum, g) => sum + (g.playtime_forever || 0), 0) || 0,
-        games: steamUserData.games?.games || [],
+        games: gamesList,
         boundAt: new Date().toISOString(),
         apiKeyConfigured: !!steamApiKey
       };
@@ -1073,10 +1082,61 @@
       // 保存到本地存储
       localStorage.setItem('steam_binding', JSON.stringify(bindingData));
 
-      // 如果有 UserDataManager，同步数据
-      if (typeof UserDataManager !== 'undefined') {
-        UserDataManager.linkSteam(bindingData);
+      // 同步到 UserDataManager（使用正确的存储格式）
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const userId = currentUser.id || 'guest';
+      
+      // 重要：使用与 UserDataManager 相同的存储键格式
+      const STORAGE_KEY = 'gamebox_user_data';
+      let allUserData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      let userData = allUserData[userId] || {
+        steam: { linked: false },
+        stats: { viewedGames: 0, addedToWishlist: 0, markedOwned: 0 },
+        preferences: { theme: 'dark', notifications: true }
+      };
+      
+      // 更新 Steam 数据
+      userData.steam = {
+        linked: true,
+        steamId: steamUserData.steamid,
+        personaName: steamUserData.personaname,
+        avatar: steamUserData.avatarfull,
+        profileUrl: steamUserData.profileurl,
+        lastSync: new Date().toISOString(),
+        games: gamesList,
+        gameCount: bindingData.gameCount,
+        totalPlaytime: bindingData.totalPlaytime
+      };
+      
+      userData.updatedAt = new Date().toISOString();
+      
+      // 保存到 UserDataManager 的存储格式
+      allUserData[userId] = userData;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allUserData));
+      
+      // 同时更新永久存储和备份
+      try {
+        // 永久用户存储
+        const permanentUsers = JSON.parse(localStorage.getItem('gamebox_permanent_users') || '{}');
+        permanentUsers[userId] = userData;
+        localStorage.setItem('gamebox_permanent_users', JSON.stringify(permanentUsers));
+        
+        // 备份存储
+        const BACKUP_KEY = 'gamebox_user_data_backup';
+        const backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '{}');
+        if (!backups[userId]) backups[userId] = [];
+        backups[userId].push({ data: userData, timestamp: new Date().toISOString() });
+        if (backups[userId].length > 10) backups[userId] = backups[userId].slice(-10);
+        localStorage.setItem(BACKUP_KEY, JSON.stringify(backups));
+      } catch (e) {
+        console.error('保存永久存储失败:', e);
       }
+      
+      console.log('[Steam 绑定] 数据已保存:', {
+        userId,
+        steamId: steamUserData.steamid,
+        gameCount: bindingData.gameCount
+      });
 
       // 显示最终统计
       const finalStats = document.getElementById('finalStats');
