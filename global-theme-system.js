@@ -334,51 +334,6 @@
         scanlines: true,
         cyberGrid: true
       }
-    },
-    
-    // 原始赛博朋克主题 - 简约科技风格
-    cyberpunk: {
-      id: 'cyberpunk',
-      name: '赛博朋克',
-      nameEn: 'Cyberpunk',
-      icon: '💠',
-      description: '未来科技 · 蓝色霓虹',
-      visualStyle: {
-        effects: ['简约线条', '科技网格', '蓝色光晕'],
-        animations: ['数据流动', '科技扫描'],
-        uiStyle: '简约科技边框 + 蓝色霓虹'
-      },
-      colors: {
-        primary: '#38bdf8',
-        secondary: '#0ea5e9',
-        accent: '#06b6d4',
-        background: {
-          primary: '#0f172a',
-          secondary: '#1e293b',
-          card: '#334155',
-          gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
-        },
-        text: {
-          primary: '#f8fafc',
-          secondary: '#e2e8f0',
-          muted: '#94a3b8'
-        },
-        border: '#475569',
-        borderGlow: '#38bdf8',
-        success: '#10b981',
-        warning: '#f59e0b',
-        danger: '#ef4444',
-        info: '#06b6d4'
-      },
-      fonts: {
-        primary: '"Orbitron", "Audiowide", sans-serif',
-        secondary: '"Rajdhani", "Russo One", sans-serif'
-      },
-      effects: {
-        simpleLines: true,
-        techGrid: true,
-        blueGlow: true
-      }
     }
   };
   
@@ -467,8 +422,8 @@
       body.classList.add(`theme-${themeId}`);
       body.dataset.theme = themeId;
       
-      // 特殊处理：赛博朋克主题使用theme-cyberpunk2077类名以启用特效
-      if (themeId === 'cyberpunk' || themeId === 'cyberpunk2077') {
+      // 特殊处理：赛博朋克2077主题启用特效
+      if (themeId === 'cyberpunk2077') {
         body.classList.add('theme-cyberpunk2077');
       } else {
         body.classList.remove('theme-cyberpunk2077');
@@ -478,7 +433,7 @@
       this.injectThemeVariables(theme);
       
       // 控制特效系统
-      this.toggleCyberEffects(themeId === 'cyberpunk' || themeId === 'cyberpunk2077');
+      this.toggleCyberEffects(themeId === 'cyberpunk2077');
       this.toggleWukongEffects(themeId === 'wukong');
       this.toggleWitcherEffects(themeId === 'witcher');
       this.toggleGTA5Effects(themeId === 'gta5');
@@ -943,6 +898,22 @@
           font-family: 'Cinzel', 'Trajan Pro', serif !important;
           text-shadow: 0 0 10px #C41E3A, 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
           letter-spacing: 1px !important;
+          color: #E8E8E8 !important;
+        }
+        
+        body.theme-witcher .ranking-meta {
+          color: #FFD700 !important;
+          text-shadow: 0 0 8px #FFD700 !important;
+        }
+        
+        body.theme-witcher .ranking-item {
+          transition: all 0.3s ease !important;
+        }
+        
+        body.theme-witcher .ranking-item:hover {
+          border-color: #C41E3A !important;
+          box-shadow: 0 0 25px rgba(196, 30, 58, 0.8), 0 4px 20px rgba(0, 0, 0, 0.7) !important;
+          transform: translateX(5px) !important;
         }
         
         body.theme-witcher button:hover {
@@ -965,6 +936,18 @@
           text-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00, 2px 2px 4px rgba(0, 0, 0, 0.9) !important;
           letter-spacing: 3px !important;
           text-transform: uppercase !important;
+          color: #FFFFFF !important;
+          font-weight: 900 !important;
+        }
+        
+        body.theme-gta5 .ranking-meta {
+          color: #FFD700 !important;
+          text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700 !important;
+          font-weight: 700 !important;
+        }
+        
+        body.theme-gta5 .ranking-item {
+          transition: all 0.3s ease !important;
         }
         
         body.theme-gta5 button:hover,
@@ -972,6 +955,7 @@
           border-color: #FFD700 !important;
           box-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 50px rgba(255, 20, 147, 0.4) !important;
           animation: gtaNeonPulse 2s ease-in-out infinite !important;
+          transform: translateX(5px) !important;
         }
         
         @keyframes gtaNeonPulse {
@@ -1126,26 +1110,6 @@
           25% { transform: translate(-2px, 2px); }
           50% { transform: translate(2px, -2px); }
           75% { transform: translate(-2px, -2px); }
-        }
-        
-        /* 原版赛博朋克主题 - 简约科技 */
-        body.theme-cyberpunk .card,
-        body.theme-cyberpunk .game-card,
-        body.theme-cyberpunk .ranking-item {
-          border: 1px solid #38bdf8 !important;
-          background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
-          box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2) !important;
-        }
-        
-        body.theme-cyberpunk .card-title,
-        body.theme-cyberpunk .ranking-name {
-          font-family: 'Orbitron', 'Audiowide', sans-serif !important;
-          text-shadow: 0 0 10px #38bdf8 !important;
-        }
-        
-        body.theme-cyberpunk button:hover {
-          background: linear-gradient(135deg, #0ea5e9, #38bdf8) !important;
-          box-shadow: 0 0 20px rgba(56, 189, 248, 0.6) !important;
         }
         
         /* 响应式 */
