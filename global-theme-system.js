@@ -210,13 +210,46 @@
       }
     },
     
+    // 赛博朋克2077主题
+    cyberpunk2077: {
+      id: 'cyberpunk2077',
+      name: '赛博朋克2077',
+      nameEn: 'Cyberpunk 2077',
+      icon: '🌃',
+      description: '夜之城霓虹，矩阵雨特效',
+      colors: {
+        primary: '#00F0FF',      // 夜之城青色
+        secondary: '#FF003C',    // 霓虹粉
+        accent: '#FFED4E',       // 黄色高光
+        background: {
+          primary: '#0a0e27',    // 深蓝黑
+          secondary: '#16213e',  // 暗蓝
+          card: '#1a2332'        // 卡片蓝
+        },
+        text: {
+          primary: '#00F0FF',    // 青色文字
+          secondary: '#e2e8f0',  // 银白
+          muted: '#94a3b8'       // 灰蓝
+        },
+        border: '#00F0FF',       // 青色边框
+        success: '#00ff88',      // 霓虹绿
+        warning: '#FFED4E',      // 黄色
+        danger: '#FF003C',       // 霓虹粉红
+        info: '#00F0FF'          // 青色
+      },
+      fonts: {
+        primary: '"Orbitron", "Rajdhani", sans-serif',
+        secondary: '"Rajdhani", "Roboto", sans-serif'
+      }
+    },
+    
     // 原始赛博朋克主题
     cyberpunk: {
       id: 'cyberpunk',
       name: '赛博朋克',
       nameEn: 'Cyberpunk',
-      icon: '🌃',
-      description: '未来科技，霓虹灯光',
+      icon: '💠',
+      description: '未来科技，蓝色霓虹',
       colors: {
         primary: '#38bdf8',
         secondary: '#0ea5e9',
@@ -245,7 +278,7 @@
   };
   
   const STORAGE_KEY = 'gamebox_global_theme';
-  const DEFAULT_THEME = 'cyberpunk';
+  const DEFAULT_THEME = 'cyberpunk2077';
   
   // ==========================================
   // 全局主题管理器类
@@ -330,7 +363,7 @@
       body.dataset.theme = themeId;
       
       // 特殊处理：赛博朋克主题使用theme-cyberpunk2077类名以启用特效
-      if (themeId === 'cyberpunk') {
+      if (themeId === 'cyberpunk' || themeId === 'cyberpunk2077') {
         body.classList.add('theme-cyberpunk2077');
       } else {
         body.classList.remove('theme-cyberpunk2077');
@@ -340,7 +373,7 @@
       this.injectThemeVariables(theme);
       
       // 控制特效系统
-      this.toggleCyberEffects(themeId === 'cyberpunk');
+      this.toggleCyberEffects(themeId === 'cyberpunk' || themeId === 'cyberpunk2077');
       this.toggleWukongEffects(themeId === 'wukong');
       this.toggleWitcherEffects(themeId === 'witcher');
       this.toggleGTA5Effects(themeId === 'gta5');
@@ -940,12 +973,20 @@
         }
         
         .theme-option-icon {
-          font-size: 32px;
+          font-size: 28px;
           flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
         }
         
         .theme-option-info {
           flex: 1;
+          min-width: 0;
+          overflow: hidden;
         }
         
         .theme-option-name {
@@ -953,11 +994,17 @@
           font-weight: 700;
           color: var(--theme-text-primary);
           margin-bottom: 4px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .theme-option-desc {
           font-size: 11px;
           color: var(--theme-text-muted);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .theme-option-check {
