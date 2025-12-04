@@ -903,33 +903,43 @@
     const playtimeText = formatPlaytime(game.playtimeForever);
     const recentText = game.playtime2Weeks > 0 ? `近两周: ${formatPlaytime(game.playtime2Weeks)}` : '';
     const isSteam = game.source === 'steam';
-    const gameId = game.id;
+    const gameId = game.id || game.appId || game.appid;
+    
+    // 调试信息
+    console.log('渲染游戏卡片:', { name: game.name, id: gameId, source: game.source, thumbnail: game.thumbnail });
     
     // Steam 高清封面图 URL (多重降级策略)
-    // 优先级: header.jpg (460x215) -> capsule_616x353.jpg -> library_600x900.jpg
     const steamCoverUrl = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg` : '';
     const steamCoverFallback1 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg` : '';
     const steamCoverFallback2 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900.jpg` : '';
     
-    // 确定封面 URL
-    let coverUrl = '';
-    if (isSteam && gameId) {
+    // 确定封面 URL - 优先使用已有的 thumbnail，否则构建 Steam URL
+    let coverUrl = game.thumbnail || '';
+    if (!coverUrl && gameId) {
       coverUrl = steamCoverUrl;
-    } else if (game.thumbnail) {
-      coverUrl = game.thumbnail;
     }
     
-    // 封面图显示逻辑 - 多级降级 + 美观占位符
-    const coverImg = coverUrl 
-      ? `<img src="${coverUrl}" alt="${game.name}" loading="lazy" 
-           onerror="this.onerror=function(){
-             this.onerror=function(){
-               this.parentElement.innerHTML='<div class=\\'cover-placeholder\\' data-name=\\'${game.name.replace(/'/g, "").substring(0, 20)}\\'>🎮</div>';
-             };
-             this.src='${steamCoverFallback2}';
-           };
-           this.src='${steamCoverFallback1}';" />`
-      : `<div class="cover-placeholder" data-name="${game.name.substring(0, 20)}">🎮</div>`;
+    // 安全处理游戏名称（用于 HTML 属性）
+    const safeName = (game.name || 'Unknown').replace(/['"<>]/g, '').substring(0, 25);
+    
+    // 创建占位符 HTML
+    const placeholderHTML = `<div class="cover-placeholder" data-name="${safeName}">🎮</div>`;
+    
+    // 封面图显示逻辑
+    let coverImg;
+    if (coverUrl && gameId) {
+      // 有封面 URL 时显示图片
+      coverImg = `<img 
+        src="${coverUrl}" 
+        alt="${safeName}" 
+        loading="lazy"
+        style="width:100%;height:100%;object-fit:cover;"
+        onerror="this.onerror=null;this.src='${steamCoverFallback1}';this.onerror=function(){this.src='${steamCoverFallback2}';this.onerror=function(){this.parentElement.innerHTML='${placeholderHTML.replace(/'/g, "\\'")}';};}" 
+      />`;
+    } else {
+      // 没有封面时显示占位符
+      coverImg = placeholderHTML;
+    }
     
     // 点击事件处理
     const clickHandler = isSteam 
