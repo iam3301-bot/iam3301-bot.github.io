@@ -152,29 +152,38 @@
   };
 
   // =============================================
-  // PlayStation Network API (via psn-api pattern)
+  // PlayStation Network API (完整支持 - 与 Steam 对接一致)
   // =============================================
   
   const PSNAPI = {
     // API 配置
     config: {
       enabled: false,
-      npsso: '', // 用户的 NPSSO token
+      npsso: '',
       accessToken: '',
       refreshToken: '',
-      tokenExpiry: 0
+      tokenExpiry: 0,
+      accountId: '',
+      onlineId: '',
+      // 代理服务器地址 - 可配置
+      proxyUrl: localStorage.getItem('psn_proxy_url') || 'http://localhost:3001'
     },
     
     // 初始化
     init() {
-      // 从 localStorage 读取配置
       const savedConfig = localStorage.getItem('psn_api_config');
       if (savedConfig) {
         try {
           const config = JSON.parse(savedConfig);
           Object.assign(this.config, config);
-          this.config.enabled = !!config.accessToken;
-          console.log('✅ PSN API 配置已加载');
+          // 检查 token 是否过期
+          if (this.config.accessToken && this.config.tokenExpiry > Date.now()) {
+            this.config.enabled = true;
+            console.log('✅ PSN API 已启用 (Token 有效)');
+          } else if (this.config.accessToken) {
+            console.log('⚠️ PSN API Token 已过期，需要重新认证');
+            this.config.enabled = false;
+          }
         } catch (e) {
           console.warn('PSN API 配置解析失败');
         }
@@ -185,57 +194,221 @@
     
     // 保存配置
     saveConfig() {
-      localStorage.setItem('psn_api_config', JSON.stringify(this.config));
+      const configToSave = {
+        npsso: this.config.npsso,
+        accessToken: this.config.accessToken,
+        refreshToken: this.config.refreshToken,
+        tokenExpiry: this.config.tokenExpiry,
+        accountId: this.config.accountId,
+        onlineId: this.config.onlineId,
+        proxyUrl: this.config.proxyUrl
+      };
+      localStorage.setItem('psn_api_config', JSON.stringify(configToSave));
     },
     
-    // 设置 NPSSO Token (需要从 PlayStation 网站获取)
-    async setNpsso(npsso) {
+    // 设置代理服务器地址
+    setProxyUrl(url) {
+      this.config.proxyUrl = url;
+      localStorage.setItem('psn_proxy_url', url);
+    },
+    
+    // 检查代理服务器是否可用
+    async checkProxy() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(`${this.config.proxyUrl}/api/psn/health`, {
+          method: 'GET',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        return response.ok;
+      } catch (e) {
+        return false;
+      }
+    },
+    
+    // 使用 NPSSO 进行认证
+    async authenticate(npsso) {
       if (!npsso || npsso.length < 60) {
         return { success: false, error: 'NPSSO Token 格式无效 (应为64字符)' };
       }
       
-      this.config.npsso = npsso;
-      
-      // 尝试交换 access token
-      // 注意：由于 CORS 限制，这需要通过代理或后端服务
-      // 这里提供一个模拟/演示模式
-      
-      console.log('⚠️ PSN API 需要后端代理才能完成认证');
-      console.log('ℹ️ 由于浏览器 CORS 限制，PSN API 调用需要服务端支持');
-      
-      // 保存 NPSSO，等待后端支持
-      this.config.enabled = false; // 标记为未完全启用
-      this.saveConfig();
-      
-      return { 
-        success: false, 
-        error: 'PSN API 需要后端代理服务支持，目前请使用手动录入',
-        hint: '您可以访问 https://ca.account.sony.com/api/v1/ssocookie 获取 NPSSO Token'
-      };
+      try {
+        // 先检查代理服务器
+        const proxyAvailable = await this.checkProxy();
+        if (!proxyAvailable) {
+          return { 
+            success: false, 
+            error: '无法连接到 PSN API 代理服务器',
+            hint: `请确保代理服务器运行在 ${this.config.proxyUrl}`
+          };
+        }
+        
+        // 调用代理服务器进行认证
+        const response = await fetch(`${this.config.proxyUrl}/api/psn/auth`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ npsso })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          this.config.npsso = npsso;
+          this.config.accessToken = data.accessToken;
+          this.config.refreshToken = data.refreshToken;
+          this.config.tokenExpiry = Date.now() + (data.expiresIn * 1000);
+          this.config.enabled = true;
+          this.saveConfig();
+          
+          console.log('✅ PSN API 认证成功');
+          return { success: true };
+        } else {
+          return { success: false, error: data.error || '认证失败' };
+        }
+      } catch (e) {
+        console.error('PSN 认证错误:', e);
+        return { 
+          success: false, 
+          error: '无法连接到 PSN API 代理服务器',
+          hint: `请确保代理服务器运行在 ${this.config.proxyUrl}`
+        };
+      }
     },
     
     // 检查是否启用
     isEnabled() {
-      return this.config.enabled && this.config.accessToken;
+      return this.config.enabled && this.config.accessToken && this.config.tokenExpiry > Date.now();
     },
     
-    // 获取用户资料 (需要 accessToken)
-    async getProfile(accountId) {
+    // API 请求封装
+    async apiRequest(endpoint, params = {}) {
       if (!this.isEnabled()) {
-        return { success: false, error: 'PSN API 未配置或未授权' };
+        return { success: false, error: 'PSN API 未启用或 Token 已过期' };
       }
       
-      // 实际实现需要后端代理
-      return { success: false, error: '需要后端代理服务支持' };
+      try {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `${this.config.proxyUrl}${endpoint}${queryString ? '?' + queryString : ''}`;
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${this.config.accessToken}`
+          }
+        });
+        
+        if (response.status === 401) {
+          this.config.enabled = false;
+          this.saveConfig();
+          return { success: false, error: 'Token 已过期，请重新认证' };
+        }
+        
+        const data = await response.json();
+        return { success: response.ok, data };
+      } catch (e) {
+        console.error('PSN API 请求错误:', e);
+        return { success: false, error: e.message };
+      }
     },
     
-    // 获取奖杯数据
-    async getTrophies(accountId) {
-      if (!this.isEnabled()) {
-        return { success: false, error: 'PSN API 未配置或未授权' };
+    // 获取用户资料
+    async getProfile(accountId = 'me') {
+      const result = await this.apiRequest('/api/psn/profile', { accountId });
+      
+      if (result.success && result.data) {
+        const profile = result.data;
+        return {
+          success: true,
+          profile: {
+            accountId: profile.accountId || accountId,
+            onlineId: profile.onlineId || '',
+            avatar: profile.avatarUrls?.[0]?.avatarUrl || profile.avatarUrl || '',
+            aboutMe: profile.aboutMe || '',
+            languages: profile.languages || [],
+            isPlus: profile.isPlus || false
+          }
+        };
       }
       
-      return { success: false, error: '需要后端代理服务支持' };
+      return result;
+    },
+    
+    // 获取用户奖杯概要
+    async getTrophySummary(accountId = 'me') {
+      const result = await this.apiRequest('/api/psn/trophy-summary', { accountId });
+      
+      if (result.success && result.data) {
+        return {
+          success: true,
+          summary: {
+            trophyLevel: result.data.trophyLevel || 0,
+            progress: result.data.progress || 0,
+            tier: result.data.tier || 1,
+            earnedTrophies: result.data.earnedTrophies || {
+              bronze: 0,
+              silver: 0,
+              gold: 0,
+              platinum: 0
+            }
+          }
+        };
+      }
+      
+      return result;
+    },
+    
+    // 获取游戏列表
+    async getUserTitles(accountId = 'me', limit = 800) {
+      const result = await this.apiRequest('/api/psn/titles', { accountId, limit });
+      
+      if (result.success && result.data) {
+        const titles = result.data.trophyTitles || [];
+        return {
+          success: true,
+          titles: titles.map(t => ({
+            npCommunicationId: t.npCommunicationId,
+            name: t.trophyTitleName,
+            detail: t.trophyTitleDetail,
+            iconUrl: t.trophyTitleIconUrl,
+            platform: t.trophyTitlePlatform, // PS5, PS4, PS3, VITA
+            progress: t.progress,
+            earnedTrophies: t.earnedTrophies,
+            definedTrophies: t.definedTrophies,
+            lastUpdated: t.lastUpdatedDateTime
+          })),
+          totalCount: result.data.totalItemCount || titles.length
+        };
+      }
+      
+      return { success: false, error: result.error, titles: [], totalCount: 0 };
+    },
+    
+    // 搜索用户
+    async searchUser(onlineId) {
+      const result = await this.apiRequest('/api/psn/search', { onlineId });
+      
+      if (result.success && result.data && result.data.domainResponses) {
+        const socialResults = result.data.domainResponses.find(d => d.domain === 'SocialAllAccounts');
+        if (socialResults && socialResults.results) {
+          return {
+            success: true,
+            users: socialResults.results.map(u => ({
+              accountId: u.socialMetadata?.accountId,
+              onlineId: u.socialMetadata?.onlineId,
+              avatarUrl: u.socialMetadata?.avatarUrl,
+              isPsPlus: u.socialMetadata?.isPsPlus
+            }))
+          };
+        }
+      }
+      
+      return { success: false, error: '未找到用户', users: [] };
     },
     
     // 清除配置
@@ -245,10 +418,22 @@
         npsso: '',
         accessToken: '',
         refreshToken: '',
-        tokenExpiry: 0
+        tokenExpiry: 0,
+        accountId: '',
+        onlineId: '',
+        proxyUrl: this.config.proxyUrl
       };
       localStorage.removeItem('psn_api_config');
       console.log('ℹ️ PSN API 配置已清除');
+    },
+    
+    // 兼容别名方法
+    async setNpsso(npsso) {
+      return await this.authenticate(npsso);
+    },
+    
+    async getTrophies(accountId) {
+      return await this.getUserTitles(accountId);
     }
   };
 
@@ -296,9 +481,9 @@
         playstation: {
           enabled: PSNAPI.isEnabled(),
           name: 'PlayStation Network',
-          apiSource: 'psn-api (需要后端)',
+          apiSource: 'psn-api (需要后端代理)',
           configUrl: 'https://ca.account.sony.com/api/v1/ssocookie',
-          features: ['奖杯数据', '用户资料'],
+          features: ['奖杯数据', '用户资料', '游戏列表', '奖杯统计'],
           note: '需要后端代理服务支持'
         },
         epic: {
@@ -324,11 +509,17 @@
     
     // PlayStation 相关方法
     playstation: {
+      authenticate: (npsso) => PSNAPI.authenticate(npsso),
       setNpsso: (npsso) => PSNAPI.setNpsso(npsso),
       clearConfig: () => PSNAPI.clearConfig(),
       isEnabled: () => PSNAPI.isEnabled(),
+      checkProxy: () => PSNAPI.checkProxy(),
+      setProxyUrl: (url) => PSNAPI.setProxyUrl(url),
       getProfile: (accountId) => PSNAPI.getProfile(accountId),
-      getTrophies: (accountId) => PSNAPI.getTrophies(accountId)
+      getTrophySummary: (accountId) => PSNAPI.getTrophySummary(accountId),
+      getTrophies: (accountId) => PSNAPI.getTrophies(accountId),
+      getUserTitles: (accountId, limit) => PSNAPI.getUserTitles(accountId, limit),
+      searchUser: (onlineId) => PSNAPI.searchUser(onlineId)
     },
     
     // Epic 相关方法
@@ -369,17 +560,49 @@
               gamerscore: profileResult.profile.gamerscore,
               gameCount: gamesResult.gameCount || 0,
               games: gamesResult.games || [],
-              isApiData: true, // 标记为 API 数据
+              isApiData: true,
               boundAt: new Date().toISOString()
             }
           };
           
         case 'playstation':
-          return { 
-            success: false, 
-            error: 'PSN API 需要后端代理服务，请手动录入数据',
-            configRequired: true,
-            useManualEntry: true
+          if (!PSNAPI.isEnabled()) {
+            return { 
+              success: false, 
+              error: '请先配置 PSN NPSSO Token',
+              configRequired: true,
+              useManualEntry: false
+            };
+          }
+          
+          // 获取奖杯概要
+          const summaryResult = await PSNAPI.getTrophySummary('me');
+          
+          // 获取游戏列表
+          const titlesResult = await PSNAPI.getUserTitles('me');
+          
+          if (!titlesResult.success) {
+            return { success: false, error: titlesResult.error || '获取数据失败' };
+          }
+          
+          // 计算奖杯统计
+          const trophies = summaryResult.success ? summaryResult.summary.earnedTrophies : { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+          const totalTrophies = trophies.bronze + trophies.silver + trophies.gold + trophies.platinum;
+          
+          return {
+            success: true,
+            platform: 'playstation',
+            account: {
+              username: identifier || 'PSN User',
+              accountId: 'me',
+              gameCount: titlesResult.totalCount,
+              games: titlesResult.titles,
+              trophyLevel: summaryResult.success ? summaryResult.summary.trophyLevel : 0,
+              trophies: trophies,
+              totalTrophies: totalTrophies,
+              isApiData: true,
+              boundAt: new Date().toISOString()
+            }
           };
           
         case 'epic':

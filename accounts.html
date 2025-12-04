@@ -1492,36 +1492,261 @@
       const totalGames = accounts.reduce((sum, a) => sum + (a.gameCount || 0), 0);
       statusDesc.textContent = `已绑定 ${accounts.length} 个账号，共 ${totalGames} 款游戏`;
       
-      accountsList.innerHTML = accounts.map((account, index) => `
-        <div class="account-item" data-index="${index}">
-          <div class="account-avatar" style="background: ${account.avatar ? 'transparent' : config.color}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; overflow: hidden;">
-            ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` : account.username.charAt(0).toUpperCase()}
-          </div>
-          <div class="account-info">
-            <div class="account-name">
-              ${account.username}
-              ${account.isPrimary ? '<span class="primary-badge">主账号</span>' : ''}
-              ${account.gamerscore ? `<span style="color: #10b981; font-size: 12px; margin-left: 8px;">🏆 ${account.gamerscore.toLocaleString()} G</span>` : ''}
-            </div>
-            <div class="account-id">
-              ${config.idLabel} · ${account.gameCount || 0} 款游戏
-              ${account.isApiData ? '<span style="color: #10b981; margin-left: 8px;">✓ API 数据</span>' : ''}
-              ${account.isManual ? '<span style="color: #f59e0b; margin-left: 8px;">📝 手动录入</span>' : ''}
-            </div>
-          </div>
-          <div class="account-actions">
-            ${account.isApiData ? `<button class="action-btn" onclick="syncXboxAccount(${index})">🔄 同步</button>` : `<button class="action-btn" onclick="editPlatformAccount('${platform}', ${index})">✏️ 编辑</button>`}
-            ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('${platform}', ${index})">设为主账号</button>` : ''}
-            <button class="action-btn danger" onclick="unlinkPlatformAccount('${platform}', ${index})">解绑</button>
-          </div>
-        </div>
-      `).join('');
+      accountsList.innerHTML = accounts.map((account, index) => {
+        // 根据平台类型渲染不同的账号信息
+        if (platform === 'playstation') {
+          return renderPsnAccountItem(account, index);
+        } else if (platform === 'xbox') {
+          return renderXboxAccountItem(account, index);
+        } else {
+          return renderGenericAccountItem(platform, account, index, config);
+        }
+      }).join('');
     } else {
       accountsSection.style.display = 'none';
       bindBtn.textContent = '绑定账号';
       bindBtn.classList.remove('bound');
-      statusDesc.textContent = `手动记录您的 ${config.name} 游戏库`;
+      if (platform === 'playstation') {
+        statusDesc.textContent = '同步奖杯和游戏数据';
+      } else {
+        statusDesc.textContent = `手动记录您的 ${config.name} 游戏库`;
+      }
     }
+  }
+  
+  // 渲染 PlayStation 账号项目 (与 Steam 风格一致)
+  function renderPsnAccountItem(account, index) {
+    const trophies = account.trophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+    const totalTrophies = trophies.bronze + trophies.silver + trophies.gold + trophies.platinum;
+    
+    return `
+      <div class="account-item" data-index="${index}" style="background: rgba(0, 48, 135, 0.1);">
+        <div class="account-avatar" style="background: ${account.avatar ? 'transparent' : 'linear-gradient(135deg, #003087, #00246d)'}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; overflow: hidden;">
+          ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` : '🎮'}
+        </div>
+        <div class="account-info" style="flex: 1;">
+          <div class="account-name">
+            ${account.username || 'PSN User'}
+            ${account.isPrimary ? '<span class="primary-badge">当前主账号</span>' : ''}
+          </div>
+          <div class="account-id" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px;">
+            <span>🎮 ${account.gameCount || 0} 款游戏</span>
+            ${account.trophyLevel ? `<span style="color: #fbbf24;">⭐ Lv.${account.trophyLevel}</span>` : ''}
+            ${totalTrophies > 0 ? `
+              <span style="color: #60a5fa;">
+                🏆 ${totalTrophies} 奖杯
+                <span style="font-size: 10px; opacity: 0.7;">
+                  (🥇${trophies.platinum || 0} 🥈${trophies.gold || 0} 🥉${trophies.silver || 0} 🟤${trophies.bronze || 0})
+                </span>
+              </span>
+            ` : ''}
+            ${account.isApiData ? '<span style="color: #10b981;">✓ API 数据</span>' : ''}
+            ${account.isManual ? '<span style="color: #f59e0b;">📝 手动录入</span>' : ''}
+          </div>
+        </div>
+        <div class="account-actions">
+          ${account.isApiData ? `
+            <button class="action-btn primary" onclick="viewPsnTrophies(${index})" style="background: linear-gradient(135deg, #003087, #00246d); border-color: transparent; color: white;">
+              查看奖杯
+            </button>
+            <div class="dropdown-btn">
+              <button class="action-btn" onclick="toggleDropdown(this)">
+                更多 ▼
+              </button>
+              <div class="dropdown-menu">
+                ${!account.isPrimary ? `<div class="dropdown-item" onclick="setPlatformPrimary('playstation', ${index})">设为主账号</div>` : ''}
+                <div class="dropdown-item" onclick="syncPsnAccount(${index})">同步数据</div>
+                <div class="dropdown-item" onclick="viewPsnGames(${index})">查看游戏库</div>
+              </div>
+            </div>
+          ` : `
+            <button class="action-btn" onclick="editPlatformAccount('playstation', ${index})">✏️ 编辑</button>
+            ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('playstation', ${index})">设为主账号</button>` : ''}
+          `}
+          <button class="action-btn danger" onclick="unlinkPlatformAccount('playstation', ${index})">解绑</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  // 渲染 Xbox 账号项目
+  function renderXboxAccountItem(account, index) {
+    return `
+      <div class="account-item" data-index="${index}" style="background: rgba(16, 124, 16, 0.1);">
+        <div class="account-avatar" style="background: ${account.avatar ? 'transparent' : 'linear-gradient(135deg, #107c10, #0e6b0e)'}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; overflow: hidden;">
+          ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` : '🎮'}
+        </div>
+        <div class="account-info">
+          <div class="account-name">
+            ${account.username}
+            ${account.isPrimary ? '<span class="primary-badge">主账号</span>' : ''}
+            ${account.gamerscore ? `<span style="color: #10b981; font-size: 12px; margin-left: 8px;">🏆 ${account.gamerscore.toLocaleString()} G</span>` : ''}
+          </div>
+          <div class="account-id">
+            Gamertag · ${account.gameCount || 0} 款游戏
+            ${account.isApiData ? '<span style="color: #10b981; margin-left: 8px;">✓ API 数据</span>' : ''}
+            ${account.isManual ? '<span style="color: #f59e0b; margin-left: 8px;">📝 手动录入</span>' : ''}
+          </div>
+        </div>
+        <div class="account-actions">
+          ${account.isApiData ? `<button class="action-btn" onclick="syncXboxAccount(${index})">🔄 同步</button>` : `<button class="action-btn" onclick="editPlatformAccount('xbox', ${index})">✏️ 编辑</button>`}
+          ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('xbox', ${index})">设为主账号</button>` : ''}
+          <button class="action-btn danger" onclick="unlinkPlatformAccount('xbox', ${index})">解绑</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  // 渲染通用平台账号项目
+  function renderGenericAccountItem(platform, account, index, config) {
+    return `
+      <div class="account-item" data-index="${index}">
+        <div class="account-avatar" style="background: ${account.avatar ? 'transparent' : config.color}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; overflow: hidden;">
+          ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` : account.username.charAt(0).toUpperCase()}
+        </div>
+        <div class="account-info">
+          <div class="account-name">
+            ${account.username}
+            ${account.isPrimary ? '<span class="primary-badge">主账号</span>' : ''}
+          </div>
+          <div class="account-id">
+            ${config.idLabel} · ${account.gameCount || 0} 款游戏
+            ${account.isManual ? '<span style="color: #f59e0b; margin-left: 8px;">📝 手动录入</span>' : ''}
+          </div>
+        </div>
+        <div class="account-actions">
+          <button class="action-btn" onclick="editPlatformAccount('${platform}', ${index})">✏️ 编辑</button>
+          ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('${platform}', ${index})">设为主账号</button>` : ''}
+          <button class="action-btn danger" onclick="unlinkPlatformAccount('${platform}', ${index})">解绑</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  // 查看 PSN 奖杯
+  function viewPsnTrophies(index) {
+    const accounts = userData.playstationAccounts || [];
+    const account = accounts[index];
+    
+    if (!account) return;
+    
+    const trophies = account.trophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+    const totalTrophies = trophies.bronze + trophies.silver + trophies.gold + trophies.platinum;
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(0, 48, 135, 0.3); border-radius: 16px; padding: 32px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+            <div style="width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg, #003087, #00246d); display: flex; align-items: center; justify-content: center; font-size: 32px;">
+              ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;">` : '🎮'}
+            </div>
+            <div>
+              <h3 style="color: #60a5fa; margin: 0;">${account.username || 'PSN User'}</h3>
+              <p style="color: var(--text-muted); margin: 4px 0 0; font-size: 14px;">奖杯等级 ${account.trophyLevel || 0}</p>
+            </div>
+          </div>
+          
+          <h4 style="color: var(--text-soft); margin-bottom: 16px;">🏆 奖杯统计</h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
+            <div style="text-align: center; padding: 16px; background: rgba(168, 85, 247, 0.2); border-radius: 12px;">
+              <div style="font-size: 28px; margin-bottom: 8px;">🏆</div>
+              <div style="font-size: 24px; font-weight: bold; color: #a855f7;">${trophies.platinum || 0}</div>
+              <div style="font-size: 12px; color: var(--text-muted);">白金</div>
+            </div>
+            <div style="text-align: center; padding: 16px; background: rgba(251, 191, 36, 0.2); border-radius: 12px;">
+              <div style="font-size: 28px; margin-bottom: 8px;">🥇</div>
+              <div style="font-size: 24px; font-weight: bold; color: #fbbf24;">${trophies.gold || 0}</div>
+              <div style="font-size: 12px; color: var(--text-muted);">金</div>
+            </div>
+            <div style="text-align: center; padding: 16px; background: rgba(156, 163, 175, 0.2); border-radius: 12px;">
+              <div style="font-size: 28px; margin-bottom: 8px;">🥈</div>
+              <div style="font-size: 24px; font-weight: bold; color: #9ca3af;">${trophies.silver || 0}</div>
+              <div style="font-size: 12px; color: var(--text-muted);">银</div>
+            </div>
+            <div style="text-align: center; padding: 16px; background: rgba(180, 83, 9, 0.2); border-radius: 12px;">
+              <div style="font-size: 28px; margin-bottom: 8px;">🥉</div>
+              <div style="font-size: 24px; font-weight: bold; color: #b45309;">${trophies.bronze || 0}</div>
+              <div style="font-size: 12px; color: var(--text-muted);">铜</div>
+            </div>
+          </div>
+          
+          <div style="background: rgba(0, 48, 135, 0.1); border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 24px;">
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 8px;">奖杯总数</div>
+            <div style="font-size: 36px; font-weight: bold; color: #60a5fa;">${totalTrophies}</div>
+          </div>
+          
+          <div style="display: flex; gap: 12px;">
+            <button onclick="viewPsnGames(${index}); this.closest('[style*=fixed]').remove();" 
+              style="flex: 1; padding: 12px; background: linear-gradient(135deg, #003087, #00246d); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+              查看游戏库
+            </button>
+            <button onclick="this.closest('[style*=fixed]').remove()" 
+              style="flex: 1; padding: 12px; background: transparent; border: 1px solid rgba(0, 48, 135, 0.3); border-radius: 8px; color: var(--text-soft); cursor: pointer;">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  // 查看 PSN 游戏库
+  function viewPsnGames(index) {
+    const accounts = userData.playstationAccounts || [];
+    const account = accounts[index];
+    
+    if (!account || !account.games || account.games.length === 0) {
+      showMessage('暂无游戏数据', 'error');
+      return;
+    }
+    
+    const games = account.games;
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(0, 48, 135, 0.3); border-radius: 16px; padding: 32px; max-width: 700px; width: 95%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;" onclick="event.stopPropagation()">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <h3 style="color: #60a5fa; margin: 0;">🎮 ${account.username || 'PSN User'} 的游戏库</h3>
+            <span style="color: var(--text-muted); font-size: 14px;">${games.length} 款游戏</span>
+          </div>
+          
+          <div style="flex: 1; overflow-y: auto; margin: 0 -16px; padding: 0 16px;">
+            ${games.slice(0, 50).map(game => `
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 8px;">
+                <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: rgba(0, 48, 135, 0.3);">
+                  ${game.iconUrl ? `<img src="${game.iconUrl}" style="width: 100%; height: 100%; object-fit: cover;">` : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🎮</div>'}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="color: var(--text-main); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${game.name || '未知游戏'}</div>
+                  <div style="display: flex; gap: 12px; margin-top: 4px; font-size: 12px; color: var(--text-muted);">
+                    <span>📱 ${game.platform || 'PS'}</span>
+                    ${game.progress !== undefined ? `<span>📊 ${game.progress}%</span>` : ''}
+                    ${game.earnedTrophies ? `<span>🏆 ${(game.earnedTrophies.platinum || 0) + (game.earnedTrophies.gold || 0) + (game.earnedTrophies.silver || 0) + (game.earnedTrophies.bronze || 0)} 奖杯</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+            ${games.length > 50 ? `
+              <div style="text-align: center; padding: 16px; color: var(--text-muted); font-size: 14px;">
+                还有 ${games.length - 50} 款游戏未显示...
+              </div>
+            ` : ''}
+          </div>
+          
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0, 48, 135, 0.2);">
+            <button onclick="this.closest('[style*=fixed]').remove()" 
+              style="width: 100%; padding: 12px; background: linear-gradient(135deg, #003087, #00246d); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
   }
   
   // 编辑平台账号
@@ -1668,19 +1893,37 @@
         </div>
       `,
       playstation: `
-        <h3 style="color: #66c0f4; margin-bottom: 16px;">如何查看 PlayStation 游戏库？</h3>
+        <h3 style="color: #60a5fa; margin-bottom: 16px;">PlayStation API 绑定指南</h3>
         <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
+          
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+            <strong style="color: #10b981;">✅ 支持 API 自动获取</strong>
+            <p style="margin-top: 8px;">PlayStation 支持通过 API 自动获取游戏列表、奖杯数据等信息，与 Steam 绑定体验一致！</p>
+          </div>
+          
+          <p><strong>如何获取 NPSSO Token：</strong></p>
           <ol style="margin: 12px 0; padding-left: 20px;">
-            <li>访问 <a href="https://library.playstation.com/" target="_blank" style="color: #66c0f4;">PlayStation Library</a></li>
-            <li>或在 PS5/PS4 主机上查看</li>
-            <li>浏览您的游戏收藏</li>
-            <li>统计您拥有的游戏数量</li>
+            <li>在浏览器中登录 <a href="https://www.playstation.com/" target="_blank" style="color: #60a5fa;">PlayStation.com</a></li>
+            <li>登录后，访问 <a href="https://ca.account.sony.com/api/v1/ssocookie" target="_blank" style="color: #60a5fa;">此链接获取 NPSSO</a></li>
+            <li>复制返回的 JSON 中的 npsso 值（64字符）</li>
+            <li>将 NPSSO Token 粘贴到配置区域并点击"认证"</li>
           </ol>
           
-          <div style="background: rgba(0, 48, 135, 0.1); border: 1px solid rgba(0, 48, 135, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
-            <strong style="color: #60a5fa;">💡 提示</strong>
-            <p style="margin-top: 8px;">PS Plus 订阅的游戏可以计入您的游戏库统计。</p>
+          <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+            <strong style="color: #f59e0b;">⚠️ 重要说明</strong>
+            <p style="margin-top: 8px;">
+              • NPSSO Token 有效期约 2 个月，过期需重新获取<br>
+              • 需要运行 PSN API 代理服务器（默认端口 3001）<br>
+              • 启动命令: <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">node psn-api-server.js</code>
+            </p>
           </div>
+          
+          <p style="margin-top: 16px;"><strong>也可以选择手动录入：</strong></p>
+          <ol style="margin: 12px 0; padding-left: 20px;">
+            <li>访问 <a href="https://library.playstation.com/" target="_blank" style="color: #60a5fa;">PlayStation Library</a></li>
+            <li>统计您拥有的游戏数量</li>
+            <li>切换到"手动输入"模式进行录入</li>
+          </ol>
         </div>
       `
     };
