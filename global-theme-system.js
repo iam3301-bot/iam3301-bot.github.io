@@ -12,21 +12,27 @@
   // ==========================================
   
   const GAME_THEMES = {
-    // 黑神话：悟空主题
+    // 黑神话：悟空主题 - 东方神话史诗风格
     wukong: {
       id: 'wukong',
       name: '黑神话：悟空',
       nameEn: 'Black Myth: Wukong',
       icon: '🐵',
-      description: '东方神话，金色辉煌',
+      description: '东方神话史诗 · 金箍棒辉煌',
+      visualStyle: {
+        effects: ['金色粒子', '云雾缭绕', '水墨晕染', '火焰光晕'],
+        animations: ['筋斗云', '72变幻影', '金箍棒旋转'],
+        uiStyle: '中国传统纹样边框 + 金色装饰'
+      },
       colors: {
         primary: '#FFD700',      // 金箍棒金
-        secondary: '#B8860B',    // 暗金
+        secondary: '#DC143C',    // 孙悟空红袍
         accent: '#FF6B00',       // 火焰橙
         background: {
-          primary: '#1A0F0A',    // 深棕黑
-          secondary: '#2D1810',  // 棕褐
-          card: '#3D2418'        // 卡片背景
+          primary: '#1A0F0A',    // 深棕黑(天宫暗沉)
+          secondary: '#2D1810',  // 棕褐(花果山石)
+          card: '#3D2418',       // 卡片(寺庙古木)
+          gradient: 'radial-gradient(circle at center, #2D1810 0%, #1A0F0A 100%)'  // 水墨渐变
         },
         text: {
           primary: '#FFF8DC',    // 象牙白
@@ -34,98 +40,45 @@
           muted: '#8B7355'       // 褐灰
         },
         border: '#8B6914',       // 金铜边框
+        borderGlow: '#FFD700',   // 金色发光
         success: '#DAA520',      // 金色
         warning: '#FF8C00',      // 深橙
         danger: '#DC143C',       // 猩红
         info: '#FFD700'          // 金黄
       },
       fonts: {
-        primary: '"Ma Shan Zheng", "KaiTi", "STKaiti", cursive',
-        secondary: '"Zhi Mang Xing", "STXingkai", cursive'
-      }
-    },
-    
-    // 巫师3主题
-    witcher: {
-      id: 'witcher',
-      name: '巫师3',
-      nameEn: 'The Witcher 3',
-      icon: '⚔️',
-      description: '中世纪奇幻，狼之风暴',
-      colors: {
-        primary: '#C41E3A',      // 血红
-        secondary: '#8B0000',    // 暗红
-        accent: '#FFD700',       // 金色符文
-        background: {
-          primary: '#0A0A0A',    // 纯黑
-          secondary: '#1A1A1A',  // 深灰
-          card: '#2A2A2A'        // 炭灰
-        },
-        text: {
-          primary: '#E8E8E8',    // 银白
-          secondary: '#B8B8B8',  // 浅灰
-          muted: '#707070'       // 中灰
-        },
-        border: '#4A4A4A',       // 钢灰
-        success: '#228B22',      // 森林绿
-        warning: '#FFA500',      // 琥珀
-        danger: '#8B0000',       // 血红
-        info: '#4682B4'          // 钢蓝
+        primary: '"Ma Shan Zheng", "KaiTi", "STKaiti", "SimSun", serif',
+        secondary: '"Zhi Mang Xing", "STXingkai", "SimHei", sans-serif'
       },
-      fonts: {
-        primary: '"Cinzel", "Times New Roman", serif',
-        secondary: '"Philosopher", Georgia, serif'
+      effects: {
+        particles: true,
+        cloudMist: true,
+        inkWash: true,
+        goldenGlow: true
       }
     },
     
-    // GTA5主题
-    gta5: {
-      id: 'gta5',
-      name: 'GTA5',
-      nameEn: 'Grand Theft Auto V',
-      icon: '🚗',
-      description: '都市霓虹，自由狂野',
-      colors: {
-        primary: '#00FF00',      // 霓虹绿
-        secondary: '#32CD32',    // 青柠绿
-        accent: '#FF1493',       // 霓虹粉
-        background: {
-          primary: '#000000',    // 纯黑
-          secondary: '#0D0D0D',  // 墨黑
-          card: '#1A1A1A'        // 深黑
-        },
-        text: {
-          primary: '#FFFFFF',    // 纯白
-          secondary: '#CCCCCC',  // 浅灰
-          muted: '#808080'       // 中灰
-        },
-        border: '#00FF00',       // 霓虹绿边框
-        success: '#00FF00',      // 绿色
-        warning: '#FFD700',      // 金色
-        danger: '#FF0000',       // 红色
-        info: '#00BFFF'          // 深天蓝
-      },
-      fonts: {
-        primary: '"Pricedown", "Impact", sans-serif',
-        secondary: '"Roboto Condensed", Arial, sans-serif'
-      }
-    },
-    
-    // 荒野大镖客2主题
+    // 荒野大镖客2主题 - 美国西部荒野风格
     rdr2: {
       id: 'rdr2',
       name: '荒野大镖客2',
       nameEn: 'Red Dead Redemption 2',
       icon: '🤠',
-      description: '西部荒野，黄昏余晖',
+      description: '西部荒野 · 黄昏救赎',
+      visualStyle: {
+        effects: ['沙尘暴', '夕阳余晖', '老照片纹理', '左轮枪烟'],
+        animations: ['马蹄印', '子弹轨迹', '牛仔决斗'],
+        uiStyle: '木纹边框 + 皮革质感 + 西部字体'
+      },
       colors: {
-        primary: '#D4AF37',      // 金黄
+        primary: '#D4AF37',      // 金色(夕阳)
         secondary: '#8B4513',    // 马鞍棕
         accent: '#CD5C5C',       // 印第安红
         background: {
-          primary: '#2B1810',    // 深棕
+          primary: '#2B1810',    // 深棕(荒漠夜)
           secondary: '#3D2817',  // 泥土棕
-          card: '#4A3425'        // 木板棕
+          card: '#4A3425',       // 木板棕
+          gradient: 'radial-gradient(ellipse at bottom, #D4AF37 0%, #8B4513 30%, #2B1810 70%)'  // 夕阳渐变
         },
         text: {
           primary: '#F5DEB3',    // 麦色
@@ -133,98 +86,137 @@
           muted: '#A0826D'       // 沙土色
         },
         border: '#8B7355',       // 皮革棕
+        borderGlow: '#D4AF37',   // 金色光晕
         success: '#6B8E23',      // 橄榄绿
         warning: '#DAA520',      // 金棒色
-        danger: '#8B0000',       // 暗红
+        danger: '#8B0000',       // 血红(枪战)
         info: '#4682B4'          // 钢蓝
       },
       fonts: {
-        primary: '"Rye", "Courier New", monospace',
-        secondary: '"Special Elite", Georgia, serif'
+        primary: '"Rye", "Smokum", "Courier New", monospace',
+        secondary: '"Special Elite", "Covered By Your Grace", Georgia, serif'
+      },
+      effects: {
+        dustStorm: true,
+        sunsetGlow: true,
+        vintagePaper: true,
+        gunSmoke: true
       }
     },
     
-    // 博德之门3主题
+    // 博德之门3主题 - DND奇幻冒险风格
     bg3: {
       id: 'bg3',
       name: '博德之门3',
       nameEn: 'Baldur\'s Gate 3',
       icon: '🐉',
-      description: 'DND奇幻，紫色魔法',
+      description: 'DND奇幻 · 魔法与龙',
+      visualStyle: {
+        effects: ['魔法粒子', '紫色法术圈', '20面骰子', '龙鳞纹理'],
+        animations: ['魔法阵旋转', '法术释放', '骰子滚动'],
+        uiStyle: '魔法书边框 + 紫色魔法光'
+      },
       colors: {
-        primary: '#9370DB',      // 中紫
-        secondary: '#6A5ACD',    // 岩蓝
-        accent: '#FF4500',       // 橙红
+        primary: '#9370DB',      // 魔法紫
+        secondary: '#FF4500',    // 火焰橙(龙息)
+        accent: '#FFD700',       // 金色(传奇)
         background: {
-          primary: '#1C0A28',    // 深紫黑
-          secondary: '#2D1B3D',  // 紫黑
-          card: '#3E2A52'        // 深紫
+          primary: '#1C0A28',    // 深紫黑(魔法夜)
+          secondary: '#2D1B3D',  // 紫黑(地下城)
+          card: '#3E2A52',       // 深紫(魔法卡)
+          gradient: 'radial-gradient(circle at center, #2D1B3D 0%, #1C0A28 100%)'  // 魔法渐变
         },
         text: {
           primary: '#E6E6FA',    // 薰衣草白
           secondary: '#D8BFD8',  // 蓟色
           muted: '#9370DB'       // 中紫
         },
-        border: '#8B7AB8',       // 紫灰
-        success: '#32CD32',      // 青柠绿
-        warning: '#FFD700',      // 金色
-        danger: '#DC143C',       // 猩红
-        info: '#9370DB'          // 中紫
+        border: '#9370DB',       // 紫色边框
+        borderGlow: '#FF4500',   // 火焰光晕
+        success: '#32CD32',      // 青柠绿(成功)
+        warning: '#FFD700',      // 金色(警告)
+        danger: '#DC143C',       // 猩红(伤害)
+        info: '#9370DB'          // 魔法紫
       },
       fonts: {
-        primary: '"Spectral", "Garamond", serif',
-        secondary: '"Lora", Georgia, serif'
+        primary: '"Spectral", "IM Fell DW Pica", "Garamond", serif',
+        secondary: '"Lora", "Quattrocento", Georgia, serif'
+      },
+      effects: {
+        magicParticles: true,
+        spellCircle: true,
+        dice20: true,
+        dragonScale: true
       }
     },
     
-    // 艾尔登法环主题
+    // 艾尔登法环主题 - 黑暗魂系史诗风格
     eldenring: {
       id: 'eldenring',
       name: '艾尔登法环',
       nameEn: 'Elden Ring',
       icon: '💍',
-      description: '黑暗魂系，黄金律法',
+      description: '黑暗魂系 · 黄金律法',
+      visualStyle: {
+        effects: ['金色法环', '灵魂粒子', '篝火余烬', '雾气弥漫'],
+        animations: ['法环旋转', '灵魂飘散', '死亡重生'],
+        uiStyle: '古代石刻边框 + 金色律法纹'
+      },
       colors: {
         primary: '#FDB813',      // 金色法环
-        secondary: '#B8860B',    // 暗金
-        accent: '#00CED1',       // 暗绿松石
+        secondary: '#B8860B',    // 暗金(失色)
+        accent: '#00CED1',       // 月光蓝
         background: {
-          primary: '#0C0C0C',    // 深黑
-          secondary: '#1A1A1A',  // 炭黑
-          card: '#2A2A2A'        // 暗灰
+          primary: '#0C0C0C',    // 深黑(死亡)
+          secondary: '#1A1A1A',  // 炭黑(余烬)
+          card: '#2A2A2A',       // 暗灰(石棺)
+          gradient: 'radial-gradient(ellipse at top, #FDB813 0%, #1A1A1A 40%, #0C0C0C 100%)'  // 法环光辉
         },
         text: {
           primary: '#E8D4A8',    // 古金色
           secondary: '#C4B5A0',  // 石色
           muted: '#8A7968'       // 灰棕
         },
-        border: '#5C5C5C',       // 钢灰
+        border: '#FDB813',       // 金色边框
+        borderGlow: '#FDB813',   // 律法光辉
         success: '#8FBC8F',      // 暗海绿
         warning: '#DAA520',      // 金棒色
-        danger: '#8B0000',       // 暗红
-        info: '#4682B4'          // 钢蓝
+        danger: '#8B0000',       // 血红(致命)
+        info: '#00CED1'          // 月光蓝
       },
       fonts: {
-        primary: '"Trajan Pro", "Cinzel", serif',
-        secondary: '"Marcellus", Georgia, serif'
+        primary: '"Trajan Pro", "Cinzel", "EB Garamond", serif',
+        secondary: '"Marcellus", "Crimson Text", Georgia, serif'
+      },
+      effects: {
+        goldenRing: true,
+        soulParticles: true,
+        bonfireEmber: true,
+        mistEffect: true
       }
     },
     
-    // 赛博朋克2077主题
+    // 赛博朋克2077主题 - 未来赛博朋克风格
     cyberpunk2077: {
       id: 'cyberpunk2077',
       name: '赛博朋克2077',
       nameEn: 'Cyberpunk 2077',
       icon: '🌃',
-      description: '夜之城霓虹，矩阵雨特效',
+      description: '夜之城 · 霓虹与矩阵',
+      visualStyle: {
+        effects: ['矩阵雨', '霓虹光管', '故障特效', '数字流'],
+        animations: ['数码扫描线', '赛博网格', 'Glitch闪烁'],
+        uiStyle: '未来科技边框 + 霓虹发光 + 故障艺术'
+      },
       colors: {
         primary: '#00F0FF',      // 夜之城青色
-        secondary: '#FF003C',    // 霓虹粉
+        secondary: '#FF003C',    // 霓虹粉红
         accent: '#FFED4E',       // 黄色高光
         background: {
-          primary: '#0a0e27',    // 深蓝黑
-          secondary: '#16213e',  // 暗蓝
-          card: '#1a2332'        // 卡片蓝
+          primary: '#0a0e27',    // 深蓝黑(夜之城)
+          secondary: '#16213e',  // 暗蓝(都市阴影)
+          card: '#1a2332',       // 卡片蓝
+          gradient: 'linear-gradient(180deg, #0a0e27 0%, #16213e 50%, #1a2332 100%)'  // 赛博渐变
         },
         text: {
           primary: '#00F0FF',    // 青色文字
@@ -232,47 +224,23 @@
           muted: '#94a3b8'       // 灰蓝
         },
         border: '#00F0FF',       // 青色边框
+        borderGlow: '#00F0FF',   // 霓虹光晕
         success: '#00ff88',      // 霓虹绿
         warning: '#FFED4E',      // 黄色
         danger: '#FF003C',       // 霓虹粉红
         info: '#00F0FF'          // 青色
       },
       fonts: {
-        primary: '"Orbitron", "Rajdhani", sans-serif',
-        secondary: '"Rajdhani", "Roboto", sans-serif'
-      }
-    },
-    
-    // 原始赛博朋克主题
-    cyberpunk: {
-      id: 'cyberpunk',
-      name: '赛博朋克',
-      nameEn: 'Cyberpunk',
-      icon: '💠',
-      description: '未来科技，蓝色霓虹',
-      colors: {
-        primary: '#38bdf8',
-        secondary: '#0ea5e9',
-        accent: '#06b6d4',
-        background: {
-          primary: '#0f172a',
-          secondary: '#1e293b',
-          card: '#334155'
-        },
-        text: {
-          primary: '#f8fafc',
-          secondary: '#e2e8f0',
-          muted: '#94a3b8'
-        },
-        border: '#475569',
-        success: '#10b981',
-        warning: '#f59e0b',
-        danger: '#ef4444',
-        info: '#06b6d4'
+        primary: '"Orbitron", "Exo 2", "Rajdhani", sans-serif',
+        secondary: '"Rajdhani", "Saira", "Roboto", sans-serif'
       },
-      fonts: {
-        primary: '"Orbitron", sans-serif',
-        secondary: '"Rajdhani", sans-serif'
+      effects: {
+        matrixRain: true,
+        neonTubes: true,
+        glitchEffect: true,
+        digitalStream: true,
+        scanlines: true,
+        cyberGrid: true
       }
     }
   };
@@ -362,8 +330,8 @@
       body.classList.add(`theme-${themeId}`);
       body.dataset.theme = themeId;
       
-      // 特殊处理：赛博朋克主题使用theme-cyberpunk2077类名以启用特效
-      if (themeId === 'cyberpunk' || themeId === 'cyberpunk2077') {
+      // 特殊处理：赛博朋克2077主题启用特效
+      if (themeId === 'cyberpunk2077') {
         body.classList.add('theme-cyberpunk2077');
       } else {
         body.classList.remove('theme-cyberpunk2077');
@@ -373,10 +341,8 @@
       this.injectThemeVariables(theme);
       
       // 控制特效系统
-      this.toggleCyberEffects(themeId === 'cyberpunk' || themeId === 'cyberpunk2077');
+      this.toggleCyberEffects(themeId === 'cyberpunk2077');
       this.toggleWukongEffects(themeId === 'wukong');
-      this.toggleWitcherEffects(themeId === 'witcher');
-      this.toggleGTA5Effects(themeId === 'gta5');
       this.toggleRDR2Effects(themeId === 'rdr2');
       this.toggleBG3Effects(themeId === 'bg3');
       this.toggleEldenRingEffects(themeId === 'eldenring');
@@ -431,37 +397,6 @@
       }
     }
     
-    // 控制巫师3主题特效
-    toggleWitcherEffects(enable) {
-      if (enable) {
-        if (window.Witcher3EffectsSystem && !window.witcherEffects) {
-          window.witcherEffects = new window.Witcher3EffectsSystem();
-        } else if (window.witcherEffects) {
-          window.witcherEffects.toggle(true);
-        }
-      } else {
-        if (window.witcherEffects) {
-          window.witcherEffects.destroy();
-          window.witcherEffects = null;
-        }
-      }
-    }
-    
-    // 控制GTA5主题特效
-    toggleGTA5Effects(enable) {
-      if (enable) {
-        if (window.GTA5EffectsSystem && !window.gta5Effects) {
-          window.gta5Effects = new window.GTA5EffectsSystem();
-        } else if (window.gta5Effects) {
-          window.gta5Effects.toggle(true);
-        }
-      } else {
-        if (window.gta5Effects) {
-          window.gta5Effects.destroy();
-          window.gta5Effects = null;
-        }
-      }
-    }
     
     // 控制荒野大镖客2主题特效
     toggleRDR2Effects(enable) {
@@ -535,10 +470,16 @@
       root.style.setProperty('--text-muted', colors.text.muted);
       
       root.style.setProperty('--theme-border', colors.border);
+      root.style.setProperty('--theme-border-glow', colors.borderGlow || colors.primary);
       root.style.setProperty('--theme-success', colors.success);
       root.style.setProperty('--theme-warning', colors.warning);
       root.style.setProperty('--theme-danger', colors.danger);
       root.style.setProperty('--theme-info', colors.info);
+      
+      // 设置背景渐变
+      if (colors.background.gradient) {
+        root.style.setProperty('--theme-bg-gradient', colors.background.gradient);
+      }
       
       root.style.setProperty('--theme-font-primary', theme.fonts.primary);
       root.style.setProperty('--theme-font-secondary', theme.fonts.secondary);
@@ -560,17 +501,19 @@
     
     // 生成全局CSS
     generateGlobalCSS() {
+      const currentThemeData = GAME_THEMES[this.currentTheme];
+      const bgGradient = currentThemeData?.colors?.background?.gradient || 
+        `linear-gradient(135deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 100%)`;
+      
       return `
         /* ==========================================
            全局主题样式 - 适用所有页面
+           当前主题: ${currentThemeData?.name || '未知'}
            ========================================== */
         
         /* 基础样式 */
         body {
-          background: linear-gradient(135deg, 
-            var(--theme-bg-primary) 0%, 
-            var(--theme-bg-secondary) 100%
-          ) !important;
+          background: ${bgGradient} !important;
           background-attachment: fixed !important;
           color: var(--theme-text-primary) !important;
           font-family: var(--theme-font-secondary), -apple-system, sans-serif !important;
@@ -777,11 +720,195 @@
           border-color: var(--theme-primary) !important;
         }
         
+        /* ==========================================
+           主题特色样式 - 每个游戏独特的视觉效果
+           ========================================== */
+        
+        /* 黑神话：悟空主题 - 中国传统纹样 */
+        body.theme-wukong .card,
+        body.theme-wukong .game-card,
+        body.theme-wukong .ranking-item {
+          border-style: double !important;
+          border-width: 3px !important;
+          background: linear-gradient(135deg, #3D2418 0%, #2D1810 100%) !important;
+          box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.2) !important;
+        }
+        
+        body.theme-wukong .card-title,
+        body.theme-wukong .ranking-name {
+          text-shadow: 0 0 10px #FFD700, 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+          letter-spacing: 2px !important;
+        }
+        
+        body.theme-wukong button:hover,
+        body.theme-wukong .ranking-item:hover {
+          box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 15px rgba(220, 20, 60, 0.4) !important;
+          transform: translateY(-2px) !important;
+        }
+        
+        /* 荒野大镖客2主题 - 西部复古纸质 */
+        body.theme-rdr2 .card,
+        body.theme-rdr2 .game-card,
+        body.theme-rdr2 .ranking-item {
+          border: 3px solid #8B7355 !important;
+          background: linear-gradient(135deg, #4A3425 0%, #3D2817 100%) !important;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(212, 175, 55, 0.1) !important;
+          position: relative !important;
+        }
+        
+        body.theme-rdr2 .card::after,
+        body.theme-rdr2 .game-card::after {
+          content: '' !important;
+          position: absolute !important;
+          inset: 0 !important;
+          background: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\"><filter id=\"noise\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"4\" /></filter><rect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.05\"/></svg>') !important;
+          pointer-events: none !important;
+        }
+        
+        body.theme-rdr2 .card-title,
+        body.theme-rdr2 .ranking-name {
+          font-family: 'Rye', 'Smokum', serif !important;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px #D4AF37 !important;
+          letter-spacing: 2px !important;
+        }
+        
+        body.theme-rdr2 button:hover {
+          background: linear-gradient(135deg, #8B4513, #D4AF37) !important;
+          box-shadow: 0 0 20px rgba(212, 175, 55, 0.6) !important;
+        }
+        
+        /* 博德之门3主题 - DND魔法书页 */
+        body.theme-bg3 .card,
+        body.theme-bg3 .game-card,
+        body.theme-bg3 .ranking-item {
+          border: 2px solid #9370DB !important;
+          background: linear-gradient(135deg, #3E2A52 0%, #2D1B3D 100%) !important;
+          box-shadow: 0 0 20px rgba(147, 112, 219, 0.4), 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+          position: relative !important;
+        }
+        
+        body.theme-bg3 .card::before,
+        body.theme-bg3 .game-card::before {
+          content: '' !important;
+          position: absolute !important;
+          inset: -2px !important;
+          border: 2px solid #FF4500 !important;
+          border-radius: inherit !important;
+          opacity: 0 !important;
+          transition: opacity 0.3s ease !important;
+        }
+        
+        body.theme-bg3 .card:hover::before,
+        body.theme-bg3 .game-card:hover::before {
+          opacity: 0.6 !important;
+        }
+        
+        body.theme-bg3 .card-title,
+        body.theme-bg3 .ranking-name {
+          font-family: 'Spectral', 'IM Fell DW Pica', serif !important;
+          text-shadow: 0 0 15px #9370DB, 0 0 30px #FF4500, 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+        
+        body.theme-bg3 button:hover {
+          background: linear-gradient(135deg, #9370DB, #6A5ACD) !important;
+          box-shadow: 0 0 25px rgba(147, 112, 219, 0.8), 0 0 40px rgba(255, 69, 0, 0.4) !important;
+        }
+        
+        /* 艾尔登法环主题 - 黄金律法光辉 */
+        body.theme-eldenring .card,
+        body.theme-eldenring .game-card,
+        body.theme-eldenring .ranking-item {
+          border: 2px solid #FDB813 !important;
+          background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%) !important;
+          box-shadow: 0 0 20px rgba(253, 184, 19, 0.3), 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+          position: relative !important;
+        }
+        
+        body.theme-eldenring .card::after,
+        body.theme-eldenring .game-card::after {
+          content: '' !important;
+          position: absolute !important;
+          top: -2px !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          width: 60% !important;
+          height: 2px !important;
+          background: linear-gradient(90deg, transparent, #FDB813, transparent) !important;
+          box-shadow: 0 0 10px #FDB813 !important;
+        }
+        
+        body.theme-eldenring .card-title,
+        body.theme-eldenring .ranking-name {
+          font-family: 'Trajan Pro', 'Cinzel', serif !important;
+          text-shadow: 0 0 15px #FDB813, 0 0 30px #FDB813, 2px 2px 6px rgba(0, 0, 0, 0.9) !important;
+          letter-spacing: 3px !important;
+        }
+        
+        body.theme-eldenring button:hover,
+        body.theme-eldenring .ranking-item:hover {
+          box-shadow: 0 0 30px rgba(253, 184, 19, 0.8), 0 0 50px rgba(253, 184, 19, 0.4) !important;
+          animation: eldenRingGlow 2s ease-in-out infinite !important;
+        }
+        
+        @keyframes eldenRingGlow {
+          0%, 100% { box-shadow: 0 0 30px rgba(253, 184, 19, 0.6); }
+          50% { box-shadow: 0 0 50px rgba(253, 184, 19, 1), 0 0 80px rgba(253, 184, 19, 0.5); }
+        }
+        
+        /* 赛博朋克2077主题 - 矩阵赛博 */
+        body.theme-cyberpunk2077 .card,
+        body.theme-cyberpunk2077 .game-card,
+        body.theme-cyberpunk2077 .ranking-item {
+          border: 2px solid #00F0FF !important;
+          background: linear-gradient(135deg, #1a2332 0%, #16213e 100%) !important;
+          box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(255, 0, 60, 0.2), inset 0 1px 0 rgba(0, 240, 255, 0.2) !important;
+          position: relative !important;
+        }
+        
+        body.theme-cyberpunk2077 .card::before,
+        body.theme-cyberpunk2077 .game-card::before {
+          content: '' !important;
+          position: absolute !important;
+          inset: 0 !important;
+          background: repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.03) 0px, transparent 2px, transparent 4px) !important;
+          pointer-events: none !important;
+        }
+        
+        body.theme-cyberpunk2077 .card-title,
+        body.theme-cyberpunk2077 .ranking-name {
+          font-family: 'Orbitron', 'Exo 2', sans-serif !important;
+          text-shadow: 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 30px #FF003C, 2px 2px 4px rgba(0, 0, 0, 0.9) !important;
+          letter-spacing: 2px !important;
+          text-transform: uppercase !important;
+        }
+        
+        body.theme-cyberpunk2077 button:hover,
+        body.theme-cyberpunk2077 .ranking-item:hover {
+          box-shadow: 0 0 30px rgba(0, 240, 255, 0.8), 0 0 50px rgba(255, 0, 60, 0.4) !important;
+          animation: cyberGlitch 0.3s ease-in-out !important;
+        }
+        
+        @keyframes cyberGlitch {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(-2px, 2px); }
+          50% { transform: translate(2px, -2px); }
+          75% { transform: translate(-2px, -2px); }
+        }
+        
         /* 响应式 */
         @media (max-width: 768px) {
           ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
+          }
+          
+          /* 移动端简化特效 */
+          body.theme-wukong .card,
+          body.theme-rdr2 .card,
+          body.theme-bg3 .card,
+          body.theme-eldenring .card,
+          body.theme-cyberpunk2077 .card {
+            border-width: 2px !important;
           }
         }
       `;
