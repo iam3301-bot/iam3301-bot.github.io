@@ -1390,11 +1390,8 @@
       // 渲染游戏列表
       renderSteamGames(userData.steam.games || []);
       
-      // 检查是否是演示数据
-      // (通过检查 localStorage 中保存的数据是否有 isDemo 标记)
-      if (!SteamAPI.isEnabled()) {
-        document.getElementById('steamLinkedDemoNotice').style.display = 'block';
-      }
+      // 已对接真实Steam API，不显示演示数据提示
+      document.getElementById('steamLinkedDemoNotice').style.display = 'none';
     } else {
       steamUnlinked.style.display = 'block';
       steamLinked.style.display = 'none';
@@ -1428,7 +1425,7 @@
     gamesList.innerHTML = sortedGames.map(game => `
       <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${game.appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
         <div class="steam-game-img">
-          <img src="${game.headerImage || game.img_icon_url || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_231x87.jpg`}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/${game.appId}/header.jpg" alt="${game.name}" onerror="this.onerror=null; this.src='https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_231x87.jpg'" />
         </div>
         <div class="steam-game-info">
           <div class="steam-game-name">${game.name}</div>
@@ -1608,20 +1605,14 @@
   });
   
   // 登出
-  // 切换账号
-  document.getElementById('switchAccountBtn').addEventListener('click', async () => {
-    if (confirm('确定要切换到其他账号吗？当前账号数据已保存。')) {
-      await GameBoxAuth.signOut();
-      window.location.href = 'login.html';
-    }
+  // 切换账号 - 跳转到账号管理页面
+  document.getElementById('switchAccountBtn').addEventListener('click', () => {
+    window.location.href = 'account-settings.html';
   });
   
-  // 退出登录
-  document.getElementById('logoutBtn').addEventListener('click', async () => {
-    if (confirm('确定要退出登录吗？')) {
-      await GameBoxAuth.signOut();
-      window.location.href = 'login.html';
-    }
+  // 退出登录 - 跳转到账号管理页面
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.location.href = 'account-settings.html';
   });
   
   // =============================================
