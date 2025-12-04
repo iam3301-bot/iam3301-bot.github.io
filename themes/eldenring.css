@@ -1,0 +1,40 @@
+/**
+ * 艾尔登法环主题 - 魂系风格
+ */
+body.theme-eldenring {
+  background: #0C0C0C;
+  background-image: radial-gradient(ellipse at top, #FDB813 0%, #1A1A1A 30%, #0C0C0C 100%);
+}
+
+.theme-eldenring .card {
+  background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%) !important;
+  border: 2px solid #FDB813 !important;
+  box-shadow: 0 0 25px rgba(253, 184, 19, 0.4), 0 4px 25px rgba(0, 0, 0, 0.8) !important;
+}
+
+.theme-eldenring .card:hover {
+  box-shadow: 0 0 50px rgba(253, 184, 19, 0.8), 0 0 80px rgba(253, 184, 19, 0.4) !important;
+  animation: eldenGlow 2s ease-in-out infinite;
+}
+
+@keyframes eldenGlow {
+  0%, 100% { box-shadow: 0 0 40px rgba(253, 184, 19, 0.6); }
+  50% { box-shadow: 0 0 70px rgba(253, 184, 19, 1), 0 0 100px rgba(253, 184, 19, 0.5); }
+}
+
+.theme-eldenring .card-title {
+  font-family: 'Trajan Pro', 'Cinzel', serif !important;
+  color: #E8D4A8 !important;
+  text-shadow: 0 0 20px #FDB813, 0 0 40px #FDB813 !important;
+  letter-spacing: 3px !important;
+}
+
+.theme-eldenring button {
+  background: linear-gradient(135deg, #B8860B, #FDB813) !important;
+  border: 2px solid #FDB813 !important;
+  color: #0C0C0C !important;
+}
+
+.theme-eldenring button:hover {
+  box-shadow: 0 0 40px rgba(253, 184, 19, 0.8) !important;
+}

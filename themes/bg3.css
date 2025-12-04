@@ -1,0 +1,35 @@
+/**
+ * 博德之门3主题 - DND奇幻风格
+ */
+body.theme-bg3 {
+  background: #1C0A28;
+  background-image: radial-gradient(circle at center, #2D1B3D 0%, #1C0A28 100%);
+}
+
+.theme-bg3 .card {
+  background: linear-gradient(135deg, #3E2A52 0%, #2D1B3D 100%) !important;
+  border: 2px solid #9370DB !important;
+  box-shadow: 0 0 25px rgba(147, 112, 219, 0.4), 0 0 50px rgba(255, 69, 0, 0.2) !important;
+}
+
+.theme-bg3 .card:hover {
+  border-color: #FF4500 !important;
+  box-shadow: 0 0 40px rgba(147, 112, 219, 0.7), 0 0 60px rgba(255, 69, 0, 0.4) !important;
+}
+
+.theme-bg3 .card-title {
+  font-family: 'Spectral', serif !important;
+  color: #E6E6FA !important;
+  text-shadow: 0 0 20px #9370DB, 0 0 40px #FF4500 !important;
+}
+
+.theme-bg3 button {
+  background: linear-gradient(135deg, #9370DB, #6A5ACD) !important;
+  border: 2px solid #9370DB !important;
+  color: #E6E6FA !important;
+}
+
+.theme-bg3 button:hover {
+  background: linear-gradient(135deg, #FF4500, #9370DB) !important;
+  box-shadow: 0 0 30px rgba(255, 69, 0, 0.6) !important;
+}

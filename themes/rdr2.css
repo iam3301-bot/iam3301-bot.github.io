@@ -1,0 +1,67 @@
+/**
+ * 荒野大镖客2主题 - 西部荒野风格
+ * 基于游戏真实UI：复古纸张、皮革质感、西部字体
+ */
+
+body.theme-rdr2 {
+  background: #2B1810;
+  background-image: 
+    radial-gradient(ellipse at bottom, rgba(212, 175, 55, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at top right, rgba(139, 69, 19, 0.2) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* 复古纸张纹理 */
+body.theme-rdr2::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.08"/></svg>');
+  pointer-events: none;
+  z-index: 1;
+}
+
+.theme-rdr2 .card,
+.theme-rdr2 .game-card,
+.theme-rdr2 .ranking-item {
+  background: linear-gradient(135deg, #4A3425 0%, #3D2817 100%) !important;
+  border: 3px solid #8B7355 !important;
+  border-radius: 4px !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(212, 175, 55, 0.2),
+    inset 0 0 30px rgba(0, 0, 0, 0.3) !important;
+  position: relative !important;
+}
+
+.theme-rdr2 .card:hover {
+  border-color: #D4AF37 !important;
+  box-shadow: 
+    0 8px 35px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(212, 175, 55, 0.5) !important;
+  transform: translateY(-4px) !important;
+}
+
+.theme-rdr2 .card-title,
+.theme-rdr2 .ranking-name {
+  font-family: 'Rye', 'Smokum', serif !important;
+  color: #F5DEB3 !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(212, 175, 55, 0.6) !important;
+  letter-spacing: 2px !important;
+}
+
+.theme-rdr2 button {
+  background: linear-gradient(135deg, #8B4513, #D4AF37) !important;
+  border: 2px solid #8B7355 !important;
+  color: #F5DEB3 !important;
+  font-family: 'Special Elite', serif !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+}
+
+.theme-rdr2 button:hover {
+  background: linear-gradient(135deg, #D4AF37, #CD5C5C) !important;
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
