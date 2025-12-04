@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录中... - GameBox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 60px 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 30px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    
+    .message {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .error {
+      color: #f44336;
+      background: #ffebee;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .success {
+      color: #4caf50;
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h1 id="title">正在登录...</h1>
+    <p class="message" id="message">请稍候，正在处理您的登录请求</p>
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script src="oauth-providers.js"></script>
+  <script>
+    // 处理 OAuth 回调
+    async function handleOAuthCallback() {
+      try {
+        // 从 URL 获取参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+
+        // 检查是否有错误
+        if (error) {
+          throw new Error(errorDescription || error);
+        }
+
+        // 检查是否有授权码
+        if (!code) {
+          throw new Error('未获取到授权码');
+        }
+
+        if (!state) {
+          throw new Error('未获取到 state 参数');
+        }
+
+        console.log('[OAuth Callback] 收到回调, code:', code, 'state:', state);
+
+        // 使用 OAuthManager 处理回调
+        const result = await window.OAuthManager.handleCallback(code, state);
+
+        if (result.success) {
+          // 登录成功，保存用户信息
+          const user = result.user;
+          
+          // 保存到 localStorage
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          
+          // 如果使用 GameBoxAuth，同步用户数据
+          if (typeof GameBoxAuth !== 'undefined') {
+            // 创建或更新本地用户
+            const localUsers = JSON.parse(localStorage.getItem('gamebox_users') || '[]');
+            const existingUserIndex = localUsers.findIndex(u => 
+              u.email === user.email || u.id === user.id
+            );
+
+            if (existingUserIndex >= 0) {
+              // 更新现有用户
+              localUsers[existingUserIndex] = {
+                ...localUsers[existingUserIndex],
+                ...user,
+                last_sign_in: new Date().toISOString()
+              };
+            } else {
+              // 添加新用户
+              localUsers.push({
+                ...user,
+                created_at: new Date().toISOString(),
+                last_sign_in: new Date().toISOString()
+              });
+            }
+
+            // 保存用户列表
+            localStorage.setItem('gamebox_users', JSON.stringify(localUsers));
+            
+            // 保存到永久存储
+            if (typeof UserDataManager !== 'undefined') {
+              UserDataManager.saveUserData(user);
+            }
+          }
+
+          // 显示成功消息
+          document.getElementById('title').textContent = '登录成功！';
+          document.getElementById('message').textContent = result.message;
+          document.querySelector('.spinner').style.display = 'none';
+          document.getElementById('success').style.display = 'block';
+          document.getElementById('success').textContent = '即将跳转到用户中心...';
+
+          // 通知父窗口
+          if (window.opener) {
+            window.opener.postMessage({
+              type: 'oauth_success',
+              user: user,
+              provider: user.provider
+            }, window.location.origin);
+          }
+
+          // 3秒后跳转到用户中心
+          setTimeout(() => {
+            if (window.opener) {
+              // 如果是弹窗，关闭窗口
+              window.close();
+            } else {
+              // 如果是重定向，跳转到用户中心
+              window.location.href = '/profile.html';
+            }
+          }, 3000);
+
+        } else {
+          throw new Error(result.message || '登录失败');
+        }
+
+      } catch (error) {
+        console.error('[OAuth Callback] 处理失败:', error);
+        
+        // 显示错误消息
+        document.getElementById('title').textContent = '登录失败';
+        document.getElementById('message').textContent = '很抱歉，登录过程中出现了问题';
+        document.querySelector('.spinner').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = error.message;
+
+        // 通知父窗口
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'oauth_error',
+            error: error.message
+          }, window.location.origin);
+
+          // 3秒后关闭窗口
+          setTimeout(() => {
+            window.close();
+          }, 3000);
+        } else {
+          // 5秒后返回登录页
+          setTimeout(() => {
+            window.location.href = '/login.html';
+          }, 5000);
+        }
+      }
+    }
+
+    // 页面加载完成后处理回调
+    window.addEventListener('DOMContentLoaded', handleOAuthCallback);
+  </script>
+</body>
+</html>
