@@ -344,9 +344,6 @@
           document.getElementById('xboxStatus').className = 'platform-status-badge connected';
           document.querySelector('.platform-card.xbox').classList.add('connected');
         } catch (e) {}
-      } else if (xboxApiKey) {
-        document.getElementById('xboxStatus').textContent = 'API 已配置';
-        document.getElementById('xboxStatus').className = 'platform-status-badge pending';
       }
 
       // PlayStation
@@ -358,14 +355,6 @@
           document.getElementById('psnStatus').textContent = '已绑定';
           document.getElementById('psnStatus').className = 'platform-status-badge connected';
           document.querySelector('.platform-card.playstation').classList.add('connected');
-        } catch (e) {}
-      } else if (psnConfig) {
-        try {
-          const config = JSON.parse(psnConfig);
-          if (config.accessToken && config.tokenExpiry > Date.now()) {
-            document.getElementById('psnStatus').textContent = 'API 已配置';
-            document.getElementById('psnStatus').className = 'platform-status-badge pending';
-          }
         } catch (e) {}
       }
     }
