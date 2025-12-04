@@ -677,17 +677,26 @@
     steamGames = [];
     
     if (userData?.steam?.linked && userData.steam.games) {
-      steamGames = userData.steam.games.map(game => ({
-        id: game.appId || game.appid,
-        name: game.name,
-        playtimeForever: game.playtimeForever || game.playtime_forever || 0,
-        playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
-        thumbnail: game.headerImage || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId || game.appid}/header.jpg`,
-        source: 'steam',
-        lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
-      }));
+      console.log('📦 原始 Steam 游戏数据:', userData.steam.games.slice(0, 2));
       
-      console.log(`✅ 加载 Steam 游戏: ${steamGames.length} 款`);
+      steamGames = userData.steam.games.map(game => {
+        // 确保获取正确的 AppID (必须是数字)
+        const appId = game.appId || game.appid || game.id;
+        const validAppId = appId && /^\d+$/.test(String(appId)) ? appId : null;
+        
+        return {
+          id: validAppId,
+          appId: validAppId,
+          name: game.name,
+          playtimeForever: game.playtimeForever || game.playtime_forever || 0,
+          playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
+          thumbnail: game.headerImage || (validAppId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/header.jpg` : ''),
+          source: 'steam',
+          lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
+        };
+      });
+      
+      console.log(`✅ 加载 Steam 游戏: ${steamGames.length} 款`, steamGames.slice(0, 2));
     }
     
     // 也检查 steam_binding
@@ -695,16 +704,24 @@
     if (steamBinding && steamGames.length === 0) {
       try {
         const bindingData = JSON.parse(steamBinding);
+        console.log('📦 steam_binding 数据:', bindingData.games?.slice(0, 2));
+        
         if (bindingData.games && bindingData.games.length > 0) {
-          steamGames = bindingData.games.map(game => ({
-            id: game.appid || game.appId,
-            name: game.name,
-            playtimeForever: game.playtimeForever || game.playtime_forever || 0,
-            playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
-            thumbnail: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid || game.appId}/header.jpg`,
-            source: 'steam',
-            lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
-          }));
+          steamGames = bindingData.games.map(game => {
+            const appId = game.appid || game.appId || game.id;
+            const validAppId = appId && /^\d+$/.test(String(appId)) ? appId : null;
+            
+            return {
+              id: validAppId,
+              appId: validAppId,
+              name: game.name,
+              playtimeForever: game.playtimeForever || game.playtime_forever || 0,
+              playtime2Weeks: game.playtime2Weeks || game.playtime_2weeks || 0,
+              thumbnail: validAppId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${validAppId}/header.jpg` : '',
+              source: 'steam',
+              lastPlayed: game.playtime2Weeks > 0 ? Date.now() : null
+            };
+          });
           console.log(`✅ 从 steam_binding 加载游戏: ${steamGames.length} 款`);
         }
       } catch (e) {
@@ -903,38 +920,54 @@
     const playtimeText = formatPlaytime(game.playtimeForever);
     const recentText = game.playtime2Weeks > 0 ? `近两周: ${formatPlaytime(game.playtime2Weeks)}` : '';
     const isSteam = game.source === 'steam';
-    const gameId = game.id || game.appId || game.appid;
+    
+    // 获取 Steam AppID - 必须是纯数字
+    let gameId = game.appId || game.appid || game.id;
+    // 确保 gameId 是有效的 Steam AppID (纯数字)
+    if (gameId && !/^\d+$/.test(String(gameId))) {
+      console.warn('无效的 Steam AppID:', gameId, '游戏:', game.name);
+      gameId = null;
+    }
     
     // 调试信息
-    console.log('渲染游戏卡片:', { name: game.name, id: gameId, source: game.source, thumbnail: game.thumbnail });
+    console.log('渲染游戏卡片:', { 
+      name: game.name, 
+      appId: gameId, 
+      originalId: game.id,
+      source: game.source, 
+      thumbnail: game.thumbnail 
+    });
     
     // Steam 高清封面图 URL (多重降级策略)
     const steamCoverUrl = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg` : '';
     const steamCoverFallback1 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg` : '';
     const steamCoverFallback2 = gameId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/library_600x900.jpg` : '';
     
-    // 确定封面 URL - 优先使用已有的 thumbnail，否则构建 Steam URL
-    let coverUrl = game.thumbnail || '';
-    if (!coverUrl && gameId) {
+    // 确定封面 URL
+    let coverUrl = '';
+    // 优先使用已有的有效 thumbnail (必须是完整 URL)
+    if (game.thumbnail && game.thumbnail.startsWith('http')) {
+      coverUrl = game.thumbnail;
+    } else if (gameId) {
       coverUrl = steamCoverUrl;
     }
     
     // 安全处理游戏名称（用于 HTML 属性）
-    const safeName = (game.name || 'Unknown').replace(/['"<>]/g, '').substring(0, 25);
+    const safeName = (game.name || 'Unknown').replace(/['"<>&]/g, '').substring(0, 25);
     
     // 创建占位符 HTML
     const placeholderHTML = `<div class="cover-placeholder" data-name="${safeName}">🎮</div>`;
     
     // 封面图显示逻辑
     let coverImg;
-    if (coverUrl && gameId) {
+    if (coverUrl) {
       // 有封面 URL 时显示图片
       coverImg = `<img 
         src="${coverUrl}" 
         alt="${safeName}" 
         loading="lazy"
         style="width:100%;height:100%;object-fit:cover;"
-        onerror="this.onerror=null;this.src='${steamCoverFallback1}';this.onerror=function(){this.src='${steamCoverFallback2}';this.onerror=function(){this.parentElement.innerHTML='${placeholderHTML.replace(/'/g, "\\'")}';};}" 
+        onerror="this.onerror=null;this.src='${steamCoverFallback1 || coverUrl}';this.onerror=function(){this.src='${steamCoverFallback2 || coverUrl}';this.onerror=function(){this.parentElement.innerHTML='${placeholderHTML.replace(/'/g, "\\'")}';};}" 
       />`;
     } else {
       // 没有封面时显示占位符
