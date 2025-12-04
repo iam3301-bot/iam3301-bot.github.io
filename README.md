@@ -14,6 +14,7 @@
 - ⚡ **轻量高效** - 无框架依赖，原生 JavaScript 实现
 - 🔒 **安全防护** - XSS 防护，安全的 HTML 处理
 - 🎯 **Steam 集成** - 通过代理服务器获取 Steam 推荐配置
+- 🎮 **多平台账号管理** - 支持 Steam、Epic Games、Xbox Live、PlayStation Network 账号绑定
 
 ## 📸 预览
 
@@ -121,6 +122,13 @@ gamebox-web/
 - [x] 系统配置显示（最低 + 推荐）
 - [x] Steam 推荐配置获取
 - [x] 用户登录/退出（LocalStorage）
+- [x] **多平台游戏账号管理**
+  - [x] Steam 账号绑定与同步
+  - [x] Epic Games 账号手动录入
+  - [x] Xbox Live API 集成（OpenXBL）
+  - [x] PlayStation Network API 集成（NPSSO）
+  - [x] 独立的账号切换界面
+  - [x] 独立的退出登录界面
 - [x] 全局搜索
 - [x] 响应式设计
 - [x] 加载状态提示
@@ -256,6 +264,16 @@ on:
 5. 提交 Pull Request
 
 ## 📝 更新日志
+
+### v2.1.0 (2024-12-04) 🎮
+- ✨ **多平台游戏账号管理系统**
+- ✅ 添加 Epic Games 账号手动录入功能
+- ✅ 集成 Xbox Live API (OpenXBL)
+- ✅ 集成 PlayStation Network API (NPSSO)
+- ✅ 独立的账号切换界面优化
+- ✅ 独立的退出登录界面优化
+- ✅ 移除所有"即将推出"文本，改为"未绑定"状态
+- ✅ 统一平台绑定按钮样式和交互
 
 ### v2.0.0 (2024-12-02) 🚀
 - ✨ **重大更新：无需本地服务器！**
