@@ -951,15 +951,34 @@
                 绑定 Steam 账号后，可以自动同步您的游戏库、游戏时长等数据
               </p>
               
-              <div class="link-form">
-                <input type="text" class="link-input" id="steamIdInput" 
-                  placeholder="输入 Steam ID 或个人资料链接" />
-                <button class="link-btn" id="linkSteamBtn">绑定账号</button>
+              <!-- 推荐：使用绑定向导 -->
+              <div style="margin-bottom: 20px;">
+                <a href="steam-binding.html" class="link-btn" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: linear-gradient(135deg, #1b2838, #2a475e); padding: 14px 24px; font-size: 15px;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  🎮 使用绑定向导（推荐）
+                </a>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                  向导将引导您完成 Steam 登录验证和 API Key 配置
+                </p>
+              </div>
+              
+              <!-- 快捷方式：直接输入 Steam ID -->
+              <div style="border-top: 1px solid rgba(56, 189, 248, 0.2); padding-top: 16px; margin-top: 16px;">
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+                  或者直接输入 Steam ID 快速绑定：
+                </p>
+                <div class="link-form">
+                  <input type="text" class="link-input" id="steamIdInput" 
+                    placeholder="输入 Steam ID 或个人资料链接" />
+                  <button class="link-btn" id="linkSteamBtn">快速绑定</button>
+                </div>
               </div>
               
               <div class="demo-notice" id="steamDemoNotice">
-                💡 演示模式下将显示模拟数据。获取真实数据需要配置 Steam API Key。
-                <br>支持格式: SteamID64 / steamcommunity.com/profiles/xxx / steamcommunity.com/id/xxx
+                💡 <strong>提示：</strong>推荐使用绑定向导获取完整功能。<br>
+                快速绑定仅支持公开数据，可能无法获取完整游戏库。
               </div>
             </div>
             
