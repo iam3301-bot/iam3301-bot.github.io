@@ -693,16 +693,57 @@
           <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.29901.14093025913434488.a2fd5be9-a22e-4fe9-ae2e-ae1e7e1e7e1e.b1c1c1c1-c1c1-c1c1-c1c1-c1c1c1c1c1c1" alt="Gears" style="object-fit: cover;"></div>
         </div>
         
+        <!-- Xbox API 配置区域 -->
+        <div class="api-config-area" id="xboxApiConfig" style="padding: 16px 20px; background: rgba(16, 124, 16, 0.1); border-bottom: 1px solid rgba(16, 124, 16, 0.2); display: none;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <span style="color: #10b981;">🔑</span>
+            <span style="color: var(--text-soft); font-size: 14px; font-weight: 600;">OpenXBL API Key 配置</span>
+            <span id="xboxApiStatus" style="font-size: 12px; padding: 2px 8px; border-radius: 4px; background: rgba(239, 68, 68, 0.2); color: #ef4444;">未配置</span>
+          </div>
+          <div class="input-group">
+            <input type="text" class="input-field" id="xboxApiKeyInput" placeholder="输入 OpenXBL API Key">
+            <button class="submit-btn" onclick="saveXboxApiKey()" style="background: linear-gradient(135deg, #107c10, #0e6b0e);">保存 Key</button>
+          </div>
+          <div class="input-hint" style="margin-top: 8px;">
+            <span>🌐 前往 <a href="https://xbl.io/" target="_blank" style="color: #10b981;">xbl.io</a> 免费注册获取 API Key，即可自动获取游戏列表和成就数据</span>
+          </div>
+        </div>
+        
         <!-- Xbox 绑定输入区域 -->
         <div class="bind-input-area" id="xboxInputArea">
-          <div class="input-group">
-            <input type="text" class="input-field" id="xboxUsernameInput" placeholder="输入 Xbox Gamertag">
-            <input type="number" class="input-field" id="xboxGameCountInput" placeholder="游戏数量" style="max-width: 120px;" min="0">
-            <button class="submit-btn" onclick="bindPlatformAccount('xbox')">确认绑定</button>
+          <!-- 绑定模式切换 -->
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <button class="mode-btn active" id="xboxModeApi" onclick="switchXboxMode('api')" style="flex: 1; padding: 10px; background: rgba(16, 124, 16, 0.2); border: 1px solid rgba(16, 124, 16, 0.3); border-radius: 8px; color: #10b981; font-size: 13px; cursor: pointer;">
+              🔗 API 自动获取
+            </button>
+            <button class="mode-btn" id="xboxModeManual" onclick="switchXboxMode('manual')" style="flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: var(--text-muted); font-size: 13px; cursor: pointer;">
+              ✏️ 手动输入
+            </button>
           </div>
-          <div class="input-hint">
-            <span class="input-hint-icon">💡</span>
-            <span>请访问 <a href="https://account.xbox.com/profile" target="_blank" style="color: #66c0f4;">Xbox Profile</a> 或 <a href="https://www.xbox.com/play" target="_blank" style="color: #66c0f4;">Xbox Cloud Gaming</a> 查看您的游戏库</span>
+          
+          <!-- API 模式 -->
+          <div id="xboxApiMode">
+            <div class="input-group">
+              <input type="text" class="input-field" id="xboxGamertagInput" placeholder="输入 Xbox Gamertag">
+              <button class="submit-btn" onclick="bindXboxViaApi()" style="background: linear-gradient(135deg, #107c10, #0e6b0e);">🔍 自动获取</button>
+            </div>
+            <div class="input-hint">
+              <span class="input-hint-icon">💡</span>
+              <span>输入 Gamertag 后自动获取游戏列表、成就和 Gamerscore（需要配置 API Key）</span>
+            </div>
+          </div>
+          
+          <!-- 手动模式 -->
+          <div id="xboxManualMode" style="display: none;">
+            <div class="input-group">
+              <input type="text" class="input-field" id="xboxUsernameInput" placeholder="输入 Xbox Gamertag">
+              <input type="number" class="input-field" id="xboxGameCountInput" placeholder="游戏数量" style="max-width: 120px;" min="0">
+              <button class="submit-btn" onclick="bindPlatformAccount('xbox')">确认绑定</button>
+            </div>
+            <div class="input-hint">
+              <span class="input-hint-icon">💡</span>
+              <span>请访问 <a href="https://account.xbox.com/profile" target="_blank" style="color: #66c0f4;">Xbox Profile</a> 查看您的游戏库数量</span>
+            </div>
           </div>
         </div>
         
@@ -779,6 +820,7 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="supabase-config.js"></script>
+<script src="platform-api-service.js"></script>
 <script>
   // =============================================
   // 页面初始化
@@ -793,6 +835,11 @@
     await GameBoxAuth.init();
     SteamAPI.init();
     
+    // 初始化平台 API 服务
+    if (window.PlatformAPIService) {
+      PlatformAPIService.init();
+    }
+    
     currentUser = await GameBoxAuth.getCurrentUser();
     
     if (currentUser) {
@@ -803,6 +850,7 @@
       
       renderSteamAccounts();
       initPlatforms(); // 初始化 Epic / Xbox / PlayStation 平台
+      initXboxApiStatus(); // 初始化 Xbox API 状态显示
       updateHeaderUser();
     } else {
       document.getElementById('loginPrompt').style.display = 'block';
@@ -1150,6 +1198,192 @@
   }
   
   // =============================================
+  // Xbox API 功能
+  // =============================================
+  
+  // 初始化 Xbox API 状态
+  function initXboxApiStatus() {
+    const statusEl = document.getElementById('xboxApiStatus');
+    const configArea = document.getElementById('xboxApiConfig');
+    
+    if (window.PlatformAPIService && PlatformAPIService.xbox.isEnabled()) {
+      statusEl.textContent = '已配置';
+      statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+      statusEl.style.color = '#10b981';
+    } else {
+      statusEl.textContent = '未配置';
+      statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+      statusEl.style.color = '#ef4444';
+    }
+  }
+  
+  // 切换 Xbox 绑定模式
+  function switchXboxMode(mode) {
+    const apiMode = document.getElementById('xboxApiMode');
+    const manualMode = document.getElementById('xboxManualMode');
+    const apiBtn = document.getElementById('xboxModeApi');
+    const manualBtn = document.getElementById('xboxModeManual');
+    const configArea = document.getElementById('xboxApiConfig');
+    
+    if (mode === 'api') {
+      apiMode.style.display = 'block';
+      manualMode.style.display = 'none';
+      configArea.style.display = 'block';
+      apiBtn.style.background = 'rgba(16, 124, 16, 0.2)';
+      apiBtn.style.borderColor = 'rgba(16, 124, 16, 0.3)';
+      apiBtn.style.color = '#10b981';
+      manualBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+      manualBtn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      manualBtn.style.color = 'var(--text-muted)';
+    } else {
+      apiMode.style.display = 'none';
+      manualMode.style.display = 'block';
+      configArea.style.display = 'none';
+      manualBtn.style.background = 'rgba(16, 124, 16, 0.2)';
+      manualBtn.style.borderColor = 'rgba(16, 124, 16, 0.3)';
+      manualBtn.style.color = '#10b981';
+      apiBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+      apiBtn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      apiBtn.style.color = 'var(--text-muted)';
+    }
+  }
+  
+  // 保存 Xbox API Key
+  function saveXboxApiKey() {
+    const input = document.getElementById('xboxApiKeyInput');
+    const key = input.value.trim();
+    
+    if (!key) {
+      showMessage('请输入 API Key', 'error');
+      return;
+    }
+    
+    if (window.PlatformAPIService) {
+      PlatformAPIService.xbox.setApiKey(key);
+      initXboxApiStatus();
+      showMessage('Xbox API Key 已保存', 'success');
+      input.value = '';
+    } else {
+      showMessage('平台服务未加载', 'error');
+    }
+  }
+  
+  // 通过 API 绑定 Xbox
+  async function bindXboxViaApi() {
+    const gamertagInput = document.getElementById('xboxGamertagInput');
+    const gamertag = gamertagInput.value.trim();
+    
+    if (!gamertag) {
+      showMessage('请输入 Gamertag', 'error');
+      return;
+    }
+    
+    if (!window.PlatformAPIService || !PlatformAPIService.xbox.isEnabled()) {
+      showMessage('请先配置 Xbox API Key', 'error');
+      document.getElementById('xboxApiConfig').style.display = 'block';
+      return;
+    }
+    
+    showMessage('正在获取 Xbox 数据...', 'info');
+    
+    try {
+      const result = await PlatformAPIService.bindAccount('xbox', gamertag);
+      
+      if (result.success) {
+        // 获取已有账号
+        const accounts = userData.xboxAccounts || [];
+        
+        // 检查是否已绑定
+        if (accounts.some(a => a.username.toLowerCase() === result.account.username.toLowerCase())) {
+          showMessage('该 Xbox 账号已绑定', 'error');
+          return;
+        }
+        
+        // 添加新账号
+        const newAccount = {
+          id: `xbox-${Date.now()}`,
+          username: result.account.username,
+          xuid: result.account.xuid,
+          avatar: result.account.avatar,
+          gamerscore: result.account.gamerscore,
+          gameCount: result.account.gameCount,
+          games: result.account.games,
+          platform: 'xbox',
+          isPrimary: accounts.length === 0,
+          isApiData: true,
+          boundAt: new Date().toISOString(),
+          lastUpdated: new Date().toISOString()
+        };
+        
+        accounts.push(newAccount);
+        userData.xboxAccounts = accounts;
+        
+        UserDataManager.saveData(currentUser.id, { xboxAccounts: accounts });
+        renderPlatformAccounts('xbox');
+        
+        gamertagInput.value = '';
+        document.getElementById('xboxInputArea').classList.remove('show');
+        
+        showMessage(`Xbox 账号绑定成功！获取到 ${newAccount.gameCount} 款游戏，${newAccount.gamerscore} Gamerscore`, 'success');
+      } else {
+        if (result.configRequired) {
+          document.getElementById('xboxApiConfig').style.display = 'block';
+        }
+        showMessage(result.error || '绑定失败', 'error');
+      }
+    } catch (error) {
+      console.error('Xbox API 绑定错误:', error);
+      showMessage('绑定失败: ' + error.message, 'error');
+    }
+  }
+  
+  // 同步 Xbox 账号数据
+  async function syncXboxAccount(index) {
+    const accounts = userData.xboxAccounts || [];
+    const account = accounts[index];
+    
+    if (!account || !account.isApiData) {
+      showMessage('只能同步 API 绑定的账号', 'error');
+      return;
+    }
+    
+    if (!window.PlatformAPIService || !PlatformAPIService.xbox.isEnabled()) {
+      showMessage('Xbox API 未配置', 'error');
+      return;
+    }
+    
+    showMessage('正在同步 Xbox 数据...', 'info');
+    
+    try {
+      // 获取最新资料
+      const profileResult = await PlatformAPIService.xbox.getProfile(account.username);
+      if (profileResult.success) {
+        account.avatar = profileResult.profile.avatar;
+        account.gamerscore = profileResult.profile.gamerscore;
+      }
+      
+      // 获取游戏列表
+      if (account.xuid) {
+        const gamesResult = await PlatformAPIService.xbox.getGames(account.xuid);
+        if (gamesResult.success) {
+          account.games = gamesResult.games;
+          account.gameCount = gamesResult.gameCount;
+        }
+      }
+      
+      account.lastUpdated = new Date().toISOString();
+      
+      UserDataManager.saveData(currentUser.id, { xboxAccounts: accounts });
+      renderPlatformAccounts('xbox');
+      
+      showMessage('Xbox 数据同步完成！', 'success');
+    } catch (error) {
+      console.error('Xbox 同步错误:', error);
+      showMessage('同步失败: ' + error.message, 'error');
+    }
+  }
+  
+  // =============================================
   // Epic / Xbox / PlayStation 平台账号管理
   // =============================================
   
@@ -1260,23 +1494,23 @@
       
       accountsList.innerHTML = accounts.map((account, index) => `
         <div class="account-item" data-index="${index}">
-          <div class="account-avatar" style="background: ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;">
-            ${account.username.charAt(0).toUpperCase()}
+          <div class="account-avatar" style="background: ${account.avatar ? 'transparent' : config.color}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; overflow: hidden;">
+            ${account.avatar ? `<img src="${account.avatar}" style="width: 100%; height: 100%; object-fit: cover;">` : account.username.charAt(0).toUpperCase()}
           </div>
           <div class="account-info">
             <div class="account-name">
               ${account.username}
               ${account.isPrimary ? '<span class="primary-badge">主账号</span>' : ''}
+              ${account.gamerscore ? `<span style="color: #10b981; font-size: 12px; margin-left: 8px;">🏆 ${account.gamerscore.toLocaleString()} G</span>` : ''}
             </div>
             <div class="account-id">
               ${config.idLabel} · ${account.gameCount || 0} 款游戏
+              ${account.isApiData ? '<span style="color: #10b981; margin-left: 8px;">✓ API 数据</span>' : ''}
               ${account.isManual ? '<span style="color: #f59e0b; margin-left: 8px;">📝 手动录入</span>' : ''}
             </div>
           </div>
           <div class="account-actions">
-            <button class="action-btn" onclick="editPlatformAccount('${platform}', ${index})">
-              ✏️ 编辑
-            </button>
+            ${account.isApiData ? `<button class="action-btn" onclick="syncXboxAccount(${index})">🔄 同步</button>` : `<button class="action-btn" onclick="editPlatformAccount('${platform}', ${index})">✏️ 编辑</button>`}
             ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('${platform}', ${index})">设为主账号</button>` : ''}
             <button class="action-btn danger" onclick="unlinkPlatformAccount('${platform}', ${index})">解绑</button>
           </div>
