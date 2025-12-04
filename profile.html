@@ -2203,24 +2203,24 @@
     // 显示密码输入弹窗
     const modal = document.createElement('div');
     modal.id = 'switchPasswordModal';
-    modal.innerHTML = \`
+    modal.innerHTML = `
       <div class="modal-overlay" onclick="document.getElementById('switchPasswordModal').remove()">
         <div class="switch-password-modal" onclick="event.stopPropagation()">
           <div class="modal-header">
-            <h3>🔄 切换到 \${targetAccount.username || targetAccount.email}</h3>
+            <h3>🔄 切换到 ${targetAccount.username || targetAccount.email}</h3>
             <button class="modal-close" onclick="document.getElementById('switchPasswordModal').remove()">×</button>
           </div>
           
           <div class="switch-password-content">
             <div class="target-account-info">
-              <div class="target-avatar">\${targetAccount.username?.charAt(0)?.toUpperCase() || '?'}</div>
+              <div class="target-avatar">${targetAccount.username?.charAt(0)?.toUpperCase() || '?'}</div>
               <div class="target-details">
-                <div class="target-name">\${targetAccount.username || '用户'}</div>
-                <div class="target-email">\${targetAccount.email}</div>
+                <div class="target-name">${targetAccount.username || '用户'}</div>
+                <div class="target-email">${targetAccount.email}</div>
               </div>
             </div>
             
-            <form id="switchPasswordForm" onsubmit="handleSwitchAccount(event, '\${accountId}', '\${targetAccount.email}')">
+            <form id="switchPasswordForm" onsubmit="handleSwitchAccount(event, '${accountId}', '${targetAccount.email}')">
               <div class="form-group">
                 <label>请输入密码以切换账户</label>
                 <input type="password" id="switchPassword" placeholder="输入密码" required autofocus />
@@ -2350,7 +2350,7 @@
           cursor: not-allowed;
         }
       </style>
-    \`;
+    `;
     
     document.body.appendChild(modal);
     
