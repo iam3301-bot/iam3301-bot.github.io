@@ -25,15 +25,14 @@ const SUPABASE_CONFIG = {
   
   // 替换为你的 Supabase Project URL
   // 格式: https://xxxxxxxxxxxxx.supabase.co
-  url: 'https://demo-project.supabase.co',
+  url: 'https://gybgiqyyltckgxbdtzwu.supabase.co',
   
   // 替换为你的 Supabase anon/public key
   // 这是公开密钥，可以安全地在前端使用
-  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.demo-key-replace-with-your-own',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA',
   
-  // ⚠️ 设为 true 以启用真实云数据库 (多用户共享)
-  // 设为 false 使用本地模拟模式 (仅当前浏览器可用)
-  enabled: false,
+  // ✅ 已启用 Supabase 云数据库 (多用户共享)
+  enabled: true,
   
   // OAuth 配置 (需要在 Supabase Dashboard 中配置)
   oauth: {
