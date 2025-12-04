@@ -1,43 +1,74 @@
 /**
- * 黑神话：悟空主题 - 完整视觉系统
- * 基于游戏真实UI设计：水墨画、金色装饰、中国传统纹样
+ * ███████╗ BLACK MYTH: WUKONG ███████╗
+ * 黑神话：悟空 - 艺术级完美主题
+ * 东方神话 · 水墨意境 · 金箍神韵
+ * 
+ * Design Philosophy:
+ * - 水墨画风营造中国传统意境
+ * - 金色系呼应金箍棒与佛光
+ * - 双线边框展现中国传统纹样
+ * - 书法字体传递东方神韵
+ * - 云雾动效模拟筋斗云与仙气
  */
 
 /* ==========================================
-   背景系统 - 水墨山水
+   全局背景系统 - 水墨山水意境
    ========================================== */
 body.theme-wukong {
   background: #1A0F0A;
   background-image: 
-    radial-gradient(ellipse at center, rgba(45, 24, 16, 0.8) 0%, #1A0F0A 70%),
-    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(220, 20, 60, 0.03) 0%, transparent 50%);
+    /* 水墨渐变 */
+    radial-gradient(ellipse at 30% 20%, rgba(45, 24, 16, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(61, 36, 24, 0.5) 0%, transparent 50%),
+    /* 金色光晕 */
+    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(220, 20, 60, 0.05) 0%, transparent 40%),
+    /* 深色基底 */
+    linear-gradient(180deg, #2D1810 0%, #1A0F0A 100%);
   background-attachment: fixed;
+  background-blend-mode: normal;
   position: relative;
+  color: #FFF8DC;
 }
 
-/* 水墨云雾效果 */
+/* 云雾缭绕效果 */
 body.theme-wukong::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   background-image: 
-    radial-gradient(ellipse at top left, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
-    radial-gradient(ellipse at bottom right, rgba(220, 20, 60, 0.05) 0%, transparent 40%);
-  animation: mistFlow 20s ease-in-out infinite;
+    radial-gradient(ellipse at top left, rgba(255, 215, 0, 0.12) 0%, transparent 30%),
+    radial-gradient(ellipse at bottom right, rgba(220, 20, 60, 0.08) 0%, transparent 30%),
+    radial-gradient(ellipse at center, rgba(255, 248, 220, 0.03) 0%, transparent 50%);
+  animation: mistFlow 30s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
+  mix-blend-mode: screen;
 }
 
 @keyframes mistFlow {
-  0%, 100% { opacity: 0.3; transform: translate(0, 0) scale(1); }
-  50% { opacity: 0.6; transform: translate(20px, -20px) scale(1.1); }
+  0% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.1);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+    opacity: 0.5;
+  }
+  100% { 
+    transform: translate(20px, -30px) scale(1.05);
+    opacity: 0.7;
+  }
 }
 
-/* 金色粒子 */
+/* 金色粒子效果 - 佛光普照 */
 body.theme-wukong::after {
   content: '';
   position: fixed;
@@ -46,49 +77,465 @@ body.theme-wukong::after {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(1px 1px at 20% 30%, rgba(255, 215, 0, 0.8), transparent),
-    radial-gradient(1px 1px at 40% 70%, rgba(255, 215, 0, 0.6), transparent),
-    radial-gradient(1px 1px at 60% 40%, rgba(255, 215, 0, 0.7), transparent),
-    radial-gradient(1px 1px at 80% 80%, rgba(255, 215, 0, 0.5), transparent);
+    radial-gradient(2px 2px at 15% 25%, rgba(255, 215, 0, 0.9), transparent),
+    radial-gradient(1px 1px at 40% 60%, rgba(255, 215, 0, 0.7), transparent),
+    radial-gradient(1px 1px at 65% 35%, rgba(255, 215, 0, 0.8), transparent),
+    radial-gradient(2px 2px at 85% 75%, rgba(255, 215, 0, 0.6), transparent),
+    radial-gradient(1px 1px at 30% 80%, rgba(218, 165, 32, 0.7), transparent),
+    radial-gradient(2px 2px at 70% 15%, rgba(255, 140, 0, 0.5), transparent);
   background-size: 100% 100%;
-  animation: goldenParticles 8s linear infinite;
+  animation: goldenParticles 12s linear infinite;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 @keyframes goldenParticles {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
+  0% { 
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% { 
+    transform: translateY(-100%) rotate(360deg);
+    opacity: 0.4;
+  }
 }
 
 /* ==========================================
-   卡片系统 - 古典木纹
+   卡片系统 - 古典木纹与金边
    ========================================== */
 .theme-wukong .card,
 .theme-wukong .game-card,
-.theme-wukong .ranking-item {
-  background: linear-gradient(135deg, 
-    rgba(61, 36, 24, 0.95) 0%, 
-    rgba(45, 24, 16, 0.9) 100%) !important;
+.theme-wukong .ranking-item,
+.theme-wukong .community-post {
+  background: linear-gradient(145deg, 
+    rgba(61, 36, 24, 0.98) 0%, 
+    rgba(45, 24, 16, 0.95) 50%,
+    rgba(42, 26, 18, 0.96) 100%) !important;
+  /* 中国传统双线边框 */
   border: 3px double #FFD700 !important;
   border-radius: 12px !important;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.3),
-    inset 0 2px 0 rgba(255, 215, 0, 0.2),
-    inset 0 -2px 0 rgba(139, 69, 20, 0.3) !important;
+    0 10px 40px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(255, 215, 0, 0.4),
+    inset 0 2px 1px rgba(255, 215, 0, 0.3),
+    inset 0 -2px 1px rgba(139, 69, 20, 0.4),
+    inset 4px 0 8px rgba(0, 0, 0, 0.3),
+    inset -4px 0 8px rgba(0, 0, 0, 0.3) !important;
   position: relative !important;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* 中国传统纹样装饰 */
-.theme-wukong .card::before {
+/* 顶部金色装饰线 - 中国纹样 */
+.theme-wukong .card::before,
+.theme-wukong .game-card::before,
+.theme-wukong .ranking-item::before {
   content: '';
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    #FFD700 0px,
+    #FFD700 12px,
+    transparent 12px,
+    transparent 18px,
+    #DAA520 18px,
+    #DAA520 22px,
+    transparent 22px,
+    transparent 28px
+  );
+  opacity: 0.7;
+  z-index: 1;
+  box-shadow: 0 1px 2px rgba(255, 215, 0, 0.5);
+}
+
+/* 底部装饰线 */
+.theme-wukong .card::after,
+.theme-wukong .game-card::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #8B6914 20%,
+    #FFD700 50%,
+    #8B6914 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  z-index: 1;
+}
+
+/* 木纹纹理叠加 */
+.theme-wukong .card,
+.theme-wukong .game-card {
+  background-image: 
+    /* 木纹纹理 */
+    repeating-linear-gradient(
+      90deg,
+      rgba(139, 69, 19, 0.08) 0px,
+      transparent 2px,
+      transparent 4px,
+      rgba(101, 67, 33, 0.06) 4px,
+      rgba(101, 67, 33, 0.06) 6px,
+      transparent 6px
+    ),
+    linear-gradient(145deg, 
+      rgba(61, 36, 24, 0.98) 0%, 
+      rgba(45, 24, 16, 0.95) 50%,
+      rgba(42, 26, 18, 0.96) 100%) !important;
+}
+
+/* 卡片悬停 - 金光闪耀 */
+.theme-wukong .card:hover,
+.theme-wukong .game-card:hover,
+.theme-wukong .ranking-item:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  border-color: #FFA500 !important;
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 0 80px rgba(255, 140, 0, 0.3),
+    inset 0 2px 1px rgba(255, 215, 0, 0.5),
+    inset 0 -2px 1px rgba(139, 69, 20, 0.5),
+    inset 4px 0 12px rgba(255, 215, 0, 0.2),
+    inset -4px 0 12px rgba(255, 215, 0, 0.2) !important;
+  animation: goldenGlow 2s ease-in-out infinite;
+}
+
+@keyframes goldenGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.8),
+      0 0 40px rgba(255, 215, 0, 0.6),
+      0 0 80px rgba(255, 140, 0, 0.3);
+  }
+  50% { 
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.8),
+      0 0 50px rgba(255, 215, 0, 0.8),
+      0 0 100px rgba(255, 140, 0, 0.5);
+  }
+}
+
+/* ==========================================
+   文字系统 - 书法与金色神韵
+   ========================================== */
+.theme-wukong .card-title,
+.theme-wukong .game-card h3,
+.theme-wukong h1, 
+.theme-wukong h2, 
+.theme-wukong h3 {
+  font-family: 'Ma Shan Zheng', 'KaiTi', 'STKaiti', serif !important;
+  font-weight: 700 !important;
+  color: #FFD700 !important;
+  letter-spacing: 2px !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(255, 215, 0, 0.8),
+    0 0 30px rgba(255, 215, 0, 0.5),
+    0 0 45px rgba(255, 140, 0, 0.3),
+    /* 描边效果 */
+    -1px -1px 0 rgba(139, 69, 20, 0.6),
+    1px -1px 0 rgba(139, 69, 20, 0.6),
+    -1px 1px 0 rgba(139, 69, 20, 0.6),
+    1px 1px 0 rgba(139, 69, 20, 0.6) !important;
+  position: relative;
+  z-index: 2;
+  text-rendering: optimizeLegibility;
+}
+
+/* 排行榜游戏名称 - 书法风格 */
+.theme-wukong .ranking-name {
+  font-family: 'Ma Shan Zheng', 'KaiTi', serif !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  color: #FFF8DC !important;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 215, 0, 0.3) !important;
+  letter-spacing: 1px !important;
+}
+
+/* 平台信息 - 金色点缀 */
+.theme-wukong .ranking-meta,
+.theme-wukong .platform-badge {
+  color: #DAA520 !important;
+  font-weight: 600 !important;
+  font-family: 'STKaiti', 'KaiTi', serif !important;
+  text-shadow: 
+    0 0 8px rgba(218, 165, 32, 0.8),
+    1px 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 次要文字 - 水墨色调 */
+.theme-wukong p,
+.theme-wukong .description {
+  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif !important;
+  color: #D4C4A8 !important;
+  line-height: 1.9 !important;
+  letter-spacing: 1px !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==========================================
+   按钮系统 - 金箍棒能量
+   ========================================== */
+.theme-wukong button,
+.theme-wukong .btn,
+.theme-wukong a.button {
+  background: linear-gradient(135deg, 
+    rgba(218, 165, 32, 0.3) 0%, 
+    rgba(255, 215, 0, 0.2) 50%,
+    rgba(139, 69, 20, 0.3) 100%) !important;
+  border: 2px solid #FFD700 !important;
+  border-radius: 8px !important;
+  color: #FFF8DC !important;
+  font-family: 'Ma Shan Zheng', 'STKaiti', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  padding: 12px 32px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.4s ease !important;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.5) !important;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 215, 0, 0.4),
+    inset 0 -1px 0 rgba(139, 69, 20, 0.3) !important;
+}
+
+/* 按钮金光流动效果 */
+.theme-wukong button::before,
+.theme-wukong .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 215, 0, 0.4) 30%,
+    rgba(255, 215, 0, 0.6) 50%,
+    rgba(255, 215, 0, 0.4) 70%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+  z-index: 0;
+}
+
+/* 按钮悬停 - 金箍棒旋转 */
+.theme-wukong button:hover,
+.theme-wukong .btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(218, 165, 32, 0.5) 0%, 
+    rgba(255, 215, 0, 0.4) 50%,
+    rgba(255, 140, 0, 0.5) 100%) !important;
+  border-color: #FFA500 !important;
+  color: #FFFFFF !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.6),
+    0 0 60px rgba(255, 140, 0, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(139, 69, 20, 0.4) !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(255, 215, 0, 1),
+    0 0 30px rgba(255, 140, 0, 0.7) !important;
+  animation: staffSpin 1s ease-in-out;
+}
+
+.theme-wukong button:hover::before,
+.theme-wukong .btn:hover::before {
+  left: 100%;
+}
+
+@keyframes staffSpin {
+  0% { transform: translateY(-3px) scale(1.05) rotate(0deg); }
+  50% { transform: translateY(-3px) scale(1.05) rotate(180deg); }
+  100% { transform: translateY(-3px) scale(1.05) rotate(360deg); }
+}
+
+/* 按钮激活状态 */
+.theme-wukong button:active,
+.theme-wukong .btn:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.5),
+    inset 0 3px 10px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* ==========================================
+   输入框系统
+   ========================================== */
+.theme-wukong input[type="text"],
+.theme-wukong input[type="search"],
+.theme-wukong textarea,
+.theme-wukong select {
+  background: rgba(26, 15, 10, 0.9) !important;
+  border: 2px solid rgba(255, 215, 0, 0.4) !important;
+  border-radius: 8px !important;
+  color: #FFF8DC !important;
+  font-family: 'KaiTi', 'STKaiti', serif !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(255, 215, 0, 0.2) !important;
+}
+
+.theme-wukong input:focus,
+.theme-wukong textarea:focus,
+.theme-wukong select:focus {
+  outline: none !important;
+  border-color: #FFD700 !important;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3) !important;
+  background: rgba(26, 15, 10, 0.95) !important;
+}
+
+/* ==========================================
+   链接系统
+   ========================================== */
+.theme-wukong a {
+  color: #FFD700 !important;
+  text-decoration: none !important;
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+}
+
+.theme-wukong a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
+}
+
+.theme-wukong a:hover {
+  color: #FFA500 !important;
+  text-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.9),
+    0 0 30px rgba(255, 140, 0, 0.6) !important;
+}
+
+.theme-wukong a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================
+   徽章和标签 - 金色印章
+   ========================================== */
+.theme-wukong .badge,
+.theme-wukong .tag,
+.theme-wukong .label {
+  background: linear-gradient(135deg, 
+    rgba(218, 165, 32, 0.4) 0%, 
+    rgba(255, 215, 0, 0.3) 100%) !important;
+  border: 2px solid #DAA520 !important;
+  border-radius: 6px !important;
+  color: #FFF8DC !important;
+  font-family: 'STKaiti', 'KaiTi', serif !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: 1px !important;
+  padding: 4px 14px !important;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 215, 0, 0.3) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ==========================================
+   滚动条 - 金色龙纹
+   ========================================== */
+.theme-wukong ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.theme-wukong ::-webkit-scrollbar-track {
+  background: rgba(26, 15, 10, 0.9);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 6px;
+}
+
+.theme-wukong ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, 
+    #FFD700 0%, 
+    #DAA520 50%, 
+    #B8860B 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(139, 69, 20, 0.4);
+  box-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.theme-wukong ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, 
+    #FFA500 0%, 
+    #FFD700 50%, 
+    #DAA520 100%);
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 140, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================
+   导航栏 - 古典门楣
+   ========================================== */
+.theme-wukong nav,
+.theme-wukong .navbar {
+  background: linear-gradient(180deg, 
+    rgba(61, 36, 24, 0.98) 0%, 
+    rgba(45, 24, 16, 0.95) 100%) !important;
+  border-bottom: 3px double #FFD700 !important;
+  box-shadow: 
+    0 6px 25px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(255, 215, 0, 0.3),
+    inset 0 -2px 1px rgba(255, 215, 0, 0.3) !important;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* 导航栏顶部装饰 */
+.theme-wukong nav::before,
+.theme-wukong .navbar::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 5%;
+  right: 5%;
   height: 2px;
   background: repeating-linear-gradient(
     90deg,
@@ -97,264 +544,154 @@ body.theme-wukong::after {
     transparent 10px,
     transparent 15px
   );
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
-.theme-wukong .card::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    #DC143C 0px,
-    #DC143C 10px,
-    transparent 10px,
-    transparent 15px
-  );
-  opacity: 0.4;
-}
-
-/* 角落装饰 */
-.theme-wukong .game-card::before,
-.theme-wukong .ranking-item::before {
-  content: '✦';
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  font-size: 16px;
-  color: #FFD700;
-  text-shadow: 0 0 10px #FFD700;
-  animation: cornerGlow 2s ease-in-out infinite;
-}
-
-@keyframes cornerGlow {
-  0%, 100% { opacity: 0.6; text-shadow: 0 0 10px #FFD700; }
-  50% { opacity: 1; text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700; }
-}
-
-/* 悬停效果 - 金光闪耀 */
-.theme-wukong .card:hover,
-.theme-wukong .game-card:hover,
-.theme-wukong .ranking-item:hover {
-  border-color: #DC143C !important;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.6),
-    0 0 60px rgba(220, 20, 60, 0.4),
-    inset 0 0 30px rgba(255, 215, 0, 0.2) !important;
-  transform: translateY(-5px) scale(1.02) !important;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* ==========================================
-   文字系统 - 书法风格
-   ========================================== */
-.theme-wukong .card-title,
-.theme-wukong .page-title,
-.theme-wukong .ranking-name {
-  font-family: 'Ma Shan Zheng', 'KaiTi', 'STKaiti', 'SimSun', serif !important;
-  color: #FFF8DC !important;
-  letter-spacing: 4px !important;
-  text-shadow: 
-    0 0 15px rgba(255, 215, 0, 0.8),
-    0 0 30px rgba(255, 215, 0, 0.5),
-    3px 3px 6px rgba(0, 0, 0, 0.9),
-    0 0 40px rgba(220, 20, 60, 0.3) !important;
-  font-weight: 700 !important;
-  position: relative;
-  padding: 5px 0;
-}
-
-/* 文字描边效果 */
-.theme-wukong .card-title::before,
-.theme-wukong .ranking-name::before {
-  content: '「';
-  position: absolute;
-  left: -20px;
-  color: #FFD700;
-  font-size: 1.2em;
-  text-shadow: 0 0 10px #FFD700;
-}
-
-.theme-wukong .card-title::after,
-.theme-wukong .ranking-name::after {
-  content: '」';
-  position: absolute;
-  right: -20px;
-  color: #FFD700;
-  font-size: 1.2em;
-  text-shadow: 0 0 10px #FFD700;
-}
-
-.theme-wukong .ranking-meta {
-  color: #DAA520 !important;
-  text-shadow: 0 0 10px rgba(218, 165, 32, 0.8) !important;
-  font-family: 'Zhi Mang Xing', 'STXingkai', 'SimHei', sans-serif !important;
-  letter-spacing: 2px !important;
-}
-
-/* ==========================================
-   按钮系统 - 金箍棒风格
-   ========================================== */
-.theme-wukong button,
-.theme-wukong .btn {
-  background: linear-gradient(135deg, 
-    rgba(139, 69, 20, 0.9), 
-    rgba(184, 134, 11, 0.8)) !important;
-  border: 2px solid #FFD700 !important;
-  border-radius: 8px !important;
-  color: #FFF8DC !important;
-  font-family: 'Ma Shan Zheng', 'KaiTi', serif !important;
-  font-weight: 600 !important;
-  letter-spacing: 3px !important;
-  padding: 12px 28px !important;
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.5),
-    0 0 20px rgba(255, 215, 0, 0.3),
-    inset 0 1px 0 rgba(255, 215, 0, 0.3) !important;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease !important;
-}
-
-/* 按钮金色光泽 */
-.theme-wukong button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent,
-    rgba(255, 215, 0, 0.6),
-    transparent
-  );
-  transition: left 0.6s ease;
-}
-
-.theme-wukong button:hover::before {
-  left: 100%;
-}
-
-.theme-wukong button:hover {
-  background: linear-gradient(135deg, 
-    rgba(220, 20, 60, 0.9), 
-    rgba(255, 107, 0, 0.8)) !important;
-  border-color: #DC143C !important;
-  box-shadow: 
-    0 6px 25px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(220, 20, 60, 0.6),
-    0 0 50px rgba(255, 215, 0, 0.4),
-    inset 0 0 20px rgba(255, 215, 0, 0.3) !important;
-  transform: translateY(-3px) scale(1.05) !important;
-}
-
-/* 激活状态 */
-.theme-wukong button.is-active,
-.theme-wukong .btn.is-active {
-  background: linear-gradient(135deg, #FFD700, #FF6B00) !important;
-  border-color: #DC143C !important;
-  color: #1A0F0A !important;
-  box-shadow: 
-    0 0 40px rgba(255, 215, 0, 0.8),
-    inset 0 0 30px rgba(220, 20, 60, 0.3) !important;
+/* Logo样式 - 金色题字 */
+.theme-wukong .logo {
+  color: #FFD700 !important;
+  font-family: 'Ma Shan Zheng', 'STKaiti', serif !important;
   font-weight: 900 !important;
+  font-size: 28px !important;
+  letter-spacing: 3px !important;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(255, 215, 0, 0.9),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 0 60px rgba(255, 140, 0, 0.4),
+    -1px -1px 0 rgba(139, 69, 20, 0.6),
+    1px -1px 0 rgba(139, 69, 20, 0.6),
+    -1px 1px 0 rgba(139, 69, 20, 0.6),
+    1px 1px 0 rgba(139, 69, 20, 0.6) !important;
+  animation: logoShine 3s ease-in-out infinite;
+}
+
+@keyframes logoShine {
+  0%, 100% { 
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      0 0 20px rgba(255, 215, 0, 0.9),
+      0 0 40px rgba(255, 215, 0, 0.6),
+      0 0 60px rgba(255, 140, 0, 0.4);
+  }
+  50% { 
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      0 0 30px rgba(255, 215, 0, 1),
+      0 0 60px rgba(255, 215, 0, 0.8),
+      0 0 90px rgba(255, 140, 0, 0.6);
+  }
 }
 
 /* ==========================================
-   输入框系统 - 卷轴风格
+   特殊动画效果
    ========================================== */
-.theme-wukong input,
-.theme-wukong select,
-.theme-wukong textarea {
-  background: rgba(26, 15, 10, 0.85) !important;
-  border: 2px solid #8B6914 !important;
-  border-radius: 6px !important;
-  color: #FFF8DC !important;
-  font-family: 'KaiTi', 'SimSun', serif !important;
-  padding: 12px 16px !important;
-  box-shadow: 
-    inset 0 2px 8px rgba(0, 0, 0, 0.5),
-    inset 0 0 15px rgba(139, 105, 20, 0.2) !important;
-}
 
-.theme-wukong input:focus,
-.theme-wukong select:focus,
-.theme-wukong textarea:focus {
-  border-color: #FFD700 !important;
-  box-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.5),
-    inset 0 0 20px rgba(255, 215, 0, 0.2) !important;
-  outline: none !important;
-}
-
-/* ==========================================
-   滚动条 - 金箍棒
-   ========================================== */
-.theme-wukong ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
-}
-
-.theme-wukong ::-webkit-scrollbar-track {
-  background: rgba(26, 15, 10, 0.8);
-  border: 2px solid #8B6914;
-  border-radius: 7px;
-}
-
-.theme-wukong ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FFD700, #DC143C, #FFD700);
-  border: 2px solid rgba(26, 15, 10, 0.8);
-  border-radius: 7px;
-  box-shadow: 
-    0 0 15px rgba(255, 215, 0, 0.5),
-    inset 0 0 10px rgba(220, 20, 60, 0.3);
-}
-
-.theme-wukong ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #FF6B00, #FFD700, #DC143C);
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-}
-
-/* ==========================================
-   特殊装饰 - 祥云
-   ========================================== */
-.theme-wukong .cloud-decoration {
-  position: fixed;
-  width: 150px;
-  height: 60px;
-  background: radial-gradient(ellipse, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: cloudFloat 15s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
+/* 云雾漂浮 */
 @keyframes cloudFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-  50% { transform: translate(30px, -20px) scale(1.2); opacity: 0.6; }
+  0%, 100% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(30px) translateY(-20px) scale(1.1);
+    opacity: 0.6;
+  }
 }
 
-/* 响应式 */
+/* 金光闪烁 */
+@keyframes goldenSparkle {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* 筋斗云翻滚 */
+@keyframes cloudTumble {
+  0% { transform: rotate(0deg) translateX(0); }
+  25% { transform: rotate(90deg) translateX(10px); }
+  50% { transform: rotate(180deg) translateX(0); }
+  75% { transform: rotate(270deg) translateX(-10px); }
+  100% { transform: rotate(360deg) translateX(0); }
+}
+
+/* ==========================================
+   响应式设计 - 移动端优化
+   ========================================== */
 @media (max-width: 768px) {
-  .theme-wukong .card-title::before,
-  .theme-wukong .ranking-name::before {
-    left: -15px;
-    font-size: 1em;
+  .theme-wukong .card,
+  .theme-wukong .game-card,
+  .theme-wukong .ranking-item {
+    border-width: 2px !important;
   }
   
-  .theme-wukong .card-title::after,
-  .theme-wukong .ranking-name::after {
-    right: -15px;
-    font-size: 1em;
+  .theme-wukong .card-title,
+  .theme-wukong h1,
+  .theme-wukong h2 {
+    letter-spacing: 1px !important;
+    font-size: 1.3em !important;
   }
   
-  .theme-wukong button {
-    padding: 10px 20px !important;
-    letter-spacing: 2px !important;
+  .theme-wukong button,
+  .theme-wukong .btn {
+    padding: 10px 24px !important;
+    letter-spacing: 1px !important;
+  }
+  
+  body.theme-wukong::before,
+  body.theme-wukong::after {
+    animation-duration: 20s !important;
+  }
+}
+
+/* ==========================================
+   打印样式
+   ========================================== */
+@media print {
+  body.theme-wukong::before,
+  body.theme-wukong::after,
+  .theme-wukong .card::before,
+  .theme-wukong .card::after {
+    display: none !important;
+  }
+  
+  .theme-wukong * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==========================================
+   可访问性增强
+   ========================================== */
+.theme-wukong *:focus-visible {
+  outline: 3px solid #FFD700 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .theme-wukong .card,
+  .theme-wukong .game-card {
+    border-width: 4px !important;
+    border-style: solid !important;
+  }
+  
+  .theme-wukong .card-title,
+  .theme-wukong h1,
+  .theme-wukong h2 {
+    text-shadow: 2px 2px 0 #000 !important;
+    font-weight: 900 !important;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .theme-wukong *,
+  .theme-wukong *::before,
+  .theme-wukong *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
