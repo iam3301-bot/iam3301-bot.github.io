@@ -1084,6 +1084,14 @@
           
           <div class="settings-item">
             <div>
+              <div class="settings-label">切换账号</div>
+              <div class="settings-desc">登录其他账号</div>
+            </div>
+            <button class="profile-btn" id="switchAccountBtn" style="background: var(--cyber-cyan); color: #000;">切换</button>
+          </div>
+          
+          <div class="settings-item">
+            <div>
               <div class="settings-label">退出登录</div>
               <div class="settings-desc">安全退出当前账号</div>
             </div>
@@ -1420,7 +1428,7 @@
     gamesList.innerHTML = sortedGames.map(game => `
       <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${game.appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
         <div class="steam-game-img">
-          <img src="${game.headerImage}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
+          <img src="${game.headerImage || game.img_icon_url || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_231x87.jpg`}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/120x45/1b2838/66c0f4?text=No+Image'" />
         </div>
         <div class="steam-game-info">
           <div class="steam-game-name">${game.name}</div>
@@ -1600,6 +1608,15 @@
   });
   
   // 登出
+  // 切换账号
+  document.getElementById('switchAccountBtn').addEventListener('click', async () => {
+    if (confirm('确定要切换到其他账号吗？当前账号数据已保存。')) {
+      await GameBoxAuth.signOut();
+      window.location.href = 'login.html';
+    }
+  });
+  
+  // 退出登录
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     if (confirm('确定要退出登录吗？')) {
       await GameBoxAuth.signOut();
