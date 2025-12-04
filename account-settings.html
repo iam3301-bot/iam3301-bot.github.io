@@ -179,19 +179,42 @@
     
     // 加载用户信息
     async function loadUserInfo() {
+      // 等待 GameBoxAuth 初始化
+      await GameBoxAuth.init();
+      
       const userData = GameBoxAuth.getCurrentUser();
+      console.log('当前用户数据:', userData);
+      
       if (!userData) {
+        console.log('未登录，跳转到登录页');
         window.location.href = 'login.html';
         return;
       }
       
-      document.getElementById('username').textContent = userData.username || '-';
-      document.getElementById('email').textContent = userData.email || '-';
+      // 显示用户信息
+      document.getElementById('username').textContent = userData.username || userData.email?.split('@')[0] || '未知用户';
+      document.getElementById('email').textContent = userData.email || '未设置邮箱';
       
       if (userData.createdAt) {
         const date = new Date(userData.createdAt);
-        document.getElementById('createdAt').textContent = date.toLocaleDateString('zh-CN');
+        document.getElementById('createdAt').textContent = date.toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } else if (userData.created_at) {
+        // 兼容不同的字段名
+        const date = new Date(userData.created_at);
+        document.getElementById('createdAt').textContent = date.toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } else {
+        document.getElementById('createdAt').textContent = '未知';
       }
+      
+      console.log('用户信息加载完成');
     }
     
     // 切换账号 - 跳转到切换账号页面
@@ -205,7 +228,7 @@
     });
     
     // 页面加载时初始化
-    loadUserInfo();
+    document.addEventListener('DOMContentLoaded', loadUserInfo);
   </script>
 </body>
 </html>

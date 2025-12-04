@@ -215,12 +215,19 @@
     }
     
     // 显示当前账号信息
-    function displayCurrentAccount() {
+    async function displayCurrentAccount() {
+      // 等待 GameBoxAuth 初始化
+      await GameBoxAuth.init();
+      
       const userData = GameBoxAuth.getCurrentUser();
       const currentAccountEl = document.getElementById('currentAccount');
       
+      console.log('切换账号页 - 当前用户:', userData);
+      
       if (userData) {
-        currentAccountEl.textContent = `${userData.username || '未知用户'} (${userData.email || ''})`;
+        const displayName = userData.username || userData.email?.split('@')[0] || '未知用户';
+        const displayEmail = userData.email || '';
+        currentAccountEl.textContent = `${displayName}${displayEmail ? ' (' + displayEmail + ')' : ''}`;
       } else {
         currentAccountEl.textContent = '未登录';
       }
@@ -272,7 +279,7 @@
     });
     
     // 页面加载时显示当前账号
-    displayCurrentAccount();
+    document.addEventListener('DOMContentLoaded', displayCurrentAccount);
   </script>
 </body>
 </html>
