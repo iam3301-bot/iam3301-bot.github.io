@@ -1,1075 +1,380 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 游戏账号管理</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的游戏账号 - GameBox 游盒</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="index.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+  <link rel="stylesheet" href="index.css">
   <style>
-    /* 游戏账号管理页面样式 */
+    body {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
     .accounts-container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 20px;
     }
     
-    .page-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    .accounts-header {
+      text-align: center;
+      margin-bottom: 50px;
     }
     
-    .back-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: rgba(17, 24, 39, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      color: var(--text-soft);
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-    
-    .back-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    
-    .page-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-main);
+    .accounts-header h1 {
       font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      color: #f4b93e;
+      margin-bottom: 15px;
+      text-shadow: 0 0 30px rgba(244, 185, 62, 0.6);
     }
     
-    /* 平台卡片 */
-    .platform-card {
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      border-radius: 16px;
+    .accounts-header .icon {
+      font-size: 60px;
       margin-bottom: 20px;
-      overflow: hidden;
-    }
-    
-    .platform-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.2);
-    }
-    
-    .platform-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    
-    .platform-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    
-    .platform-icon.steam {
-      background: linear-gradient(135deg, #1b2838, #2a475e);
-    }
-    
-    .platform-icon.epic {
-      background: linear-gradient(135deg, #2f2f2f, #1a1a1a);
-    }
-    
-    .platform-icon.xbox {
-      background: linear-gradient(135deg, #107c10, #0e6b0e);
-    }
-    
-    .platform-icon.playstation {
-      background: linear-gradient(135deg, #003087, #00246d);
-    }
-    
-    .platform-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    
-    .platform-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    
-    .platform-action {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .help-link {
-      font-size: 13px;
-      color: var(--accent);
-      text-decoration: none;
-      cursor: pointer;
-    }
-    
-    .help-link:hover {
-      text-decoration: underline;
-    }
-    
-    .bind-btn {
-      padding: 10px 24px;
-      background: linear-gradient(135deg, #4a90d9, #3a7bc8);
-      border: none;
-      border-radius: 20px;
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .bind-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(74, 144, 217, 0.4);
-    }
-    
-    .bind-btn.bound {
-      background: linear-gradient(135deg, #10b981, #059669);
-    }
-    
-    /* 绑定输入区域 */
-    .bind-input-area {
-      padding: 20px;
-      display: none;
-    }
-    
-    .bind-input-area.show {
       display: block;
     }
     
-    .input-group {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    
-    .input-field {
-      flex: 1;
-      padding: 14px 16px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(102, 192, 244, 0.3);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 14px;
-    }
-    
-    .input-field:focus {
-      outline: none;
-      border-color: #66c0f4;
-    }
-    
-    .submit-btn {
-      padding: 14px 28px;
-      background: linear-gradient(135deg, #66c0f4, #4a90d9);
-      border: none;
-      border-radius: 10px;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-    
-    .submit-btn:hover {
-      transform: translateY(-2px);
-    }
-    
-    .submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .input-hint {
-      font-size: 12px;
+    .accounts-header p {
       color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* 提示横幅 */
+    .info-banner {
+      background: rgba(244, 185, 62, 0.1);
+      border: 1px solid rgba(244, 185, 62, 0.3);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 40px;
       display: flex;
       align-items: flex-start;
-      gap: 6px;
+      gap: 15px;
     }
-    
-    .input-hint-icon {
-      color: #f59e0b;
-    }
-    
-    /* 已绑定账号列表 */
-    .accounts-section {
-      padding: 20px;
-    }
-    
-    .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-soft);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .account-item {
-      display: flex;
-      align-items: center;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      margin-bottom: 12px;
-      transition: all 0.3s ease;
-    }
-    
-    .account-item:hover {
-      background: rgba(102, 192, 244, 0.1);
-    }
-    
-    .account-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-right: 16px;
+
+    .info-banner .icon {
+      font-size: 24px;
+      color: #f4b93e;
       flex-shrink: 0;
     }
-    
-    .account-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .account-info {
-      flex: 1;
-      min-width: 0;
-    }
-    
-    .account-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 4px;
-    }
-    
-    .account-id {
-      font-size: 11px;
+
+    .info-banner .content p {
       color: var(--text-muted);
-      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
     }
-    
-    .account-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    
-    .action-btn {
-      padding: 8px 16px;
-      background: rgba(102, 192, 244, 0.2);
-      border: 1px solid rgba(102, 192, 244, 0.3);
-      border-radius: 8px;
-      color: #66c0f4;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
+
+    /* 平台账号卡片 */
+    .platform-section {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 2px solid rgba(244, 185, 62, 0.3);
+      border-radius: 16px;
+      padding: 35px;
+      margin-bottom: 25px;
       transition: all 0.3s ease;
+    }
+
+    .platform-section:hover {
+      border-color: #f4b93e;
+      box-shadow: 0 5px 30px rgba(244, 185, 62, 0.2);
+    }
+
+    .platform-section h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 26px;
+      color: #f4b93e;
+      margin-bottom: 25px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 12px;
     }
-    
-    .action-btn:hover {
-      background: rgba(102, 192, 244, 0.3);
-      border-color: #66c0f4;
+
+    .platform-section h2 .icon {
+      font-size: 32px;
     }
-    
-    .action-btn.primary {
-      background: #66c0f4;
-      color: #1b2838;
-      border-color: transparent;
+
+    /* 平台卡片网格 */
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
     }
-    
-    .action-btn.danger {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.3);
-      color: #ef4444;
-    }
-    
-    .action-btn.danger:hover {
-      background: rgba(239, 68, 68, 0.3);
-    }
-    
-    .dropdown-btn {
-      position: relative;
-    }
-    
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 4px;
-      background: rgba(17, 24, 39, 0.98);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 8px;
-      padding: 8px 0;
-      min-width: 150px;
-      display: none;
-      z-index: 100;
-    }
-    
-    .dropdown-menu.show {
-      display: block;
-    }
-    
-    .dropdown-item {
-      padding: 10px 16px;
-      font-size: 13px;
-      color: var(--text-soft);
+
+    .platform-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(244, 185, 62, 0.2);
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s ease;
       cursor: pointer;
-      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
-    
-    .dropdown-item:hover {
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--accent);
+
+    .platform-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(244, 185, 62, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    
-    /* 添加账号按钮 */
-    .add-account-btn {
+
+    .platform-card:hover::before {
+      opacity: 1;
+    }
+
+    .platform-card:hover {
+      transform: translateY(-5px);
+      border-color: #f4b93e;
+      box-shadow: 0 8px 25px rgba(244, 185, 62, 0.3);
+    }
+
+    .platform-card.connected {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .platform-card.connected::before {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+    }
+
+    .platform-icon-wrapper {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 16px;
-      background: transparent;
-      border: 2px dashed rgba(102, 192, 244, 0.3);
-      border-radius: 12px;
-      color: #66c0f4;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-    }
-    
-    .add-account-btn:hover {
-      border-color: #66c0f4;
-      background: rgba(102, 192, 244, 0.1);
-    }
-    
-    /* 游戏横幅 */
-    .games-banner {
-      display: flex;
-      gap: 12px;
-      padding: 0 20px 20px;
-      overflow-x: auto;
-    }
-    
-    .game-banner-item {
-      width: 80px;
-      height: 100px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .game-banner-item:hover {
-      transform: scale(1.05);
-    }
-    
-    .game-banner-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* 可见性选择器 */
-    .visibility-select {
-      padding: 8px 12px;
+      font-size: 48px;
+      border-radius: 16px;
       background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(102, 192, 244, 0.3);
-      border-radius: 8px;
+    }
+
+    .platform-card.epic .platform-icon-wrapper {
+      background: linear-gradient(135deg, #2a2a2a, #0078f2);
+    }
+
+    .platform-card.xbox .platform-icon-wrapper {
+      background: linear-gradient(135deg, #0e7a0d, #107c10);
+    }
+
+    .platform-card.playstation .platform-icon-wrapper {
+      background: linear-gradient(135deg, #003087, #0070d1);
+    }
+
+    .platform-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
       color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .platform-status-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
       font-size: 12px;
-      cursor: pointer;
-    }
-    
-    /* 主账号标签 */
-    .primary-badge {
-      padding: 4px 10px;
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      border-radius: 4px;
-      font-size: 11px;
-      color: white;
       font-weight: 600;
-      margin-left: 8px;
+      margin-bottom: 15px;
     }
-    
-    /* 消息提示 */
-    .message-toast {
-      position: fixed;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 24px;
-      background: rgba(17, 24, 39, 0.95);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 14px;
-      z-index: 1000;
-      display: none;
+
+    .platform-status-badge.connected {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
     }
-    
-    .message-toast.show {
-      display: block;
-      animation: slideDown 0.3s ease;
+
+    .platform-status-badge.pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
     }
-    
-    .message-toast.success {
-      border-color: rgba(16, 185, 129, 0.5);
+
+    .platform-status-badge.disconnected {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
     }
-    
-    .message-toast.error {
-      border-color: rgba(239, 68, 68, 0.5);
+
+    .platform-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
     }
-    
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-    }
-    
-    /* 未登录提示 */
-    .login-prompt {
+
+    /* 返回按钮 */
+    .back-button {
       text-align: center;
-      padding: 60px 20px;
+      margin-top: 40px;
     }
-    
-    .login-prompt-icon {
-      font-size: 64px;
-      margin-bottom: 24px;
+
+    .back-button a {
+      color: #f4b93e;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.3s ease;
     }
-    
+
+    .back-button a:hover {
+      text-shadow: 0 0 10px rgba(244, 185, 62, 0.8);
+    }
+
     /* 响应式 */
     @media (max-width: 768px) {
-      .platform-header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
+      .accounts-header h1 {
+        font-size: 32px;
       }
-      
-      .platform-action {
-        width: 100%;
-        justify-content: space-between;
+
+      .platforms-grid {
+        grid-template-columns: 1fr;
       }
-      
-      .account-item {
-        flex-wrap: wrap;
-      }
-      
-      .account-actions {
-        width: 100%;
-        margin-top: 12px;
-        justify-content: flex-end;
+
+      .platform-section {
+        padding: 20px;
       }
     }
   </style>
 </head>
-<body data-current-page="profile">
-<div class="page">
-  <header class="header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <div class="logo-mark">G</div>
-        <div>
-          <div>GameBox 游盒</div>
-          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
-        </div>
-      </a>
-      <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜 <span class="badge">HOT</span></a>
-        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
-        <a href="community.html" data-page="community" class="nav-link">社区</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
-        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="profile.html" data-page="profile" class="nav-link active">用户中心</a>
-      </nav>
-      <div class="header-right">
-        <div class="header-search">
-          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
-          <span class="header-search-icon">🔍</span>
-        </div>
-        <button class="header-user" id="headerUserBtn">未登录 · 游客</button>
-      </div>
+<body>
+  <div class="accounts-container">
+    <!-- 页面头部 -->
+    <div class="accounts-header">
+      <span class="icon">🎮</span>
+      <h1>其他平台</h1>
+      <p>管理您在各个游戏平台的账号绑定</p>
     </div>
-  </header>
-  
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  
-  <!-- 消息提示 -->
-  <div id="messageToast" class="message-toast"></div>
 
-  <main class="main" style="display: block;">
-    
-    <!-- 未登录提示 -->
-    <div id="loginPrompt" class="accounts-container login-prompt" style="display: none;">
-      <div class="login-prompt-icon">🔐</div>
-      <h2 style="color: var(--text-main); margin-bottom: 12px;">请先登录</h2>
-      <p style="color: var(--text-muted); margin-bottom: 24px;">登录后即可管理您的游戏账号</p>
-      <a href="login.html" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, var(--accent), #00ff88); border-radius: 8px; color: #0a0f1a; font-weight: 600; text-decoration: none;">前往登录</a>
+    <!-- 提示横幅 -->
+    <div class="info-banner">
+      <span class="icon">💡</span>
+      <div class="content">
+        <p>提示: Epic Games、Xbox 和 PlayStation 平台均需配置对应 API 后即可同步数据。请选择平台进行配置和绑定。</p>
+      </div>
     </div>
-    
-    <!-- 主内容 -->
-    <div id="mainContent" class="accounts-container" style="display: none;">
-      
-      <!-- 页面标题 -->
-      <div class="page-header">
-        <button class="back-btn" onclick="window.location.href='profile.html'">←</button>
-        <h1 class="page-title">游戏账号管理</h1>
-      </div>
-      
-      <!-- Steam 平台 -->
-      <div class="platform-card" id="steamPlatform">
-        <div class="platform-header">
-          <div class="platform-info">
-            <div class="platform-icon steam">🎮</div>
-            <div>
-              <div class="platform-name">Steam</div>
-              <div class="platform-desc">同步游玩数据</div>
-            </div>
-          </div>
-          <div class="platform-action">
-            <span class="help-link" onclick="showSteamHelp()">帮助</span>
-            <button class="bind-btn" id="steamBindBtn" onclick="toggleSteamInput()">绑定我的Steam</button>
-          </div>
-        </div>
-        
-        <!-- 热门游戏横幅 -->
-        <div class="games-banner">
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/730/capsule_231x87.jpg" alt="CS2"></div>
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/570/capsule_231x87.jpg" alt="Dota2"></div>
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/578080/capsule_231x87.jpg" alt="PUBG"></div>
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/capsule_231x87.jpg" alt="Apex"></div>
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/capsule_231x87.jpg" alt="Elden Ring"></div>
-          <div class="game-banner-item"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/capsule_231x87.jpg" alt="Black Myth"></div>
-        </div>
-        
-        <!-- 绑定输入区域 -->
-        <div class="bind-input-area" id="steamInputArea">
-          <div class="input-group">
-            <input type="text" class="input-field" id="steamIdInput" placeholder="输入 Steam ID 或个人资料链接">
-            <button class="submit-btn" id="steamSubmitBtn" onclick="bindSteamAccount()">绑定账号</button>
-          </div>
-          <div class="input-hint">
-            <span class="input-hint-icon">💡</span>
-            <span>演示模式下将显示模拟数据。获取真实数据需要配置 Steam API Key。<br>支持格式: SteamID64 / steamcommunity.com/profiles/xxx / steamcommunity.com/id/xxx</span>
-          </div>
-        </div>
-        
-        <!-- 已绑定账号列表 -->
-        <div class="accounts-section" id="steamAccountsSection" style="display: none;">
-          <div class="section-title">已绑平台&游戏</div>
-          <div id="steamAccountsList">
-            <!-- 动态生成 -->
-          </div>
-          <button class="add-account-btn" onclick="toggleSteamInput()">
-            <span>+</span> 添加账号
-          </button>
-        </div>
-      </div>
-      
-      <!-- Epic 平台 -->
-      <div class="platform-card">
-        <div class="platform-header">
-          <div class="platform-info">
-            <div class="platform-icon epic">🎮</div>
-            <div>
-              <div class="platform-name">Epic Games</div>
-              <div class="platform-desc">同步游玩数据</div>
-            </div>
-          </div>
-          <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Xbox 平台 -->
-      <div class="platform-card">
-        <div class="platform-header">
-          <div class="platform-info">
-            <div class="platform-icon xbox">🎮</div>
-            <div>
-              <div class="platform-name">Xbox</div>
-              <div class="platform-desc">同步游玩数据</div>
-            </div>
-          </div>
-          <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- PlayStation 平台 -->
-      <div class="platform-card">
-        <div class="platform-header">
-          <div class="platform-info">
-            <div class="platform-icon playstation">🎮</div>
-            <div>
-              <div class="platform-name">PlayStation</div>
-              <div class="platform-desc">同步游玩数据</div>
-            </div>
-          </div>
-          <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </main>
-  
-  <footer class="footer">
-    GameBox 游盒 · 游戏账号管理
-  </footer>
-</div>
 
-<script src="common.js"></script>
-<script src="cyber-effects.js"></script>
-<script src="supabase-config.js"></script>
-<script>
-  // =============================================
-  // 页面初始化
-  // =============================================
-  
-  initCommon();
-  
-  let currentUser = null;
-  let userData = null;
-  
-  async function init() {
-    await GameBoxAuth.init();
-    SteamAPI.init();
-    
-    currentUser = await GameBoxAuth.getCurrentUser();
-    
-    if (currentUser) {
-      document.getElementById('loginPrompt').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+    <!-- 其他平台区域 -->
+    <div class="platform-section">
+      <h2><span class="icon">🎮</span> 其他平台</h2>
       
-      userData = UserDataManager.getData(currentUser.id);
-      
-      renderSteamAccounts();
-      updateHeaderUser();
-    } else {
-      document.getElementById('loginPrompt').style.display = 'block';
-      document.getElementById('mainContent').style.display = 'none';
-    }
-  }
-  
-  // =============================================
-  // Steam 账号管理
-  // =============================================
-  
-  function toggleSteamInput() {
-    const inputArea = document.getElementById('steamInputArea');
-    inputArea.classList.toggle('show');
-  }
-  
-  function renderSteamAccounts() {
-    const accountsSection = document.getElementById('steamAccountsSection');
-    const accountsList = document.getElementById('steamAccountsList');
-    const bindBtn = document.getElementById('steamBindBtn');
-    
-    // 获取所有 Steam 账号
-    const steamAccounts = userData.steamAccounts || [];
-    
-    // 如果有旧的单账号数据，迁移到多账号
-    if (userData.steam?.linked && !steamAccounts.length) {
-      steamAccounts.push({
-        ...userData.steam,
-        isPrimary: true,
-        visibility: 'public',
-        addedAt: userData.steam.lastSync || new Date().toISOString()
-      });
-      userData.steamAccounts = steamAccounts;
-      UserDataManager.saveData(currentUser.id, { steamAccounts });
-    }
-    
-    if (steamAccounts.length > 0) {
-      accountsSection.style.display = 'block';
-      bindBtn.textContent = '✓ 已绑定';
-      bindBtn.classList.add('bound');
-      
-      accountsList.innerHTML = steamAccounts.map((account, index) => `
-        <div class="account-item" data-index="${index}">
-          <div class="account-avatar">
-            <img src="${account.avatar || 'https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}" alt="${account.personaName}">
+      <div class="platforms-grid">
+        <!-- Epic Games -->
+        <div class="platform-card epic" onclick="goToPlatformConfig('epic')">
+          <div class="platform-icon-wrapper">
+            🎯
           </div>
-          <div class="account-info">
-            <div class="account-name">
-              ${account.personaName || '未知用户'}
-              ${account.isPrimary ? '<span class="primary-badge">当前主账号</span>' : ''}
-            </div>
-            <div class="account-id">${account.steamId || '-'}</div>
-          </div>
-          <div class="account-actions">
-            <button class="action-btn primary" onclick="showFriendCode('${account.steamId}')">
-              显示好友码
-            </button>
-            <div class="dropdown-btn">
-              <button class="action-btn" onclick="toggleDropdown(this)">
-                多账号 ▼
-              </button>
-              <div class="dropdown-menu">
-                ${!account.isPrimary ? `<div class="dropdown-item" onclick="setPrimaryAccount(${index})">设为主账号</div>` : ''}
-                <div class="dropdown-item" onclick="syncAccount(${index})">同步数据</div>
-                <div class="dropdown-item" onclick="viewGames(${index})">查看游戏库</div>
-              </div>
-            </div>
-            <button class="action-btn danger" onclick="unlinkAccount(${index})">解绑</button>
+          <div class="platform-name">Epic Games</div>
+          <span class="platform-status-badge pending" id="epicStatus">即将推出</span>
+          <div class="platform-description">
+            Epic Games 暂无公开 API，需要手动录入账号信息
           </div>
         </div>
-      `).join('');
-    } else {
-      accountsSection.style.display = 'none';
-      bindBtn.textContent = '绑定我的Steam';
-      bindBtn.classList.remove('bound');
-    }
-  }
-  
-  async function bindSteamAccount() {
-    const input = document.getElementById('steamIdInput');
-    const btn = document.getElementById('steamSubmitBtn');
-    const steamIdOrUrl = input.value.trim();
-    
-    if (!steamIdOrUrl) {
-      showMessage('请输入 Steam ID 或个人资料链接', 'error');
-      return;
-    }
-    
-    btn.disabled = true;
-    btn.textContent = '绑定中...';
-    
-    try {
-      // 解析 Steam ID
-      const resolveResult = await SteamAPI.resolveSteamId(steamIdOrUrl);
-      if (!resolveResult.success) {
-        showMessage(resolveResult.error, 'error');
-        return;
-      }
-      
-      const steamId = resolveResult.steamId;
-      
-      // 检查是否已绑定
-      const steamAccounts = userData.steamAccounts || [];
-      if (steamAccounts.some(a => a.steamId === steamId)) {
-        showMessage('该 Steam 账号已绑定', 'error');
-        return;
-      }
-      
-      // 获取用户信息
-      const playerResult = await SteamAPI.getPlayerSummary(steamId);
-      if (!playerResult.success) {
-        showMessage(playerResult.error, 'error');
-        return;
-      }
-      
-      // 获取游戏库
-      const gamesResult = await SteamAPI.getOwnedGames(steamId);
-      
-      // 计算总游戏时间
-      let totalPlaytime = 0;
-      if (gamesResult.success && gamesResult.games) {
-        totalPlaytime = gamesResult.games.reduce((sum, g) => sum + (g.playtimeForever || 0), 0);
-      }
-      
-      // 添加新账号
-      const newAccount = {
-        steamId: steamId,
-        personaName: playerResult.player.personaName,
-        avatar: playerResult.player.avatar,
-        profileUrl: playerResult.player.profileUrl,
-        games: gamesResult.success ? gamesResult.games : [],
-        gameCount: gamesResult.success ? gamesResult.gameCount : 0,
-        totalPlaytime: totalPlaytime,
-        isPrimary: steamAccounts.length === 0, // 第一个账号为主账号
-        visibility: 'public',
-        lastSync: new Date().toISOString(),
-        addedAt: new Date().toISOString(),
-        isDemo: playerResult.isDemo || gamesResult.isDemo
-      };
-      
-      steamAccounts.push(newAccount);
-      
-      // 保存
-      userData.steamAccounts = steamAccounts;
-      // 同时更新旧的 steam 字段以保持兼容
-      if (newAccount.isPrimary) {
-        userData.steam = {
-          linked: true,
-          ...newAccount
-        };
-      }
-      UserDataManager.saveData(currentUser.id, { steamAccounts, steam: userData.steam });
-      
-      // 刷新显示
-      renderSteamAccounts();
-      input.value = '';
-      document.getElementById('steamInputArea').classList.remove('show');
-      
-      let message = 'Steam 账号绑定成功！';
-      if (newAccount.isDemo) {
-        message += ' (演示数据)';
-      }
-      showMessage(message, 'success');
-      
-    } catch (error) {
-      showMessage('绑定失败: ' + error.message, 'error');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '绑定账号';
-    }
-  }
-  
-  function showFriendCode(steamId) {
-    // Steam 好友码计算
-    // 好友码 = SteamID64 - 76561197960265728 (Steam64 ID Offset)
-    const steamIdNum = BigInt(steamId);
-    const offset = BigInt('76561197960265728');
-    const friendCode = (steamIdNum - offset).toString();
-    
-    const modal = document.createElement('div');
-    modal.innerHTML = `
-      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 400px; text-align: center;">
-          <h3 style="color: #66c0f4; margin-bottom: 16px;">Steam 好友码</h3>
-          <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; margin-bottom: 16px;">
-            <div style="font-size: 32px; font-weight: bold; color: #00ff88; letter-spacing: 4px; font-family: monospace;">${friendCode}</div>
+
+        <!-- Xbox -->
+        <div class="platform-card xbox" onclick="goToPlatformConfig('xbox')">
+          <div class="platform-icon-wrapper">
+            🎮
           </div>
-          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
-            SteamID64: ${steamId}
-          </p>
-          <button onclick="navigator.clipboard.writeText('${friendCode}'); this.textContent='已复制!'; setTimeout(() => this.textContent='复制好友码', 2000)" 
-            style="padding: 10px 24px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer; margin-right: 8px;">
-            复制好友码
-          </button>
-          <button onclick="this.parentElement.parentElement.remove()" 
-            style="padding: 10px 24px; background: transparent; border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 8px; color: var(--text-soft); cursor: pointer;">
-            关闭
-          </button>
+          <div class="platform-name">Xbox</div>
+          <span class="platform-status-badge pending" id="xboxStatus">即将推出</span>
+          <div class="platform-description">
+            使用 OpenXBL API 同步 Xbox Live 游戏数据和成就
+          </div>
+        </div>
+
+        <!-- PlayStation -->
+        <div class="platform-card playstation" onclick="goToPlatformConfig('psn')">
+          <div class="platform-icon-wrapper">
+            🎯
+          </div>
+          <div class="platform-name">PlayStation</div>
+          <span class="platform-status-badge pending" id="psnStatus">即将推出</span>
+          <div class="platform-description">
+            通过 PSN API 同步奖杯数据和游戏库信息
+          </div>
         </div>
       </div>
-    `;
-    document.body.appendChild(modal);
-  }
-  
-  function toggleDropdown(btn) {
-    const menu = btn.nextElementSibling;
-    // 关闭其他下拉菜单
-    document.querySelectorAll('.dropdown-menu.show').forEach(m => {
-      if (m !== menu) m.classList.remove('show');
+    </div>
+
+    <!-- 返回按钮 -->
+    <div class="back-button">
+      <a href="profile.html">← 返回用户中心</a>
+    </div>
+  </div>
+
+  <script src="platform-api-service.js"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    // =============================================
+    // 游戏账号管理脚本
+    // =============================================
+
+    // 跳转到平台配置页面
+    function goToPlatformConfig(platform) {
+      window.location.href = 'platform-accounts.html#' + platform;
+    }
+
+    // 更新平台状态显示
+    function updatePlatformStatus() {
+      // Epic Games
+      const epicBinding = localStorage.getItem('epic_binding');
+      if (epicBinding) {
+        try {
+          const data = JSON.parse(epicBinding);
+          document.getElementById('epicStatus').textContent = '已手动录入';
+          document.getElementById('epicStatus').className = 'platform-status-badge connected';
+          document.querySelector('.platform-card.epic').classList.add('connected');
+        } catch (e) {}
+      }
+
+      // Xbox
+      const xboxBinding = localStorage.getItem('xbox_binding');
+      const xboxApiKey = localStorage.getItem('xbox_api_key');
+      if (xboxBinding) {
+        try {
+          const data = JSON.parse(xboxBinding);
+          document.getElementById('xboxStatus').textContent = '已绑定';
+          document.getElementById('xboxStatus').className = 'platform-status-badge connected';
+          document.querySelector('.platform-card.xbox').classList.add('connected');
+        } catch (e) {}
+      } else if (xboxApiKey) {
+        document.getElementById('xboxStatus').textContent = 'API 已配置';
+        document.getElementById('xboxStatus').className = 'platform-status-badge pending';
+      }
+
+      // PlayStation
+      const psnBinding = localStorage.getItem('psn_binding');
+      const psnConfig = localStorage.getItem('psn_api_config');
+      if (psnBinding) {
+        try {
+          const data = JSON.parse(psnBinding);
+          document.getElementById('psnStatus').textContent = '已绑定';
+          document.getElementById('psnStatus').className = 'platform-status-badge connected';
+          document.querySelector('.platform-card.playstation').classList.add('connected');
+        } catch (e) {}
+      } else if (psnConfig) {
+        try {
+          const config = JSON.parse(psnConfig);
+          if (config.accessToken && config.tokenExpiry > Date.now()) {
+            document.getElementById('psnStatus').textContent = 'API 已配置';
+            document.getElementById('psnStatus').className = 'platform-status-badge pending';
+          }
+        } catch (e) {}
+      }
+    }
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePlatformStatus();
+      console.log('✅ 游戏账号管理页面已初始化');
     });
-    menu.classList.toggle('show');
-  }
-  
-  // 点击其他地方关闭下拉菜单
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.dropdown-btn')) {
-      document.querySelectorAll('.dropdown-menu.show').forEach(m => m.classList.remove('show'));
-    }
-  });
-  
-  function setPrimaryAccount(index) {
-    const steamAccounts = userData.steamAccounts || [];
-    steamAccounts.forEach((a, i) => a.isPrimary = i === index);
-    
-    // 更新旧的 steam 字段
-    userData.steam = {
-      linked: true,
-      ...steamAccounts[index]
-    };
-    
-    UserDataManager.saveData(currentUser.id, { steamAccounts, steam: userData.steam });
-    renderSteamAccounts();
-    showMessage('已设为主账号', 'success');
-  }
-  
-  async function syncAccount(index) {
-    const steamAccounts = userData.steamAccounts || [];
-    const account = steamAccounts[index];
-    
-    if (!account) return;
-    
-    showMessage('正在同步...', 'info');
-    
-    try {
-      // 获取最新数据
-      const playerResult = await SteamAPI.getPlayerSummary(account.steamId);
-      const gamesResult = await SteamAPI.getOwnedGames(account.steamId);
-      
-      if (playerResult.success) {
-        account.personaName = playerResult.player.personaName;
-        account.avatar = playerResult.player.avatar;
-      }
-      
-      if (gamesResult.success) {
-        account.games = gamesResult.games;
-        account.gameCount = gamesResult.gameCount;
-        account.totalPlaytime = gamesResult.games.reduce((sum, g) => sum + (g.playtimeForever || 0), 0);
-      }
-      
-      account.lastSync = new Date().toISOString();
-      
-      // 更新主账号数据
-      if (account.isPrimary) {
-        userData.steam = { linked: true, ...account };
-      }
-      
-      UserDataManager.saveData(currentUser.id, { steamAccounts, steam: userData.steam });
-      renderSteamAccounts();
-      showMessage('同步完成！', 'success');
-    } catch (error) {
-      showMessage('同步失败: ' + error.message, 'error');
-    }
-  }
-  
-  function viewGames(index) {
-    const steamAccounts = userData.steamAccounts || [];
-    const account = steamAccounts[index];
-    
-    if (!account || !account.games || account.games.length === 0) {
-      showMessage('暂无游戏数据', 'error');
-      return;
-    }
-    
-    // 跳转到用户中心查看游戏库
-    window.location.href = 'profile.html';
-  }
-  
-  function unlinkAccount(index) {
-    if (!confirm('确定要解绑这个 Steam 账号吗？')) return;
-    
-    const steamAccounts = userData.steamAccounts || [];
-    const removed = steamAccounts.splice(index, 1)[0];
-    
-    // 如果删除的是主账号，设置新的主账号
-    if (removed.isPrimary && steamAccounts.length > 0) {
-      steamAccounts[0].isPrimary = true;
-      userData.steam = { linked: true, ...steamAccounts[0] };
-    } else if (steamAccounts.length === 0) {
-      userData.steam = { linked: false };
-    }
-    
-    UserDataManager.saveData(currentUser.id, { steamAccounts, steam: userData.steam });
-    renderSteamAccounts();
-    showMessage('账号已解绑', 'success');
-  }
-  
-  function showSteamHelp() {
-    const modal = document.createElement('div');
-    modal.innerHTML = `
-      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
-        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 500px; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
-          <h3 style="color: #66c0f4; margin-bottom: 16px;">如何获取 Steam ID？</h3>
-          
-          <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
-            <p><strong>方法一：从个人资料页面获取</strong></p>
-            <ol style="margin: 12px 0; padding-left: 20px;">
-              <li>打开 Steam 客户端或网页版</li>
-              <li>点击您的用户名，进入个人资料</li>
-              <li>复制浏览器地址栏中的链接</li>
-              <li>格式如: steamcommunity.com/id/xxx 或 steamcommunity.com/profiles/xxx</li>
-            </ol>
-            
-            <p><strong>方法二：在 Steam 设置中查看</strong></p>
-            <ol style="margin: 12px 0; padding-left: 20px;">
-              <li>打开 Steam 客户端</li>
-              <li>进入 设置 > 界面</li>
-              <li>勾选 "当可用时在 Steam URL 栏中显示 Steam URL"</li>
-              <li>您的 SteamID64 会显示在个人资料中</li>
-            </ol>
-            
-            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
-              <strong style="color: #f59e0b;">⚠️ 注意</strong>
-              <p style="margin-top: 8px;">您的 Steam 资料需要设为公开才能获取游戏数据。<br>在 Steam 中进入 编辑个人资料 > 隐私设置，将"游戏详情"设为公开。</p>
-            </div>
-          </div>
-          
-          <button onclick="this.parentElement.parentElement.remove()" 
-            style="margin-top: 20px; padding: 10px 24px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer; width: 100%;">
-            知道了
-          </button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-  }
-  
-  // =============================================
-  // 工具函数
-  // =============================================
-  
-  function showMessage(text, type = 'info') {
-    const toast = document.getElementById('messageToast');
-    toast.textContent = text;
-    toast.className = 'message-toast show ' + type;
-    
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
-  }
-  
-  async function updateHeaderUser() {
-    const headerBtn = document.getElementById('headerUserBtn');
-    if (currentUser) {
-      headerBtn.textContent = currentUser.username;
-      headerBtn.style.color = 'var(--accent)';
-    }
-  }
-  
-  // =============================================
-  // 启动
-  // =============================================
-  
-  init();
-</script>
+  </script>
 </body>
 </html>
