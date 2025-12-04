@@ -73,7 +73,7 @@
     }
     
     .game-card-enhanced .game-cover {
-      height: 140px;
+      height: 160px;
       background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
       position: relative;
       overflow: hidden;
@@ -83,46 +83,67 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .game-card-enhanced:hover .game-cover img {
+      transform: scale(1.05);
+    }
+    
+    .game-card-enhanced .game-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
     }
     
     .game-card-enhanced .playtime-badge {
       position: absolute;
-      top: 8px;
+      bottom: 8px;
       right: 8px;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       color: #66c0f4;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(102, 192, 244, 0.3);
     }
     
     .game-card-enhanced .steam-badge {
       position: absolute;
       top: 8px;
       left: 8px;
-      background: linear-gradient(135deg, #1b2838, #2a475e);
+      background: rgba(27, 40, 56, 0.9);
       color: #66c0f4;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 4px;
-      font-size: 10px;
+      font-size: 11px;
       display: flex;
       align-items: center;
       gap: 4px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(102, 192, 244, 0.3);
     }
     
     .game-card-enhanced .game-info {
-      padding: 12px;
+      padding: 16px;
     }
     
     .game-card-enhanced .game-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text-main);
-      margin-bottom: 8px;
-      white-space: nowrap;
+      margin-bottom: 10px;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
     
     .game-card-enhanced .game-meta {
@@ -131,11 +152,35 @@
       align-items: center;
       font-size: 12px;
       color: var(--text-muted);
+      margin-bottom: 8px;
     }
     
     .game-card-enhanced .recent-play {
       color: #00ff88;
-      font-size: 11px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .game-card-enhanced .view-detail-btn {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, rgba(102, 192, 244, 0.2), rgba(102, 192, 244, 0.1));
+      border: 1px solid rgba(102, 192, 244, 0.3);
+      border-radius: 6px;
+      color: #66c0f4;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .game-card-enhanced .view-detail-btn:hover {
+      background: linear-gradient(135deg, rgba(102, 192, 244, 0.3), rgba(102, 192, 244, 0.2));
+      border-color: #66c0f4;
     }
     
     /* Steam 连接提示 */
@@ -222,11 +267,11 @@
       font-size: 11px;
     }
     
-    /* 游戏列表网格 */
+    /* 游戏列表网格 - 更大的卡片显示更清晰的封面 */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
     
     /* 空状态 */
@@ -670,33 +715,40 @@
     }
     
     container.innerHTML = games.map(game => renderGameCard(game)).join('');
-    
-    // 绑定点击事件
-    container.querySelectorAll('.game-card-enhanced').forEach(card => {
-      card.addEventListener('click', () => {
-        const gameId = card.dataset.id;
-        const gameName = card.dataset.name;
-        if (game.source === 'steam') {
-          window.open(`https://store.steampowered.com/app/${gameId}`, '_blank');
-        } else {
-          window.location.href = `game-detail.html?id=${gameId}&name=${encodeURIComponent(gameName)}`;
-        }
-      });
-    });
+    // 点击事件已在HTML内联处理，无需额外绑定
   }
   
-  // 渲染单个游戏卡片
+  // 渲染单个游戏卡片 - 优化封面显示和点击功能
   function renderGameCard(game) {
     const playtimeText = formatPlaytime(game.playtimeForever);
     const recentText = game.playtime2Weeks > 0 ? `近两周: ${formatPlaytime(game.playtime2Weeks)}` : '';
     const isSteam = game.source === 'steam';
+    const gameId = game.id;
     
-    const coverImg = game.thumbnail 
-      ? `<img src="${game.thumbnail}" alt="${game.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#1b2838,#2a475e);\\'>🎮</div>'" />`
+    // 使用Steam高清横版封面图（header图更清晰）
+    let coverUrl = '';
+    if (isSteam && gameId) {
+      // Steam提供多种尺寸的图片，header.jpg是高清横版封面(460x215)，capsule_616x353.jpg更大
+      coverUrl = `https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/capsule_616x353.jpg`;
+    } else if (game.thumbnail) {
+      coverUrl = game.thumbnail;
+    }
+    
+    // 封面图显示逻辑：优先使用高清图，失败后降级
+    const coverImg = coverUrl 
+      ? `<img src="${coverUrl}" alt="${game.name}" loading="lazy" 
+           onerror="this.onerror=null; this.src='https://cdn.cloudflare.steamstatic.com/steam/apps/${gameId}/header.jpg'; 
+           this.onerror=function(){this.style.display='none'; this.parentElement.querySelector('.cover-fallback').style.display='flex';}" />
+         <div class="cover-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#1b2838,#2a475e);position:absolute;top:0;left:0;">🎮</div>`
       : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#1b2838,#2a475e);">🎮</div>';
     
+    // 点击事件处理：Steam游戏跳转到Steam商店，其他跳转到游戏详情
+    const clickHandler = isSteam 
+      ? `onclick="window.open('https://store.steampowered.com/app/${gameId}', '_blank')"` 
+      : `onclick="window.location.href='game-detail.html?id=${gameId}&name=${encodeURIComponent(game.name)}'" `;
+    
     return `
-      <div class="game-card-enhanced" data-id="${game.id}" data-name="${game.name}">
+      <div class="game-card-enhanced" data-id="${gameId}" data-name="${game.name}" data-source="${game.source}" ${clickHandler} title="点击查看详情">
         <div class="game-cover">
           ${coverImg}
           ${isSteam ? '<div class="steam-badge"><svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg> Steam</div>' : ''}
@@ -709,6 +761,9 @@
             <span>${playtimeText}</span>
           </div>
           ${recentText ? `<div class="recent-play">🔥 ${recentText}</div>` : ''}
+          <div class="view-detail-btn">
+            ${isSteam ? '🔗 在 Steam 商店查看' : '📖 查看游戏详情'}
+          </div>
         </div>
       </div>
     `;

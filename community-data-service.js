@@ -1,17 +1,93 @@
 /**
- * 社区数据服务
- * 使用LocalStorage存储帖子数据，实现真实的发帖和互动功能
+ * 社区数据服务 - 支持Supabase实时数据库 + LocalStorage后备
+ * 实现真实的发帖、互动和实时统计功能
  */
 
 (function() {
   const STORAGE_KEY_POSTS = 'gamebox_community_posts';
   const STORAGE_KEY_STATS = 'gamebox_community_stats';
   const STORAGE_KEY_ONLINE = 'gamebox_online_users';
+  const STORAGE_KEY_COMMENTS = 'gamebox_post_comments';
+
+  // Supabase配置检测
+  let useSupabase = false;
+  let supabaseClient = null;
+
+  // 尝试初始化Supabase
+  function initSupabase() {
+    if (typeof window.supabase !== 'undefined' && 
+        typeof SUPABASE_CONFIG !== 'undefined' && 
+        SUPABASE_CONFIG.enabled && 
+        SUPABASE_CONFIG.url !== 'https://demo-project.supabase.co') {
+      try {
+        supabaseClient = window.supabase;
+        useSupabase = true;
+        console.log('✅ 社区数据服务: 使用Supabase实时数据库');
+        subscribeToRealtimeUpdates();
+      } catch (e) {
+        console.warn('⚠️ Supabase初始化失败，使用本地存储:', e);
+        useSupabase = false;
+      }
+    } else {
+      console.log('ℹ️ 社区数据服务: 使用本地存储模式');
+    }
+  }
+
+  // 实时订阅更新
+  function subscribeToRealtimeUpdates() {
+    if (!useSupabase || !supabaseClient) return;
+
+    // 订阅帖子变化
+    supabaseClient
+      .channel('community_posts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'community_posts' }, (payload) => {
+        console.log('📬 帖子实时更新:', payload);
+        // 触发UI更新事件
+        window.dispatchEvent(new CustomEvent('community-update', { detail: payload }));
+      })
+      .subscribe();
+
+    // 订阅在线状态变化
+    supabaseClient
+      .channel('online_status')
+      .on('presence', { event: 'sync' }, () => {
+        updateOnlinePresence();
+      })
+      .subscribe();
+  }
+
+  // 更新在线状态
+  async function updateOnlinePresence() {
+    if (!useSupabase || !supabaseClient) return;
+    
+    try {
+      const channel = supabaseClient.channel('online_users');
+      await channel.track({
+        online_at: new Date().toISOString(),
+        user_id: getCurrentUserId()
+      });
+    } catch (e) {
+      console.error('更新在线状态失败:', e);
+    }
+  }
+
+  // 获取当前用户ID
+  function getCurrentUserId() {
+    try {
+      const user = JSON.parse(localStorage.getItem('gamebox_current_user') || '{}');
+      return user.id || `guest_${Math.random().toString(36).substr(2, 9)}`;
+    } catch {
+      return `guest_${Math.random().toString(36).substr(2, 9)}`;
+    }
+  }
 
   /**
    * 初始化社区数据
    */
   function initCommunityData() {
+    // 尝试初始化Supabase
+    initSupabase();
+
     // 如果localStorage中没有数据，初始化默认帖子
     const existingPosts = localStorage.getItem(STORAGE_KEY_POSTS);
     
@@ -27,14 +103,69 @@
       const stats = {
         totalMembers: 5678,
         totalReplies: 12345,
-        lastUpdate: Date.now()
+        lastUpdate: Date.now(),
+        startTime: Date.now() // 记录开始时间，用于计算增长
       };
       localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
       console.log('✅ 初始化社区统计数据');
     }
 
+    // 初始化评论数据
+    if (!localStorage.getItem(STORAGE_KEY_COMMENTS)) {
+      localStorage.setItem(STORAGE_KEY_COMMENTS, JSON.stringify({}));
+    }
+
     // 更新在线用户
     updateOnlineUsers();
+    
+    // 启动实时更新
+    startRealtimeUpdates();
+  }
+
+  // 启动实时更新定时器
+  let realtimeInterval = null;
+  function startRealtimeUpdates() {
+    if (realtimeInterval) return;
+    
+    // 每10秒更新一次在线人数和统计
+    realtimeInterval = setInterval(() => {
+      updateOnlineUsers();
+      incrementStats();
+      // 触发UI更新
+      window.dispatchEvent(new CustomEvent('community-stats-update'));
+    }, 10000);
+    
+    console.log('🔄 社区实时更新已启动 (每10秒)');
+  }
+
+  // 模拟统计增长（基于时间的真实增长模拟）
+  function incrementStats() {
+    try {
+      const statsJson = localStorage.getItem(STORAGE_KEY_STATS);
+      const stats = statsJson ? JSON.parse(statsJson) : {
+        totalMembers: 5678,
+        totalReplies: 12345,
+        lastUpdate: Date.now(),
+        startTime: Date.now()
+      };
+      
+      const now = Date.now();
+      const hoursSinceStart = (now - (stats.startTime || now)) / (1000 * 60 * 60);
+      
+      // 模拟真实增长：每小时增加 1-3 个会员，2-5 条回复
+      if (now - stats.lastUpdate > 60000) { // 每分钟检查一次
+        const memberGrowth = Math.random() < 0.3 ? 1 : 0; // 30%概率新增会员
+        const replyGrowth = Math.floor(Math.random() * 2); // 0-1条新回复
+        
+        stats.totalMembers += memberGrowth;
+        stats.totalReplies += replyGrowth;
+        stats.lastUpdate = now;
+        
+        localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
+      }
+    } catch (e) {
+      console.error('更新统计失败:', e);
+    }
   }
 
   /**
@@ -191,40 +322,7 @@
             <li><strong>特殊神庙</strong>：32个 🔄 进行中</li>
           </ul>
           
-          <h4>🎯 新手必做神庙Top 10</h4>
-          <ol>
-            <li><strong>启始之塔</strong> - 解锁地图塔功能</li>
-            <li><strong>鸟望台神庙</strong> - 获得滑翔伞</li>
-            <li><strong>回忆之林</strong> - 增加心之器皿</li>
-            <li><strong>时间停止</strong> - 学会重要技能</li>
-            <li><strong>火焰之试炼</strong> - 获得炎之大剑</li>
-            <li><strong>冰雪神庙</strong> - 学会冰冻技巧</li>
-            <li><strong>雷电殿堂</strong> - 掌握雷电应用</li>
-            <li><strong>风之祭坛</strong> - 强化滑翔能力</li>
-            <li><strong>力量测试</strong> - 提升攻击力</li>
-            <li><strong>智慧考验</strong> - 获得珍稀道具</li>
-          </ol>
-          
-          <h4>💡 解谜技巧汇总</h4>
-          <ul>
-            <li><strong>究极手</strong>：最常用的能力，可以移动和组合物体</li>
-            <li><strong>通天术</strong>：向上穿透物体，快速到达高处</li>
-            <li><strong>时光倒流</strong>：让物体时间倒流，创造性解谜</li>
-            <li><strong>余料建造</strong>：粘合物品制作工具和武器</li>
-          </ul>
-          
-          <h4>🗺️ 地图资源</h4>
-          <p>我制作了一个互动地图，标记了所有神庙位置、呀哈哈种子、材料点等。需要的朋友可以私信我获取链接。</p>
-          
-          <h4>📢 更新计划</h4>
-          <ul>
-            <li>✅ 地表神庙 (已完成)</li>
-            <li>✅ 天空岛神庙 (已完成)</li>
-            <li>🔄 地下神庙 (进行中，预计3天完成)</li>
-            <li>📅 特殊神庙 (计划下周开始)</li>
-          </ul>
-          
-          <p>感谢大家的支持！有任何问题欢迎在评论区提问，我会尽快回复~</p>
+          <p>感谢大家的支持！有任何问题欢迎在评论区提问~</p>
         `,
         author: "海拉鲁勇者",
         avatar: "🗡️",
@@ -272,7 +370,27 @@
   /**
    * 获取所有帖子
    */
-  function getAllPosts() {
+  async function getAllPosts() {
+    // 如果使用Supabase，尝试从服务器获取
+    if (useSupabase && supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('community_posts')
+          .select('*')
+          .order('is_pinned', { ascending: false })
+          .order('created_at', { ascending: false });
+        
+        if (!error && data && data.length > 0) {
+          // 同步到本地缓存
+          localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(data));
+          return data;
+        }
+      } catch (e) {
+        console.warn('从Supabase获取帖子失败，使用本地数据:', e);
+      }
+    }
+
+    // 使用本地存储
     try {
       const postsJson = localStorage.getItem(STORAGE_KEY_POSTS);
       if (!postsJson) {
@@ -282,9 +400,13 @@
       
       const posts = JSON.parse(postsJson);
       
-      // 更新浏览量（随机增加）
+      // 更新浏览量（随机增加，模拟真实流量）
+      const now = Date.now();
       posts.forEach(post => {
-        post.views += Math.floor(Math.random() * 3);
+        // 根据帖子新鲜度调整浏览增长
+        const ageHours = (now - post.time) / (1000 * 60 * 60);
+        const viewIncrement = ageHours < 24 ? Math.floor(Math.random() * 5) : Math.floor(Math.random() * 2);
+        post.views += viewIncrement;
       });
       
       // 保存更新后的数据
@@ -300,19 +422,24 @@
   /**
    * 根据ID获取帖子
    */
-  function getPostById(id) {
-    const posts = getAllPosts();
-    return posts.find(p => p.id === id);
+  async function getPostById(id) {
+    const posts = await getAllPosts();
+    const post = posts.find(p => p.id === id);
+    
+    if (post) {
+      // 增加浏览量
+      post.views = (post.views || 0) + 1;
+      await updatePost(post.id, { views: post.views });
+    }
+    
+    return post;
   }
 
   /**
    * 发布新帖子
    */
-  function createPost(postData) {
+  async function createPost(postData) {
     try {
-      const posts = getAllPosts();
-      
-      // 生成唯一ID
       const newPost = {
         id: `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         title: postData.title,
@@ -329,11 +456,38 @@
         time: Date.now(),
         createdAt: Date.now()
       };
-      
-      // 添加到帖子列表开头
+
+      // 如果使用Supabase，同时保存到服务器
+      if (useSupabase && supabaseClient) {
+        try {
+          const { error } = await supabaseClient
+            .from('community_posts')
+            .insert([{
+              id: newPost.id,
+              title: newPost.title,
+              content: newPost.content,
+              author: newPost.author,
+              avatar: newPost.avatar,
+              game: newPost.game,
+              board: newPost.board,
+              replies: 0,
+              likes: 0,
+              views: 0,
+              is_pinned: false,
+              is_new: true,
+              created_at: new Date().toISOString()
+            }]);
+          
+          if (error) throw error;
+          console.log('✅ 帖子已同步到Supabase');
+        } catch (e) {
+          console.warn('同步到Supabase失败:', e);
+        }
+      }
+
+      // 保存到本地
+      const posts = await getAllPosts();
       posts.unshift(newPost);
-      
-      // 保存到localStorage
       localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(posts));
       
       // 更新统计数据
@@ -350,9 +504,9 @@
   /**
    * 删除帖子
    */
-  function deletePost(postId) {
+  async function deletePost(postId) {
     try {
-      const posts = getAllPosts();
+      const posts = await getAllPosts();
       const index = posts.findIndex(p => p.id === postId);
       
       if (index === -1) {
@@ -361,6 +515,18 @@
       
       posts.splice(index, 1);
       localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(posts));
+
+      // 如果使用Supabase，同时从服务器删除
+      if (useSupabase && supabaseClient) {
+        try {
+          await supabaseClient
+            .from('community_posts')
+            .delete()
+            .eq('id', postId);
+        } catch (e) {
+          console.warn('从Supabase删除失败:', e);
+        }
+      }
       
       console.log('✅ 帖子删除成功:', postId);
       return { success: true };
@@ -373,9 +539,9 @@
   /**
    * 更新帖子数据
    */
-  function updatePost(postId, updates) {
+  async function updatePost(postId, updates) {
     try {
-      const posts = getAllPosts();
+      const posts = await getAllPosts();
       const post = posts.find(p => p.id === postId);
       
       if (!post) {
@@ -384,8 +550,19 @@
       
       Object.assign(post, updates);
       localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(posts));
+
+      // 如果使用Supabase，同时更新服务器
+      if (useSupabase && supabaseClient) {
+        try {
+          await supabaseClient
+            .from('community_posts')
+            .update(updates)
+            .eq('id', postId);
+        } catch (e) {
+          console.warn('更新Supabase失败:', e);
+        }
+      }
       
-      console.log('✅ 帖子更新成功:', postId);
       return { success: true, post };
     } catch (error) {
       console.error('❌ 更新帖子失败:', error);
@@ -394,7 +571,59 @@
   }
 
   /**
-   * 获取社区统计数据
+   * 获取帖子评论
+   */
+  function getPostComments(postId) {
+    try {
+      const commentsJson = localStorage.getItem(STORAGE_KEY_COMMENTS);
+      const allComments = commentsJson ? JSON.parse(commentsJson) : {};
+      return allComments[postId] || [];
+    } catch (e) {
+      console.error('获取评论失败:', e);
+      return [];
+    }
+  }
+
+  /**
+   * 添加评论
+   */
+  async function addComment(postId, commentData) {
+    try {
+      const commentsJson = localStorage.getItem(STORAGE_KEY_COMMENTS);
+      const allComments = commentsJson ? JSON.parse(commentsJson) : {};
+      
+      if (!allComments[postId]) {
+        allComments[postId] = [];
+      }
+      
+      const newComment = {
+        id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        author: commentData.author || '游客',
+        avatar: commentData.avatar || '👤',
+        content: commentData.content,
+        likes: 0,
+        time: Date.now(),
+        createdAt: Date.now()
+      };
+      
+      allComments[postId].push(newComment);
+      localStorage.setItem(STORAGE_KEY_COMMENTS, JSON.stringify(allComments));
+      
+      // 更新帖子回复数
+      await updatePost(postId, { replies: allComments[postId].length });
+      
+      // 更新统计
+      updateStats({ repliesIncrement: 1 });
+      
+      return { success: true, comment: newComment };
+    } catch (error) {
+      console.error('添加评论失败:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * 获取社区统计数据 - 实时计算
    */
   function getCommunityStats() {
     try {
@@ -402,15 +631,33 @@
       const stats = statsJson ? JSON.parse(statsJson) : {
         totalMembers: 5678,
         totalReplies: 12345,
-        lastUpdate: Date.now()
+        lastUpdate: Date.now(),
+        startTime: Date.now()
       };
       
-      const posts = getAllPosts();
+      // 从本地帖子计算实际数据
+      let posts = [];
+      try {
+        posts = JSON.parse(localStorage.getItem(STORAGE_KEY_POSTS) || '[]');
+      } catch (e) {
+        posts = [];
+      }
+      
+      // 计算总回复数
+      const actualReplies = posts.reduce((sum, p) => sum + (p.replies || 0), 0);
+      
+      // 基于时间的增长模拟
+      const now = Date.now();
+      const startTime = stats.startTime || (now - 7 * 24 * 60 * 60 * 1000); // 默认7天前开始
+      const daysSinceStart = (now - startTime) / (1000 * 60 * 60 * 24);
+      
+      // 每天增加约 5-15 个会员（更真实的增长）
+      const memberGrowth = Math.floor(daysSinceStart * (5 + Math.random() * 10));
       
       return {
         totalPosts: posts.length,
-        totalMembers: stats.totalMembers + Math.floor((Date.now() - stats.lastUpdate) / (24 * 60 * 60 * 1000)), // 每天增加1个成员
-        totalReplies: stats.totalReplies + posts.reduce((sum, p) => sum + p.replies, 0),
+        totalMembers: stats.totalMembers + memberGrowth,
+        totalReplies: stats.totalReplies + actualReplies,
         onlineUsers: getOnlineUserCount()
       };
     } catch (error) {
@@ -419,7 +666,7 @@
         totalPosts: 0,
         totalMembers: 5678,
         totalReplies: 12345,
-        onlineUsers: 89
+        onlineUsers: getOnlineUserCount()
       };
     }
   }
@@ -429,10 +676,16 @@
    */
   function updateStats(updates) {
     try {
-      const stats = getCommunityStats();
+      const statsJson = localStorage.getItem(STORAGE_KEY_STATS);
+      const stats = statsJson ? JSON.parse(statsJson) : {
+        totalMembers: 5678,
+        totalReplies: 12345,
+        lastUpdate: Date.now(),
+        startTime: Date.now()
+      };
       
       if (updates.postsIncrement) {
-        stats.totalPosts += updates.postsIncrement;
+        // 帖子数从实际数据计算
       }
       if (updates.membersIncrement) {
         stats.totalMembers += updates.membersIncrement;
@@ -444,7 +697,7 @@
       stats.lastUpdate = Date.now();
       localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
       
-      return stats;
+      return getCommunityStats();
     } catch (error) {
       console.error('更新统计数据失败:', error);
       return getCommunityStats();
@@ -452,27 +705,37 @@
   }
 
   /**
-   * 获取在线用户数
+   * 获取在线用户数 - 基于时间的真实模拟
    */
   function getOnlineUserCount() {
     // 模拟在线用户数：基础值 + 时间因子 + 随机波动
-    const baseCount = 50;
+    const baseCount = 80;
     const hour = new Date().getHours();
+    const minute = new Date().getMinutes();
     
-    // 根据时间调整在线人数（高峰期：19:00-23:00）
+    // 根据时间调整在线人数
     let timeFactor = 1.0;
     if (hour >= 19 && hour <= 23) {
-      timeFactor = 2.5; // 高峰期
+      timeFactor = 2.8; // 高峰期 (19:00-23:00)
     } else if (hour >= 12 && hour <= 14) {
-      timeFactor = 1.8; // 午休时间
-    } else if (hour >= 8 && hour <= 18) {
-      timeFactor = 1.3; // 白天
+      timeFactor = 2.0; // 午休时间
+    } else if (hour >= 9 && hour <= 18) {
+      timeFactor = 1.5; // 工作日白天
+    } else if (hour >= 0 && hour <= 6) {
+      timeFactor = 0.3; // 深夜凌晨
     } else {
-      timeFactor = 0.5; // 深夜
+      timeFactor = 0.8; // 清晨
     }
     
-    // 随机波动 ±20%
-    const randomFactor = 0.8 + Math.random() * 0.4;
+    // 周末因子
+    const day = new Date().getDay();
+    if (day === 0 || day === 6) {
+      timeFactor *= 1.3; // 周末增加30%
+    }
+    
+    // 分钟级随机波动 ±15%
+    const minuteSeed = Math.sin(minute * 0.1) * 0.15;
+    const randomFactor = 0.85 + Math.random() * 0.3 + minuteSeed;
     
     return Math.floor(baseCount * timeFactor * randomFactor);
   }
@@ -485,19 +748,27 @@
       '褪色者小明', 'V', '海拉鲁勇者', '掌机党', '小骑士', 
       '买家小王', '罪恶都市粉', 'GameBox官方', '赛博浪客',
       '荒野猎人', '星际旅者', '魔法使', '剑圣', '枪神',
-      '战术大师', '探险家', '收集癖', '成就党', '速通玩家'
+      '战术大师', '探险家', '收集癖', '成就党', '速通玩家',
+      '休闲玩家', '硬核玩家', '剧情党', '画面党', '手残党',
+      '肝帝', '欧皇', '非酋', '老司机', '萌新',
+      '独狼玩家', '社交达人', '建筑大师', '红石工程师', 'PVP高手'
     ];
     
     const onlineCount = getOnlineUserCount();
     const onlineUsers = [];
     
     // 随机选择在线用户
-    const shuffled = userNames.sort(() => 0.5 - Math.random());
+    const shuffled = [...userNames].sort(() => 0.5 - Math.random());
     for (let i = 0; i < Math.min(onlineCount, shuffled.length); i++) {
       onlineUsers.push(shuffled[i]);
     }
     
-    localStorage.setItem(STORAGE_KEY_ONLINE, JSON.stringify(onlineUsers));
+    localStorage.setItem(STORAGE_KEY_ONLINE, JSON.stringify({
+      users: onlineUsers,
+      count: onlineCount,
+      lastUpdate: Date.now()
+    }));
+    
     return onlineUsers;
   }
 
@@ -506,23 +777,49 @@
    */
   function getOnlineUsers() {
     try {
-      const usersJson = localStorage.getItem(STORAGE_KEY_ONLINE);
-      if (!usersJson) {
+      const dataJson = localStorage.getItem(STORAGE_KEY_ONLINE);
+      if (!dataJson) {
         return updateOnlineUsers();
       }
       
-      // 每30秒更新一次在线用户
-      const lastUpdate = localStorage.getItem('online_users_last_update');
-      if (!lastUpdate || Date.now() - parseInt(lastUpdate) > 30000) {
-        localStorage.setItem('online_users_last_update', Date.now().toString());
+      const data = JSON.parse(dataJson);
+      
+      // 每10秒更新一次在线用户
+      if (!data.lastUpdate || Date.now() - data.lastUpdate > 10000) {
         return updateOnlineUsers();
       }
       
-      return JSON.parse(usersJson);
+      return data.users || [];
     } catch (error) {
       console.error('获取在线用户失败:', error);
       return [];
     }
+  }
+
+  /**
+   * 点赞帖子
+   */
+  async function likePost(postId) {
+    const posts = await getAllPosts();
+    const post = posts.find(p => p.id === postId);
+    
+    if (post) {
+      const likedKey = `liked_${postId}`;
+      const isLiked = localStorage.getItem(likedKey);
+      
+      if (isLiked) {
+        post.likes = Math.max(0, (post.likes || 0) - 1);
+        localStorage.removeItem(likedKey);
+      } else {
+        post.likes = (post.likes || 0) + 1;
+        localStorage.setItem(likedKey, 'true');
+      }
+      
+      await updatePost(postId, { likes: post.likes });
+      return { success: true, likes: post.likes, liked: !isLiked };
+    }
+    
+    return { success: false, error: '帖子不存在' };
   }
 
   // 导出API
@@ -533,13 +830,17 @@
     createPost,
     deletePost,
     updatePost,
+    getPostComments,
+    addComment,
     getCommunityStats,
     getOnlineUsers,
-    getOnlineUserCount
+    getOnlineUserCount,
+    likePost,
+    updateStats
   };
 
   // 初始化
   initCommunityData();
   
-  console.log('✅ 社区数据服务已加载');
+  console.log('✅ 社区数据服务已加载 (支持实时更新)');
 })();
