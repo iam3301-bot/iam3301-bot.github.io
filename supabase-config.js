@@ -898,81 +898,93 @@ const GameBoxAuth = {
   },
   
   // 验证邮箱验证码
+  // 重要: 无论是 Supabase 模式还是本地模式，都使用本地存储的验证码验证
+  // 因为 EmailJS 发送的验证码存储在本地，不是 Supabase 的 OTP
   async verifyEmailOTP(email, code) {
-    if (isSupabaseEnabled()) {
-      try {
-        const { data, error } = await supabaseClient.auth.verifyOtp({
-          email: email,
-          token: code,
-          type: 'email'
-        });
-        
-        if (error) throw error;
-        
-        return {
-          success: true,
-          message: '邮箱验证成功'
-        };
-      } catch (error) {
-        return { success: false, error: '验证码错误或已过期' };
-      }
-    } else {
-      // 本地模式验证
-      const otpDataStr = localStorage.getItem('gamebox_email_otp');
-      if (!otpDataStr) {
-        return { success: false, error: '请先发送验证码' };
-      }
-      
-      const otpData = JSON.parse(otpDataStr);
-      
-      if (otpData.email !== email.toLowerCase()) {
-        return { success: false, error: '邮箱不匹配' };
-      }
-      
-      if (Date.now() > otpData.expires) {
-        localStorage.removeItem('gamebox_email_otp');
-        return { success: false, error: '验证码已过期，请重新发送' };
-      }
-      
-      if (otpData.code !== code) {
-        return { success: false, error: '验证码错误' };
-      }
-      
-      // 验证成功，清除验证码
+    // 统一使用本地存储验证（因为验证码是我们通过 EmailJS 发送并存储在本地的）
+    const otpDataStr = localStorage.getItem('gamebox_email_otp');
+    
+    if (!otpDataStr) {
+      return { success: false, error: '请先发送验证码' };
+    }
+    
+    const otpData = JSON.parse(otpDataStr);
+    
+    // 检查邮箱是否匹配
+    if (otpData.email !== email.toLowerCase()) {
+      return { success: false, error: '邮箱不匹配，请确认输入的邮箱地址' };
+    }
+    
+    // 检查验证码是否过期
+    if (Date.now() > otpData.expires) {
       localStorage.removeItem('gamebox_email_otp');
-      
-      return {
-        success: true,
-        message: '邮箱验证成功'
+      const expiredMinutesAgo = Math.round((Date.now() - otpData.expires) / 60000);
+      return { 
+        success: false, 
+        error: `验证码已过期${expiredMinutesAgo > 0 ? `（${expiredMinutesAgo}分钟前）` : ''}，请重新发送` 
       };
     }
+    
+    // 检查验证码是否正确
+    if (otpData.code !== code) {
+      return { success: false, error: '验证码错误，请检查后重试' };
+    }
+    
+    // 验证成功，清除验证码
+    localStorage.removeItem('gamebox_email_otp');
+    
+    console.log('[GameBox Auth] 验证码验证成功:', email);
+    
+    return {
+      success: true,
+      message: '邮箱验证成功'
+    };
   },
   
   // 带验证码的注册（强制验证）
   async signUpWithOTP(email, password, username, otpCode) {
-    // 先验证验证码
+    // 无论是 Supabase 模式还是本地模式，都先验证 EmailJS 发送的验证码
+    // 因为我们使用 EmailJS 发送验证码，验证码存储在本地 localStorage
+    
+    console.log('[GameBox Auth] signUpWithOTP 开始, Supabase 模式:', isSupabaseEnabled());
+    
+    // 第一步：验证验证码（使用本地存储验证）
     const verifyResult = await this.verifyEmailOTP(email, otpCode);
     if (!verifyResult.success) {
+      console.log('[GameBox Auth] 验证码验证失败:', verifyResult.error);
       return verifyResult;
     }
     
-    // 验证通过后注册
+    console.log('[GameBox Auth] 验证码验证成功，开始注册');
+    
+    // 第二步：验证通过后注册
     const signUpResult = await this.signUp(email, password, username);
     
-    if (signUpResult.success && signUpResult.user) {
-      // 标记邮箱已验证
-      const users = LOCAL_AUTH.getUsers();
-      const userIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
-      if (userIndex !== -1) {
-        users[userIndex].email_confirmed = true;
-        users[userIndex].email_verified_at = new Date().toISOString();
-        users[userIndex].updated_at = new Date().toISOString();
-        LOCAL_AUTH.saveUsers(users);
-        
-        // 更新永久存储
-        this._saveUserToPermanentStorage(users[userIndex]);
-        
-        signUpResult.user.email_confirmed = true;
+    if (signUpResult.success) {
+      // Supabase 模式：用户已创建
+      if (isSupabaseEnabled()) {
+        console.log('[GameBox Auth] Supabase 注册成功');
+        // 如果 Supabase 返回需要邮箱验证，我们已经通过 EmailJS 验证过了
+        // 所以可以告知用户注册成功
+        signUpResult.message = '注册成功！您可以立即登录。';
+        signUpResult.needsEmailConfirmation = false;
+      } 
+      // 本地模式：标记邮箱已验证
+      else if (signUpResult.user) {
+        const users = LOCAL_AUTH.getUsers();
+        const userIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+        if (userIndex !== -1) {
+          users[userIndex].email_confirmed = true;
+          users[userIndex].email_verified_at = new Date().toISOString();
+          users[userIndex].updated_at = new Date().toISOString();
+          LOCAL_AUTH.saveUsers(users);
+          
+          // 更新永久存储
+          this._saveUserToPermanentStorage(users[userIndex]);
+          
+          signUpResult.user.email_confirmed = true;
+        }
+        signUpResult.message = '注册成功！您可以立即登录。';
       }
     }
     
