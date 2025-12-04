@@ -366,15 +366,18 @@
     <div class="platforms-header">
       <span class="icon">🎮</span>
       <h1>其他平台</h1>
-      <p>Epic Games、Xbox 和 PlayStation 平台的绑定与管理，即将推出！敬请期待！</p>
+      <p>管理您的 Epic Games、Xbox 和 PlayStation 平台账号</p>
     </div>
 
     <!-- 提示信息 -->
     <div class="info-banner">
       <span class="icon">💡</span>
       <div class="content">
-        <h3>提示: Epic Games、Xbox 和 PlayStation 平台均需配置 API</h3>
-        <p>Epic Games、Xbox 和 PlayStation 平台绑定需要对应的 API Key 和 Token。请按照各平台卡片中的说明进行配置。</p>
+        <h3>配置说明：各平台需要对应的 API 密钥</h3>
+        <p><strong>Epic Games:</strong> 暂无公开 API，支持手动录入账号信息<br>
+        <strong>Xbox:</strong> 需要 OpenXBL API Key（免费申请）<br>
+        <strong>PlayStation:</strong> 需要 PSN NPSSO Token 和代理服务器<br><br>
+        请点击各平台卡片中的"配置"按钮进行设置。</p>
       </div>
     </div>
 
@@ -388,7 +391,7 @@
           </div>
           <div class="platform-info">
             <h3>Epic Games</h3>
-            <span class="platform-status disconnected" id="epicStatus">即将推出</span>
+            <span class="platform-status disconnected" id="epicStatus">未绑定</span>
           </div>
         </div>
 
@@ -408,11 +411,11 @@
         </div>
 
         <div class="platform-actions">
-          <button class="platform-btn secondary" disabled>
-            📚 Epic Games 暂无公开 API
+          <button class="platform-btn primary" onclick="toggleConfig('epic')" id="epicBindBtn">
+            💾 手动录入 Epic 账号
           </button>
-          <button class="platform-btn secondary" onclick="toggleConfig('epic')">
-            ⚙️ 手动录入配置
+          <button class="platform-btn secondary" onclick="showEpicHelp()">
+            📚 查看帮助
           </button>
         </div>
 
@@ -445,7 +448,7 @@
           </div>
           <div class="platform-info">
             <h3>Xbox</h3>
-            <span class="platform-status disconnected" id="xboxStatus">即将推出</span>
+            <span class="platform-status disconnected" id="xboxStatus">未配置</span>
           </div>
         </div>
 
@@ -465,11 +468,11 @@
         </div>
 
         <div class="platform-actions">
-          <button class="platform-btn primary" disabled id="xboxConnectBtn">
-            🔗 绑定 Xbox 账号（即将推出）
+          <button class="platform-btn primary" id="xboxConnectBtn" onclick="bindXboxAccount()">
+            🔗 绑定 Xbox 账号
           </button>
           <button class="platform-btn secondary" onclick="toggleConfig('xbox')">
-            ⚙️ 配置 Xbox API Key
+            ⚙️ 配置 API Key
           </button>
         </div>
 
@@ -500,7 +503,7 @@
           </div>
           <div class="platform-info">
             <h3>PlayStation</h3>
-            <span class="platform-status disconnected" id="psnStatus">即将推出</span>
+            <span class="platform-status disconnected" id="psnStatus">未配置</span>
           </div>
         </div>
 
@@ -520,8 +523,8 @@
         </div>
 
         <div class="platform-actions">
-          <button class="platform-btn primary" disabled id="psnConnectBtn">
-            🔗 绑定 PSN 账号（即将推出）
+          <button class="platform-btn primary" id="psnConnectBtn" onclick="bindPsnAccount()">
+            🔗 绑定 PSN 账号
           </button>
           <button class="platform-btn secondary" onclick="toggleConfig('psn')">
             ⚙️ 配置 PSN API
@@ -768,6 +771,113 @@
     // =============================================
     // 页面初始化
     // =============================================
+    // 账号绑定功能
+    // =============================================
+    
+    function showEpicHelp() {
+      alert(`Epic Games 账号绑定帮助
+      
+📚 Epic Games 暂无公开 API
+
+Epic Games 目前不提供公开的用户数据 API，因此我们无法自动获取您的游戏库和游玩数据。
+
+如何查看您的 Epic 用户名：
+1. 打开 Epic Games Launcher
+2. 点击右上角的用户头像
+3. 查看显示名称（Display Name）
+
+💡 提示：您可以手动输入用户名和游戏数量进行标记。`);
+    }
+    
+    async function bindXboxAccount() {
+      if (!window.PlatformAPIService.xbox.isEnabled()) {
+        alert('请先配置 Xbox API Key');
+        toggleConfig('xbox');
+        return;
+      }
+      
+      const gamertag = prompt('请输入您的 Xbox Gamertag (玩家标签):');
+      if (!gamertag) return;
+      
+      const btn = document.getElementById('xboxConnectBtn');
+      btn.disabled = true;
+      btn.textContent = '绑定中...';
+      
+      try {
+        const result = await window.PlatformAPIService.bindAccount('xbox', gamertag);
+        
+        if (result.success) {
+          // 保存绑定数据
+          localStorage.setItem('xbox_binding', JSON.stringify(result.account));
+          
+          // 更新显示
+          document.getElementById('xboxGamertag').textContent = result.account.username || gamertag;
+          document.getElementById('xboxGamerscore').textContent = result.account.gamerscore || 0;
+          document.getElementById('xboxGameCount').textContent = result.account.gameCount || 0;
+          document.getElementById('xboxStatus').textContent = '已绑定';
+          document.getElementById('xboxStatus').className = 'platform-status connected';
+          document.getElementById('xboxCard').classList.add('connected');
+          
+          alert('✅ Xbox 账号绑定成功！\n\n' + 
+                `Gamertag: ${result.account.username}\n` +
+                `Gamerscore: ${result.account.gamerscore || 0}\n` +
+                `游戏数量: ${result.account.gameCount || 0}`);
+        } else {
+          alert('❌ 绑定失败：' + (result.error || '未知错误'));
+        }
+      } catch (error) {
+        alert('❌ 绑定失败：' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔗 绑定 Xbox 账号';
+      }
+    }
+    
+    async function bindPsnAccount() {
+      if (!window.PlatformAPIService.playstation.isEnabled()) {
+        alert('请先配置 PSN NPSSO Token');
+        toggleConfig('psn');
+        return;
+      }
+      
+      const onlineId = prompt('请输入您的 PSN Online ID:');
+      if (!onlineId) return;
+      
+      const btn = document.getElementById('psnConnectBtn');
+      btn.disabled = true;
+      btn.textContent = '绑定中...';
+      
+      try {
+        const result = await window.PlatformAPIService.bindAccount('playstation', onlineId);
+        
+        if (result.success) {
+          // 保存绑定数据
+          localStorage.setItem('psn_binding', JSON.stringify(result.account));
+          
+          // 更新显示
+          document.getElementById('psnOnlineId').textContent = result.account.username || onlineId;
+          document.getElementById('psnTrophyLevel').textContent = result.account.trophyLevel || 0;
+          document.getElementById('psnGameCount').textContent = result.account.gameCount || 0;
+          document.getElementById('psnStatus').textContent = '已绑定';
+          document.getElementById('psnStatus').className = 'platform-status connected';
+          document.getElementById('psnCard').classList.add('connected');
+          
+          alert('✅ PlayStation 账号绑定成功！\n\n' + 
+                `Online ID: ${result.account.username}\n` +
+                `奖杯等级: ${result.account.trophyLevel || 0}\n` +
+                `游戏数量: ${result.account.gameCount || 0}`);
+        } else {
+          alert('❌ 绑定失败：' + (result.error || '未知错误'));
+        }
+      } catch (error) {
+        alert('❌ 绑定失败：' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔗 绑定 PSN 账号';
+      }
+    }
+    
+    // =============================================
     document.addEventListener('DOMContentLoaded', () => {
       // 加载 Epic 数据
       const epicData = localStorage.getItem('epic_binding');
@@ -783,8 +893,11 @@
       const xboxApiKey = localStorage.getItem('xbox_api_key');
       if (xboxApiKey) {
         document.getElementById('xboxApiKey').value = xboxApiKey;
-        document.getElementById('xboxConnectBtn').disabled = false;
-        document.getElementById('xboxConnectBtn').textContent = '🔗 绑定 Xbox 账号';
+      }
+      // 检查 Xbox API 是否已启用
+      if (window.PlatformAPIService && window.PlatformAPIService.xbox.isEnabled()) {
+        document.getElementById('xboxStatus').textContent = 'API 已配置';
+        document.getElementById('xboxStatus').className = 'platform-status pending';
       }
       updateXboxDisplay();
 
@@ -799,11 +912,12 @@
           if (config.proxyUrl) {
             document.getElementById('psnProxyUrl').value = config.proxyUrl;
           }
-          if (config.accessToken && config.tokenExpiry > Date.now()) {
-            document.getElementById('psnConnectBtn').disabled = false;
-            document.getElementById('psnConnectBtn').textContent = '🔗 绑定 PSN 账号';
-          }
         } catch (e) {}
+      }
+      // 检查 PSN API 是否已启用
+      if (window.PlatformAPIService && window.PlatformAPIService.playstation.isEnabled()) {
+        document.getElementById('psnStatus').textContent = 'API 已配置';
+        document.getElementById('psnStatus').className = 'platform-status pending';
       }
       updatePsnDisplay();
 

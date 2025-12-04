@@ -19,21 +19,47 @@
       align-items: center;
       justify-content: center;
       font-family: 'Rajdhani', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 背景动画效果 */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 50%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     
     .switch-container {
-      max-width: 450px;
+      max-width: 500px;
       width: 90%;
       margin: 0 auto;
       padding: 20px;
+      position: relative;
+      z-index: 1;
     }
     
     .switch-card {
       background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
       border: 1px solid rgba(0, 240, 255, 0.3);
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1);
+      border-radius: 20px;
+      padding: 48px 40px;
+      box-shadow: 0 20px 60px rgba(0, 240, 255, 0.15), 0 0 0 1px rgba(0, 240, 255, 0.1) inset;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
     }
     
     .switch-card::before {
@@ -42,21 +68,44 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #00F0FF, #FF003C);
+      height: 4px;
+      background: linear-gradient(90deg, #00F0FF, #00ff88, #FF003C, #00F0FF);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
     }
     
     .switch-header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 36px;
+    }
+    
+    .switch-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      animation: rotate 3s ease-in-out infinite;
+      display: inline-block;
+    }
+    
+    @keyframes rotate {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
     }
     
     .switch-title {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
-      color: #00F0FF;
+      background: linear-gradient(135deg, #00F0FF, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 8px;
       font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
     }
     
     .switch-subtitle {
@@ -65,45 +114,70 @@
     }
     
     .current-account {
-      background: rgba(0, 240, 255, 0.1);
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 255, 136, 0.05));
       border: 1px solid rgba(0, 240, 255, 0.3);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 24px;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .current-account::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+      animation: slide 2s ease-in-out infinite;
+    }
+    
+    @keyframes slide {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
     
     .current-account-label {
       font-size: 12px;
       color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     
     .current-account-info {
-      font-size: 16px;
-      color: #00F0FF;
-      font-weight: 600;
+      font-size: 18px;
+      background: linear-gradient(135deg, #00F0FF, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
     }
     
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     
     .form-label {
       display: block;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 8px;
-      font-weight: 500;
+      margin-bottom: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
     .form-input {
       width: 100%;
-      padding: 12px 16px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(0, 240, 255, 0.2);
+      border-radius: 10px;
       color: white;
-      font-size: 14px;
+      font-size: 15px;
       transition: all 0.3s;
       font-family: inherit;
     }
@@ -111,15 +185,20 @@
     .form-input:focus {
       outline: none;
       border-color: #00F0FF;
-      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.1), 0 0 20px rgba(0, 240, 255, 0.2);
+      background: rgba(0, 0, 0, 0.6);
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
     }
     
     .switch-btn {
       width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #00F0FF, #00ccff);
+      padding: 16px;
+      background: linear-gradient(135deg, #00F0FF, #00ff88);
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       color: #000;
       font-size: 16px;
       font-weight: 700;
@@ -127,19 +206,42 @@
       transition: all 0.3s;
       font-family: 'Orbitron', sans-serif;
       margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .switch-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .switch-btn:hover::before {
+      left: 100%;
     }
     
     .switch-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+    }
+    
+    .switch-btn:active {
+      transform: translateY(-1px);
     }
     
     .cancel-btn {
       width: 100%;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
       color: white;
       font-size: 16px;
       font-weight: 600;
@@ -149,27 +251,53 @@
     }
     
     .cancel-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
     }
     
     .message {
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 20px;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
       font-size: 14px;
       text-align: center;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .message.error {
-      background: rgba(255, 0, 60, 0.1);
-      border: 1px solid rgba(255, 0, 60, 0.3);
+      background: rgba(255, 0, 60, 0.15);
+      border: 2px solid rgba(255, 0, 60, 0.4);
       color: #FF003C;
     }
     
     .message.success {
-      background: rgba(0, 255, 136, 0.1);
-      border: 1px solid rgba(0, 255, 136, 0.3);
+      background: rgba(0, 255, 136, 0.15);
+      border: 2px solid rgba(0, 255, 136, 0.4);
       color: #00ff88;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 600px) {
+      .switch-card {
+        padding: 36px 28px;
+      }
+      
+      .switch-title {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -177,7 +305,8 @@
   <div class="switch-container">
     <div class="switch-card">
       <div class="switch-header">
-        <div class="switch-title">🔄 切换账号</div>
+        <div class="switch-icon">🔄</div>
+        <div class="switch-title">切换账号</div>
         <div class="switch-subtitle">登录到其他 GameBox 账号</div>
       </div>
       
