@@ -9,16 +9,30 @@
 // =============================================
 
 const SUPABASE_CONFIG = {
+  // =============================================
+  // ⚠️ 重要: 配置 Supabase 以启用多用户功能
+  // =============================================
+  // 当前为演示模式(本地存储)，用户数据不能跨浏览器共享
+  // 
+  // 配置步骤:
+  // 1. 访问 https://supabase.com 注册免费账户
+  // 2. 创建新项目 (免费版支持 500MB 数据库, 50000 用户)
+  // 3. 进入项目 Settings > API
+  // 4. 复制 Project URL 和 anon public key
+  // 5. 将下面的值替换为你的真实配置
+  // 6. 将 enabled 改为 true
+  // =============================================
+  
   // 替换为你的 Supabase Project URL
   // 格式: https://xxxxxxxxxxxxx.supabase.co
-  url: 'https://demo-project.supabase.co',
+  url: 'https://gybgiqyyltckgxbdtzwu.supabase.co',
   
   // 替换为你的 Supabase anon/public key
   // 这是公开密钥，可以安全地在前端使用
-  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.demo-key-replace-with-your-own',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA',
   
-  // 是否启用 Supabase (设为 false 使用本地模拟模式)
-  enabled: false,
+  // ✅ 已启用 Supabase 云数据库 (多用户共享)
+  enabled: true,
   
   // OAuth 配置 (需要在 Supabase Dashboard 中配置)
   oauth: {
