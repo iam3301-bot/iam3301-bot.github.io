@@ -1054,34 +1054,51 @@ const GameBoxAuth = {
 // =============================================
 
 const STEAM_CONFIG = {
-  // Steam Web API Key (用户需要自行申请: https://steamcommunity.com/dev/apikey)
-  // 正确的 API Key 是 32 位十六进制字符串
-  apiKey: '',
+  // Steam Web API Key - 从 localStorage 读取用户配置的 Key
+  // 用户在 Steam 绑定页面输入自己的 API Key
+  get apiKey() {
+    return localStorage.getItem('steam_api_key') || '';
+  },
+  
+  // 设置 API Key
+  set apiKey(value) {
+    if (value) {
+      localStorage.setItem('steam_api_key', value);
+    } else {
+      localStorage.removeItem('steam_api_key');
+    }
+  },
   
   // 是否启用 Steam 集成
   enabled: true,
   
   // CORS 代理列表 (按优先级排序，自动故障转移)
   proxyServers: [
-    { name: 'corsproxy.io', url: 'https://corsproxy.io/?', active: true },
-    { name: 'cors.lol', url: 'https://api.cors.lol/?url=', active: true },
     { name: 'allorigins', url: 'https://api.allorigins.win/raw?url=', active: true },
-    { name: 'codetabs', url: 'https://api.codetabs.com/v1/proxy?quest=', active: true }
+    { name: 'corsproxy.io', url: 'https://corsproxy.io/?', active: true },
+    { name: 'cors.lol', url: 'https://api.cors.lol/?url=', active: true }
   ],
   
   currentProxyIndex: 0,
-  proxyUrl: 'https://corsproxy.io/?'
+  proxyUrl: 'https://api.allorigins.win/raw?url='
 };
 
 const SteamAPI = {
   // 初始化
   init() {
-    console.log('[Steam API] 初始化, 启用状态:', STEAM_CONFIG.enabled);
+    const hasApiKey = !!STEAM_CONFIG.apiKey;
+    console.log('[Steam API] 初始化, API Key 已配置:', hasApiKey);
+    if (hasApiKey) {
+      console.log('[Steam API] ✅ 将使用真实 Steam API 获取数据');
+    } else {
+      console.log('[Steam API] ⚠️ 未配置 API Key，将使用演示数据');
+    }
   },
   
-  // 检查是否启用
+  // 检查是否启用 (有 API Key 才能获取真实数据)
   isEnabled() {
-    return STEAM_CONFIG.enabled && STEAM_CONFIG.apiKey;
+    const apiKey = STEAM_CONFIG.apiKey;
+    return STEAM_CONFIG.enabled && apiKey && apiKey.length === 32;
   },
   
   // 获取当前代理服务器
