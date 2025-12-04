@@ -1109,13 +1109,19 @@ const SUPABASE_CONFIG = {
       return;
     }
     
-    // 验证码检查 (如果已发送)
-    if (otpSent && !otpCode) {
+    // 强制要求验证码（必须先发送验证码）
+    if (!otpSent) {
+      showMessage('请先点击"发送验证码"按钮获取邮箱验证码', 'error');
+      return;
+    }
+    
+    // 验证码必填检查
+    if (!otpCode) {
       showMessage('请输入邮箱验证码', 'error');
       return;
     }
     
-    if (otpSent && otpCode.length !== 6) {
+    if (otpCode.length !== 6) {
       showMessage('验证码应为6位数字', 'error');
       return;
     }
@@ -1145,15 +1151,8 @@ const SUPABASE_CONFIG = {
     hideMessage();
     
     try {
-      let result;
-      
-      // 如果发送了验证码，使用带验证码的注册
-      if (otpSent && otpCode) {
-        result = await GameBoxAuth.signUpWithOTP(email, password, username, otpCode);
-      } else {
-        // 否则使用普通注册
-        result = await GameBoxAuth.signUp(email, password, username);
-      }
+      // 必须使用验证码注册
+      const result = await GameBoxAuth.signUpWithOTP(email, password, username, otpCode);
       
       if (result.success) {
         if (result.needsEmailConfirmation) {

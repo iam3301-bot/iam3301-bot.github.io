@@ -223,6 +223,10 @@ const GameBoxAuth = {
   // 初始化
   async init() {
     LOCAL_AUTH.init();
+    
+    // 恢复永久存储的用户数据
+    this._restoreUsersFromPermanentStorage();
+    
     const supabaseReady = initSupabase();
     
     if (supabaseReady) {
@@ -238,6 +242,7 @@ const GameBoxAuth = {
     }
     
     console.log('[GameBox Auth] 初始化完成, 模式:', supabaseReady ? 'Supabase' : '本地模拟');
+    console.log('[GameBox Auth] 用户数据永久存储: 已启用');
     return { mode: supabaseReady ? 'supabase' : 'local' };
   },
   
@@ -320,24 +325,28 @@ const GameBoxAuth = {
       return { success: false, error: '该用户名已被使用' };
     }
     
-    // 创建新用户
+    // 创建新用户 (注意: email_confirmed 设为 false，必须验证)
     const newUser = {
       id: 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
       email: email.toLowerCase(),
       password: password,
       username: username,
       avatar: this._getRandomAvatar(),
-      email_confirmed: true, // 本地模式默认已验证
-      created_at: new Date().toISOString()
+      email_confirmed: false, // 必须邮箱验证
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     };
     
     users.push(newUser);
     LOCAL_AUTH.saveUsers(users);
     
+    // 保存到永久存储（防止数据丢失）
+    this._saveUserToPermanentStorage(newUser);
+    
     return {
       success: true,
-      needsEmailConfirmation: false,
-      message: '注册成功！',
+      needsEmailConfirmation: true, // 需要邮箱验证
+      message: '注册成功！请使用邮箱验证码完成注册。',
       user: newUser
     };
   },
@@ -396,6 +405,26 @@ const GameBoxAuth = {
     
     if (!user) {
       return { success: false, error: '邮箱或密码错误' };
+    }
+    
+    // 检查邮箱是否已验证
+    if (!user.email_confirmed) {
+      return { 
+        success: false, 
+        error: '邮箱尚未验证，请先完成邮箱验证',
+        needsVerification: true
+      };
+    }
+    
+    // 更新最后登录时间
+    const userIndex = users.findIndex(u => u.id === user.id);
+    if (userIndex !== -1) {
+      users[userIndex].last_login = new Date().toISOString();
+      users[userIndex].updated_at = new Date().toISOString();
+      LOCAL_AUTH.saveUsers(users);
+      
+      // 更新永久存储
+      this._saveUserToPermanentStorage(users[userIndex]);
     }
     
     const session = LOCAL_AUTH.setSession(user);
@@ -905,7 +934,7 @@ const GameBoxAuth = {
     }
   },
   
-  // 带验证码的注册
+  // 带验证码的注册（强制验证）
   async signUpWithOTP(email, password, username, otpCode) {
     // 先验证验证码
     const verifyResult = await this.verifyEmailOTP(email, otpCode);
@@ -914,7 +943,83 @@ const GameBoxAuth = {
     }
     
     // 验证通过后注册
-    return this.signUp(email, password, username);
+    const signUpResult = await this.signUp(email, password, username);
+    
+    if (signUpResult.success && signUpResult.user) {
+      // 标记邮箱已验证
+      const users = LOCAL_AUTH.getUsers();
+      const userIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+      if (userIndex !== -1) {
+        users[userIndex].email_confirmed = true;
+        users[userIndex].email_verified_at = new Date().toISOString();
+        users[userIndex].updated_at = new Date().toISOString();
+        LOCAL_AUTH.saveUsers(users);
+        
+        // 更新永久存储
+        this._saveUserToPermanentStorage(users[userIndex]);
+        
+        signUpResult.user.email_confirmed = true;
+      }
+    }
+    
+    return signUpResult;
+  },
+  
+  // 保存用户到永久存储（防止数据丢失）
+  _saveUserToPermanentStorage(user) {
+    try {
+      // 使用专门的永久存储 key
+      const PERMANENT_USERS_KEY = 'gamebox_permanent_users';
+      const permanentUsers = JSON.parse(localStorage.getItem(PERMANENT_USERS_KEY) || '[]');
+      
+      // 查找是否已存在
+      const existingIndex = permanentUsers.findIndex(u => u.id === user.id);
+      
+      if (existingIndex !== -1) {
+        // 更新现有用户（保留所有历史数据）
+        permanentUsers[existingIndex] = {
+          ...permanentUsers[existingIndex],
+          ...user,
+          updated_at: new Date().toISOString()
+        };
+      } else {
+        // 添加新用户
+        permanentUsers.push({
+          ...user,
+          permanent_saved_at: new Date().toISOString()
+        });
+      }
+      
+      localStorage.setItem(PERMANENT_USERS_KEY, JSON.stringify(permanentUsers));
+      console.log('[GameBox Auth] 用户数据已保存到永久存储:', user.email);
+    } catch (error) {
+      console.error('[GameBox Auth] 保存到永久存储失败:', error);
+    }
+  },
+  
+  // 从永久存储恢复用户数据
+  _restoreUsersFromPermanentStorage() {
+    try {
+      const PERMANENT_USERS_KEY = 'gamebox_permanent_users';
+      const permanentUsers = JSON.parse(localStorage.getItem(PERMANENT_USERS_KEY) || '[]');
+      
+      if (permanentUsers.length > 0) {
+        // 合并到当前用户列表
+        const currentUsers = LOCAL_AUTH.getUsers();
+        const currentEmails = new Set(currentUsers.map(u => u.email.toLowerCase()));
+        
+        permanentUsers.forEach(permUser => {
+          if (!currentEmails.has(permUser.email.toLowerCase())) {
+            currentUsers.push(permUser);
+          }
+        });
+        
+        LOCAL_AUTH.saveUsers(currentUsers);
+        console.log('[GameBox Auth] 已从永久存储恢复用户数据');
+      }
+    } catch (error) {
+      console.error('[GameBox Auth] 恢复永久存储失败:', error);
+    }
   }
 };
 
@@ -1285,12 +1390,69 @@ const UserDataManager = {
     return allData[userId] || this._getDefaultData();
   },
   
-  // 保存用户数据
+  // 保存用户数据（实时保存，永不删除）
   saveData(userId, data) {
     const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     allData[userId] = { ...this.getData(userId), ...data, updatedAt: new Date().toISOString() };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allData));
+    
+    // 自动备份到永久存储
+    this._backupUserData(userId, allData[userId]);
+    
     return allData[userId];
+  },
+  
+  // 备份用户数据到永久存储（防止数据丢失）
+  _backupUserData(userId, userData) {
+    try {
+      const BACKUP_KEY = 'gamebox_user_data_backup';
+      const backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '{}');
+      
+      if (!backups[userId]) {
+        backups[userId] = [];
+      }
+      
+      // 保存当前数据快照
+      backups[userId].push({
+        data: userData,
+        timestamp: new Date().toISOString()
+      });
+      
+      // 只保留最近10个备份
+      if (backups[userId].length > 10) {
+        backups[userId] = backups[userId].slice(-10);
+      }
+      
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backups));
+      console.log('[UserDataManager] 用户数据已备份:', userId);
+    } catch (error) {
+      console.error('[UserDataManager] 备份失败:', error);
+    }
+  },
+  
+  // 恢复用户数据（从备份恢复）
+  restoreUserData(userId) {
+    try {
+      const BACKUP_KEY = 'gamebox_user_data_backup';
+      const backups = JSON.parse(localStorage.getItem(BACKUP_KEY) || '{}');
+      
+      if (backups[userId] && backups[userId].length > 0) {
+        // 恢复最新的备份
+        const latestBackup = backups[userId][backups[userId].length - 1];
+        
+        const allData = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+        allData[userId] = latestBackup.data;
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allData));
+        
+        console.log('[UserDataManager] 用户数据已恢复:', userId);
+        return { success: true, data: latestBackup.data };
+      }
+      
+      return { success: false, error: '没有找到备份数据' };
+    } catch (error) {
+      console.error('[UserDataManager] 恢复失败:', error);
+      return { success: false, error: error.message };
+    }
   },
   
   // 默认数据结构
