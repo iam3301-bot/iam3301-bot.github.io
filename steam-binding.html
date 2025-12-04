@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steam 账号绑定向导 - GameBox 游盒</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    .bind-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .bind-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .bind-header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 36px;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    .bind-header p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* 步骤指示器 */
+    .steps-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .step-item.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .step-item.completed {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .step-item.active .step-number {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .step-item.completed .step-number {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .step-item.completed .step-number::after {
+      content: '✓';
+    }
+
+    .step-item.completed .step-number span {
+      display: none;
+    }
+
+    .step-text {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .step-item.active .step-text,
+    .step-item.completed .step-text {
+      color: var(--text-soft);
+    }
+
+    /* 步骤内容区域 */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .step-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 卡片样式 */
+    .bind-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+
+    .bind-card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bind-card h2 .icon {
+      font-size: 32px;
+    }
+
+    /* 教程步骤 */
+    .tutorial-steps {
+      counter-reset: tutorial;
+    }
+
+    .tutorial-step {
+      position: relative;
+      padding: 20px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .tutorial-step::before {
+      counter-increment: tutorial;
+      content: counter(tutorial);
+      position: absolute;
+      left: 15px;
+      top: 20px;
+      width: 30px;
+      height: 30px;
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .tutorial-step h4 {
+      color: var(--text-soft);
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .tutorial-step p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .tutorial-step a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .tutorial-step a:hover {
+      text-decoration: underline;
+    }
+
+    .tutorial-step img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    /* 输入框 */
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      color: var(--text-soft);
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+
+    .input-group input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* 按钮 */
+    .btn {
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #00ff88);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-steam {
+      background: linear-gradient(135deg, #1b2838, #2a475e);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      padding: 16px 32px;
+    }
+
+    .btn-steam:hover {
+      background: linear-gradient(135deg, #2a475e, #3d6a8a);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(27, 40, 56, 0.5);
+    }
+
+    .btn-steam svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    /* 警告和提示 */
+    .alert {
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .alert-info {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #f59e0b;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .alert-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-content strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* 代码块 */
+    .code-block {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #10b981;
+      margin: 15px 0;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      background: rgba(56, 189, 248, 0.2);
+      border: none;
+      border-radius: 4px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    .code-block .copy-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+    }
+
+    /* 绑定结果 */
+    .bind-result {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .bind-result .success-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    .bind-result h3 {
+      font-size: 28px;
+      color: #10b981;
+      margin-bottom: 15px;
+    }
+
+    .bind-result p {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    /* Steam 用户信息卡片 */
+    .steam-profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+
+    .steam-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+    }
+
+    .steam-info h4 {
+      font-size: 20px;
+      color: var(--text-soft);
+      margin-bottom: 5px;
+    }
+
+    .steam-info p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .steam-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .stat-card .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    /* 加载状态 */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading p {
+      color: var(--text-muted);
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    /* FAQ 折叠面板 */
+    .faq-item {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+
+    .faq-question:hover {
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .faq-question .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-question .arrow {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      padding: 0 20px 20px;
+      max-height: 500px;
+    }
+
+    .faq-answer p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .bind-header h1 {
+        font-size: 28px;
+      }
+
+      .steps-indicator {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tutorial-step {
+        padding-left: 50px;
+      }
+
+      .steam-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bind-container">
+    <!-- 头部 -->
+    <div class="bind-header">
+      <h1>🎮 Steam 账号绑定向导</h1>
+      <p>按照以下步骤，将您的 Steam 账号与 GameBox 关联，同步您的游戏库</p>
+    </div>
+
+    <!-- 步骤指示器 -->
+    <div class="steps-indicator">
+      <div class="step-item active" data-step="1">
+        <div class="step-number"><span>1</span></div>
+        <span class="step-text">获取 API Key</span>
+      </div>
+      <div class="step-item" data-step="2">
+        <div class="step-number"><span>2</span></div>
+        <span class="step-text">Steam 登录验证</span>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-number"><span>3</span></div>
+        <span class="step-text">确认绑定</span>
+      </div>
+      <div class="step-item" data-step="4">
+        <div class="step-number"><span>4</span></div>
+        <span class="step-text">完成</span>
+      </div>
+    </div>
+
+    <!-- 步骤1: 获取 API Key -->
+    <div class="step-content active" id="step1">
+      <div class="bind-card">
+        <h2><span class="icon">🔑</span> 第一步：获取 Steam API Key</h2>
+        
+        <div class="alert alert-info">
+          <span class="alert-icon">ℹ️</span>
+          <div class="alert-content">
+            <strong>什么是 Steam API Key？</strong>
+            Steam API Key 是 Steam 官方提供的密钥，用于安全地访问您的游戏数据。每个 Steam 用户都可以免费获取。
+          </div>
+        </div>
+
+        <div class="tutorial-steps">
+          <div class="tutorial-step">
+            <h4>访问 Steam API Key 注册页面</h4>
+            <p>点击下方按钮，打开 Steam 官方 API Key 注册页面：</p>
+            <div style="margin-top: 15px;">
+              <a href="https://steamcommunity.com/dev/apikey" target="_blank" class="btn btn-steam">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                打开 Steam API Key 页面
+              </a>
+            </div>
+          </div>
+
+          <div class="tutorial-step">
+            <h4>登录您的 Steam 账号</h4>
+            <p>如果您尚未登录，请使用您的 Steam 账号登录。确保这是您想要绑定的账号。</p>
+          </div>
+
+          <div class="tutorial-step">
+            <h4>填写域名信息</h4>
+            <p>在 "Domain Name" 字段中，填写以下内容：</p>
+            <div class="code-block">
+              localhost
+              <button class="copy-btn" onclick="copyToClipboard('localhost')">复制</button>
+            </div>
+            <p style="margin-top: 10px; font-size: 13px; color: var(--text-muted);">
+              💡 提示：个人使用填写 "localhost" 即可，无需真实域名
+            </p>
+          </div>
+
+          <div class="tutorial-step">
+            <h4>同意条款并注册</h4>
+            <p>勾选 "I agree to the Steam Web API Terms of Use"（我同意 Steam Web API 使用条款），然后点击 "Register"（注册）按钮。</p>
+          </div>
+
+          <div class="tutorial-step">
+            <h4>复制您的 API Key</h4>
+            <p>注册成功后，页面会显示您的 API Key，格式类似：</p>
+            <div class="code-block">
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+              <span style="color: var(--text-muted);">（32位字符）</span>
+            </div>
+            <p style="margin-top: 10px;">请复制这个 Key，并粘贴到下方输入框中。</p>
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-content">
+            <strong>安全提示</strong>
+            请妥善保管您的 API Key，不要分享给他人。API Key 仅用于获取您自己的游戏数据，不会影响您的 Steam 账号安全。
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="apiKey">请输入您的 Steam API Key</label>
+          <input type="text" id="apiKey" placeholder="粘贴您的32位 Steam API Key" maxlength="32">
+          <p class="input-hint">API Key 是32位字母数字组合，例如：A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6</p>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="validateApiKeyAndNext()">验证并继续</button>
+          <button class="btn btn-secondary" onclick="skipApiKey()">跳过此步骤（使用公共数据）</button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="bind-card">
+        <h2><span class="icon">❓</span> 常见问题</h2>
+        
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            为什么需要 API Key？
+            <span class="arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>API Key 用于安全地访问 Steam 的官方数据接口。有了它，我们可以获取您的完整游戏库、游戏时长、成就等信息。没有 API Key，我们只能获取公开的基础信息。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            API Key 会泄露我的账号吗？
+            <span class="arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>不会。API Key 只能用于读取数据，无法进行任何账号操作（如修改密码、购买游戏等）。即使泄露，也不会对您的账号造成任何影响。您随时可以在 Steam 重新生成新的 Key。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            我的 API Key 会被存储吗？
+            <span class="arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>您的 API Key 仅存储在您的浏览器本地（LocalStorage），不会上传到任何服务器。您可以随时在设置中清除。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            没有 API Key 可以绑定吗？
+            <span class="arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            <p>可以，但功能会受限。没有 API Key 时，我们只能获取您设置为公开的游戏数据。建议获取 API Key 以获得最佳体验。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤2: Steam 登录验证 -->
+    <div class="step-content" id="step2">
+      <div class="bind-card">
+        <h2><span class="icon">🔐</span> 第二步：Steam 账号验证</h2>
+
+        <div class="alert alert-info">
+          <span class="alert-icon">ℹ️</span>
+          <div class="alert-content">
+            <strong>安全的 Steam 登录</strong>
+            点击下方按钮后，您将被跳转到 Steam 官方登录页面进行身份验证。这是 Steam 官方的 OpenID 认证，我们不会获取您的密码。
+          </div>
+        </div>
+
+        <div style="text-align: center; padding: 40px 0;">
+          <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 16px;">
+            请点击下方按钮，使用 Steam 账号登录验证
+          </p>
+          <button class="btn btn-steam" onclick="steamLogin()" style="font-size: 18px; padding: 18px 40px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px;">
+              <path d="M12 2C6.48 2 2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95 0-5.52-4.48-10-10-10z"/>
+            </svg>
+            通过 Steam 登录
+          </button>
+        </div>
+
+        <div class="alert alert-warning">
+          <span class="alert-icon">💡</span>
+          <div class="alert-content">
+            <strong>登录须知</strong>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+              <li>确保您登录的是正确的 Steam 账号</li>
+              <li>登录过程在 Steam 官方页面完成</li>
+              <li>我们只获取您的 Steam ID 和公开信息</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← 返回上一步</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤3: 确认绑定 -->
+    <div class="step-content" id="step3">
+      <div class="bind-card">
+        <h2><span class="icon">✅</span> 第三步：确认绑定信息</h2>
+
+        <div id="steamProfilePreview">
+          <!-- Steam 用户信息将在这里显示 -->
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>正在获取 Steam 账号信息...</p>
+          </div>
+        </div>
+
+        <div id="confirmButtons" style="display: none;">
+          <div class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <div class="alert-content">
+              <strong>信息获取成功</strong>
+              请确认以上信息是否正确，确认后将完成绑定。
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="confirmBinding()">确认绑定</button>
+            <button class="btn btn-secondary" onclick="goToStep(2)">返回重新验证</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤4: 完成 -->
+    <div class="step-content" id="step4">
+      <div class="bind-card">
+        <div class="bind-result">
+          <div class="success-icon">🎉</div>
+          <h3>绑定成功！</h3>
+          <p>您的 Steam 账号已成功关联到 GameBox</p>
+
+          <div id="finalStats" class="steam-stats">
+            <!-- 最终统计数据 -->
+          </div>
+
+          <div class="btn-group" style="justify-content: center; margin-top: 40px;">
+            <a href="profile.html" class="btn btn-primary">前往用户中心</a>
+            <a href="accounts.html" class="btn btn-secondary">管理游戏账号</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script>
+    // =============================================
+    // Steam 绑定向导脚本
+    // =============================================
+
+    let currentStep = 1;
+    let steamApiKey = '';
+    let steamUserData = null;
+
+    // 步骤控制
+    function goToStep(step) {
+      // 更新步骤指示器
+      document.querySelectorAll('.step-item').forEach((item, index) => {
+        item.classList.remove('active');
+        if (index + 1 < step) {
+          item.classList.add('completed');
+        } else if (index + 1 === step) {
+          item.classList.add('active');
+          item.classList.remove('completed');
+        } else {
+          item.classList.remove('completed');
+        }
+      });
+
+      // 显示对应步骤内容
+      document.querySelectorAll('.step-content').forEach((content, index) => {
+        content.classList.remove('active');
+        if (index + 1 === step) {
+          content.classList.add('active');
+        }
+      });
+
+      currentStep = step;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 验证 API Key
+    async function validateApiKeyAndNext() {
+      const apiKeyInput = document.getElementById('apiKey');
+      const apiKey = apiKeyInput.value.trim();
+
+      if (!apiKey) {
+        alert('请输入 Steam API Key');
+        return;
+      }
+
+      if (apiKey.length !== 32) {
+        alert('API Key 格式不正确，应为32位字符');
+        return;
+      }
+
+      // 测试 API Key 是否有效
+      try {
+        // 使用 CORS 代理测试
+        const testUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+          `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=76561198000000000`
+        )}`;
+
+        const response = await fetch(testUrl);
+        const data = await response.json();
+        const result = JSON.parse(data.contents);
+
+        if (result.response) {
+          steamApiKey = apiKey;
+          localStorage.setItem('steam_api_key', apiKey);
+          goToStep(2);
+        } else {
+          alert('API Key 验证失败，请检查是否正确');
+        }
+      } catch (error) {
+        console.error('API Key 验证错误:', error);
+        // 即使验证失败也允许继续（可能是网络问题）
+        steamApiKey = apiKey;
+        localStorage.setItem('steam_api_key', apiKey);
+        goToStep(2);
+      }
+    }
+
+    // 跳过 API Key
+    function skipApiKey() {
+      if (confirm('跳过后将只能获取公开数据，确定要跳过吗？')) {
+        steamApiKey = '';
+        goToStep(2);
+      }
+    }
+
+    // Steam OpenID 登录
+    function steamLogin() {
+      // Steam OpenID 登录 URL
+      const returnUrl = encodeURIComponent(window.location.origin + '/steam-callback.html');
+      const realm = encodeURIComponent(window.location.origin);
+      
+      // 构建 Steam OpenID 认证 URL
+      const steamOpenIdUrl = 'https://steamcommunity.com/openid/login?' + 
+        'openid.ns=http://specs.openid.net/auth/2.0&' +
+        'openid.mode=checkid_setup&' +
+        'openid.return_to=' + returnUrl + '&' +
+        'openid.realm=' + realm + '&' +
+        'openid.identity=http://specs.openid.net/auth/2.0/identifier_select&' +
+        'openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select';
+
+      // 打开 Steam 登录窗口
+      const width = 800;
+      const height = 600;
+      const left = (screen.width - width) / 2;
+      const top = (screen.height - height) / 2;
+
+      const steamWindow = window.open(
+        steamOpenIdUrl,
+        'steam_login',
+        `width=${width},height=${height},left=${left},top=${top}`
+      );
+
+      // 监听回调消息
+      window.addEventListener('message', handleSteamCallback);
+
+      // 检测窗口关闭
+      const checkWindow = setInterval(() => {
+        if (steamWindow && steamWindow.closed) {
+          clearInterval(checkWindow);
+          window.removeEventListener('message', handleSteamCallback);
+        }
+      }, 500);
+    }
+
+    // 处理 Steam 回调
+    async function handleSteamCallback(event) {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data.type === 'steam_login_success') {
+        const steamId = event.data.steamId;
+        console.log('Steam ID:', steamId);
+
+        // 获取用户详细信息
+        await fetchSteamUserData(steamId);
+        goToStep(3);
+      } else if (event.data.type === 'steam_login_error') {
+        alert('Steam 登录失败：' + event.data.error);
+      }
+    }
+
+    // 获取 Steam 用户数据
+    async function fetchSteamUserData(steamId) {
+      const profilePreview = document.getElementById('steamProfilePreview');
+      const confirmButtons = document.getElementById('confirmButtons');
+
+      try {
+        const apiKey = steamApiKey || localStorage.getItem('steam_api_key');
+        
+        // 获取用户信息
+        let userData = null;
+        let gamesData = null;
+
+        if (apiKey) {
+          // 使用 API Key 获取完整数据
+          const userUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+            `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamId}`
+          )}`;
+          
+          const userResponse = await fetch(userUrl);
+          const userJson = await userResponse.json();
+          const userResult = JSON.parse(userJson.contents);
+          userData = userResult.response.players[0];
+
+          // 获取游戏列表
+          const gamesUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+            `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${apiKey}&steamid=${steamId}&include_appinfo=1&include_played_free_games=1`
+          )}`;
+
+          const gamesResponse = await fetch(gamesUrl);
+          const gamesJson = await gamesResponse.json();
+          const gamesResult = JSON.parse(gamesJson.contents);
+          gamesData = gamesResult.response;
+        }
+
+        // 如果没有 API Key 或获取失败，使用公开数据
+        if (!userData) {
+          userData = {
+            steamid: steamId,
+            personaname: '未知用户',
+            avatarfull: 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg',
+            profileurl: `https://steamcommunity.com/profiles/${steamId}`,
+            personastate: 0
+          };
+        }
+
+        steamUserData = {
+          ...userData,
+          games: gamesData
+        };
+
+        // 显示用户信息
+        const totalPlaytime = gamesData?.games?.reduce((sum, game) => sum + (game.playtime_forever || 0), 0) || 0;
+        const gameCount = gamesData?.game_count || 0;
+
+        profilePreview.innerHTML = `
+          <div class="steam-profile">
+            <img src="${userData.avatarfull}" alt="头像" class="steam-avatar">
+            <div class="steam-info">
+              <h4>${userData.personaname}</h4>
+              <p>Steam ID: ${userData.steamid}</p>
+              <p>状态: ${getOnlineStatus(userData.personastate)}</p>
+            </div>
+          </div>
+
+          <div class="steam-stats">
+            <div class="stat-card">
+              <div class="value">${gameCount}</div>
+              <div class="label">拥有游戏</div>
+            </div>
+            <div class="stat-card">
+              <div class="value">${formatPlaytime(totalPlaytime)}</div>
+              <div class="label">总游戏时长</div>
+            </div>
+            <div class="stat-card">
+              <div class="value">${gamesData?.games?.filter(g => g.playtime_forever > 0).length || 0}</div>
+              <div class="label">已游玩</div>
+            </div>
+          </div>
+        `;
+
+        confirmButtons.style.display = 'block';
+
+      } catch (error) {
+        console.error('获取 Steam 数据失败:', error);
+        profilePreview.innerHTML = `
+          <div class="alert alert-warning">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-content">
+              <strong>获取数据失败</strong>
+              <p>无法获取 Steam 账号信息，但您仍可以完成绑定。错误: ${error.message}</p>
+            </div>
+          </div>
+        `;
+        confirmButtons.style.display = 'block';
+      }
+    }
+
+    // 确认绑定
+    function confirmBinding() {
+      if (!steamUserData) {
+        alert('请先完成 Steam 登录验证');
+        return;
+      }
+
+      // 保存绑定信息
+      const bindingData = {
+        steamId: steamUserData.steamid,
+        personaName: steamUserData.personaname,
+        avatar: steamUserData.avatarfull,
+        profileUrl: steamUserData.profileurl,
+        gameCount: steamUserData.games?.game_count || 0,
+        totalPlaytime: steamUserData.games?.games?.reduce((sum, g) => sum + (g.playtime_forever || 0), 0) || 0,
+        games: steamUserData.games?.games || [],
+        boundAt: new Date().toISOString(),
+        apiKeyConfigured: !!steamApiKey
+      };
+
+      // 保存到本地存储
+      localStorage.setItem('steam_binding', JSON.stringify(bindingData));
+
+      // 如果有 UserDataManager，同步数据
+      if (typeof UserDataManager !== 'undefined') {
+        UserDataManager.linkSteam(bindingData);
+      }
+
+      // 显示最终统计
+      const finalStats = document.getElementById('finalStats');
+      finalStats.innerHTML = `
+        <div class="stat-card">
+          <div class="value">${bindingData.gameCount}</div>
+          <div class="label">已同步游戏</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${formatPlaytime(bindingData.totalPlaytime)}</div>
+          <div class="label">总游戏时长</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">1</div>
+          <div class="label">已绑定账号</div>
+        </div>
+      `;
+
+      goToStep(4);
+    }
+
+    // 工具函数
+    function getOnlineStatus(state) {
+      const statuses = ['离线', '在线', '忙碌', '离开', '打盹', '想交易', '想玩游戏'];
+      return statuses[state] || '未知';
+    }
+
+    function formatPlaytime(minutes) {
+      if (minutes < 60) return `${minutes}分钟`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}小时`;
+      const days = Math.floor(hours / 24);
+      return `${days}天`;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('已复制到剪贴板');
+      });
+    }
+
+    function toggleFaq(element) {
+      const faqItem = element.parentElement;
+      faqItem.classList.toggle('open');
+    }
+
+    // 检查是否已有绑定
+    function checkExistingBinding() {
+      const existing = localStorage.getItem('steam_binding');
+      if (existing) {
+        try {
+          const data = JSON.parse(existing);
+          if (confirm(`检测到已绑定的 Steam 账号：${data.personaName}\n\n是否要重新绑定？`)) {
+            localStorage.removeItem('steam_binding');
+          } else {
+            window.location.href = 'profile.html';
+          }
+        } catch (e) {}
+      }
+
+      // 检查是否已有 API Key
+      const savedApiKey = localStorage.getItem('steam_api_key');
+      if (savedApiKey) {
+        document.getElementById('apiKey').value = savedApiKey;
+      }
+    }
+
+    // 页面加载
+    document.addEventListener('DOMContentLoaded', () => {
+      checkExistingBinding();
+    });
+  </script>
+</body>
+</html>

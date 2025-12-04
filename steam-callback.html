@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steam 登录验证中... - GameBox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      max-width: 400px;
+    }
+
+    .steam-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 30px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #66c0f4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 30px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #66c0f4;
+    }
+
+    p {
+      font-size: 16px;
+      color: #8f98a0;
+      line-height: 1.6;
+    }
+
+    .success {
+      color: #5ba32b;
+    }
+
+    .error {
+      color: #c7372b;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .close-hint {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #8f98a0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <svg class="steam-logo" viewBox="0 0 256 259" xmlns="http://www.w3.org/2000/svg">
+      <path d="M127.779 0C57.2 0 0 55.756 0 124.542c0 6.218.508 12.32 1.469 18.284l67.63 27.953c5.747-3.932 12.68-6.238 20.16-6.238 1.099 0 2.186.047 3.257.128l30.192-43.755v-.614c0-27.923 22.71-50.634 50.634-50.634 27.922 0 50.633 22.711 50.633 50.634 0 27.923-22.71 50.634-50.633 50.634-.873 0-1.735-.029-2.594-.079l-43.04 30.702c.043.942.072 1.89.072 2.841 0 21.068-17.132 38.2-38.2 38.2-18.773 0-34.389-13.566-37.575-31.418L1.868 186.003C17.028 227.673 67.96 258.4 127.779 258.4c70.58 0 127.78-55.755 127.78-124.54C255.559 55.755 198.36 0 127.78 0" fill="#fff"/>
+      <path d="M82.553 204.1l-15.352-6.349c2.728 5.642 7.478 10.282 13.612 12.659 13.27 5.14 28.101-1.493 33.241-14.762 2.488-6.422 2.453-13.49-.098-19.885-2.553-6.396-7.404-11.36-13.68-13.79-6.195-2.398-12.695-2.265-18.475-.288l15.864 6.56c9.79 4.05 14.438 15.204 10.388 24.994-4.05 9.79-15.204 14.438-24.994 10.388-.171-.07-.337-.147-.506-.22" fill="#1b2838"/>
+      <path d="M218.666 119.942c0-23.18-18.844-42.025-42.025-42.025-23.18 0-42.025 18.844-42.025 42.025 0 23.18 18.844 42.025 42.025 42.025 23.18 0 42.025-18.844 42.025-42.025m-74.23.003c0-17.787 14.442-32.228 32.228-32.228s32.229 14.441 32.229 32.228c0 17.787-14.443 32.229-32.229 32.229-17.786 0-32.228-14.442-32.228-32.229" fill="#1b2838"/>
+    </svg>
+
+    <div id="status">
+      <div class="spinner"></div>
+      <h1>正在验证 Steam 登录...</h1>
+      <p>请稍候，正在处理您的登录信息</p>
+    </div>
+
+    <div id="result" style="display: none;">
+      <h1 id="resultTitle"></h1>
+      <p id="resultMessage"></p>
+      <div class="close-hint">此窗口将自动关闭...</div>
+    </div>
+  </div>
+
+  <script>
+    // =============================================
+    // Steam OpenID 回调处理
+    // =============================================
+
+    function processCallback() {
+      const statusDiv = document.getElementById('status');
+      const resultDiv = document.getElementById('result');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultMessage = document.getElementById('resultMessage');
+
+      try {
+        // 获取 URL 参数
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Steam OpenID 参数
+        const openidNs = urlParams.get('openid.ns');
+        const openidMode = urlParams.get('openid.mode');
+        const openidClaimedId = urlParams.get('openid.claimed_id');
+        const openidIdentity = urlParams.get('openid.identity');
+        const openidReturnTo = urlParams.get('openid.return_to');
+        const openidResponseNonce = urlParams.get('openid.response_nonce');
+        const openidAssocHandle = urlParams.get('openid.assoc_handle');
+        const openidSigned = urlParams.get('openid.signed');
+        const openidSig = urlParams.get('openid.sig');
+
+        console.log('OpenID Mode:', openidMode);
+        console.log('OpenID Claimed ID:', openidClaimedId);
+
+        // 检查是否是 id_res 模式（成功响应）
+        if (openidMode === 'id_res' && openidClaimedId) {
+          // 从 claimed_id 中提取 Steam ID
+          // 格式: https://steamcommunity.com/openid/id/76561198000000000
+          const steamIdMatch = openidClaimedId.match(/\/id\/(\d+)$/);
+          
+          if (steamIdMatch && steamIdMatch[1]) {
+            const steamId = steamIdMatch[1];
+            console.log('提取的 Steam ID:', steamId);
+
+            // 显示成功
+            statusDiv.style.display = 'none';
+            resultDiv.style.display = 'block';
+            resultTitle.textContent = '✓ 登录成功';
+            resultTitle.className = 'success';
+            resultMessage.textContent = `Steam ID: ${steamId}`;
+
+            // 发送消息给父窗口
+            if (window.opener) {
+              window.opener.postMessage({
+                type: 'steam_login_success',
+                steamId: steamId,
+                claimedId: openidClaimedId
+              }, window.location.origin);
+
+              // 3秒后关闭窗口
+              setTimeout(() => {
+                window.close();
+              }, 2000);
+            } else {
+              // 如果没有父窗口，保存到 localStorage 并跳转
+              localStorage.setItem('steam_login_result', JSON.stringify({
+                success: true,
+                steamId: steamId,
+                timestamp: Date.now()
+              }));
+              
+              resultMessage.textContent += '\n正在跳转...';
+              setTimeout(() => {
+                window.location.href = '/steam-binding.html?steamId=' + steamId;
+              }, 2000);
+            }
+          } else {
+            throw new Error('无法从响应中提取 Steam ID');
+          }
+        } else if (openidMode === 'cancel') {
+          // 用户取消登录
+          throw new Error('用户取消了登录');
+        } else if (openidMode === 'error') {
+          // 登录错误
+          const errorMsg = urlParams.get('openid.error') || '未知错误';
+          throw new Error(errorMsg);
+        } else {
+          // 无法识别的响应
+          throw new Error('无效的 Steam 响应');
+        }
+
+      } catch (error) {
+        console.error('Steam 回调处理错误:', error);
+
+        statusDiv.style.display = 'none';
+        resultDiv.style.display = 'block';
+        resultTitle.textContent = '✗ 登录失败';
+        resultTitle.className = 'error';
+        resultMessage.textContent = error.message;
+
+        // 发送错误消息给父窗口
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'steam_login_error',
+            error: error.message
+          }, window.location.origin);
+
+          setTimeout(() => {
+            window.close();
+          }, 3000);
+        }
+      }
+    }
+
+    // 页面加载后处理回调
+    document.addEventListener('DOMContentLoaded', processCallback);
+  </script>
+</body>
+</html>
