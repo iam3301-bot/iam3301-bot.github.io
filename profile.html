@@ -1422,10 +1422,13 @@
         break;
     }
     
-    gamesList.innerHTML = sortedGames.map(game => `
-      <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${game.appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
+    gamesList.innerHTML = sortedGames.map(game => {
+      // 兼容 appid 和 appId 两种格式
+      const appId = game.appid || game.appId;
+      return `
+      <div class="steam-game-item" onclick="window.open('https://store.steampowered.com/app/${appId}', '_blank')" style="cursor: pointer;" title="点击查看Steam商店页面">
         <div class="steam-game-img">
-          <img src="https://cdn.akamai.steamstatic.com/steam/apps/${game.appId}/header.jpg" alt="${game.name}" onerror="this.onerror=null; this.src='https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_231x87.jpg'" />
+          <img src="https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg" alt="${game.name}" onerror="this.onerror=null; this.src='https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg'" />
         </div>
         <div class="steam-game-info">
           <div class="steam-game-name">${game.name}</div>
@@ -1436,7 +1439,8 @@
         </div>
         <div style="font-size: 12px; color: var(--text-muted);">🔗</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   }
   
   // =============================================
