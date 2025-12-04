@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>检查主题UI</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: monospace;
+      background: #1a1a1a;
+      color: #fff;
+    }
+    .info {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #0f0;
+    }
+    .error {
+      border-left-color: #f00;
+    }
+    .success {
+      border-left-color: #0f0;
+    }
+    pre {
+      background: #000;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 GameBox 主题系统诊断</h1>
+  
+  <div id="results"></div>
+  
+  <div class="info">
+    <h3>📍 预期位置</h3>
+    <p>主题切换器应该在页面 <strong>右下角</strong></p>
+    <p>ID: <code>globalThemeSwitcher</code></p>
+  </div>
+  
+  <button onclick="runDiagnostics()">🔄 重新检查</button>
+  <button onclick="forceFindSwitcher()">🔎 强制查找切换器</button>
+  <button onclick="window.location.reload()">♻️ 刷新页面</button>
+  
+  <script>
+    function addResult(title, status, details) {
+      const div = document.createElement('div');
+      div.className = `info ${status}`;
+      div.innerHTML = `
+        <h3>${status === 'success' ? '✅' : '❌'} ${title}</h3>
+        <pre>${details}</pre>
+      `;
+      document.getElementById('results').appendChild(div);
+    }
+    
+    function runDiagnostics() {
+      document.getElementById('results').innerHTML = '';
+      
+      // 检查1: 全局主题管理器
+      if (window.globalThemeManager) {
+        const theme = window.globalThemeManager.getCurrentTheme();
+        addResult('全局主题管理器', 'success', 
+          `已加载\n当前主题: ${theme.name} ${theme.icon}\nID: ${theme.id}`);
+      } else {
+        addResult('全局主题管理器', 'error', '未找到 window.globalThemeManager');
+      }
+      
+      // 检查2: DOM元素
+      const switcher = document.getElementById('globalThemeSwitcher');
+      if (switcher) {
+        const rect = switcher.getBoundingClientRect();
+        addResult('主题切换器DOM', 'success', 
+          `已找到\n位置: right=${window.innerWidth - rect.right}px, bottom=${window.innerHeight - rect.bottom}px\n可见性: ${getComputedStyle(switcher).display}`);
+      } else {
+        addResult('主题切换器DOM', 'error', '未找到 #globalThemeSwitcher 元素');
+      }
+      
+      // 检查3: 按钮元素
+      const button = document.querySelector('.theme-switcher-btn');
+      if (button) {
+        addResult('主题按钮', 'success', 
+          `已找到\n文本: ${button.textContent}\n样式: ${getComputedStyle(button).display}`);
+      } else {
+        addResult('主题按钮', 'error', '未找到 .theme-switcher-btn');
+      }
+      
+      // 检查4: 主题面板
+      const panel = document.querySelector('.theme-switcher-panel');
+      if (panel) {
+        const options = panel.querySelectorAll('.theme-option');
+        addResult('主题面板', 'success', 
+          `已找到\n主题数量: ${options.length}\n当前状态: ${panel.classList.contains('is-active') ? '显示' : '隐藏'}`);
+      } else {
+        addResult('主题面板', 'error', '未找到 .theme-switcher-panel');
+      }
+      
+      // 检查5: 样式注入
+      const styles = document.getElementById('theme-switcher-ui-styles');
+      if (styles) {
+        addResult('UI样式', 'success', `已注入\n大小: ${styles.textContent.length} 字符`);
+      } else {
+        addResult('UI样式', 'error', '未找到 #theme-switcher-ui-styles');
+      }
+      
+      // 检查6: 全局样式
+      const globalStyles = document.getElementById('global-theme-styles');
+      if (globalStyles) {
+        addResult('全局样式', 'success', `已注入\n大小: ${globalStyles.textContent.length} 字符`);
+      } else {
+        addResult('全局样式', 'error', '未找到 #global-theme-styles');
+      }
+    }
+    
+    function forceFindSwitcher() {
+      console.log('🔎 搜索所有主题相关元素...');
+      
+      // 查找所有包含 'theme' 的元素
+      const allElements = document.querySelectorAll('*');
+      const themeElements = [];
+      
+      allElements.forEach(el => {
+        if (el.id && (el.id.includes('theme') || el.id.includes('Theme'))) {
+          themeElements.push({ type: 'ID', value: el.id, element: el });
+        }
+        if (el.className && (el.className.includes('theme') || el.className.includes('Theme'))) {
+          themeElements.push({ type: 'Class', value: el.className, element: el });
+        }
+      });
+      
+      console.log('找到的主题元素:', themeElements);
+      
+      if (themeElements.length > 0) {
+        alert(`找到 ${themeElements.length} 个主题相关元素，详情见控制台`);
+      } else {
+        alert('未找到任何主题相关元素！');
+      }
+    }
+    
+    // 页面加载后自动运行
+    window.addEventListener('load', () => {
+      setTimeout(runDiagnostics, 1000);
+    });
+  </script>
+  
+  <!-- 全局主题系统 -->
+  <script src="global-theme-system.js"></script>
+</body>
+</html>

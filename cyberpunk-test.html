@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>赛博朋克2077主题测试</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cyberpunk-styles.css">
+  <link rel="stylesheet" href="cyber-effects-styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0a0e27 0%, #16213e 100%);
+      background-attachment: fixed;
+      color: #00F0FF;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      padding: 50px 20px;
+    }
+    
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 64px;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px #00F0FF;
+      animation: cyber-pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes cyber-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .subtitle {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 50px;
+      color: #FF003C;
+      text-shadow: 0 0 10px #FF003C;
+    }
+    
+    .effects-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .effect-card {
+      background: rgba(26, 26, 46, 0.8);
+      border: 2px solid #00F0FF;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .effect-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+    }
+    
+    .effect-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #FFED4E;
+      text-shadow: 0 0 10px #FFED4E;
+    }
+    
+    .effect-card p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    
+    .status.active {
+      background: rgba(0, 255, 136, 0.3);
+      border: 1px solid #00ff88;
+      color: #00ff88;
+    }
+    
+    .controls {
+      text-align: center;
+      margin: 50px 0;
+    }
+    
+    button {
+      padding: 15px 40px;
+      font-size: 18px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: #0a0e27;
+      background: linear-gradient(135deg, #00F0FF, #00BFFF);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .instruction {
+      text-align: center;
+      font-size: 20px;
+      color: #FFED4E;
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(255, 237, 78, 0.1);
+      border: 2px dashed #FFED4E;
+      border-radius: 10px;
+    }
+    
+    .test-area {
+      min-height: 200px;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #FF003C;
+      border-radius: 10px;
+      margin: 30px 0;
+      text-align: center;
+      font-size: 18px;
+    }
+    
+    .debug-info {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00F0FF;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      z-index: 99999;
+      max-width: 300px;
+    }
+    
+    .debug-info div {
+      margin: 5px 0;
+    }
+    
+    .debug-info .label {
+      color: #00F0FF;
+      font-weight: 700;
+    }
+    
+    .debug-info .value {
+      color: #FFED4E;
+    }
+  </style>
+</head>
+<body class="theme-cyberpunk2077">
+  <div class="debug-info">
+    <div><span class="label">矩阵雨:</span> <span class="value" id="matrixStatus">检测中...</span></div>
+    <div><span class="label">粒子:</span> <span class="value" id="particleStatus">检测中...</span></div>
+    <div><span class="label">滚动条:</span> <span class="value" id="scrollStatus">检测中...</span></div>
+    <div><span class="label">特效系统:</span> <span class="value" id="effectsStatus">检测中...</span></div>
+  </div>
+
+  <div class="test-container">
+    <h1>🌃 CYBERPUNK 2077</h1>
+    <p class="subtitle">NIGHT CITY AWAITS</p>
+    
+    <div class="instruction">
+      ⚡ 你应该看到背景中的矩阵雨和浮动粒子特效 ⚡
+    </div>
+    
+    <div class="effects-list">
+      <div class="effect-card">
+        <h3>💧 矩阵雨</h3>
+        <p>背景中下落的青色代码流，模拟《黑客帝国》风格的数字雨效果。</p>
+        <span class="status active">ACTIVE</span>
+      </div>
+      
+      <div class="effect-card">
+        <h3>✨ 浮动粒子</h3>
+        <p>屏幕上缓慢上升的彩色光点，营造霓虹城市的氛围。</p>
+        <span class="status active">ACTIVE</span>
+      </div>
+      
+      <div class="effect-card">
+        <h3>📺 扫描线</h3>
+        <p>CRT显示器风格的横向扫描线，增强复古未来感。</p>
+        <span class="status active">ACTIVE</span>
+      </div>
+      
+      <div class="effect-card">
+        <h3>💫 点击涟漪</h3>
+        <p>点击页面任意位置产生的青色波纹效果。</p>
+        <span class="status active">ACTIVE</span>
+      </div>
+      
+      <div class="effect-card">
+        <h3>📊 滚动进度</h3>
+        <p>页面顶部的彩色进度条，显示滚动位置。</p>
+        <span class="status active">ACTIVE</span>
+      </div>
+      
+      <div class="effect-card">
+        <h3>⚡ 故障特效</h3>
+        <p>随机触发的文字故障效果（可选）。</p>
+        <span class="status">OPTIONAL</span>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button onclick="testClickEffect()">测试点击效果</button>
+      <button onclick="testLoading()">测试加载动画</button>
+      <button onclick="location.reload()">刷新页面</button>
+    </div>
+    
+    <div class="test-area">
+      <h2>测试区域</h2>
+      <p>点击此区域测试涟漪效果</p>
+      <p style="margin-top: 20px;">向下滚动查看滚动进度条</p>
+    </div>
+    
+    <div class="test-area" style="min-height: 800px;">
+      <h2>扩展测试区域</h2>
+      <p>继续滚动以测试效果</p>
+      <p style="margin-top: 300px; font-size: 24px; color: #00F0FF;">
+        ⬆️ 向上看顶部的滚动进度条 ⬆️
+      </p>
+    </div>
+  </div>
+  
+  <script>
+    // 测试点击效果
+    function testClickEffect() {
+      alert('请点击页面任意位置，观察青色涟漪效果！');
+    }
+    
+    // 测试加载动画
+    function testLoading() {
+      if (window.CyberEffects) {
+        window.CyberEffects.showLoading();
+        setTimeout(() => {
+          window.CyberEffects.hideLoading();
+        }, 2000);
+      } else {
+        alert('CyberEffects未加载');
+      }
+    }
+    
+    // 检测特效状态
+    function checkEffects() {
+      const matrixRain = document.querySelector('.matrix-rain');
+      const particles = document.querySelector('.cyber-particles');
+      const scrollProgress = document.querySelector('.scroll-progress');
+      
+      document.getElementById('matrixStatus').textContent = matrixRain ? '✅ 运行中' : '❌ 未检测到';
+      document.getElementById('particleStatus').textContent = particles ? '✅ 运行中' : '❌ 未检测到';
+      document.getElementById('scrollStatus').textContent = scrollProgress ? '✅ 运行中' : '❌ 未检测到';
+      document.getElementById('effectsStatus').textContent = window.CyberEffects ? '✅ 已加载' : '❌ 未加载';
+      
+      document.getElementById('matrixStatus').style.color = matrixRain ? '#00ff88' : '#FF003C';
+      document.getElementById('particleStatus').style.color = particles ? '#00ff88' : '#FF003C';
+      document.getElementById('scrollStatus').style.color = scrollProgress ? '#00ff88' : '#FF003C';
+      document.getElementById('effectsStatus').style.color = window.CyberEffects ? '#00ff88' : '#FF003C';
+    }
+    
+    // 定期检查
+    setTimeout(checkEffects, 1000);
+    setInterval(checkEffects, 5000);
+  </script>
+  
+  <!-- 赛博朋克特效系统 -->
+  <script src="cyber-effects.js"></script>
+</body>
+</html>

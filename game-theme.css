@@ -1,0 +1,580 @@
+/**
+ * 游戏主题样式 - Game Theme Styles
+ * 以经典游戏元素为设计灵感，打造复古与现代结合的游戏风格
+ */
+
+/* ==========================================
+   游戏主题 CSS 变量定义
+   ========================================== */
+
+body.theme-game {
+  /* 主色调 - 游戏金币黄 */
+  --game-gold: #FFD700;
+  --game-gold-light: #FFE55C;
+  --game-gold-dark: #DAA520;
+  
+  /* 辅助色 - 生命红 */
+  --game-red: #FF4757;
+  --game-red-light: #FF6B7A;
+  --game-red-dark: #EE2F45;
+  
+  /* 辅助色 - 魔力蓝 */
+  --game-blue: #2F80ED;
+  --game-blue-light: #5FA8FF;
+  --game-blue-dark: #1E5FCC;
+  
+  /* 辅助色 - 经验绿 */
+  --game-green: #2ECC71;
+  --game-green-light: #54D98C;
+  --game-green-dark: #27AE60;
+  
+  /* 背景色 */
+  --game-bg-primary: #1A1A2E;
+  --game-bg-secondary: #16213E;
+  --game-bg-card: #0F3460;
+  --game-bg-overlay: rgba(15, 52, 96, 0.95);
+  
+  /* 文字颜色 */
+  --game-text-primary: #FFFFFF;
+  --game-text-secondary: #E4E4E4;
+  --game-text-muted: #94A3B8;
+  
+  /* 边框和分隔线 */
+  --game-border: #533483;
+  --game-border-light: rgba(83, 52, 131, 0.3);
+  
+  /* 应用基础样式 */
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+  background-attachment: fixed;
+}
+
+/* ==========================================
+   游戏主题滚动条样式
+   ========================================== */
+
+body.theme-game * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--game-gold) rgba(15, 52, 96, 0.5);
+}
+
+body.theme-game ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+body.theme-game ::-webkit-scrollbar-track {
+  background: var(--game-bg-secondary);
+  border-radius: 6px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-game ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--game-gold-light) 0%,
+    var(--game-gold) 50%,
+    var(--game-gold-dark) 100%
+  );
+  border-radius: 6px;
+  border: 2px solid var(--game-bg-secondary);
+  box-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.5),
+    inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+body.theme-game ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #FFE55C 0%,
+    var(--game-gold-light) 50%,
+    var(--game-gold) 100%
+  );
+  box-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.8),
+    inset 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+body.theme-game ::-webkit-scrollbar-corner {
+  background: var(--game-bg-secondary);
+}
+
+/* ==========================================
+   游戏主题卡片样式
+   ========================================== */
+
+body.theme-game .card {
+  background: var(--game-bg-card);
+  border: 3px solid var(--game-border);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 20px rgba(83, 52, 131, 0.4),
+    inset 0 0 30px rgba(255, 215, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-game .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--game-gold) 0%, 
+    var(--game-red) 25%, 
+    var(--game-blue) 50%, 
+    var(--game-green) 75%, 
+    var(--game-gold) 100%
+  );
+  animation: game-rainbow-flow 4s linear infinite;
+}
+
+@keyframes game-rainbow-flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+body.theme-game .card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+body.theme-game .card:hover::after {
+  opacity: 1;
+}
+
+/* ==========================================
+   游戏主题标题样式
+   ========================================== */
+
+body.theme-game .card-title,
+body.theme-game .page-title {
+  font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
+  color: var(--game-gold);
+  text-shadow: 
+    0 0 10px rgba(255, 215, 0, 0.5),
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  letter-spacing: 2px;
+  position: relative;
+}
+
+body.theme-game .card-title .dot {
+  background: var(--game-gold);
+  box-shadow: 0 0 10px var(--game-gold);
+  animation: game-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes game-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
+
+/* ==========================================
+   游戏主题按钮样式
+   ========================================== */
+
+body.theme-game button,
+body.theme-game .ranking-tab {
+  background: linear-gradient(135deg, var(--game-bg-card) 0%, var(--game-bg-secondary) 100%);
+  border: 2px solid var(--game-border);
+  color: var(--game-text-secondary);
+  font-family: 'Rajdhani', 'Microsoft YaHei', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(83, 52, 131, 0.3);
+}
+
+body.theme-game button:hover,
+body.theme-game .ranking-tab:hover {
+  background: linear-gradient(135deg, var(--game-blue-dark) 0%, var(--game-blue) 100%);
+  border-color: var(--game-blue-light);
+  color: var(--game-text-primary);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(47, 128, 237, 0.4),
+    0 0 20px rgba(47, 128, 237, 0.3);
+}
+
+body.theme-game .ranking-tab.is-active {
+  background: linear-gradient(135deg, var(--game-gold-dark) 0%, var(--game-gold) 100%);
+  border-color: var(--game-gold-light);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 
+    0 4px 15px rgba(255, 215, 0, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   游戏主题排行榜样式
+   ========================================== */
+
+body.theme-game .ranking-item {
+  background: rgba(15, 52, 96, 0.6);
+  border: 2px solid var(--game-border-light);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+body.theme-game .ranking-item:hover {
+  background: rgba(47, 128, 237, 0.2);
+  border-color: var(--game-blue);
+  transform: translateX(5px);
+  box-shadow: 
+    -5px 0 0 var(--game-blue),
+    0 4px 15px rgba(47, 128, 237, 0.3);
+}
+
+body.theme-game .ranking-rank {
+  background: linear-gradient(135deg, var(--game-bg-secondary) 0%, var(--game-bg-card) 100%);
+  color: var(--game-gold);
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  border: 2px solid var(--game-border);
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-game .ranking-rank.top1 {
+  background: linear-gradient(135deg, var(--game-gold) 0%, var(--game-gold-light) 100%);
+  color: #000;
+  border-color: var(--game-gold-light);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  animation: game-trophy-glow 2s ease-in-out infinite;
+}
+
+@keyframes game-trophy-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+  }
+}
+
+body.theme-game .ranking-rank.top2,
+body.theme-game .ranking-rank.top3 {
+  background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 100%);
+  color: #000;
+  border-color: #E8E8E8;
+  box-shadow: 0 0 15px rgba(192, 192, 192, 0.6);
+}
+
+body.theme-game .ranking-rank.top3 {
+  background: linear-gradient(135deg, #CD7F32 0%, #E59866 100%);
+  border-color: #E59866;
+  box-shadow: 0 0 15px rgba(205, 127, 50, 0.6);
+}
+
+/* ==========================================
+   游戏主题类型标签样式
+   ========================================== */
+
+body.theme-game .category-chip {
+  background: var(--game-bg-card);
+  border: 2px solid var(--game-border);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(83, 52, 131, 0.3);
+}
+
+body.theme-game .category-chip:hover {
+  background: linear-gradient(135deg, var(--game-blue-dark) 0%, var(--game-blue) 100%);
+  border-color: var(--game-blue-light);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 6px 20px rgba(47, 128, 237, 0.5),
+    0 0 20px rgba(47, 128, 237, 0.3);
+}
+
+body.theme-game .category-chip.is-active {
+  background: linear-gradient(135deg, var(--game-green-dark) 0%, var(--game-green) 100%);
+  border-color: var(--game-green-light);
+  box-shadow: 
+    0 4px 15px rgba(46, 204, 113, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+body.theme-game .category-name {
+  color: var(--game-gold);
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+body.theme-game .category-count {
+  color: var(--game-gold-light);
+  font-weight: 900;
+}
+
+/* ==========================================
+   游戏主题侧边栏样式
+   ========================================== */
+
+body.theme-game .sidebar-card-enhanced {
+  background: var(--game-bg-card);
+  border: 3px solid var(--game-border);
+  box-shadow: 0 4px 20px rgba(83, 52, 131, 0.4);
+}
+
+body.theme-game .sidebar-card-enhanced::before {
+  background: linear-gradient(90deg, var(--game-red) 0%, var(--game-gold) 50%, var(--game-green) 100%);
+}
+
+body.theme-game .sidebar-title-enhanced {
+  color: var(--game-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-game .sidebar-badge {
+  background: rgba(255, 77, 87, 0.2);
+  border-color: var(--game-red);
+  color: var(--game-red-light);
+}
+
+body.theme-game .sidebar-badge .dot {
+  background: var(--game-red);
+  box-shadow: 0 0 10px var(--game-red);
+}
+
+/* ==========================================
+   游戏主题输入框和选择框样式
+   ========================================== */
+
+body.theme-game select,
+body.theme-game input[type="text"],
+body.theme-game input[type="search"],
+body.theme-game .header-search input {
+  background: var(--game-bg-secondary);
+  border: 2px solid var(--game-border);
+  color: var(--game-text-primary);
+  box-shadow: 
+    inset 0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(83, 52, 131, 0.3);
+}
+
+body.theme-game select:focus,
+body.theme-game input[type="text"]:focus,
+body.theme-game input[type="search"]:focus,
+body.theme-game .header-search input:focus {
+  border-color: var(--game-gold);
+  box-shadow: 
+    inset 0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-game select {
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFD700' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+/* ==========================================
+   游戏主题头部样式
+   ========================================== */
+
+body.theme-game .header {
+  background: linear-gradient(135deg, 
+    var(--game-bg-primary) 0%, 
+    var(--game-bg-secondary) 100%
+  );
+  border-bottom: 3px solid var(--game-border);
+  box-shadow: 
+    0 4px 20px rgba(83, 52, 131, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.1);
+}
+
+body.theme-game .logo {
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-game .logo-mark {
+  background: linear-gradient(135deg, var(--game-gold) 0%, var(--game-gold-light) 100%);
+  color: #000;
+  border: 2px solid var(--game-gold-light);
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+  font-weight: 900;
+}
+
+body.theme-game .nav-link {
+  color: var(--game-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+body.theme-game .nav-link:hover {
+  color: var(--game-gold);
+  border-bottom-color: var(--game-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+body.theme-game .nav-link.is-active {
+  color: var(--game-gold);
+  border-bottom-color: var(--game-gold);
+  font-weight: 700;
+}
+
+body.theme-game .badge {
+  background: linear-gradient(135deg, var(--game-red) 0%, var(--game-red-light) 100%);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+  animation: game-badge-bounce 2s ease-in-out infinite;
+}
+
+@keyframes game-badge-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* ==========================================
+   游戏主题折扣和价格样式
+   ========================================== */
+
+body.theme-game .discount-mini-percent {
+  background: linear-gradient(135deg, var(--game-red) 0%, var(--game-red-light) 100%);
+  color: #fff;
+  border: 2px solid var(--game-red-light);
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.5);
+  font-weight: 900;
+}
+
+body.theme-game .discount-mini-percent.big {
+  background: linear-gradient(135deg, var(--game-gold) 0%, var(--game-gold-light) 100%);
+  color: #000;
+  border-color: var(--game-gold-light);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+  animation: game-discount-shine 2s ease-in-out infinite;
+}
+
+@keyframes game-discount-shine {
+  0%, 100% { 
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+  }
+  50% { 
+    box-shadow: 0 4px 25px rgba(255, 215, 0, 1);
+  }
+}
+
+body.theme-game .discount-mini-current {
+  color: var(--game-green-light);
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+/* ==========================================
+   游戏主题特殊效果
+   ========================================== */
+
+/* 像素化边框装饰 */
+body.theme-game .card::after {
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 215, 0, 0.05) 10px,
+      rgba(255, 215, 0, 0.05) 11px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 215, 0, 0.05) 10px,
+      rgba(255, 215, 0, 0.05) 11px
+    );
+}
+
+/* 游戏加载动画 */
+@keyframes game-loading {
+  0% { content: "⚔️"; }
+  25% { content: "🛡️"; }
+  50% { content: "🎮"; }
+  75% { content: "🏆"; }
+  100% { content: "⚔️"; }
+}
+
+/* ==========================================
+   游戏主题响应式调整
+   ========================================== */
+
+@media (max-width: 768px) {
+  body.theme-game .card {
+    border-width: 2px;
+  }
+  
+  body.theme-game .sidebar-card-enhanced {
+    border-width: 2px;
+  }
+  
+  body.theme-game ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* ==========================================
+   游戏主题徽章和标记
+   ========================================== */
+
+body.theme-game .ranking-badge,
+body.theme-game .platform-badge {
+  background: linear-gradient(135deg, var(--game-blue) 0%, var(--game-blue-light) 100%);
+  border: 1px solid var(--game-blue-light);
+  box-shadow: 0 2px 8px rgba(47, 128, 237, 0.4);
+}
+
+/* ==========================================
+   游戏主题遮罩层
+   ========================================== */
+
+body.theme-game .ranking-item-cover::after,
+body.theme-game .game-card-cover::after {
+  background: linear-gradient(
+    to top,
+    rgba(15, 52, 96, 0.9) 0%,
+    transparent 50%
+  );
+}
+
+/* ==========================================
+   游戏主题文本颜色
+   ========================================== */
+
+body.theme-game .card-subtitle,
+body.theme-game .page-intro {
+  color: var(--game-text-muted);
+}
+
+body.theme-game .ranking-item-title,
+body.theme-game .category-name {
+  color: var(--game-text-primary);
+}
+
+/* ==========================================
+   游戏主题悬浮提示
+   ========================================== */
+
+body.theme-game [title]:hover::after {
+  background: var(--game-bg-card);
+  border: 2px solid var(--game-border);
+  box-shadow: 0 4px 15px rgba(83, 52, 131, 0.5);
+}

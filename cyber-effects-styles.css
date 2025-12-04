@@ -1,0 +1,396 @@
+/**
+ * 赛博朋克视觉特效样式
+ * Cyberpunk Visual Effects Styles
+ */
+
+/* ==========================================
+   矩阵雨效果
+   ========================================== */
+
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.6;
+}
+
+.matrix-column {
+  position: absolute;
+  top: -100%;
+  color: #00F0FF;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  line-height: 1.2;
+  text-shadow: 0 0 5px #00F0FF;
+  animation: matrix-rain-fall 10s linear infinite;
+}
+
+@keyframes matrix-rain-fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* ==========================================
+   浮动粒子效果
+   ========================================== */
+
+.cyber-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particle-float 20s linear infinite;
+}
+
+.particle.cyan {
+  background: #00F0FF;
+  box-shadow: 0 0 10px #00F0FF;
+}
+
+.particle.pink {
+  background: #FF003C;
+  box-shadow: 0 0 10px #FF003C;
+}
+
+.particle.yellow {
+  background: #FFED4E;
+  box-shadow: 0 0 10px #FFED4E;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(var(--drift-x, 0)) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* ==========================================
+   加载动画
+   ========================================== */
+
+.cyber-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 14, 39, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.cyber-loading.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cyber-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(0, 240, 255, 0.2);
+  border-top-color: #00F0FF;
+  border-radius: 50%;
+  animation: cyber-spin 1s linear infinite;
+}
+
+@keyframes cyber-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cyber-loading-text {
+  margin-top: 20px;
+  color: #00F0FF;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  animation: cyber-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes cyber-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ==========================================
+   点击涟漪效果
+   ========================================== */
+
+.sound-ripple {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00F0FF;
+  box-shadow: 0 0 20px #00F0FF;
+  pointer-events: none;
+  z-index: 9999;
+  animation: sound-ripple-expand 0.6s ease-out forwards;
+}
+
+@keyframes sound-ripple-expand {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* ==========================================
+   滚动进度指示器
+   ========================================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00F0FF, #FF003C, #FFED4E);
+  z-index: 99998;
+  transition: width 0.1s ease;
+  box-shadow: 0 0 10px #00F0FF;
+}
+
+/* ==========================================
+   故障文字效果
+   ========================================== */
+
+.glitch {
+  position: relative;
+  animation: glitch-animation 2s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #FF003C;
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-1 2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #00F0FF;
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim-2 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-animation {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-anim-1 {
+  0% {
+    clip: rect(107px, 9999px, 91px, 0);
+  }
+  20% {
+    clip: rect(23px, 9999px, 144px, 0);
+  }
+  40% {
+    clip: rect(75px, 9999px, 53px, 0);
+  }
+  60% {
+    clip: rect(132px, 9999px, 19px, 0);
+  }
+  80% {
+    clip: rect(44px, 9999px, 116px, 0);
+  }
+  100% {
+    clip: rect(89px, 9999px, 72px, 0);
+  }
+}
+
+@keyframes glitch-anim-2 {
+  0% {
+    clip: rect(33px, 9999px, 142px, 0);
+  }
+  20% {
+    clip: rect(88px, 9999px, 61px, 0);
+  }
+  40% {
+    clip: rect(125px, 9999px, 94px, 0);
+  }
+  60% {
+    clip: rect(17px, 9999px, 108px, 0);
+  }
+  80% {
+    clip: rect(71px, 9999px, 45px, 0);
+  }
+  100% {
+    clip: rect(102px, 9999px, 29px, 0);
+  }
+}
+
+/* ==========================================
+   扫描线效果
+   ========================================== */
+
+body.theme-cyberpunk2077::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    transparent 1px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 3px
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.5;
+  animation: scanline-move 8s linear infinite;
+}
+
+@keyframes scanline-move {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+/* ==========================================
+   CRT屏幕效果（可选）
+   ========================================== */
+
+body.theme-cyberpunk2077::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================
+   响应式调整
+   ========================================== */
+
+@media (max-width: 768px) {
+  .matrix-column {
+    font-size: 12px;
+  }
+  
+  .particle {
+    max-width: 4px;
+    max-height: 4px;
+  }
+  
+  .cyber-spinner {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .cyber-loading-text {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   性能优化
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .matrix-column,
+  .particle,
+  .cyber-spinner,
+  .glitch {
+    animation: none;
+  }
+  
+  body.theme-cyberpunk2077::after,
+  body.theme-cyberpunk2077::before {
+    display: none;
+  }
+}

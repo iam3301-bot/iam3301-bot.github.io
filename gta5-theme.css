@@ -1,0 +1,499 @@
+/**
+ * 🚗 GTA5完整主题样式
+ * Grand Theft Auto V Complete Theme Styles
+ * 
+ * 标志性元素：
+ * - 霓虹绿主调 (Neon Green)
+ * - 洛圣都天际线 (Los Santos Skyline)
+ * - 通缉星系统 (Wanted Stars)
+ * - 街头涂鸦风格 (Street Graffiti)
+ * - 犯罪都市氛围 (Crime City Vibe)
+ */
+
+:root.theme-gta5 {
+    /* 霓虹绿主色 */
+    --gta-green: #00FF00;
+    --gta-lime: #32CD32;
+    --gta-dark-green: #008000;
+    
+    /* 霓虹粉辅助色 */
+    --gta-pink: #FF1493;
+    --gta-purple: #9400D3;
+    
+    /* 金钱绿 */
+    --gta-money: #00FF00;
+    --gta-gold: #FFD700;
+    
+    /* 背景色 - 纯黑 */
+    --gta-bg-primary: #000000;
+    --gta-bg-secondary: #0D0D0D;
+    --gta-bg-card: rgba(13, 13, 13, 0.95);
+    
+    /* 文字色 */
+    --gta-text-primary: #FFFFFF;
+    --gta-text-secondary: #CCCCCC;
+}
+
+/* ==========================================
+   全局背景 - 洛圣都夜晚
+   ========================================== */
+body.theme-gta5 {
+    background: linear-gradient(
+        180deg,
+        #000000 0%,
+        #0D0D0D 50%,
+        #000000 100%
+    );
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* 城市网格 */
+body.theme-gta5::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 霓虹光晕 */
+body.theme-gta5::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 20% 30%,
+        rgba(0, 255, 0, 0.1) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 80% 70%,
+        rgba(255, 20, 147, 0.08) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ==========================================
+   霓虹边框系统
+   ========================================== */
+body.theme-gta5 .card,
+body.theme-gta5 .game-card,
+body.theme-gta5 .ranking-item {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.98) 0%,
+        rgba(13, 13, 13, 0.98) 100%
+    );
+    border: 2px solid rgba(0, 255, 0, 0.5);
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* 霓虹发光边框动画 */
+body.theme-gta5 .card::before,
+body.theme-gta5 .game-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        #00FF00,
+        #FF1493,
+        #00FFFF,
+        #00FF00
+    );
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: gtaBorderFlow 3s linear infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gtaBorderFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body.theme-gta5 .card:hover::before,
+body.theme-gta5 .game-card:hover::before {
+    opacity: 1;
+}
+
+body.theme-gta5 .card:hover,
+body.theme-gta5 .game-card:hover {
+    border-color: #00FF00;
+    box-shadow: 
+        0 0 25px rgba(0, 255, 0, 0.7),
+        0 0 50px rgba(0, 255, 0, 0.4),
+        inset 0 0 30px rgba(0, 255, 0, 0.1);
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* ==========================================
+   按钮 - 霓虹绿
+   ========================================== */
+body.theme-gta5 button,
+body.theme-gta5 .btn {
+    background: linear-gradient(135deg, #000000 0%, #0D0D0D 100%);
+    border: 3px solid #00FF00;
+    color: #00FF00;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 12px 30px;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.5),
+        inset 0 0 20px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* 扫光效果 */
+body.theme-gta5 button::before,
+body.theme-gta5 .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+}
+
+body.theme-gta5 button:hover::before,
+body.theme-gta5 .btn:hover::before {
+    left: 200%;
+}
+
+body.theme-gta5 button:hover,
+body.theme-gta5 .btn:hover {
+    background: linear-gradient(135deg, #00FF00 0%, #32CD32 100%);
+    color: #000000;
+    border-color: #00FF00;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 0, 0.9),
+        0 0 60px rgba(0, 255, 0, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    text-shadow: none;
+}
+
+/* ==========================================
+   输入框
+   ========================================== */
+body.theme-gta5 input[type="text"],
+body.theme-gta5 input[type="email"],
+body.theme-gta5 input[type="password"],
+body.theme-gta5 input[type="search"],
+body.theme-gta5 textarea {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(0, 255, 0, 0.5);
+    color: #00FF00;
+    font-family: 'Courier New', monospace;
+    padding: 12px 16px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+body.theme-gta5 input:focus,
+body.theme-gta5 textarea:focus {
+    outline: none;
+    border-color: #00FF00;
+    box-shadow: 
+        0 0 25px rgba(0, 255, 0, 0.7),
+        inset 0 0 30px rgba(0, 255, 0, 0.1);
+    background: rgba(13, 13, 13, 0.95);
+}
+
+body.theme-gta5 input::placeholder,
+body.theme-gta5 textarea::placeholder {
+    color: rgba(0, 255, 0, 0.5);
+}
+
+/* ==========================================
+   滚动条 - 霓虹绿
+   ========================================== */
+body.theme-gta5 ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+body.theme-gta5 ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.9);
+}
+
+body.theme-gta5 ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00FF00 0%, #32CD32 100%);
+    border: 2px solid rgba(0, 0, 0, 0.9);
+    box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.8),
+        inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+body.theme-gta5 ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #32CD32 0%, #00FF00 100%);
+    box-shadow: 
+        0 0 25px rgba(0, 255, 0, 1),
+        inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+body.theme-gta5 * {
+    scrollbar-width: thin;
+    scrollbar-color: #00FF00 rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================
+   下拉框
+   ========================================== */
+body.theme-gta5 select {
+    appearance: none;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(13, 13, 13, 0.95) 100%);
+    background-image: 
+        linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(13, 13, 13, 0.95) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%2300FF00' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: left center, right 12px center;
+    background-size: auto, 12px;
+    border: 2px solid rgba(0, 255, 0, 0.5);
+    color: #00FF00;
+    font-family: 'Impact', sans-serif;
+    font-weight: 700;
+    padding: 10px 36px 10px 16px;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-gta5 select:hover {
+    border-color: #00FF00;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.6),
+        inset 0 0 30px rgba(0, 255, 0, 0.1);
+}
+
+body.theme-gta5 select option {
+    background: #000000;
+    color: #00FF00;
+}
+
+/* ==========================================
+   评分显示 - 通缉星风格
+   ========================================== */
+body.theme-gta5 .rating,
+body.theme-gta5 .score {
+    background: linear-gradient(135deg, #00FF00 0%, #32CD32 100%);
+    color: #000000;
+    font-family: 'Impact', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    padding: 8px 16px;
+    border-radius: 0;
+    border: 3px solid #000000;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.8),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+    display: inline-block;
+}
+
+/* 星星装饰 */
+body.theme-gta5 .rating::after {
+    content: '★';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #FFD700;
+    font-size: 16px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* ==========================================
+   标签徽章
+   ========================================== */
+body.theme-gta5 .tag,
+body.theme-gta5 .badge {
+    background: transparent;
+    border: 2px solid #00FF00;
+    color: #00FF00;
+    padding: 4px 12px;
+    border-radius: 0;
+    font-size: 11px;
+    font-family: 'Impact', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.5),
+        inset 0 0 10px rgba(0, 255, 0, 0.1);
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
+body.theme-gta5 .tag:hover,
+body.theme-gta5 .badge:hover {
+    background: rgba(0, 255, 0, 0.2);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.8),
+        inset 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+/* ==========================================
+   标题 - 涂鸦风格
+   ========================================== */
+body.theme-gta5 h1,
+body.theme-gta5 h2,
+body.theme-gta5 h3 {
+    color: #00FF00;
+    font-family: 'Impact', sans-serif;
+    text-transform: uppercase;
+    text-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.8),
+        2px 2px 0 #000000,
+        -2px -2px 0 #000000;
+    position: relative;
+    letter-spacing: 2px;
+}
+
+/* ==========================================
+   链接
+   ========================================== */
+body.theme-gta5 a {
+    color: #00FF00;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+body.theme-gta5 a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00FF00, #FF1493);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+body.theme-gta5 a:hover::after {
+    width: 100%;
+}
+
+body.theme-gta5 a:hover {
+    color: #32CD32;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 1);
+}
+
+/* ==========================================
+   导航栏
+   ========================================== */
+body.theme-gta5 nav,
+body.theme-gta5 header {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.98) 0%, rgba(13, 13, 13, 0.98) 100%);
+    border-bottom: 3px solid #00FF00;
+    box-shadow: 
+        0 4px 20px rgba(0, 255, 0, 0.5),
+        0 0 40px rgba(0, 255, 0, 0.3);
+}
+
+/* ==========================================
+   加载动画 - 旋转美元符号
+   ========================================== */
+body.theme-gta5 .loading {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: 20px auto;
+}
+
+body.theme-gta5 .loading::before {
+    content: '$';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    font-weight: 900;
+    color: #00FF00;
+    text-shadow: 
+        0 0 20px rgba(0, 255, 0, 1),
+        0 0 40px rgba(0, 255, 0, 0.6);
+    animation: gtaMoneyPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes gtaMoneyPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* ==========================================
+   响应式
+   ========================================== */
+@media (max-width: 768px) {
+    body.theme-gta5 ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    body.theme-gta5 button,
+    body.theme-gta5 .btn {
+        padding: 10px 20px;
+        font-size: 13px;
+        letter-spacing: 2px;
+    }
+    
+    body.theme-gta5 h1,
+    body.theme-gta5 h2 {
+        letter-spacing: 1px;
+    }
+}
