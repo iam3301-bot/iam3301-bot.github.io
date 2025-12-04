@@ -536,6 +536,19 @@
       <!-- 左侧：登录/注册卡片 -->
       <div class="auth-container" style="max-width: none; padding: 0;">
         
+        <!-- 本地模式警告提示 -->
+        <div id="localModeWarning" class="auth-info-card" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); margin-bottom: 20px; display: none;">
+          <div class="auth-info-title" style="color: #f59e0b;">
+            <span>⚠️</span> 演示模式 (本地存储)
+          </div>
+          <p style="font-size: 13px; color: var(--text-soft); margin: 0 0 12px 0; line-height: 1.6;">
+            当前用户数据仅存储在您的浏览器中，<strong>其他用户/设备无法共享</strong>。
+          </p>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+            💡 如需多用户功能，请配置 <a href="https://supabase.com" target="_blank" style="color: #f59e0b;">Supabase</a> 云数据库
+          </p>
+        </div>
+        
         <!-- 未登录状态：显示登录/注册表单 -->
         <div id="authFormContainer" class="auth-card">
           <div class="auth-header">
@@ -777,17 +790,22 @@
       const result = await GameBoxAuth.init();
       
       // 更新模式指示器
+      const localModeWarning = document.getElementById('localModeWarning');
+      
       if (result.mode === 'supabase') {
         authModeIndicator.innerHTML = `
           <span style="color: #00ff88;">●</span>
           <span>Supabase 在线模式</span>
         `;
+        if (localModeWarning) localModeWarning.style.display = 'none';
       } else {
         authModeIndicator.innerHTML = `
           <span style="color: #f59e0b;">●</span>
           <span>本地演示模式</span>
           <a href="#" onclick="showConfigHelp(); return false;" style="color: var(--accent); margin-left: 8px;">配置指南</a>
         `;
+        // 显示本地模式警告
+        if (localModeWarning) localModeWarning.style.display = 'block';
       }
       
       // 检查登录状态
