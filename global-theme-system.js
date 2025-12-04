@@ -58,98 +58,6 @@
       }
     },
     
-    // 巫师3主题 - 中世纪黑暗奇幻风格
-    witcher: {
-      id: 'witcher',
-      name: '巫师3：狂猎',
-      nameEn: 'The Witcher 3: Wild Hunt',
-      icon: '⚔️',
-      description: '中世纪黑暗奇幻 · 狼之风暴',
-      visualStyle: {
-        effects: ['雪花飘落', '血迹纹理', '符文发光', '野性狂猎'],
-        animations: ['剑刃寒光', '猎魔人印记', '狂猎虚影'],
-        uiStyle: '金属锈蚀边框 + 血红符文'
-      },
-      colors: {
-        primary: '#C41E3A',      // 狂猎血红
-        secondary: '#FFD700',    // 金色符文
-        accent: '#8B4513',       // 皮革棕
-        background: {
-          primary: '#0A0A0A',    // 纯黑(夜晚森林)
-          secondary: '#1A1A1A',  // 深灰(石墙)
-          card: '#2A2A2A',       // 炭灰(城堡)
-          gradient: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #2A2A2A 100%)'  // 阴暗渐变
-        },
-        text: {
-          primary: '#E8E8E8',    // 银剑光
-          secondary: '#B8B8B8',  // 浅灰
-          muted: '#707070'       // 铁灰
-        },
-        border: '#8B0000',       // 血红边框
-        borderGlow: '#FFD700',   // 符文光晕
-        success: '#228B22',      // 森林绿
-        warning: '#FFA500',      // 琥珀
-        danger: '#8B0000',       // 血红
-        info: '#4682B4'          // 钢蓝
-      },
-      fonts: {
-        primary: '"Cinzel", "Trajan Pro", "Times New Roman", serif',
-        secondary: '"Philosopher", "Merriweather", Georgia, serif'
-      },
-      effects: {
-        snowfall: true,
-        bloodTexture: true,
-        runeGlow: true,
-        wildHunt: true
-      }
-    },
-    
-    // GTA5主题 - 都市犯罪霓虹风格
-    gta5: {
-      id: 'gta5',
-      name: 'GTA5',
-      nameEn: 'Grand Theft Auto V',
-      icon: '🚗',
-      description: '洛圣都霓虹 · 犯罪都市',
-      visualStyle: {
-        effects: ['霓虹灯管', '警笛闪烁', '街头涂鸦', '现金飞舞'],
-        animations: ['警车追逐光', '美钞雨', '霓虹呼吸'],
-        uiStyle: '街头涂鸦边框 + 霓虹发光'
-      },
-      colors: {
-        primary: '#00FF00',      // 霓虹绿(美钞)
-        secondary: '#FFD700',    // 金色(财富)
-        accent: '#FF1493',       // 霓虹粉(Vice City致敬)
-        background: {
-          primary: '#000000',    // 纯黑(夜晚洛圣都)
-          secondary: '#0D0D0D',  // 墨黑(街道阴影)
-          card: '#1A1A1A',       // 深黑(建筑)
-          gradient: 'linear-gradient(45deg, #000000 0%, #0D0D0D 50%, #1A1A1A 100%)'  // 城市夜景
-        },
-        text: {
-          primary: '#FFFFFF',    // 纯白
-          secondary: '#00FF00',  // 霓虹绿
-          muted: '#808080'       // 中灰
-        },
-        border: '#00FF00',       // 霓虹绿边框
-        borderGlow: '#00FF00',   // 霓虹发光
-        success: '#00FF00',      // 绿色
-        warning: '#FFD700',      // 金色
-        danger: '#FF0000',       // 红色(通缉)
-        info: '#00BFFF'          // 深天蓝
-      },
-      fonts: {
-        primary: '"Pricedown", "Impact", "Teko", sans-serif',
-        secondary: '"Roboto Condensed", "Oswald", Arial, sans-serif'
-      },
-      effects: {
-        neonGlow: true,
-        policeSiren: true,
-        graffiti: true,
-        moneyRain: true
-      }
-    },
-    
     // 荒野大镖客2主题 - 美国西部荒野风格
     rdr2: {
       id: 'rdr2',
@@ -435,8 +343,6 @@
       // 控制特效系统
       this.toggleCyberEffects(themeId === 'cyberpunk2077');
       this.toggleWukongEffects(themeId === 'wukong');
-      this.toggleWitcherEffects(themeId === 'witcher');
-      this.toggleGTA5Effects(themeId === 'gta5');
       this.toggleRDR2Effects(themeId === 'rdr2');
       this.toggleBG3Effects(themeId === 'bg3');
       this.toggleEldenRingEffects(themeId === 'eldenring');
@@ -491,37 +397,6 @@
       }
     }
     
-    // 控制巫师3主题特效
-    toggleWitcherEffects(enable) {
-      if (enable) {
-        if (window.Witcher3EffectsSystem && !window.witcherEffects) {
-          window.witcherEffects = new window.Witcher3EffectsSystem();
-        } else if (window.witcherEffects) {
-          window.witcherEffects.toggle(true);
-        }
-      } else {
-        if (window.witcherEffects) {
-          window.witcherEffects.destroy();
-          window.witcherEffects = null;
-        }
-      }
-    }
-    
-    // 控制GTA5主题特效
-    toggleGTA5Effects(enable) {
-      if (enable) {
-        if (window.GTA5EffectsSystem && !window.gta5Effects) {
-          window.gta5Effects = new window.GTA5EffectsSystem();
-        } else if (window.gta5Effects) {
-          window.gta5Effects.toggle(true);
-        }
-      } else {
-        if (window.gta5Effects) {
-          window.gta5Effects.destroy();
-          window.gta5Effects = null;
-        }
-      }
-    }
     
     // 控制荒野大镖客2主题特效
     toggleRDR2Effects(enable) {
@@ -871,98 +746,6 @@
           transform: translateY(-2px) !important;
         }
         
-        /* 巫师3主题 - 中世纪金属质感 */
-        body.theme-witcher .card,
-        body.theme-witcher .game-card,
-        body.theme-witcher .ranking-item {
-          border: 2px solid #8B0000 !important;
-          background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%) !important;
-          box-shadow: 0 4px 15px rgba(139, 0, 0, 0.5), inset 0 1px 0 rgba(255, 215, 0, 0.1) !important;
-          position: relative !important;
-        }
-        
-        body.theme-witcher .card::before,
-        body.theme-witcher .game-card::before {
-          content: '' !important;
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          height: 2px !important;
-          background: linear-gradient(90deg, transparent, #FFD700, transparent) !important;
-          opacity: 0.5 !important;
-        }
-        
-        body.theme-witcher .card-title,
-        body.theme-witcher .ranking-name {
-          font-family: 'Cinzel', 'Trajan Pro', serif !important;
-          text-shadow: 0 0 10px #C41E3A, 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
-          letter-spacing: 1px !important;
-          color: #E8E8E8 !important;
-        }
-        
-        body.theme-witcher .ranking-meta {
-          color: #FFD700 !important;
-          text-shadow: 0 0 8px #FFD700 !important;
-        }
-        
-        body.theme-witcher .ranking-item {
-          transition: all 0.3s ease !important;
-        }
-        
-        body.theme-witcher .ranking-item:hover {
-          border-color: #C41E3A !important;
-          box-shadow: 0 0 25px rgba(196, 30, 58, 0.8), 0 4px 20px rgba(0, 0, 0, 0.7) !important;
-          transform: translateX(5px) !important;
-        }
-        
-        body.theme-witcher button:hover {
-          background: linear-gradient(135deg, #8B0000, #C41E3A) !important;
-          box-shadow: 0 0 20px rgba(196, 30, 58, 0.8) !important;
-        }
-        
-        /* GTA5主题 - 街头涂鸦霓虹 */
-        body.theme-gta5 .card,
-        body.theme-gta5 .game-card,
-        body.theme-gta5 .ranking-item {
-          border: 2px solid #00FF00 !important;
-          background: linear-gradient(135deg, #1A1A1A 0%, #000000 100%) !important;
-          box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 0 40px rgba(0, 255, 0, 0.2) !important;
-        }
-        
-        body.theme-gta5 .card-title,
-        body.theme-gta5 .ranking-name {
-          font-family: 'Pricedown', 'Impact', sans-serif !important;
-          text-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00, 2px 2px 4px rgba(0, 0, 0, 0.9) !important;
-          letter-spacing: 3px !important;
-          text-transform: uppercase !important;
-          color: #FFFFFF !important;
-          font-weight: 900 !important;
-        }
-        
-        body.theme-gta5 .ranking-meta {
-          color: #FFD700 !important;
-          text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700 !important;
-          font-weight: 700 !important;
-        }
-        
-        body.theme-gta5 .ranking-item {
-          transition: all 0.3s ease !important;
-        }
-        
-        body.theme-gta5 button:hover,
-        body.theme-gta5 .ranking-item:hover {
-          border-color: #FFD700 !important;
-          box-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 50px rgba(255, 20, 147, 0.4) !important;
-          animation: gtaNeonPulse 2s ease-in-out infinite !important;
-          transform: translateX(5px) !important;
-        }
-        
-        @keyframes gtaNeonPulse {
-          0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
-          50% { box-shadow: 0 0 50px rgba(0, 255, 0, 1), 0 0 30px rgba(255, 20, 147, 0.6); }
-        }
-        
         /* 荒野大镖客2主题 - 西部复古纸质 */
         body.theme-rdr2 .card,
         body.theme-rdr2 .game-card,
@@ -1121,8 +904,6 @@
           
           /* 移动端简化特效 */
           body.theme-wukong .card,
-          body.theme-witcher .card,
-          body.theme-gta5 .card,
           body.theme-rdr2 .card,
           body.theme-bg3 .card,
           body.theme-eldenring .card,
