@@ -612,54 +612,159 @@
         </div>
       </div>
       
-      <!-- Epic 平台 -->
-      <div class="platform-card">
+      <!-- Epic Games 平台 -->
+      <div class="platform-card" id="epicPlatform">
         <div class="platform-header">
           <div class="platform-info">
-            <div class="platform-icon epic">🎮</div>
+            <div class="platform-icon epic">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M3.537 0C2.165 0 1.66.506 1.66 1.879V18.44c0 1.373.505 1.879 1.877 1.879h3.857v3.68h2.5l3.074-3.68h4.053c1.372 0 1.878-.506 1.878-1.879V1.879C18.899.506 18.394 0 17.021 0H3.537zm11.003 2.748c.506 0 .759.252.759.758v.505c0 .506-.253.759-.759.759h-1.77v2.02h1.77c.506 0 .759.253.759.759v.505c0 .506-.253.759-.759.759h-1.77v2.273h1.77c.506 0 .759.253.759.758v.506c0 .506-.253.759-.759.759h-3.788V2.748h3.788zm-5.56 0c.505 0 .758.252.758.758v8.283c0 .506-.253.759-.759.759h-2.02c-.506 0-.758-.253-.758-.759V3.506c0-.506.252-.758.758-.758h2.02z"/>
+              </svg>
+            </div>
             <div>
               <div class="platform-name">Epic Games</div>
-              <div class="platform-desc">同步游玩数据</div>
+              <div class="platform-desc" id="epicStatus">手动记录您的 Epic 游戏库</div>
             </div>
           </div>
           <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
+            <span class="help-link" onclick="showPlatformHelp('epic')">帮助</span>
+            <button class="bind-btn" id="epicBindBtn" onclick="togglePlatformInput('epic')">绑定账号</button>
           </div>
+        </div>
+        
+        <!-- 热门 Epic 游戏横幅 -->
+        <div class="games-banner">
+          <div class="game-banner-item"><img src="https://cdn2.unrealengine.com/egs-fortnite-epic-games-ic1-400x400-2a9c7b80b8a3.png" alt="Fortnite" style="object-fit: contain; background: #1a1a2e;"></div>
+          <div class="game-banner-item"><img src="https://cdn1.epicgames.com/offer/fn/Blade_2560x1440_2560x1440-95f58f1eeb2b9e96a84b000e126a8ebf" alt="Fortnite" style="object-fit: cover;"></div>
+          <div class="game-banner-item"><img src="https://cdn2.unrealengine.com/egs-rocketleague-psyonix-g1c-background-2000x1125-2000x1125-1cfc20d3b1b9.jpg" alt="Rocket League" style="object-fit: cover;"></div>
+          <div class="game-banner-item"><img src="https://cdn2.unrealengine.com/Diesel%2Fproductv2%2Fgta-v-premium-edition%2Fhome%2FGTAV_EGS_Artwork_1920x1080_Hero-Carousel-V06-1920x1080-1503e4b1320d5652dd4f57466c8bcb79524b0c45.jpg" alt="GTA V" style="object-fit: cover;"></div>
+          <div class="game-banner-item"><img src="https://cdn2.unrealengine.com/egs-fallguys-mediatonic-s1-2560x1440-2560x1440-f2f3a2ce0b36.jpg" alt="Fall Guys" style="object-fit: cover;"></div>
+        </div>
+        
+        <!-- Epic 绑定输入区域 -->
+        <div class="bind-input-area" id="epicInputArea">
+          <div class="input-group">
+            <input type="text" class="input-field" id="epicUsernameInput" placeholder="输入 Epic 用户名">
+            <input type="number" class="input-field" id="epicGameCountInput" placeholder="游戏数量" style="max-width: 120px;" min="0">
+            <button class="submit-btn" onclick="bindPlatformAccount('epic')">确认绑定</button>
+          </div>
+          <div class="input-hint">
+            <span class="input-hint-icon">💡</span>
+            <span>请登录 <a href="https://store.epicgames.com/library" target="_blank" style="color: #66c0f4;">Epic Games 商城</a> 查看您的游戏库数量。数据为手动记录，仅供参考。</span>
+          </div>
+        </div>
+        
+        <!-- Epic 已绑定账号区域 -->
+        <div class="accounts-section" id="epicAccountsSection" style="display: none;">
+          <div class="section-title">已绑定的 Epic 账号</div>
+          <div id="epicAccountsList"></div>
+          <button class="add-account-btn" onclick="togglePlatformInput('epic')">
+            <span>+</span> 添加 Epic 账号
+          </button>
         </div>
       </div>
       
       <!-- Xbox 平台 -->
-      <div class="platform-card">
+      <div class="platform-card" id="xboxPlatform">
         <div class="platform-header">
           <div class="platform-info">
-            <div class="platform-icon xbox">🎮</div>
+            <div class="platform-icon xbox">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M4.102 21.033C6.211 22.881 8.977 24 12 24c3.026 0 5.789-1.119 7.902-2.967 1.877-1.912-4.316-8.709-7.902-11.417-3.582 2.708-9.779 9.505-7.898 11.417zm11.16-14.406c2.5 2.961 7.484 10.313 6.076 12.912C23.056 17.036 24 14.604 24 12c0-4.124-2.049-7.772-5.188-9.967-.024-.012-.039-.009-.062-.024-1.019-.6-4.398 2.055-3.488 4.618zm-6.527 0c.907-2.563-2.469-5.218-3.488-4.618-.024.015-.039.012-.062.024C2.049 4.228 0 7.876 0 12c0 2.604.94 5.036 2.662 6.539-1.412-2.599 3.58-9.951 6.073-12.912z"/>
+              </svg>
+            </div>
             <div>
               <div class="platform-name">Xbox</div>
-              <div class="platform-desc">同步游玩数据</div>
+              <div class="platform-desc" id="xboxStatus">手动记录您的 Xbox 游戏库</div>
             </div>
           </div>
           <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
+            <span class="help-link" onclick="showPlatformHelp('xbox')">帮助</span>
+            <button class="bind-btn" id="xboxBindBtn" onclick="togglePlatformInput('xbox')">绑定账号</button>
           </div>
+        </div>
+        
+        <!-- 热门 Xbox 游戏横幅 -->
+        <div class="games-banner">
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.58752.14333183561034498.b3a16dd3-c35d-4cb3-863e-cc88e6805351.96cff982-05cc-4f39-ae40-c84bc5a1c8cb" alt="Halo" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.36014.13749358046498498.f2c78f4f-c760-4703-9d5a-f8b4f3d4c5a4.5e3c67e0-1e77-4f7c-9e8c-b0e3f1e0c1e0" alt="Forza" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.65119.13664052316225701.0f247493-d93c-4a45-b53c-e741e758f422.8fd08d4d-f2b7-4b9d-a3c2-95f2d67a1d1e" alt="Sea of Thieves" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.11931.13510798886457066.1c8816ff-7fa3-4c3a-8eac-70c1b0e7b71a.0a1e9c5c-8e3a-4b7c-9e0a-0c1c0c1c0c1c" alt="Minecraft" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #107c10, #0e6b0e);"><img src="https://store-images.s-microsoft.com/image/apps.29901.14093025913434488.a2fd5be9-a22e-4fe9-ae2e-ae1e7e1e7e1e.b1c1c1c1-c1c1-c1c1-c1c1-c1c1c1c1c1c1" alt="Gears" style="object-fit: cover;"></div>
+        </div>
+        
+        <!-- Xbox 绑定输入区域 -->
+        <div class="bind-input-area" id="xboxInputArea">
+          <div class="input-group">
+            <input type="text" class="input-field" id="xboxUsernameInput" placeholder="输入 Xbox Gamertag">
+            <input type="number" class="input-field" id="xboxGameCountInput" placeholder="游戏数量" style="max-width: 120px;" min="0">
+            <button class="submit-btn" onclick="bindPlatformAccount('xbox')">确认绑定</button>
+          </div>
+          <div class="input-hint">
+            <span class="input-hint-icon">💡</span>
+            <span>请访问 <a href="https://account.xbox.com/profile" target="_blank" style="color: #66c0f4;">Xbox Profile</a> 或 <a href="https://www.xbox.com/play" target="_blank" style="color: #66c0f4;">Xbox Cloud Gaming</a> 查看您的游戏库</span>
+          </div>
+        </div>
+        
+        <!-- Xbox 已绑定账号区域 -->
+        <div class="accounts-section" id="xboxAccountsSection" style="display: none;">
+          <div class="section-title">已绑定的 Xbox 账号</div>
+          <div id="xboxAccountsList"></div>
+          <button class="add-account-btn" onclick="togglePlatformInput('xbox')">
+            <span>+</span> 添加 Xbox 账号
+          </button>
         </div>
       </div>
       
       <!-- PlayStation 平台 -->
-      <div class="platform-card">
+      <div class="platform-card" id="playstationPlatform">
         <div class="platform-header">
           <div class="platform-info">
-            <div class="platform-icon playstation">🎮</div>
+            <div class="platform-icon playstation">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.181.76.814.76 1.505v5.876c2.441 1.193 4.362-.002 4.362-3.153 0-3.236-1.755-4.816-4.489-5.478-1.245-.303-3.567-.761-5.342-1.851zM3.065 17.439l2.273.789s2.048-.762 2.654-.963c.606-.201.851.102.851.509v1.193c0 .406-.102.608-.557.812-.455.203-3.373 1.324-4.58 1.629-1.208.305-2.509.252-3.453-.304C-.696 20.553.01 19.455.71 18.9c.7-.555 2.355-1.461 2.355-1.461zm17.87 1.482c-.97-.607-1.456-.9-3.007-1.5-1.551-.6-2.86-1.031-3.915-.84-1.055.189-1.906.591-1.906 1.881v2.97l2.575-.977V18.32c0-.456.153-.608.56-.405.406.203.456.609.456.912v.812c0 .456-.204.558-.557.71-.354.153-3.117 1.068-3.117 1.068v2.07c0 .508.203.912 1.106.609.903-.305 4.67-1.733 5.421-2.088.75-.354 2.43-1.163 2.43-2.228-.001-.759.048-1.251-.046-1.859z"/>
+              </svg>
+            </div>
             <div>
               <div class="platform-name">PlayStation</div>
-              <div class="platform-desc">同步游玩数据</div>
+              <div class="platform-desc" id="playstationStatus">手动记录您的 PlayStation 游戏库</div>
             </div>
           </div>
           <div class="platform-action">
-            <span class="help-link">帮助</span>
-            <button class="bind-btn" disabled style="opacity: 0.5;">即将推出</button>
+            <span class="help-link" onclick="showPlatformHelp('playstation')">帮助</span>
+            <button class="bind-btn" id="playstationBindBtn" onclick="togglePlatformInput('playstation')">绑定账号</button>
           </div>
+        </div>
+        
+        <!-- 热门 PlayStation 游戏横幅 -->
+        <div class="games-banner">
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #003087, #00246d);"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202208/1718/NFf86jgTktpKGUjS5IssV5Dt.png" alt="God of War" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #003087, #00246d);"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202011/2419/XnE2JoVLyD6iLTiANmVxj8pZ.png" alt="Spider-Man" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #003087, #00246d);"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/eEczyEMDd2BLa3dtkGJVE9Id.png" alt="Horizon" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #003087, #00246d);"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202108/0410/FyTWm10bfYsV6p5BbJnMRY9B.png" alt="The Last of Us" style="object-fit: cover;"></div>
+          <div class="game-banner-item" style="background: linear-gradient(135deg, #003087, #00246d);"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202109/2819/DjBDn2Qfz5fC1qJvgMXOMzgQ.png" alt="Gran Turismo" style="object-fit: cover;"></div>
+        </div>
+        
+        <!-- PlayStation 绑定输入区域 -->
+        <div class="bind-input-area" id="playstationInputArea">
+          <div class="input-group">
+            <input type="text" class="input-field" id="playstationUsernameInput" placeholder="输入 PSN ID">
+            <input type="number" class="input-field" id="playstationGameCountInput" placeholder="游戏数量" style="max-width: 120px;" min="0">
+            <button class="submit-btn" onclick="bindPlatformAccount('playstation')">确认绑定</button>
+          </div>
+          <div class="input-hint">
+            <span class="input-hint-icon">💡</span>
+            <span>请访问 <a href="https://library.playstation.com/" target="_blank" style="color: #66c0f4;">PlayStation Library</a> 或 PS5/PS4 主机查看您的游戏库</span>
+          </div>
+        </div>
+        
+        <!-- PlayStation 已绑定账号区域 -->
+        <div class="accounts-section" id="playstationAccountsSection" style="display: none;">
+          <div class="section-title">已绑定的 PlayStation 账号</div>
+          <div id="playstationAccountsList"></div>
+          <button class="add-account-btn" onclick="togglePlatformInput('playstation')">
+            <span>+</span> 添加 PlayStation 账号
+          </button>
         </div>
       </div>
       
@@ -697,6 +802,7 @@
       userData = UserDataManager.getData(currentUser.id);
       
       renderSteamAccounts();
+      initPlatforms(); // 初始化 Epic / Xbox / PlayStation 平台
       updateHeaderUser();
     } else {
       document.getElementById('loginPrompt').style.display = 'block';
@@ -1041,6 +1147,331 @@
       </div>
     `;
     document.body.appendChild(modal);
+  }
+  
+  // =============================================
+  // Epic / Xbox / PlayStation 平台账号管理
+  // =============================================
+  
+  // 平台配置
+  const platformConfig = {
+    epic: {
+      name: 'Epic Games',
+      icon: '🎮',
+      color: '#2f2f2f',
+      idLabel: 'Epic 用户名',
+      storageKey: 'epicAccounts',
+      profileUrl: 'https://store.epicgames.com/library'
+    },
+    xbox: {
+      name: 'Xbox',
+      icon: '🎮',
+      color: '#107c10',
+      idLabel: 'Gamertag',
+      storageKey: 'xboxAccounts',
+      profileUrl: 'https://account.xbox.com/profile'
+    },
+    playstation: {
+      name: 'PlayStation',
+      icon: '🎮',
+      color: '#003087',
+      idLabel: 'PSN ID',
+      storageKey: 'playstationAccounts',
+      profileUrl: 'https://library.playstation.com/'
+    }
+  };
+  
+  // 切换平台输入区域
+  function togglePlatformInput(platform) {
+    const inputArea = document.getElementById(`${platform}InputArea`);
+    inputArea.classList.toggle('show');
+  }
+  
+  // 绑定平台账号
+  function bindPlatformAccount(platform) {
+    const config = platformConfig[platform];
+    const usernameInput = document.getElementById(`${platform}UsernameInput`);
+    const gameCountInput = document.getElementById(`${platform}GameCountInput`);
+    
+    const username = usernameInput.value.trim();
+    const gameCount = parseInt(gameCountInput.value) || 0;
+    
+    if (!username) {
+      showMessage(`请输入 ${config.idLabel}`, 'error');
+      return;
+    }
+    
+    // 获取已有账号
+    const accounts = userData[config.storageKey] || [];
+    
+    // 检查是否已绑定
+    if (accounts.some(a => a.username.toLowerCase() === username.toLowerCase())) {
+      showMessage('该账号已绑定', 'error');
+      return;
+    }
+    
+    // 添加新账号
+    const newAccount = {
+      id: `${platform}-${Date.now()}`,
+      username: username,
+      gameCount: gameCount,
+      platform: platform,
+      isPrimary: accounts.length === 0,
+      boundAt: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      isManual: true // 标记为手动录入
+    };
+    
+    accounts.push(newAccount);
+    userData[config.storageKey] = accounts;
+    
+    // 保存数据
+    UserDataManager.saveData(currentUser.id, { [config.storageKey]: accounts });
+    
+    // 更新 UI
+    renderPlatformAccounts(platform);
+    
+    // 清空输入
+    usernameInput.value = '';
+    gameCountInput.value = '';
+    document.getElementById(`${platform}InputArea`).classList.remove('show');
+    
+    showMessage(`${config.name} 账号绑定成功！`, 'success');
+  }
+  
+  // 渲染平台账号列表
+  function renderPlatformAccounts(platform) {
+    const config = platformConfig[platform];
+    const accountsSection = document.getElementById(`${platform}AccountsSection`);
+    const accountsList = document.getElementById(`${platform}AccountsList`);
+    const bindBtn = document.getElementById(`${platform}BindBtn`);
+    const statusDesc = document.getElementById(`${platform}Status`);
+    
+    const accounts = userData[config.storageKey] || [];
+    
+    if (accounts.length > 0) {
+      accountsSection.style.display = 'block';
+      bindBtn.textContent = '✓ 已绑定';
+      bindBtn.classList.add('bound');
+      
+      // 更新状态描述
+      const totalGames = accounts.reduce((sum, a) => sum + (a.gameCount || 0), 0);
+      statusDesc.textContent = `已绑定 ${accounts.length} 个账号，共 ${totalGames} 款游戏`;
+      
+      accountsList.innerHTML = accounts.map((account, index) => `
+        <div class="account-item" data-index="${index}">
+          <div class="account-avatar" style="background: ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;">
+            ${account.username.charAt(0).toUpperCase()}
+          </div>
+          <div class="account-info">
+            <div class="account-name">
+              ${account.username}
+              ${account.isPrimary ? '<span class="primary-badge">主账号</span>' : ''}
+            </div>
+            <div class="account-id">
+              ${config.idLabel} · ${account.gameCount || 0} 款游戏
+              ${account.isManual ? '<span style="color: #f59e0b; margin-left: 8px;">📝 手动录入</span>' : ''}
+            </div>
+          </div>
+          <div class="account-actions">
+            <button class="action-btn" onclick="editPlatformAccount('${platform}', ${index})">
+              ✏️ 编辑
+            </button>
+            ${!account.isPrimary ? `<button class="action-btn" onclick="setPlatformPrimary('${platform}', ${index})">设为主账号</button>` : ''}
+            <button class="action-btn danger" onclick="unlinkPlatformAccount('${platform}', ${index})">解绑</button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      accountsSection.style.display = 'none';
+      bindBtn.textContent = '绑定账号';
+      bindBtn.classList.remove('bound');
+      statusDesc.textContent = `手动记录您的 ${config.name} 游戏库`;
+    }
+  }
+  
+  // 编辑平台账号
+  function editPlatformAccount(platform, index) {
+    const config = platformConfig[platform];
+    const accounts = userData[config.storageKey] || [];
+    const account = accounts[index];
+    
+    if (!account) return;
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 400px; width: 90%;" onclick="event.stopPropagation()">
+          <h3 style="color: #66c0f4; margin-bottom: 20px;">编辑 ${config.name} 账号</h3>
+          
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; color: var(--text-soft); margin-bottom: 8px; font-size: 14px;">${config.idLabel}</label>
+            <input type="text" id="editUsername" value="${account.username}" 
+              style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 8px; color: var(--text-main); font-size: 14px;">
+          </div>
+          
+          <div style="margin-bottom: 24px;">
+            <label style="display: block; color: var(--text-soft); margin-bottom: 8px; font-size: 14px;">游戏数量</label>
+            <input type="number" id="editGameCount" value="${account.gameCount || 0}" min="0"
+              style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 8px; color: var(--text-main); font-size: 14px;">
+          </div>
+          
+          <div style="display: flex; gap: 12px;">
+            <button onclick="savePlatformEdit('${platform}', ${index})" 
+              style="flex: 1; padding: 12px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer;">
+              保存修改
+            </button>
+            <button onclick="this.closest('[style*=fixed]').remove()" 
+              style="flex: 1; padding: 12px; background: transparent; border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 8px; color: var(--text-soft); cursor: pointer;">
+              取消
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  // 保存平台账号编辑
+  window.savePlatformEdit = function(platform, index) {
+    const config = platformConfig[platform];
+    const accounts = userData[config.storageKey] || [];
+    const account = accounts[index];
+    
+    if (!account) return;
+    
+    const newUsername = document.getElementById('editUsername').value.trim();
+    const newGameCount = parseInt(document.getElementById('editGameCount').value) || 0;
+    
+    if (!newUsername) {
+      showMessage(`请输入 ${config.idLabel}`, 'error');
+      return;
+    }
+    
+    // 检查是否与其他账号重复
+    if (accounts.some((a, i) => i !== index && a.username.toLowerCase() === newUsername.toLowerCase())) {
+      showMessage('该账号已存在', 'error');
+      return;
+    }
+    
+    account.username = newUsername;
+    account.gameCount = newGameCount;
+    account.lastUpdated = new Date().toISOString();
+    
+    UserDataManager.saveData(currentUser.id, { [config.storageKey]: accounts });
+    renderPlatformAccounts(platform);
+    
+    document.querySelector('[style*="fixed"]').remove();
+    showMessage('修改已保存', 'success');
+  };
+  
+  // 设置主账号
+  function setPlatformPrimary(platform, index) {
+    const config = platformConfig[platform];
+    const accounts = userData[config.storageKey] || [];
+    
+    accounts.forEach((a, i) => a.isPrimary = i === index);
+    
+    UserDataManager.saveData(currentUser.id, { [config.storageKey]: accounts });
+    renderPlatformAccounts(platform);
+    showMessage('已设为主账号', 'success');
+  }
+  
+  // 解绑平台账号
+  function unlinkPlatformAccount(platform, index) {
+    const config = platformConfig[platform];
+    
+    if (!confirm(`确定要解绑这个 ${config.name} 账号吗？`)) return;
+    
+    const accounts = userData[config.storageKey] || [];
+    const removed = accounts.splice(index, 1)[0];
+    
+    // 如果删除的是主账号，设置新的主账号
+    if (removed.isPrimary && accounts.length > 0) {
+      accounts[0].isPrimary = true;
+    }
+    
+    UserDataManager.saveData(currentUser.id, { [config.storageKey]: accounts });
+    renderPlatformAccounts(platform);
+    showMessage('账号已解绑', 'success');
+  }
+  
+  // 显示平台帮助
+  function showPlatformHelp(platform) {
+    const config = platformConfig[platform];
+    
+    const helpContent = {
+      epic: `
+        <h3 style="color: #66c0f4; margin-bottom: 16px;">如何查看 Epic Games 游戏库？</h3>
+        <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
+          <ol style="margin: 12px 0; padding-left: 20px;">
+            <li>访问 <a href="https://store.epicgames.com/library" target="_blank" style="color: #66c0f4;">Epic Games 商城</a></li>
+            <li>登录您的 Epic 账号</li>
+            <li>点击左侧的"游戏库"</li>
+            <li>查看并统计您拥有的游戏数量</li>
+          </ol>
+          
+          <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+            <strong style="color: var(--accent);">ℹ️ 说明</strong>
+            <p style="margin-top: 8px;">Epic Games 目前没有公开 API，因此数据需要手动录入。您可以随时更新游戏数量。</p>
+          </div>
+        </div>
+      `,
+      xbox: `
+        <h3 style="color: #66c0f4; margin-bottom: 16px;">如何查看 Xbox 游戏库？</h3>
+        <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
+          <ol style="margin: 12px 0; padding-left: 20px;">
+            <li>访问 <a href="https://account.xbox.com/profile" target="_blank" style="color: #66c0f4;">Xbox Profile</a></li>
+            <li>或使用 Xbox 主机/应用</li>
+            <li>查看您的游戏库和成就</li>
+            <li>统计您拥有的游戏数量</li>
+          </ol>
+          
+          <div style="background: rgba(16, 124, 16, 0.1); border: 1px solid rgba(16, 124, 16, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+            <strong style="color: #10b981;">💡 提示</strong>
+            <p style="margin-top: 8px;">Xbox Game Pass 订阅的游戏也可以计入，但注意这些游戏在订阅结束后可能无法游玩。</p>
+          </div>
+        </div>
+      `,
+      playstation: `
+        <h3 style="color: #66c0f4; margin-bottom: 16px;">如何查看 PlayStation 游戏库？</h3>
+        <div style="color: var(--text-soft); font-size: 14px; line-height: 1.8;">
+          <ol style="margin: 12px 0; padding-left: 20px;">
+            <li>访问 <a href="https://library.playstation.com/" target="_blank" style="color: #66c0f4;">PlayStation Library</a></li>
+            <li>或在 PS5/PS4 主机上查看</li>
+            <li>浏览您的游戏收藏</li>
+            <li>统计您拥有的游戏数量</li>
+          </ol>
+          
+          <div style="background: rgba(0, 48, 135, 0.1); border: 1px solid rgba(0, 48, 135, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+            <strong style="color: #60a5fa;">💡 提示</strong>
+            <p style="margin-top: 8px;">PS Plus 订阅的游戏可以计入您的游戏库统计。</p>
+          </div>
+        </div>
+      `
+    };
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+        <div style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95)); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 16px; padding: 32px; max-width: 500px; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
+          ${helpContent[platform]}
+          
+          <button onclick="this.parentElement.parentElement.remove()" 
+            style="margin-top: 20px; padding: 10px 24px; background: #66c0f4; border: none; border-radius: 8px; color: #1b2838; font-weight: 600; cursor: pointer; width: 100%;">
+            知道了
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  // 初始化时渲染所有平台
+  function initPlatforms() {
+    renderPlatformAccounts('epic');
+    renderPlatformAccounts('xbox');
+    renderPlatformAccounts('playstation');
   }
   
   // =============================================
