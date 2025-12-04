@@ -179,11 +179,21 @@
     
     // 加载用户信息
     async function loadUserInfo() {
-      // 等待 GameBoxAuth 初始化
-      await GameBoxAuth.init();
-      
-      const userData = GameBoxAuth.getCurrentUser();
-      console.log('当前用户数据:', userData);
+      try {
+        // 等待 GameBoxAuth 初始化
+        if (typeof GameBoxAuth.init === 'function') {
+          await GameBoxAuth.init();
+        }
+        
+        // 获取用户数据
+        let userData = GameBoxAuth.getCurrentUser();
+        
+        // 如果 getCurrentUser 返回 Promise，等待它
+        if (userData instanceof Promise) {
+          userData = await userData;
+        }
+        
+        console.log('当前用户数据:', userData);
       
       if (!userData) {
         console.log('未登录，跳转到登录页');
@@ -215,6 +225,12 @@
       }
       
       console.log('用户信息加载完成');
+      } catch (error) {
+        console.error('加载用户信息失败:', error);
+        document.getElementById('username').textContent = '加载失败';
+        document.getElementById('email').textContent = '加载失败';
+        document.getElementById('createdAt').textContent = '加载失败';
+      }
     }
     
     // 切换账号 - 跳转到切换账号页面

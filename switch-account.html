@@ -216,13 +216,23 @@
     
     // 显示当前账号信息
     async function displayCurrentAccount() {
-      // 等待 GameBoxAuth 初始化
-      await GameBoxAuth.init();
-      
-      const userData = GameBoxAuth.getCurrentUser();
-      const currentAccountEl = document.getElementById('currentAccount');
-      
-      console.log('切换账号页 - 当前用户:', userData);
+      try {
+        // 等待 GameBoxAuth 初始化
+        if (typeof GameBoxAuth.init === 'function') {
+          await GameBoxAuth.init();
+        }
+        
+        // 获取用户数据
+        let userData = GameBoxAuth.getCurrentUser();
+        
+        // 如果 getCurrentUser 返回 Promise，等待它
+        if (userData instanceof Promise) {
+          userData = await userData;
+        }
+        
+        const currentAccountEl = document.getElementById('currentAccount');
+        
+        console.log('切换账号页 - 当前用户:', userData);
       
       if (userData) {
         const displayName = userData.username || userData.email?.split('@')[0] || '未知用户';
@@ -230,6 +240,10 @@
         currentAccountEl.textContent = `${displayName}${displayEmail ? ' (' + displayEmail + ')' : ''}`;
       } else {
         currentAccountEl.textContent = '未登录';
+      }
+      } catch (error) {
+        console.error('加载当前账号失败:', error);
+        document.getElementById('currentAccount').textContent = '加载失败';
       }
     }
     
