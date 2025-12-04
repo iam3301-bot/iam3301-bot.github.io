@@ -68,10 +68,10 @@ const EMAIL_SERVICE_CONFIG = {
   // 4. 获取 Service ID, Template ID, Public Key
   // =============================================
   emailjs: {
-    serviceId: 'service_gamebox',  // 替换为你的 Service ID
-    templateId: 'template_otp',     // 替换为你的 Template ID  
-    publicKey: 'your_public_key',   // 替换为你的 Public Key
-    enabled: false  // 设为 true 启用真实邮件发送
+    serviceId: 'service_mjvb7y5',  // EmailJS Service ID
+    templateId: 'template_df6t50r',     // EmailJS Template ID  
+    publicKey: 'Z6VWjqql5Idf6t027',   // EmailJS Public Key
+    enabled: true  // 已启用真实邮件发送
   },
   
   // =============================================
