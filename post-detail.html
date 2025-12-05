@@ -482,8 +482,11 @@
 
       if (!userId) {
         userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        username = '访客' + Math.floor(Math.random() * 10000);
         localStorage.setItem('gamebox_user_id', userId);
+      }
+
+      if (!username) {
+        username = '访客' + Math.floor(Math.random() * 10000);
         localStorage.setItem('gamebox_username', username);
       }
 
