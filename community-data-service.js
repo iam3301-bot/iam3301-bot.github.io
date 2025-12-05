@@ -82,7 +82,9 @@
         console.log('🔍 正在检查数据库表...');
         
         // 确保数据库表存在
+        console.log('🔧 [DEBUG] 调用 ensureDatabaseTables 前，useSupabase =', useSupabase);
         await ensureDatabaseTables();
+        console.log('🔧 [DEBUG] ensureDatabaseTables 返回后，useSupabase =', useSupabase);
         
         if (useSupabase) {
           console.log('✅ 社区数据服务: 已连接 Supabase 数据库');
@@ -183,17 +185,23 @@
       
       console.log('✅ 数据库表检查通过');
       useSupabase = true;
+      console.log('🔧 [DEBUG] useSupabase 已设置为 true');
       
       // 检查是否有初始数据，如果没有则迁移本地数据
       if (!error && (!data || data.length === 0)) {
         console.log('📤 检测到无数据，准备迁移本地数据...');
         await migrateLocalDataToSupabase();
       }
+      
+      console.log('🔧 [DEBUG] ensureDatabaseTables 完成，useSupabase =', useSupabase);
     } catch (e) {
       console.error('❌ 检查数据库表失败:', e);
       console.error('错误堆栈:', e.stack);
+      console.log('🔧 [DEBUG] catch 块设置 useSupabase = false');
       useSupabase = false;
     }
+    
+    console.log('🔧 [DEBUG] ensureDatabaseTables 函数结束，最终 useSupabase =', useSupabase);
   }
 
   /**
