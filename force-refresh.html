@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>强制刷新工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    
+    h1 {
+      color: #f5576c;
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border: none;
+      padding: 20px 40px;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 10px;
+      box-shadow: 0 5px 20px rgba(245,87,108,0.3);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(245,87,108,0.5);
+    }
+    
+    .status {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    
+    .status.success {
+      background: #d4edda;
+      border: 2px solid #28a745;
+      color: #155724;
+    }
+    
+    .status.error {
+      background: #f8d7da;
+      border: 2px solid #dc3545;
+      color: #721c24;
+    }
+    
+    .status.info {
+      background: #d1ecf1;
+      border: 2px solid #17a2b8;
+      color: #0c5460;
+    }
+    
+    .countdown {
+      font-size: 48px;
+      font-weight: bold;
+      color: #f5576c;
+      margin: 20px 0;
+    }
+    
+    .note {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 强制刷新工具</h1>
+    <p class="subtitle">
+      一键清除缓存并重新加载社区页面<br>
+      解决"本地存储数据"问题
+    </p>
+    
+    <button class="btn" onclick="clearAndRefresh()">
+      🚀 清除缓存并刷新
+    </button>
+    
+    <button class="btn" onclick="openCommunity()">
+      📱 打开社区页面
+    </button>
+    
+    <div id="status" style="display: none;"></div>
+    
+    <div class="note">
+      <strong>💡 这个工具会做什么？</strong><br>
+      1. 清除 community.html 的所有缓存<br>
+      2. 清除相关 JavaScript 文件缓存<br>
+      3. 清除 localStorage 数据<br>
+      4. 重新加载页面
+    </div>
+  </div>
+
+  <script>
+    function clearAndRefresh() {
+      const status = document.getElementById('status');
+      status.style.display = 'block';
+      status.className = 'status info';
+      status.innerHTML = '🔄 正在清除缓存...<br><br>';
+      
+      let step = 1;
+      
+      // 步骤1: 清除 localStorage
+      setTimeout(() => {
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+          status.innerHTML += `✅ 步骤 ${step++}: localStorage 已清除<br>`;
+        } catch (e) {
+          status.innerHTML += `⚠️ 步骤 ${step++}: localStorage 清除失败<br>`;
+        }
+        
+        // 步骤2: 清除 Service Worker
+        setTimeout(() => {
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+              registrations.forEach(reg => reg.unregister());
+              status.innerHTML += `✅ 步骤 ${step++}: Service Worker 已清除<br>`;
+            });
+          } else {
+            status.innerHTML += `ℹ️ 步骤 ${step++}: 无 Service Worker<br>`;
+          }
+          
+          // 步骤3: 清除 Cache API
+          setTimeout(() => {
+            if ('caches' in window) {
+              caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
+                status.innerHTML += `✅ 步骤 ${step++}: Cache API 已清除<br>`;
+              });
+            } else {
+              status.innerHTML += `ℹ️ 步骤 ${step++}: 无 Cache API<br>`;
+            }
+            
+            // 步骤4: 倒计时跳转
+            setTimeout(() => {
+              status.innerHTML += `<br>✅ 所有缓存已清除！<br><br>`;
+              let countdown = 3;
+              status.innerHTML += `<div class="countdown">${countdown}</div>`;
+              status.innerHTML += `秒后自动跳转到社区页面...`;
+              
+              const timer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                  document.querySelector('.countdown').textContent = countdown;
+                } else {
+                  clearInterval(timer);
+                  // 使用时间戳强制刷新
+                  window.location.href = `community.html?t=${Date.now()}`;
+                }
+              }, 1000);
+            }, 500);
+          }, 500);
+        }, 500);
+      }, 500);
+    }
+    
+    function openCommunity() {
+      // 使用时间戳强制不缓存
+      window.location.href = `community.html?t=${Date.now()}`;
+    }
+  </script>
+</body>
+</html>
