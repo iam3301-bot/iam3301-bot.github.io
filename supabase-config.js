@@ -1081,7 +1081,8 @@ const SteamAPI = {
   
   // 检查是否启用
   isEnabled() {
-    return STEAM_CONFIG.enabled && STEAM_CONFIG.apiKey;
+    // 检查是否启用且 API Key 有效（至少 10 个字符）
+    return STEAM_CONFIG.enabled && STEAM_CONFIG.apiKey && STEAM_CONFIG.apiKey.length > 10;
   },
   
   // 获取当前代理服务器
@@ -1118,8 +1119,14 @@ const SteamAPI = {
         });
         
         if (response.ok) {
-          const data = await response.json();
-          return { success: true, data };
+          const text = await response.text();
+          try {
+            const data = JSON.parse(text);
+            return { success: true, data };
+          } catch (jsonError) {
+            console.error('[Steam API] JSON 解析失败，响应内容:', text.substring(0, 200));
+            throw new Error(`无效的 JSON 响应: ${text.substring(0, 50)}...`);
+          }
         }
         
         throw new Error(`HTTP ${response.status}`);
