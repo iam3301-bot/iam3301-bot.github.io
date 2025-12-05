@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS community_likes (
 -- =============================================
 CREATE TABLE IF NOT EXISTS community_stats (
   id INTEGER PRIMARY KEY DEFAULT 1,
-  total_members INTEGER DEFAULT 5678,
-  total_replies INTEGER DEFAULT 12345,
+  total_members INTEGER DEFAULT 0,
+  total_replies INTEGER DEFAULT 0,
   start_time TIMESTAMPTZ DEFAULT NOW(),
   last_update TIMESTAMPTZ DEFAULT NOW()
 );
@@ -237,9 +237,9 @@ CREATE TRIGGER trigger_update_bindings_updated_at
 -- 插入初始数据
 -- =============================================
 
--- 初始化统计数据
+-- 初始化统计数据（从0开始，使用真实数据）
 INSERT INTO community_stats (id, total_members, total_replies, start_time, last_update)
-VALUES (1, 5678, 12345, NOW(), NOW())
+VALUES (1, 0, 0, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET last_update = NOW();
 
 -- 插入示例帖子（可选，首次初始化时使用）

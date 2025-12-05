@@ -1018,13 +1018,36 @@ ON CONFLICT (id) DO NOTHING;
         // 获取在线用户数
         const onlineUsers = await getOnlineUserCount();
 
-        // 计算会员增长
-        const memberGrowth = stats ? calculateMemberGrowth(stats.start_time) : 0;
+        // 统计真实用户数（从帖子和评论的作者去重）
+        let realMembers = 0;
+        try {
+          // 获取所有发帖用户（去重）
+          const { data: postAuthors } = await supabaseClient
+            .from('community_posts')
+            .select('author')
+            .neq('author', '游客');
+          
+          // 获取所有评论用户（去重）
+          const { data: commentAuthors } = await supabaseClient
+            .from('community_comments')
+            .select('author')
+            .neq('author', '游客');
+          
+          // 合并并去重
+          const allAuthors = new Set([
+            ...(postAuthors || []).map(p => p.author),
+            ...(commentAuthors || []).map(c => c.author)
+          ]);
+          
+          realMembers = allAuthors.size;
+        } catch (e) {
+          console.debug('统计真实用户失败:', e);
+        }
 
         const result = {
           totalPosts: postsCount || 0,
-          totalMembers: (stats?.total_members || 5678) + memberGrowth,
-          totalReplies: (stats?.total_replies || 12345) + (totalComments || 0),
+          totalMembers: realMembers,  // 使用真实统计的用户数
+          totalReplies: totalComments || 0,  // 直接使用评论总数
           onlineUsers: onlineUsers
         };
 
@@ -1035,16 +1058,30 @@ ON CONFLICT (id) DO NOTHING;
       }
     }
 
-    // 本地统计
+    // 本地统计 - 使用真实数据
     const posts = getLocalPosts();
     const totalReplies = posts.reduce((sum, p) => sum + (p.replies || 0), 0);
     
-    return {
-      totalPosts: posts.length,
-      totalMembers: 5678 + calculateMemberGrowth(),
-      totalReplies: 12345 + totalReplies,
-      onlineUsers: getOnlineUserCount()
-    };
+    // 从本地存储获取评论总数
+    try {
+      const commentsJson = localStorage.getItem(STORAGE_KEY_COMMENTS);
+      const allComments = commentsJson ? JSON.parse(commentsJson) : {};
+      const actualReplies = Object.values(allComments).reduce((sum, comments) => sum + comments.length, 0);
+      
+      return {
+        totalPosts: posts.length,
+        totalMembers: 0,  // 本地模式无法统计真实成员数
+        totalReplies: actualReplies,  // 使用真实评论数
+        onlineUsers: getOnlineUserCount()
+      };
+    } catch (e) {
+      return {
+        totalPosts: posts.length,
+        totalMembers: 0,
+        totalReplies: totalReplies,
+        onlineUsers: getOnlineUserCount()
+      };
+    }
   }
 
   /**
@@ -1061,8 +1098,8 @@ ON CONFLICT (id) DO NOTHING;
         .single();
 
       const newStats = {
-        total_members: (current?.total_members || 5678) + (updates.membersIncrement || 0),
-        total_replies: (current?.total_replies || 12345) + (updates.repliesIncrement || 0),
+        total_members: (current?.total_members || 0) + (updates.membersIncrement || 0),
+        total_replies: (current?.total_replies || 0) + (updates.repliesIncrement || 0),
         last_update: new Date().toISOString()
       };
 
@@ -1460,11 +1497,11 @@ ON CONFLICT (id) DO NOTHING;
       localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(getDefaultPosts()));
     }
     
-    // 初始化统计数据
+    // 初始化统计数据（使用真实初始值）
     if (!localStorage.getItem(STORAGE_KEY_STATS)) {
       localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify({
-        totalMembers: 5678,
-        totalReplies: 12345,
+        totalMembers: 0,  // 从0开始统计真实用户
+        totalReplies: 0,  // 从0开始统计真实回复
         lastUpdate: Date.now(),
         startTime: Date.now()
       }));
