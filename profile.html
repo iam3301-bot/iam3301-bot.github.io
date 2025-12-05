@@ -1215,6 +1215,8 @@
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
 <script src="supabase-config.js"></script>
+<script src="account-history.js"></script>
+<script src="account-modals.js"></script>
 <script>
   // =============================================
   // 页面初始化
@@ -1654,15 +1656,24 @@
     renderSteamGames(userData.steam?.games || [], e.target.value);
   });
   
-  // 登出
-  // 切换账号 - 跳转到账号管理页面
+  // 切换账号 - 使用浮窗组件
   document.getElementById('switchAccountBtn').addEventListener('click', () => {
-    window.location.href = 'account-settings.html';
+    if (typeof AccountModals !== 'undefined') {
+      AccountModals.showSwitchAccountModal(currentUser);
+    } else {
+      console.error('AccountModals未加载');
+      showMessage('功能暂不可用，请刷新页面重试', 'error');
+    }
   });
   
-  // 退出登录 - 跳转到账号管理页面
+  // 退出登录 - 使用浮窗组件
   document.getElementById('logoutBtn').addEventListener('click', () => {
-    window.location.href = 'account-settings.html';
+    if (typeof AccountModals !== 'undefined') {
+      AccountModals.showLogoutModal(currentUser);
+    } else {
+      console.error('AccountModals未加载');
+      showMessage('功能暂不可用，请刷新页面重试', 'error');
+    }
   });
   
   // =============================================
