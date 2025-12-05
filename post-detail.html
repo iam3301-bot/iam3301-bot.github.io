@@ -12,12 +12,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
   <style>
-    /* 帖子详情页专属样式 */
+    /* 帖子详情页专属样式 - 继承主页样式 */
     .post-detail-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      padding-top: 30px; /* 给顶部合适的呼吸空间 */
+      /* 使用与 community.html 相同的布局 */
     }
     
     /* 返回按钮 */
@@ -326,17 +323,48 @@
     }
   </style>
 </head>
-<body>
-  <!-- Matrix 背景 -->
-  <canvas id="matrix"></canvas>
+<body data-current-page="community">
+  <!-- 完整页面结构 -->
+  <div class="page">
+    <header class="header">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-mark">G</div>
+          <div>
+            <div>GameBox 游盒</div>
+            <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+          </div>
+        </a>
+        <nav class="nav-main">
+          <a href="index.html" data-page="home" class="nav-link">首页</a>
+          <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+          <a href="ranking.html" data-page="ranking" class="nav-link">
+            排行榜 <span class="badge">HOT</span>
+          </a>
+          <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+          <a href="community.html" data-page="community" class="nav-link">社区</a>
+          <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+          <a href="tools.html" data-page="tools" class="nav-link">工具</a>
+          <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+          <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+        </nav>
+        <div class="header-right">
+          <div class="header-search">
+            <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+            <span class="header-search-icon">🔍</span>
+          </div>
+          <button class="header-user" onclick="window.location.href='profile.html';" style="cursor: pointer;">未登录 · 游客</button>
+        </div>
+      </div>
+    </header>
+    
+    <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+    <div id="particles-container" class="particles-container"></div>
+    <div id="scroll-progress" class="scroll-progress"></div>
 
-  <!-- 粒子背景 -->
-  <div id="particles-js"></div>
-
-  <!-- 移除导航栏，保持简洁 -->
-
-  <!-- 主内容区 -->
-  <div class="post-detail-container">
+    <main class="main">
+      <section>
+        <div class="post-detail-container">
     <!-- 返回按钮 -->
     <a href="community.html" class="back-btn">
       <span>←</span>
@@ -378,6 +406,9 @@
       <!-- 评论列表 -->
       <div id="comments-list" class="comments-list"></div>
     </div>
+        </div>
+      </section>
+    </main>
   </div>
 
   <!-- Supabase SDK -->
@@ -865,69 +896,6 @@
     });
   </script>
 
-  <!-- Matrix 和粒子效果脚本 -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-    // Matrix 背景
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
-    const font_size = 10;
-    const columns = canvas.width/font_size;
-
-    const drops = [];
-    for(let x = 0; x < columns; x++)
-      drops[x] = 1;
-
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = 'rgba(255, 211, 0, 0.3)';
-      ctx.font = font_size + 'px monospace';
-
-      for(let i = 0; i < drops.length; i++) {
-        const text = matrix.charAt(Math.floor(Math.random() * matrix.length));
-        ctx.fillText(text, i*font_size, drops[i]*font_size);
-
-        if(drops[i]*font_size > canvas.height && Math.random() > 0.975)
-          drops[i] = 0;
-
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 35);
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // 粒子效果
-    if (typeof particlesJS !== 'undefined') {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 80, density: { enable: true, value_area: 800 } },
-          color: { value: '#ffd300' },
-          shape: { type: 'circle' },
-          opacity: { value: 0.5, random: false },
-          size: { value: 3, random: true },
-          line_linked: { enable: true, distance: 150, color: '#ffd300', opacity: 0.4, width: 1 },
-          move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
-        },
-        interactivity: {
-          detect_on: 'canvas',
-          events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
-          modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
-        },
-        retina_detect: true
-      });
-    }
-  </script>
 </body>
 </html>
