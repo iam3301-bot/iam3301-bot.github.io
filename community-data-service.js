@@ -1015,7 +1015,7 @@ ON CONFLICT (id) DO NOTHING;
           .from('community_comments')
           .select('id', { count: 'exact', head: true });
 
-        // 获取在线用户数
+        // 获取真实在线用户数（异步查询）
         const onlineUsers = await getOnlineUserCount();
 
         // 统计真实注册用户数（从 user_profiles 表）
@@ -1080,14 +1080,14 @@ ON CONFLICT (id) DO NOTHING;
         totalPosts: posts.length,
         totalMembers: 0,  // 本地模式无法统计真实成员数
         totalReplies: actualReplies,  // 使用真实评论数
-        onlineUsers: getOnlineUserCount()
+        onlineUsers: await getOnlineUserCount()  // 异步获取真实在线数
       };
     } catch (e) {
       return {
         totalPosts: posts.length,
         totalMembers: 0,
         totalReplies: totalReplies,
-        onlineUsers: getOnlineUserCount()
+        onlineUsers: await getOnlineUserCount()  // 异步获取真实在线数
       };
     }
   }
@@ -1133,38 +1133,45 @@ ON CONFLICT (id) DO NOTHING;
   // =============================================
 
   /**
-   * 获取在线用户数（真实模拟）
+   * 获取真实在线用户数（从数据库查询最近5分钟活跃的用户）
    */
-  function getOnlineUserCount() {
-    const baseCount = 80;
-    const hour = new Date().getHours();
-    const minute = new Date().getMinutes();
-    
-    // 时间因子
-    let timeFactor = 1.0;
-    if (hour >= 19 && hour <= 23) {
-      timeFactor = 2.8; // 高峰期
-    } else if (hour >= 12 && hour <= 14) {
-      timeFactor = 2.0; // 午休
-    } else if (hour >= 9 && hour <= 18) {
-      timeFactor = 1.5; // 白天
-    } else if (hour >= 0 && hour <= 6) {
-      timeFactor = 0.3; // 深夜
-    } else {
-      timeFactor = 0.8;
+  async function getOnlineUserCount() {
+    // 从 Supabase 获取真实在线用户数
+    if (useSupabase && supabaseClient) {
+      try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+        
+        const { count, error } = await supabaseClient
+          .from('online_users')
+          .select('user_id', { count: 'exact', head: true })
+          .gte('last_active', fiveMinutesAgo);
+        
+        if (error) throw error;
+        
+        const realOnlineCount = count || 0;
+        console.log(`🟢 真实在线用户数: ${realOnlineCount}`);
+        return realOnlineCount;
+      } catch (e) {
+        console.debug('获取真实在线用户数失败:', e);
+      }
     }
     
-    // 周末加成
-    const day = new Date().getDay();
-    if (day === 0 || day === 6) {
-      timeFactor *= 1.3;
+    // 本地模式降级：统计本地活跃用户
+    try {
+      const localOnlineData = JSON.parse(localStorage.getItem('gamebox_local_online') || '{}');
+      const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+      
+      let onlineCount = 0;
+      for (const userId in localOnlineData) {
+        if (localOnlineData[userId] > fiveMinutesAgo) {
+          onlineCount++;
+        }
+      }
+      
+      return onlineCount;
+    } catch (e) {
+      return 0;
     }
-    
-    // 分钟级波动
-    const minuteSeed = Math.sin(minute * 0.1) * 0.15;
-    const randomFactor = 0.85 + Math.random() * 0.3 + minuteSeed;
-    
-    return Math.floor(baseCount * timeFactor * randomFactor);
   }
 
   /**
@@ -1203,24 +1210,37 @@ ON CONFLICT (id) DO NOTHING;
   }
 
   /**
-   * 更新用户在线状态
+   * 更新用户在线状态（心跳机制）
    */
   async function updateOnlineStatus() {
-    const username = getCurrentUsername();
-    if (!username) return;
+    const userId = getCurrentUserId() || getAnonymousUserId();
+    const username = getCurrentUsername() || '访客';
 
+    // 更新到 Supabase
     if (useSupabase && supabaseClient) {
       try {
-        await supabaseClient
+        const { error } = await supabaseClient
           .from('online_users')
           .upsert({
-            user_id: getCurrentUserId() || getAnonymousUserId(),
+            user_id: userId,
             username: username,
             last_active: new Date().toISOString()
           }, { onConflict: 'user_id' });
+        
+        if (error) throw error;
+        console.log(`💓 心跳更新成功: ${username}`);
       } catch (e) {
         console.debug('更新在线状态失败:', e);
       }
+    }
+    
+    // 同时更新到本地存储（降级方案）
+    try {
+      const localOnlineData = JSON.parse(localStorage.getItem('gamebox_local_online') || '{}');
+      localOnlineData[userId] = Date.now();
+      localStorage.setItem('gamebox_local_online', JSON.stringify(localOnlineData));
+    } catch (e) {
+      console.debug('更新本地在线状态失败:', e);
     }
   }
 
@@ -1568,16 +1588,101 @@ ON CONFLICT (id) DO NOTHING;
       }));
     }
     
-    // 更新在线状态
-    updateOnlineStatus();
+    // 立即更新在线状态
+    await updateOnlineStatus();
     
-    // 启动定期更新
-    setInterval(() => {
-      updateOnlineStatus();
+    // 启动心跳机制（每30秒更新一次在线状态）
+    const heartbeatInterval = setInterval(async () => {
+      await updateOnlineStatus();
       window.dispatchEvent(new CustomEvent('community-stats-update'));
     }, 30000);
     
-    console.log('✅ 社区数据服务已初始化', useSupabase ? '(Supabase 模式)' : '(本地存储模式)');
+    // 启动统计刷新（每10秒更新一次在线人数显示）
+    const statsRefreshInterval = setInterval(() => {
+      window.dispatchEvent(new CustomEvent('community-stats-update'));
+    }, 10000);
+    
+    // 页面可见性变化时更新
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible') {
+        await updateOnlineStatus();
+      }
+    });
+    
+    // 用户活跃检测（鼠标移动、键盘输入、滚动）
+    let lastActivityUpdate = Date.now();
+    const activityThrottle = 30000;  // 30秒内最多更新一次
+    
+    const updateActivityThrottled = async () => {
+      const now = Date.now();
+      if (now - lastActivityUpdate > activityThrottle) {
+        lastActivityUpdate = now;
+        await updateOnlineStatus();
+      }
+    };
+    
+    // 监听用户活动
+    ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(event => {
+      document.addEventListener(event, updateActivityThrottled, { passive: true });
+    });
+    
+    // 用户离开页面时标记离线
+    window.addEventListener('beforeunload', async () => {
+      if (useSupabase && supabaseClient) {
+        try {
+          const userId = getCurrentUserId() || getAnonymousUserId();
+          // 删除在线记录
+          await supabaseClient
+            .from('online_users')
+            .delete()
+            .eq('user_id', userId);
+        } catch (e) {
+          console.debug('标记离线失败:', e);
+        }
+      }
+    });
+    
+    // 启动在线用户清理任务（每5分钟清理一次过期用户）
+    const cleanupInterval = setInterval(async () => {
+      if (useSupabase && supabaseClient) {
+        try {
+          await supabaseClient.rpc('cleanup_expired_online_users');
+          console.log('🧹 已清理过期在线用户');
+        } catch (e) {
+          console.debug('清理过期用户失败:', e);
+        }
+      }
+      
+      // 清理本地存储中的过期数据
+      try {
+        const localOnlineData = JSON.parse(localStorage.getItem('gamebox_local_online') || '{}');
+        const tenMinutesAgo = Date.now() - 10 * 60 * 1000;
+        let cleaned = 0;
+        
+        for (const userId in localOnlineData) {
+          if (localOnlineData[userId] < tenMinutesAgo) {
+            delete localOnlineData[userId];
+            cleaned++;
+          }
+        }
+        
+        if (cleaned > 0) {
+          localStorage.setItem('gamebox_local_online', JSON.stringify(localOnlineData));
+          console.log(`🧹 已清理 ${cleaned} 个本地过期在线记录`);
+        }
+      } catch (e) {
+        console.debug('清理本地过期数据失败:', e);
+      }
+    }, 5 * 60 * 1000);  // 每5分钟执行一次
+    
+    // 存储定时器ID以便后续清理
+    window._communityHeartbeat = heartbeatInterval;
+    window._communityStatsRefresh = statsRefreshInterval;
+    window._communityCleanup = cleanupInterval;
+    
+    console.log('✅ 社区数据服务已初始化', useSupabase ? '(Supabase 真实在线统计)' : '(本地存储模式)');
+    console.log('💓 心跳机制已启动，每30秒更新在线状态');
+    console.log('🧹 清理任务已启动，每5分钟清理过期用户');
   }
 
   // 页面可见性变化时更新状态
