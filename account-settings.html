@@ -237,6 +237,145 @@
       text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
     }
 
+    /* 消息提示 */
+    .message-box {
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+
+    .message-box.show {
+      display: block;
+    }
+
+    .message-box.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .message-box.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .message-box.info {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+    }
+
+    .message-box.warning {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #f59e0b;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 确认模态框 */
+    .confirm-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .confirm-modal.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .confirm-modal-content {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95));
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: scaleIn 0.3s ease;
+      position: relative;
+    }
+
+    .confirm-modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #00ff88);
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .confirm-modal-icon {
+      font-size: 56px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .confirm-modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      color: var(--text-soft);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .confirm-modal-message {
+      color: var(--text-muted);
+      font-size: 15px;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .confirm-modal-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .confirm-modal-buttons .btn {
+      flex: 1;
+    }
+
     /* 响应式 */
     @media (max-width: 768px) {
       .settings-header h1 {
@@ -265,6 +404,9 @@
       <h1>账号设置</h1>
       <p>管理您的账号信息、密码和其他账号</p>
     </div>
+
+    <!-- 全局消息提示 -->
+    <div id="globalMessage" class="message-box"></div>
 
     <!-- 基本信息卡片 -->
     <div class="settings-card">
@@ -367,12 +509,91 @@
     </div>
   </div>
 
+  <!-- 确认模态框 -->
+  <div id="confirmModal" class="confirm-modal">
+    <div class="confirm-modal-content">
+      <div class="confirm-modal-icon" id="confirmModalIcon">❓</div>
+      <div class="confirm-modal-title" id="confirmModalTitle">确认操作</div>
+      <div class="confirm-modal-message" id="confirmModalMessage">您确定要执行此操作吗？</div>
+      <div class="confirm-modal-buttons">
+        <button class="btn btn-secondary" id="confirmModalCancel">取消</button>
+        <button class="btn btn-primary" id="confirmModalConfirm">确认</button>
+      </div>
+    </div>
+  </div>
+
   <script src="supabase-config.js"></script>
   <script src="common.js"></script>
   <script>
     // =============================================
     // 账号设置脚本
     // =============================================
+
+    // 全局消息提示功能
+    function showMessage(message, type = 'info', duration = 5000) {
+      const messageBox = document.getElementById('globalMessage');
+      messageBox.textContent = message;
+      messageBox.className = `message-box show ${type}`;
+      
+      // 自动隐藏（成功消息3秒，其他消息5秒）
+      const hideDelay = type === 'success' ? 3000 : duration;
+      setTimeout(() => {
+        messageBox.classList.remove('show');
+      }, hideDelay);
+    }
+
+    // 确认模态框功能
+    function showConfirmModal(options) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('confirmModal');
+        const icon = document.getElementById('confirmModalIcon');
+        const title = document.getElementById('confirmModalTitle');
+        const message = document.getElementById('confirmModalMessage');
+        const cancelBtn = document.getElementById('confirmModalCancel');
+        const confirmBtn = document.getElementById('confirmModalConfirm');
+
+        // 设置内容
+        icon.textContent = options.icon || '❓';
+        title.textContent = options.title || '确认操作';
+        message.textContent = options.message || '您确定要执行此操作吗？';
+        
+        // 设置按钮文本
+        if (options.cancelText) cancelBtn.textContent = options.cancelText;
+        if (options.confirmText) confirmBtn.textContent = options.confirmText;
+
+        // 显示模态框
+        modal.classList.add('show');
+
+        // 处理按钮点击
+        const handleCancel = () => {
+          modal.classList.remove('show');
+          cleanup();
+          resolve(false);
+        };
+
+        const handleConfirm = () => {
+          modal.classList.remove('show');
+          cleanup();
+          resolve(true);
+        };
+
+        const cleanup = () => {
+          cancelBtn.removeEventListener('click', handleCancel);
+          confirmBtn.removeEventListener('click', handleConfirm);
+          modal.removeEventListener('click', handleModalClick);
+        };
+
+        const handleModalClick = (e) => {
+          if (e.target === modal) {
+            handleCancel();
+          }
+        };
+
+        cancelBtn.addEventListener('click', handleCancel);
+        confirmBtn.addEventListener('click', handleConfirm);
+        modal.addEventListener('click', handleModalClick);
+      });
+    }
 
     // 加载用户信息
     async function loadUserInfo() {
@@ -451,17 +672,17 @@
 
       // 验证输入
       if (!currentPassword || !newPassword || !confirmPassword) {
-        alert('请填写所有密码字段');
+        showMessage('请填写所有密码字段', 'error');
         return;
       }
 
       if (newPassword.length < 6) {
-        alert('新密码至少需要6位字符');
+        showMessage('新密码至少需要6位字符', 'error');
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        alert('两次输入的新密码不一致');
+        showMessage('两次输入的新密码不一致', 'error');
         return;
       }
 
@@ -476,7 +697,7 @@
           });
 
           if (signInError) {
-            alert('当前密码错误');
+            showMessage('当前密码错误，请重新输入', 'error');
             return;
           }
 
@@ -489,30 +710,55 @@
             throw updateError;
           }
 
-          alert('✅ 密码修改成功！');
+          showMessage('✅ 密码修改成功！您的新密码已生效', 'success');
           hidePasswordChange();
         } else {
           // 本地存储模式（开发环境）
-          alert('⚠️ 演示模式下无法修改密码');
+          showMessage('⚠️ 演示模式下无法修改密码，请连接数据库后重试', 'warning');
           hidePasswordChange();
         }
       } catch (error) {
         console.error('修改密码失败:', error);
-        alert('修改密码失败：' + (error.message || '未知错误'));
+        showMessage('修改密码失败：' + (error.message || '未知错误'), 'error');
       }
     }
 
     // 切换账号
-    function switchAccount() {
-      if (confirm('确定要切换到其他账号吗？\n\n当前账号将会退出登录。')) {
-        window.location.href = 'switch-account.html';
+    async function switchAccount() {
+      const confirmed = await showConfirmModal({
+        icon: '🔄',
+        title: '切换账号',
+        message: '确定要切换到其他账号吗？\n\n当前账号将会退出登录。',
+        confirmText: '切换账号',
+        cancelText: '取消'
+      });
+
+      if (confirmed) {
+        window.location.href = 'login.html';
       }
     }
 
     // 退出登录
-    function logout() {
-      if (confirm('确定要退出登录吗？')) {
-        window.location.href = 'logout-confirm.html';
+    async function logout() {
+      const confirmed = await showConfirmModal({
+        icon: '🚪',
+        title: '退出登录',
+        message: '确定要退出登录吗？\n\n退出后需要重新登录才能访问您的账号。',
+        confirmText: '退出登录',
+        cancelText: '取消'
+      });
+
+      if (confirmed) {
+        try {
+          await GameBoxAuth.signOut();
+          showMessage('✅ 已成功退出登录', 'success');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1000);
+        } catch (error) {
+          console.error('退出登录失败:', error);
+          showMessage('退出失败：' + (error.message || '未知错误'), 'error');
+        }
       }
     }
 
