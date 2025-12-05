@@ -644,52 +644,40 @@ function fillSystemRequirements(minReq, recReq) {
 // 从 Steam API 获取系统配置
 async function fetchSteamRequirements(gameTitle, appid) {
   try {
-    console.log(`正在获取 ${gameTitle} 的系统配置...`);
+    console.log(`🔍 正在获取 ${gameTitle} 的系统配置...`);
     
     // 显示加载状态
     sysMinListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</div>';
     sysRecommendedListEl.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">⏳ 正在获取配置...</div>';
     
-    // 如果有 appid，直接使用本地代理服务器
-    if (appid && typeof appid === 'number') {
+    // 优先使用 steamAPI 工具类（通过 CORS 代理）
+    if (window.steamAPI && appid && typeof appid === 'number') {
       try {
-        const response = await fetch(`/api/steam/appdetails?appid=${appid}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data[appid] && data[appid].success) {
-            const pcReq = data[appid].data.pc_requirements;
-            if (pcReq) {
-              const minReq = pcReq.minimum ? parseRequirementsHTML(pcReq.minimum) : null;
-              const recReq = pcReq.recommended ? parseRequirementsHTML(pcReq.recommended) : null;
-              fillSystemRequirements(minReq, recReq);
-              console.log(`✅ 成功获取 ${gameTitle} 的系统配置`);
-              return;
-            }
+        console.log(`📡 使用 Steam API 获取详情 (AppID: ${appid})...`);
+        const gameDetails = await window.steamAPI.getGameDetails(appid);
+        
+        if (gameDetails && gameDetails[appid] && gameDetails[appid].success) {
+          const pcReq = gameDetails[appid].data.pc_requirements;
+          if (pcReq && (pcReq.minimum || pcReq.recommended)) {
+            const minReq = pcReq.minimum ? parseRequirementsHTML(pcReq.minimum) : null;
+            const recReq = pcReq.recommended ? parseRequirementsHTML(pcReq.recommended) : null;
+            fillSystemRequirements(minReq, recReq);
+            console.log(`✅ 成功获取 ${gameTitle} 的系统配置`);
+            return;
           }
         }
-      } catch (proxyErr) {
-        console.log('本地代理失败，尝试其他方式...');
+        
+        console.log(`ℹ️ ${gameTitle} 无系统配置数据（Steam API 返回为空）`);
+      } catch (apiErr) {
+        console.warn(`⚠️ Steam API 调用失败:`, apiErr.message);
+        console.log(`ℹ️ 可能原因：CORS 代理失效或 Steam 限流`);
       }
     }
     
-    // 备用方案：使用 steamAPI 工具类
-    if (window.steamAPI) {
-      try {
-        const requirements = await window.steamAPI.getSystemRequirements(gameTitle);
-        fillSystemRequirements(requirements.minimum, requirements.recommended);
-        
-        if (requirements.minimum || requirements.recommended) {
-          console.log(`✅ 成功获取 ${gameTitle} 的系统配置`);
-        } else {
-          console.log(`ℹ️ ${gameTitle} 无系统配置数据`);
-        }
-      } catch (apiErr) {
-        console.log(`ℹ️ ${gameTitle} 无系统配置数据`);
-        fillSystemRequirements(null, null);
-      }
-    } else {
-      fillSystemRequirements(null, null);
-    }
+    // 降级方案：显示无数据
+    fillSystemRequirements(null, null);
+    console.log(`ℹ️ ${gameTitle} 系统配置暂时无法获取`);
+    
   } catch (err) {
     console.error(`❌ 获取系统配置失败:`, err);
     fillSystemRequirements(null, null);
