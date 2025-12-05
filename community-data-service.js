@@ -1018,30 +1018,38 @@ ON CONFLICT (id) DO NOTHING;
         // 获取在线用户数
         const onlineUsers = await getOnlineUserCount();
 
-        // 统计真实用户数（从帖子和评论的作者去重）
+        // 统计真实注册用户数（从 user_profiles 表）
         let realMembers = 0;
         try {
-          // 获取所有发帖用户（去重）
-          const { data: postAuthors } = await supabaseClient
-            .from('community_posts')
-            .select('author')
-            .neq('author', '游客');
+          const { count: membersCount } = await supabaseClient
+            .from('user_profiles')
+            .select('id', { count: 'exact', head: true });
           
-          // 获取所有评论用户（去重）
-          const { data: commentAuthors } = await supabaseClient
-            .from('community_comments')
-            .select('author')
-            .neq('author', '游客');
-          
-          // 合并并去重
-          const allAuthors = new Set([
-            ...(postAuthors || []).map(p => p.author),
-            ...(commentAuthors || []).map(c => c.author)
-          ]);
-          
-          realMembers = allAuthors.size;
+          realMembers = membersCount || 0;
+          console.log(`✅ 真实注册用户数: ${realMembers}`);
         } catch (e) {
           console.debug('统计真实用户失败:', e);
+          // 降级方案：统计发帖和评论的用户去重
+          try {
+            const { data: postAuthors } = await supabaseClient
+              .from('community_posts')
+              .select('author')
+              .neq('author', '游客');
+            
+            const { data: commentAuthors } = await supabaseClient
+              .from('community_comments')
+              .select('author')
+              .neq('author', '游客');
+            
+            const allAuthors = new Set([
+              ...(postAuthors || []).map(p => p.author),
+              ...(commentAuthors || []).map(c => c.author)
+            ]);
+            
+            realMembers = allAuthors.size;
+          } catch (fallbackError) {
+            console.debug('降级统计也失败:', fallbackError);
+          }
         }
 
         const result = {
@@ -1486,11 +1494,64 @@ ON CONFLICT (id) DO NOTHING;
   // =============================================
 
   /**
+   * 注册或更新用户资料
+   */
+  async function ensureUserProfile() {
+    const userId = getCurrentUserId();
+    const username = getCurrentUsername();
+    
+    if (!userId || !username || !useSupabase || !supabaseClient) {
+      return;
+    }
+
+    try {
+      // 检查用户是否已存在
+      const { data: existingUser } = await supabaseClient
+        .from('user_profiles')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (!existingUser) {
+        // 创建新用户资料
+        const { error } = await supabaseClient
+          .from('user_profiles')
+          .insert([{
+            id: userId,
+            username: username,
+            avatar: getCurrentUserAvatar(),
+            created_at: new Date().toISOString(),
+            last_login_at: new Date().toISOString()
+          }]);
+
+        if (error && error.code !== '23505') {  // 忽略重复键错误
+          throw error;
+        }
+        
+        console.log('✅ 已创建用户资料:', username);
+      } else {
+        // 更新最后登录时间
+        await supabaseClient
+          .from('user_profiles')
+          .update({ last_login_at: new Date().toISOString() })
+          .eq('id', userId);
+        
+        console.log('✅ 已更新用户登录时间:', username);
+      }
+    } catch (e) {
+      console.debug('确保用户资料失败:', e);
+    }
+  }
+
+  /**
    * 初始化社区数据服务
    */
   async function initCommunityData() {
     // 初始化 Supabase 连接
     await initSupabase();
+    
+    // 确保当前用户资料存在
+    await ensureUserProfile();
     
     // 确保本地有默认数据
     if (!localStorage.getItem(STORAGE_KEY_POSTS)) {
@@ -1532,6 +1593,7 @@ ON CONFLICT (id) DO NOTHING;
     initCommunityData,
     isSupabaseEnabled: () => useSupabase,
     getCreateTableSQL,
+    ensureUserProfile,  // 新增：确保用户资料存在
     
     // 帖子功能
     getAllPosts,

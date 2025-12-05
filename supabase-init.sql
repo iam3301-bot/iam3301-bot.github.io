@@ -11,6 +11,21 @@
 -- DROP TABLE IF EXISTS online_users CASCADE;
 -- DROP TABLE IF EXISTS activity_logs CASCADE;
 -- DROP TABLE IF EXISTS user_platform_bindings CASCADE;
+-- DROP TABLE IF EXISTS user_profiles CASCADE;
+
+-- =============================================
+-- 0. 用户注册表
+-- =============================================
+CREATE TABLE IF NOT EXISTS user_profiles (
+  id TEXT PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  email TEXT,
+  avatar TEXT DEFAULT '👤',
+  bio TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  last_login_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 
 -- =============================================
 -- 1. 社区帖子表
@@ -125,10 +140,13 @@ CREATE INDEX IF NOT EXISTS idx_activity_logs_user ON activity_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_activity_logs_created ON activity_logs(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_platform_bindings_user ON user_platform_bindings(user_id);
 CREATE INDEX IF NOT EXISTS idx_platform_bindings_platform ON user_platform_bindings(platform);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_username ON user_profiles(username);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_created ON user_profiles(created_at DESC);
 
 -- =============================================
 -- 启用行级安全策略 (RLS)
 -- =============================================
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE community_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE community_comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE community_likes ENABLE ROW LEVEL SECURITY;
@@ -207,6 +225,16 @@ CREATE POLICY "允许查看绑定" ON user_platform_bindings FOR SELECT USING (t
 
 DROP POLICY IF EXISTS "允许管理平台绑定" ON user_platform_bindings;
 CREATE POLICY "允许管理平台绑定" ON user_platform_bindings FOR ALL USING (true);
+
+-- 用户资料策略
+DROP POLICY IF EXISTS "允许公开读取用户资料" ON user_profiles;
+CREATE POLICY "允许公开读取用户资料" ON user_profiles FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "允许创建用户资料" ON user_profiles;
+CREATE POLICY "允许创建用户资料" ON user_profiles FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "允许更新用户资料" ON user_profiles;
+CREATE POLICY "允许更新用户资料" ON user_profiles FOR UPDATE USING (true);
 
 -- =============================================
 -- 创建触发器函数 - 自动更新 updated_at

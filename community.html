@@ -421,7 +421,7 @@
         <div class="community-stat">
           <div class="icon">🟢</div>
           <div class="value" id="statOnline">0</div>
-          <div class="label">在线人数</div>
+          <div class="label">在线人数 <span style="font-size: 9px; opacity: 0.5;">(模拟)</span></div>
         </div>
       </div>
 
@@ -976,6 +976,16 @@
     
     // 等待数据服务初始化
     await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // 确保当前用户已注册到 user_profiles 表
+    if (window.communityDataService?.ensureUserProfile) {
+      try {
+        await window.communityDataService.ensureUserProfile();
+        console.log('✅ 用户资料已同步');
+      } catch (e) {
+        console.debug('同步用户资料失败:', e);
+      }
+    }
     
     // 加载数据
     await refreshPostsData();
