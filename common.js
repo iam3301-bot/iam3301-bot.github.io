@@ -36,12 +36,133 @@ function initAuthButton() {
   btn.addEventListener("click", () => {
     const user = getCurrentUser();
     if (user) {
-      // 跳转到账号设置页面，不再使用confirm弹窗
-      window.location.href = "account-settings.html";
+      // 显示用户菜单
+      showUserMenu(user);
     } else {
       window.location.href = "login.html";
     }
   });
+}
+
+// 显示用户菜单
+function showUserMenu(user) {
+  // 移除已存在的菜单
+  const existingMenu = document.getElementById('userMenuDropdown');
+  if (existingMenu) {
+    existingMenu.remove();
+    return; // 如果已经显示，则关闭
+  }
+
+  // 创建菜单
+  const menu = document.createElement('div');
+  menu.id = 'userMenuDropdown';
+  menu.style.cssText = `
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(31, 41, 55, 0.95));
+    border: 2px solid rgba(56, 189, 248, 0.4);
+    border-radius: 12px;
+    padding: 12px 0;
+    min-width: 220px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: slideDown 0.2s ease;
+  `;
+
+  const menuItems = [
+    { icon: '👤', text: '个人中心', action: () => window.location.href = 'profile.html' },
+    { icon: '🔐', text: '修改密码', action: () => window.location.href = 'change-password.html' },
+    { icon: '🔄', text: '切换账号', action: () => {
+      closeUserMenu();
+      if (typeof AccountModals !== 'undefined') {
+        AccountModals.showSwitchAccountModal(user);
+      } else {
+        window.location.href = 'login.html';
+      }
+    }},
+    { icon: '🚪', text: '退出登录', action: () => {
+      closeUserMenu();
+      if (typeof AccountModals !== 'undefined') {
+        AccountModals.showLogoutModal(user);
+      } else {
+        if (confirm('确定要退出登录吗？')) {
+          localStorage.removeItem('currentUser');
+          window.location.href = 'login.html';
+        }
+      }
+    }, danger: true }
+  ];
+
+  menuItems.forEach(item => {
+    const menuItem = document.createElement('div');
+    menuItem.style.cssText = `
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: ${item.danger ? '#ef4444' : 'rgba(255, 255, 255, 0.9)'};
+      font-size: 14px;
+      font-weight: 500;
+    `;
+    menuItem.innerHTML = `<span style="font-size: 18px;">${item.icon}</span><span>${item.text}</span>`;
+    
+    menuItem.addEventListener('mouseenter', () => {
+      menuItem.style.background = item.danger 
+        ? 'rgba(239, 68, 68, 0.1)' 
+        : 'rgba(56, 189, 248, 0.1)';
+    });
+    
+    menuItem.addEventListener('mouseleave', () => {
+      menuItem.style.background = 'transparent';
+    });
+    
+    menuItem.addEventListener('click', () => {
+      item.action();
+    });
+    
+    menu.appendChild(menuItem);
+  });
+
+  // 添加样式
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.body.appendChild(menu);
+
+  // 点击外部关闭菜单
+  setTimeout(() => {
+    document.addEventListener('click', handleClickOutside);
+  }, 0);
+
+  function handleClickOutside(e) {
+    if (!menu.contains(e.target) && !e.target.classList.contains('header-user')) {
+      closeUserMenu();
+      document.removeEventListener('click', handleClickOutside);
+    }
+  }
+}
+
+function closeUserMenu() {
+  const menu = document.getElementById('userMenuDropdown');
+  if (menu) {
+    menu.style.animation = 'slideUp 0.2s ease';
+    setTimeout(() => menu.remove(), 200);
+  }
 }
 
 function initGlobalSearch() {
