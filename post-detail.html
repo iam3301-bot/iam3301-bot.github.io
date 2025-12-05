@@ -3,434 +3,926 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>帖子详情 - GameBox 游盒</title>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>帖子详情 - GameBox 社区</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
   <style>
-    .post-detail {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
-      border: 1px solid rgba(255, 211, 0, 0.3);
+    /* 帖子详情页专属样式 */
+    .post-detail-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-top: 120px;
+    }
+    
+    /* 返回按钮 */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 8px;
-      padding: 24px;
+      color: var(--cyber-yellow);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
       margin-bottom: 20px;
     }
     
+    .back-btn:hover {
+      border-color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
+      transform: translateX(-5px);
+    }
+    
+    /* 帖子内容卡片 */
+    .post-content-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(255, 211, 0, 0.1);
+    }
+    
+    .post-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 211, 0, 0.2);
+    }
+    
     .post-title {
-      font-size: 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
       font-weight: 700;
       color: var(--cyber-yellow);
-      margin-bottom: 16px;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .post-badges {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .post-badge {
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-pinned {
+      background: linear-gradient(135deg, #ff3d94 0%, #d946ef 100%);
+      color: white;
+    }
+    
+    .badge-board {
+      background: rgba(255, 211, 0, 0.2);
+      color: var(--cyber-yellow);
+      border: 1px solid var(--cyber-yellow);
     }
     
     .post-meta {
       display: flex;
+      align-items: center;
       gap: 20px;
-      margin-bottom: 20px;
-      font-size: 13px;
       color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 20px;
     }
     
-    .post-content {
+    .post-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .post-body {
+      color: var(--text-primary);
+      font-size: 16px;
       line-height: 1.8;
-      color: var(--text-main);
-      margin-bottom: 24px;
-      font-size: 15px;
+      margin-bottom: 30px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
     
     .post-actions {
       display: flex;
-      gap: 16px;
-      padding-top: 16px;
+      gap: 15px;
+      padding-top: 20px;
       border-top: 1px solid rgba(255, 211, 0, 0.2);
     }
     
     .action-btn {
-      padding: 8px 20px;
-      background: rgba(85, 234, 212, 0.1);
-      border: 1px solid rgba(85, 234, 212, 0.3);
-      border-radius: 6px;
-      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
     .action-btn:hover {
-      background: rgba(85, 234, 212, 0.2);
-      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.2);
     }
     
+    .action-btn.active {
+      border-color: var(--cyber-yellow);
+      color: var(--cyber-yellow);
+      background: rgba(255, 211, 0, 0.1);
+    }
+    
+    /* 评论区 */
     .comments-section {
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
-      border: 1px solid rgba(255, 211, 0, 0.3);
-      border-radius: 8px;
-      padding: 24px;
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 12px;
+      padding: 30px;
     }
     
-    .comment-form {
-      margin-bottom: 24px;
+    .comments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 211, 0, 0.2);
     }
     
-    .comment-form textarea {
-      width: 100%;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(85, 234, 212, 0.3);
-      border-radius: 6px;
-      color: var(--text-main);
+    .comments-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--cyber-yellow);
+    }
+    
+    .comments-count {
+      color: var(--text-muted);
       font-size: 14px;
-      line-height: 1.6;
-      min-height: 100px;
-      resize: vertical;
     }
     
-    .comment-form textarea:focus {
+    /* 发表评论表单 */
+    .comment-form {
+      margin-bottom: 30px;
+    }
+    
+    .comment-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: 'Rajdhani', sans-serif;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    .comment-input:focus {
       outline: none;
-      border-color: var(--cyber-cyan);
-      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+      border-color: var(--cyber-yellow);
+      box-shadow: 0 0 15px rgba(255, 211, 0, 0.2);
+    }
+    
+    .comment-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .comment-submit-btn {
+      margin-top: 10px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--cyber-yellow) 0%, #ff3d94 100%);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .comment-submit-btn:hover {
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    .comment-submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* 评论列表 */
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
     
     .comment-item {
-      padding: 16px;
       background: rgba(0, 0, 0, 0.3);
-      border-radius: 6px;
-      margin-bottom: 12px;
-      border-left: 3px solid var(--cyber-cyan);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .comment-item:hover {
+      border-color: rgba(255, 211, 0, 0.4);
+      background: rgba(0, 0, 0, 0.4);
     }
     
     .comment-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: var(--cyber-yellow);
+      font-size: 14px;
+    }
+    
+    .comment-time {
       color: var(--text-muted);
+      font-size: 12px;
     }
     
     .comment-content {
-      color: var(--text-main);
-      line-height: 1.6;
-    }
-    
-    .submit-btn {
-      padding: 10px 24px;
-      background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.3));
-      color: var(--cyber-cyan);
-      border: 2px solid var(--cyber-cyan);
-      border-radius: 6px;
+      color: var(--text-primary);
       font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
     
-    .submit-btn:hover {
-      background: linear-gradient(135deg, rgba(85, 234, 212, 0.5), rgba(0, 255, 159, 0.5));
-      box-shadow: 0 0 20px rgba(85, 234, 212, 0.4);
-      transform: translateY(-2px);
+    .no-comments {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px;
+      font-size: 14px;
+    }
+    
+    /* 加载状态 */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      color: var(--cyber-yellow);
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 211, 0, 0.2);
+      border-top-color: var(--cyber-yellow);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 错误提示 */
+    .error-message {
+      background: rgba(255, 0, 0, 0.1);
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      border-radius: 8px;
+      padding: 20px;
+      color: #ff6b6b;
+      text-align: center;
+      margin: 20px 0;
     }
   </style>
 </head>
-<body data-current-page="community">
-<div class="page">
-  <header class="header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <div class="logo-mark">G</div>
-        <div>
-          <div>GameBox 游盒</div>
-          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
-        </div>
-      </a>
-      <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="community.html" data-page="community" class="nav-link">返回社区</a>
-      </nav>
+<body>
+  <!-- Matrix 背景 -->
+  <canvas id="matrix"></canvas>
+
+  <!-- 粒子背景 -->
+  <div id="particles-js"></div>
+
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-icon">🎮</span>
+        <span class="logo-text">GameBox</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="library.html">游戏库</a></li>
+        <li><a href="community.html" class="active">社区</a></li>
+        <li><a href="about.html">关于</a></li>
+      </ul>
     </div>
-  </header>
-  
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
+  </nav>
 
-  <main class="main">
-    <section>
-      <div class="card">
-        <a href="community.html" style="color: var(--cyber-cyan); text-decoration: none; display: inline-block; margin-bottom: 16px;">
-          ← 返回社区
-        </a>
+  <!-- 主内容区 -->
+  <div class="post-detail-container">
+    <!-- 返回按钮 -->
+    <a href="community.html" class="back-btn">
+      <span>←</span>
+      <span>返回社区</span>
+    </a>
+
+    <!-- 加载中 -->
+    <div id="loading-container" class="loading">
+      <div class="loading-spinner"></div>
+      <p>加载帖子详情中...</p>
+    </div>
+
+    <!-- 错误提示 -->
+    <div id="error-container" style="display: none;"></div>
+
+    <!-- 帖子内容 -->
+    <div id="post-content" style="display: none;"></div>
+
+    <!-- 评论区 -->
+    <div id="comments-section" class="comments-section" style="display: none;">
+      <div class="comments-header">
+        <h2 class="comments-title">💬 评论区</h2>
+        <span class="comments-count" id="comments-count">0 条评论</span>
       </div>
 
-      <!-- 帖子详情 -->
-      <div id="postDetail" class="post-detail">
-        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-          加载中...
-        </div>
+      <!-- 发表评论 -->
+      <div class="comment-form">
+        <textarea 
+          id="comment-input" 
+          class="comment-input" 
+          placeholder="发表你的看法...（最少 5 个字符）"
+          maxlength="2000"
+        ></textarea>
+        <button id="submit-comment-btn" class="comment-submit-btn">
+          🚀 发表评论
+        </button>
       </div>
 
-      <!-- 评论区 -->
-      <div class="comments-section">
-        <h3 style="color: var(--cyber-yellow); margin-bottom: 20px; font-family: 'Orbitron', sans-serif;">
-          💬 评论区 (<span id="commentCount">0</span>)
-        </h3>
-        
-        <div class="comment-form">
-          <textarea id="commentInput" placeholder="发表你的评论...（至少5个字符）"></textarea>
-          <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
-            <button class="submit-btn" onclick="submitComment()">🚀 发表评论</button>
-          </div>
-        </div>
-        
-        <div id="commentsList">
-          <div style="text-align: center; padding: 20px; color: var(--text-muted);">
-            暂无评论，来抢沙发吧！
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
+      <!-- 评论列表 -->
+      <div id="comments-list" class="comments-list"></div>
+    </div>
+  </div>
 
-<script src="common.js"></script>
-<script src="cyber-effects.js"></script>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  initCommon();
-
-  const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA';
-
-  let supabaseClient = null;
-  let postId = null;
-  
-  function getUserId() {
-    let userId = localStorage.getItem('gamebox_user_id');
-    if (!userId) {
-      userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
-      localStorage.setItem('gamebox_user_id', userId);
-    }
-    return userId;
-  }
-  
-  const userId = getUserId();
-
-  function loadSupabaseSDK() {
-    return new Promise((resolve, reject) => {
-      if (typeof supabase !== 'undefined') {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
-
-  async function init() {
-    const params = new URLSearchParams(window.location.search);
-    postId = params.get('id');
+  <script>
+    // ========== Supabase 配置 ==========
+    const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM0NTA1NTksImV4cCI6MjA0OTAyNjU1OX0.Jje1KvXqg_3rqtzv6_M2w2pxTvCtSVEwGy3ZX1Nb7YE';
     
-    if (!postId) {
-      document.getElementById('postDetail').innerHTML = 
-        '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 帖子不存在</div>';
-      return;
-    }
+    let supabaseClient = null;
+    let currentPost = null;
+    let currentUser = null;
+    let commentsSubscription = null;
 
-    try {
-      await loadSupabaseSDK();
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ========== 初始化 ==========
+    async function init() {
+      console.log('🚀 初始化帖子详情页...');
       
-      await loadPost();
-      await loadComments();
-      subscribeToComments();
-      
-    } catch (e) {
-      console.error('初始化失败:', e);
-    }
-  }
-
-  async function loadPost() {
-    try {
-      const { data, error } = await supabaseClient
-        .from('community_posts')
-        .select('*')
-        .eq('id', postId)
-        .single();
-      
-      if (error) throw error;
-      
-      if (!data) {
-        document.getElementById('postDetail').innerHTML = 
-          '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 帖子不存在</div>';
+      // 创建 Supabase 客户端
+      try {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('✅ Supabase 客户端创建成功');
+      } catch (error) {
+        console.error('❌ Supabase 客户端创建失败:', error);
+        showError('数据库连接失败，请稍后再试');
         return;
       }
-      
-      // 增加浏览数
-      await supabaseClient
-        .from('community_posts')
-        .update({ views: (data.views || 0) + 1 })
-        .eq('id', postId);
-      
-      const formatTime = (timestamp) => {
-        const time = new Date(timestamp);
-        return time.toLocaleString('zh-CN');
-      };
-      
-      document.getElementById('postDetail').innerHTML = `
-        <div class="post-title">${data.title}</div>
-        <div class="post-meta">
-          <span>👤 ${data.author}</span>
-          <span>🎮 ${data.game}</span>
-          <span>🕒 ${formatTime(data.created_at)}</span>
-          <span>👁️ ${(data.views || 0) + 1} 浏览</span>
+
+      // 获取当前用户
+      currentUser = getCurrentUser();
+      console.log('🔷 当前用户:', currentUser);
+
+      // 获取 URL 参数中的帖子 ID
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id');
+
+      if (!postId) {
+        showError('未找到帖子 ID');
+        return;
+      }
+
+      // 加载帖子内容
+      await loadPost(postId);
+
+      // 加载评论
+      await loadComments(postId);
+
+      // 订阅评论更新（Realtime）
+      subscribeToComments(postId);
+
+      // 绑定事件
+      bindEvents(postId);
+    }
+
+    // ========== 获取当前用户 ==========
+    function getCurrentUser() {
+      let userId = localStorage.getItem('gamebox_user_id');
+      let username = localStorage.getItem('gamebox_username');
+
+      if (!userId) {
+        userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        username = '访客' + Math.floor(Math.random() * 10000);
+        localStorage.setItem('gamebox_user_id', userId);
+        localStorage.setItem('gamebox_username', username);
+      }
+
+      return { id: userId, name: username };
+    }
+
+    // ========== 加载帖子 ==========
+    async function loadPost(postId) {
+      try {
+        console.log('📥 加载帖子:', postId);
+
+        const { data, error } = await supabaseClient
+          .from('community_posts')
+          .select('*')
+          .eq('id', postId)
+          .single();
+
+        if (error) {
+          console.error('❌ 加载帖子失败:', error);
+          showError('加载帖子失败：' + error.message);
+          return;
+        }
+
+        if (!data) {
+          showError('帖子不存在');
+          return;
+        }
+
+        currentPost = data;
+        console.log('✅ 帖子加载成功:', currentPost);
+
+        // 增加浏览数
+        await incrementViews(postId);
+
+        // 渲染帖子
+        renderPost(currentPost);
+
+        // 隐藏加载提示
+        document.getElementById('loading-container').style.display = 'none';
+        document.getElementById('post-content').style.display = 'block';
+        document.getElementById('comments-section').style.display = 'block';
+
+      } catch (error) {
+        console.error('❌ 加载帖子异常:', error);
+        showError('加载帖子时发生错误');
+      }
+    }
+
+    // ========== 增加浏览数 ==========
+    async function incrementViews(postId) {
+      try {
+        const { error } = await supabaseClient
+          .from('community_posts')
+          .update({ views: (currentPost.views || 0) + 1 })
+          .eq('id', postId);
+
+        if (error) {
+          console.error('❌ 更新浏览数失败:', error);
+        } else {
+          console.log('✅ 浏览数 +1');
+        }
+      } catch (error) {
+        console.error('❌ 更新浏览数异常:', error);
+      }
+    }
+
+    // ========== 渲染帖子 ==========
+    function renderPost(post) {
+      const postContentHTML = `
+        <div class="post-content-card">
+          <div class="post-header">
+            <h1 class="post-title">${escapeHtml(post.title)}</h1>
+            <div class="post-badges">
+              ${post.pinned ? '<span class="post-badge badge-pinned">📌 置顶</span>' : ''}
+              <span class="post-badge badge-board">${getBoardName(post.board)}</span>
+            </div>
+          </div>
+
+          <div class="post-meta">
+            <span class="post-meta-item">
+              <span>👤</span>
+              <span>${escapeHtml(post.author)}</span>
+            </span>
+            <span class="post-meta-item">
+              <span>🎮</span>
+              <span>${escapeHtml(post.game || '未分类')}</span>
+            </span>
+            <span class="post-meta-item">
+              <span>📅</span>
+              <span>${formatDate(post.created_at)}</span>
+            </span>
+            <span class="post-meta-item">
+              <span>👁️</span>
+              <span>${post.views || 0} 浏览</span>
+            </span>
+          </div>
+
+          <div class="post-body">${escapeHtml(post.content)}</div>
+
+          <div class="post-actions">
+            <button class="action-btn like-btn" id="like-btn" data-post-id="${post.id}">
+              <span>👍</span>
+              <span id="like-count">${post.likes || 0}</span>
+            </button>
+            <button class="action-btn">
+              <span>💬</span>
+              <span id="reply-count">${post.replies || 0}</span>
+            </button>
+            <button class="action-btn">
+              <span>🔗</span>
+              <span>分享</span>
+            </button>
+          </div>
         </div>
-        <div class="post-content">${data.content.replace(/\n/g, '<br>')}</div>
-        <div class="post-actions">
-          <button class="action-btn" onclick="likePost()">
-            👍 点赞 (<span id="likeCount">${data.likes || 0}</span>)
-          </button>
-          <button class="action-btn">
-            💬 评论 (<span id="replyCount">${data.replies || 0}</span>)
+      `;
+
+      document.getElementById('post-content').innerHTML = postContentHTML;
+    }
+
+    // ========== 加载评论 ==========
+    async function loadComments(postId) {
+      try {
+        console.log('📥 加载评论:', postId);
+
+        const { data, error } = await supabaseClient
+          .from('community_comments')
+          .select('*')
+          .eq('post_id', postId)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('❌ 加载评论失败:', error);
+          // 如果表不存在，显示提示
+          if (error.code === '42P01') {
+            document.getElementById('comments-list').innerHTML = `
+              <div class="no-comments">
+                <p>评论功能尚未开启</p>
+                <p style="margin-top: 10px; font-size: 12px;">管理员需要先创建评论表</p>
+              </div>
+            `;
+            document.getElementById('submit-comment-btn').disabled = true;
+          }
+          return;
+        }
+
+        console.log('✅ 评论加载成功:', data?.length || 0, '条');
+        renderComments(data || []);
+
+      } catch (error) {
+        console.error('❌ 加载评论异常:', error);
+      }
+    }
+
+    // ========== 渲染评论 ==========
+    function renderComments(comments) {
+      const commentsCount = comments.length;
+      document.getElementById('comments-count').textContent = `${commentsCount} 条评论`;
+
+      if (commentsCount === 0) {
+        document.getElementById('comments-list').innerHTML = `
+          <div class="no-comments">
+            <p>暂无评论，快来发表第一条评论吧！</p>
+          </div>
+        `;
+        return;
+      }
+
+      const commentsHTML = comments.map(comment => `
+        <div class="comment-item" data-id="${comment.id}">
+          <div class="comment-header">
+            <span class="comment-author">${escapeHtml(comment.author)}</span>
+            <span class="comment-time">${formatDate(comment.created_at)}</span>
+          </div>
+          <div class="comment-content">${escapeHtml(comment.content)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('comments-list').innerHTML = commentsHTML;
+    }
+
+    // ========== 订阅评论更新（Realtime）==========
+    function subscribeToComments(postId) {
+      try {
+        console.log('🔔 订阅评论 Realtime 更新:', postId);
+
+        commentsSubscription = supabaseClient
+          .channel('comments-' + postId)
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'community_comments',
+              filter: `post_id=eq.${postId}`
+            },
+            (payload) => {
+              console.log('🔔 收到评论更新:', payload);
+              
+              if (payload.eventType === 'INSERT') {
+                // 新评论
+                loadComments(postId);
+                
+                // 更新帖子回复数
+                if (currentPost) {
+                  currentPost.replies = (currentPost.replies || 0) + 1;
+                  document.getElementById('reply-count').textContent = currentPost.replies;
+                  
+                  // 同步到数据库
+                  supabaseClient
+                    .from('community_posts')
+                    .update({ replies: currentPost.replies })
+                    .eq('id', postId)
+                    .then(() => console.log('✅ 回复数已更新'));
+                }
+              } else if (payload.eventType === 'DELETE') {
+                // 删除评论
+                loadComments(postId);
+              }
+            }
+          )
+          .subscribe();
+
+        console.log('✅ Realtime 订阅成功');
+      } catch (error) {
+        console.error('❌ Realtime 订阅失败:', error);
+      }
+    }
+
+    // ========== 发表评论 ==========
+    async function submitComment(postId) {
+      const input = document.getElementById('comment-input');
+      const content = input.value.trim();
+
+      if (content.length < 5) {
+        alert('评论内容至少 5 个字符');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-comment-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '发表中...';
+
+      try {
+        console.log('📤 发表评论:', content);
+
+        const { data, error } = await supabaseClient
+          .from('community_comments')
+          .insert([
+            {
+              post_id: postId,
+              author: currentUser.name,
+              content: content
+            }
+          ])
+          .select()
+          .single();
+
+        if (error) {
+          console.error('❌ 发表评论失败:', error);
+          alert('发表评论失败：' + error.message);
+          return;
+        }
+
+        console.log('✅ 评论发表成功:', data);
+        
+        // 清空输入框
+        input.value = '';
+        
+        // 显示成功提示
+        alert('✅ 评论发表成功！');
+
+      } catch (error) {
+        console.error('❌ 发表评论异常:', error);
+        alert('发表评论时发生错误');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🚀 发表评论';
+      }
+    }
+
+    // ========== 点赞 ==========
+    async function likePost(postId) {
+      try {
+        console.log('👍 点赞帖子:', postId);
+
+        const newLikes = (currentPost.likes || 0) + 1;
+
+        const { error } = await supabaseClient
+          .from('community_posts')
+          .update({ likes: newLikes })
+          .eq('id', postId);
+
+        if (error) {
+          console.error('❌ 点赞失败:', error);
+          return;
+        }
+
+        console.log('✅ 点赞成功');
+        currentPost.likes = newLikes;
+        document.getElementById('like-count').textContent = newLikes;
+        
+        // 添加已点赞样式
+        document.getElementById('like-btn').classList.add('active');
+        
+        // 保存点赞状态（防止重复点赞）
+        localStorage.setItem(`liked_${postId}`, 'true');
+
+      } catch (error) {
+        console.error('❌ 点赞异常:', error);
+      }
+    }
+
+    // ========== 绑定事件 ==========
+    function bindEvents(postId) {
+      // 发表评论按钮
+      document.getElementById('submit-comment-btn').addEventListener('click', () => {
+        submitComment(postId);
+      });
+
+      // 回车发表评论（Ctrl + Enter）
+      document.getElementById('comment-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          submitComment(postId);
+        }
+      });
+
+      // 点赞按钮（使用事件委托）
+      document.getElementById('post-content').addEventListener('click', (e) => {
+        const likeBtn = e.target.closest('.like-btn');
+        if (likeBtn) {
+          const postId = likeBtn.dataset.postId;
+          const hasLiked = localStorage.getItem(`liked_${postId}`);
+          
+          if (!hasLiked) {
+            likePost(postId);
+          } else {
+            alert('您已经点赞过了！');
+          }
+        }
+      });
+    }
+
+    // ========== 工具函数 ==========
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = now - date;
+      
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      
+      if (minutes < 1) return '刚刚';
+      if (minutes < 60) return `${minutes} 分钟前`;
+      if (hours < 24) return `${hours} 小时前`;
+      if (days < 7) return `${days} 天前`;
+      
+      return date.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    }
+
+    function getBoardName(boardKey) {
+      const boards = {
+        'general': '综合讨论',
+        'guides': '攻略心得',
+        'showcase': '作品展示',
+        'questions': '问题求助',
+        'events': '活动公告'
+      };
+      return boards[boardKey] || boardKey;
+    }
+
+    function showError(message) {
+      document.getElementById('loading-container').style.display = 'none';
+      const errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML = `
+        <div class="error-message">
+          <h3>⚠️ 错误</h3>
+          <p>${message}</p>
+          <button class="back-btn" onclick="window.location.href='community.html'" style="margin-top: 15px;">
+            返回社区
           </button>
         </div>
       `;
-      
-    } catch (e) {
-      console.error('加载帖子失败:', e);
-      document.getElementById('postDetail').innerHTML = 
-        '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 加载失败: ' + e.message + '</div>';
+      errorContainer.style.display = 'block';
     }
-  }
 
-  async function loadComments() {
-    try {
-      const { data, error } = await supabaseClient
-        .from('community_comments')
-        .select('*')
-        .eq('post_id', postId)
-        .order('created_at', { ascending: true });
-      
-      if (error) throw error;
-      
-      const commentsList = document.getElementById('commentsList');
-      const commentCount = document.getElementById('commentCount');
-      
-      commentCount.textContent = data.length;
-      
-      if (data.length === 0) {
-        commentsList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">暂无评论，来抢沙发吧！</div>';
-        return;
+    // ========== 页面加载完成后初始化 ==========
+    window.addEventListener('DOMContentLoaded', init);
+
+    // ========== 页面卸载时清理订阅 ==========
+    window.addEventListener('beforeunload', () => {
+      if (commentsSubscription) {
+        commentsSubscription.unsubscribe();
+        console.log('🔕 已取消 Realtime 订阅');
       }
-      
-      const formatTime = (timestamp) => {
-        const now = new Date();
-        const time = new Date(timestamp);
-        const diff = Math.floor((now - time) / 1000);
-        
-        if (diff < 60) return '刚刚';
-        if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
-        if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
-        return time.toLocaleDateString();
-      };
-      
-      commentsList.innerHTML = data.map(comment => `
-        <div class="comment-item">
-          <div class="comment-header">
-            <span>👤 ${comment.author}</span>
-            <span>🕒 ${formatTime(comment.created_at)}</span>
-          </div>
-          <div class="comment-content">${comment.content}</div>
-        </div>
-      `).join('');
-      
-    } catch (e) {
-      console.error('加载评论失败:', e);
-    }
-  }
+    });
+  </script>
 
-  async function submitComment() {
-    const input = document.getElementById('commentInput');
-    const content = input.value.trim();
-    
-    if (!content || content.length < 5) {
-      alert('评论内容至少需要5个字符');
-      return;
-    }
-    
-    try {
-      const { error } = await supabaseClient
-        .from('community_comments')
-        .insert({
-          post_id: postId,
-          author: '访客' + Math.floor(Math.random() * 10000),
-          content: content,
-          created_at: new Date().toISOString()
-        });
-      
-      if (error) throw error;
-      
-      // 更新帖子的回复数
-      const { data: post } = await supabaseClient
-        .from('community_posts')
-        .select('replies')
-        .eq('id', postId)
-        .single();
-      
-      await supabaseClient
-        .from('community_posts')
-        .update({ replies: (post.replies || 0) + 1 })
-        .eq('id', postId);
-      
-      input.value = '';
-      alert('✅ 评论发表成功！');
-      
-    } catch (e) {
-      console.error('发表评论失败:', e);
-      alert('❌ 发表失败: ' + e.message);
-    }
-  }
+  <!-- Matrix 和粒子效果脚本 -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    // Matrix 背景
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
 
-  async function likePost() {
-    try {
-      const { data } = await supabaseClient
-        .from('community_posts')
-        .select('likes')
-        .eq('id', postId)
-        .single();
-      
-      await supabaseClient
-        .from('community_posts')
-        .update({ likes: (data.likes || 0) + 1 })
-        .eq('id', postId);
-      
-      document.getElementById('likeCount').textContent = (data.likes || 0) + 1;
-      
-    } catch (e) {
-      console.error('点赞失败:', e);
-    }
-  }
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  function subscribeToComments() {
-    try {
-      supabaseClient
-        .channel('post-comments-' + postId)
-        .on('postgres_changes', {
-          event: '*',
-          schema: 'public',
-          table: 'community_comments',
-          filter: 'post_id=eq.' + postId
-        }, () => {
-          loadComments();
-        })
-        .subscribe();
-    } catch (e) {
-      console.error('订阅评论失败:', e);
-    }
-  }
+    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+    const font_size = 10;
+    const columns = canvas.width/font_size;
 
-  init();
-</script>
+    const drops = [];
+    for(let x = 0; x < columns; x++)
+      drops[x] = 1;
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'rgba(255, 211, 0, 0.3)';
+      ctx.font = font_size + 'px monospace';
+
+      for(let i = 0; i < drops.length; i++) {
+        const text = matrix.charAt(Math.floor(Math.random() * matrix.length));
+        ctx.fillText(text, i*font_size, drops[i]*font_size);
+
+        if(drops[i]*font_size > canvas.height && Math.random() > 0.975)
+          drops[i] = 0;
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // 粒子效果
+    if (typeof particlesJS !== 'undefined') {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: '#ffd300' },
+          shape: { type: 'circle' },
+          opacity: { value: 0.5, random: false },
+          size: { value: 3, random: true },
+          line_linked: { enable: true, distance: 150, color: '#ffd300', opacity: 0.4, width: 1 },
+          move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+          modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+        },
+        retina_detect: true
+      });
+    }
+  </script>
 </body>
 </html>
