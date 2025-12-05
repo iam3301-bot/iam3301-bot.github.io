@@ -217,6 +217,17 @@ const LOCAL_AUTH = {
   clearSession() {
     localStorage.removeItem(this.SESSION_KEY);
     localStorage.removeItem('currentUser');
+    // 清除所有 gamebox 相关的用户数据
+    localStorage.removeItem('gamebox_user_id');
+    localStorage.removeItem('gamebox_username');
+    // 清除 Supabase auth tokens
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('sb-') || key.includes('supabase')) {
+        localStorage.removeItem(key);
+      }
+    });
+    console.log('[GameBox Auth] 已清除所有会话数据');
   },
   
   // 检查会话是否有效
