@@ -17,7 +17,16 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      padding-top: 90px; /* 减少顶部空白 */
+      padding-top: 100px; /* 直接紧贴导航栏 */
+    }
+    
+    /* 确保导航栏固定在顶部 */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
     }
     
     /* 返回按钮 */
@@ -25,16 +34,16 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 20px;
+      padding: 8px 16px;
       background: rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 8px;
       color: var(--cyber-yellow);
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     
     .back-btn:hover {
@@ -48,8 +57,8 @@
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
       border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 12px;
-      padding: 30px;
-      margin-bottom: 30px;
+      padding: 25px;
+      margin-bottom: 20px;
       box-shadow: 0 4px 20px rgba(255, 211, 0, 0.1);
     }
     
@@ -156,7 +165,7 @@
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
       border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 12px;
-      padding: 30px;
+      padding: 25px;
     }
     
     .comments-header {
@@ -292,8 +301,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 60px;
+      padding: 40px 20px;
       color: var(--cyber-yellow);
+      min-height: 200px;
     }
     
     .loading-spinner {
