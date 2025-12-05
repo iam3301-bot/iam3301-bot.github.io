@@ -680,7 +680,12 @@
           
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
             <a href="profile.html" class="auth-btn" style="flex: 1; max-width: 160px; text-align: center; text-decoration: none;">个人中心</a>
-            <button class="logout-btn" id="logoutBtn">退出登录</button>
+            <button class="auth-btn" id="switchAccountBtn" style="flex: 1; max-width: 160px;">
+              🔄 切换账号
+            </button>
+          </div>
+          <div style="display: flex; gap: 12px; justify-content: center; margin-top: 12px;">
+            <button class="logout-btn" id="logoutBtn" style="width: 100%; max-width: 340px;">退出登录</button>
           </div>
           
           <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(56, 189, 248, 0.2);">
@@ -741,7 +746,9 @@
 </div>
 
 <script src="common.js"></script>
-<parameter name="cyber-effects.js"></script>
+<script src="cyber-effects.js"></script>
+<!-- 多账号管理系统 -->
+<script src="account-switcher.js"></script>
 <!-- GameBox 认证系统 -->
 <script src="supabase-config.js"></script>
 <!-- OAuth 第三方登录管理 -->
@@ -1063,6 +1070,13 @@ const SUPABASE_CONFIG = {
       if (result.success) {
         showMessage(result.message, 'success');
         
+        // 保存账号到多账号列表
+        const user = await GameBoxAuth.getCurrentUser();
+        const session = await GameBoxAuth.getSession();
+        if (user && window.AccountSwitcher) {
+          window.AccountSwitcher.saveAccount(user, session);
+        }
+        
         setTimeout(async () => {
           await checkAuthState();
         }, 1000);
@@ -1242,6 +1256,13 @@ const SUPABASE_CONFIG = {
           const loginResult = await GameBoxAuth.signIn(email, password);
           
           if (loginResult.success) {
+            // 保存账号到多账号列表
+            const user = await GameBoxAuth.getCurrentUser();
+            const session = await GameBoxAuth.getSession();
+            if (user && window.AccountSwitcher) {
+              window.AccountSwitcher.saveAccount(user, session);
+            }
+            
             setTimeout(async () => {
               await checkAuthState();
             }, 1500);
@@ -1271,6 +1292,30 @@ const SUPABASE_CONFIG = {
   // 登出
   // =============================================
   
+  // 切换账号按钮
+  document.getElementById('switchAccountBtn')?.addEventListener('click', () => {
+    window.AccountSwitcher.showSwitcher(
+      // 切换账号回调
+      async (email) => {
+        showMessage(`正在切换到账号：${email}...`, 'info');
+        // 先退出当前账号
+        await GameBoxAuth.signOut();
+        // 显示登录表单
+        showAuthForm();
+        // 自动填充邮箱
+        document.getElementById('authEmail').value = email;
+        showMessage('请输入密码以继续', 'info');
+      },
+      // 添加新账号回调
+      async () => {
+        await GameBoxAuth.signOut();
+        showAuthForm();
+        showMessage('请输入新账号信息', 'info');
+      }
+    );
+  });
+
+  // 退出登录按钮
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     const btn = document.getElementById('logoutBtn');
     btn.disabled = true;
