@@ -1310,8 +1310,7 @@ const SteamAPI = {
   // 获取用户信息
   async getPlayerSummary(steamId) {
     if (!this.isEnabled()) {
-      // 本地模式 - 返回模拟数据
-      return this._getMockPlayerSummary(steamId);
+      return { success: false, error: 'Steam API Key 未配置，请联系管理员配置 API Key' };
     }
     
     const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_CONFIG.apiKey}&steamids=${steamId}`;
@@ -1335,13 +1334,7 @@ const SteamAPI = {
       };
     }
     
-    // 如果 API 请求失败，回退到模拟数据
-    if (!result.success) {
-      console.warn('[Steam API] API 请求失败，使用模拟数据');
-      return this._getMockPlayerSummary(steamId);
-    }
-    
-    return { success: false, error: '未找到该用户' };
+    return { success: false, error: result.error || '未找到该用户' };
   },
   
   // 获取拥有的游戏
@@ -1375,19 +1368,13 @@ const SteamAPI = {
       };
     }
     
-    // 如果 API 请求失败，回退到模拟数据
-    if (!result.success) {
-      console.warn('[Steam API] API 请求失败，使用模拟数据');
-      return this._getMockOwnedGames(steamId);
-    }
-    
-    return { success: false, error: '获取游戏库失败，可能是用户资料设为私密' };
+    return { success: false, error: result.error || '获取游戏库失败，可能是用户资料设为私密' };
   },
   
   // 获取最近游玩的游戏
   async getRecentlyPlayedGames(steamId, count = 10) {
     if (!this.isEnabled()) {
-      return this._getMockRecentGames(steamId);
+      return { success: false, error: 'Steam API Key 未配置，请联系管理员配置 API Key' };
     }
     
     const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_CONFIG.apiKey}&steamid=${steamId}&count=${count}&format=json`;
@@ -1409,13 +1396,7 @@ const SteamAPI = {
       };
     }
     
-    // 如果 API 请求失败，回退到模拟数据
-    if (!result.success) {
-      console.warn('[Steam API] API 请求失败，使用模拟数据');
-      return this._getMockRecentGames(steamId);
-    }
-    
-    return { success: false, error: '获取最近游戏失败' };
+    return { success: false, error: result.error || '获取最近游戏失败' };
   },
   
   // 获取成就
@@ -1465,70 +1446,7 @@ const SteamAPI = {
   // 本地模拟数据 (演示用)
   // =============================================
   
-  _getMockPlayerSummary(steamId) {
-    return {
-      success: true,
-      player: {
-        steamId: steamId || '76561198000000000',
-        personaName: '演示玩家',
-        profileUrl: 'https://steamcommunity.com/profiles/' + (steamId || '76561198000000000'),
-        avatar: 'https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg',
-        personaState: 1,
-        visibility: 3,
-        lastLogoff: Math.floor(Date.now() / 1000) - 3600,
-        gameId: null,
-        gameExtraInfo: null
-      },
-      isDemo: true
-    };
-  },
-  
-  _getMockOwnedGames(steamId) {
-    const mockGames = [
-      { appId: 730, name: 'Counter-Strike 2', playtimeForever: 15420, playtime2Weeks: 840 },
-      { appId: 570, name: 'Dota 2', playtimeForever: 8760, playtime2Weeks: 120 },
-      { appId: 1245620, name: 'ELDEN RING', playtimeForever: 4320, playtime2Weeks: 360 },
-      { appId: 1091500, name: 'Cyberpunk 2077', playtimeForever: 2880, playtime2Weeks: 0 },
-      { appId: 1174180, name: 'Red Dead Redemption 2', playtimeForever: 3600, playtime2Weeks: 180 },
-      { appId: 292030, name: 'The Witcher 3: Wild Hunt', playtimeForever: 5400, playtime2Weeks: 0 },
-      { appId: 1551360, name: 'Forza Horizon 5', playtimeForever: 1200, playtime2Weeks: 60 },
-      { appId: 1817070, name: 'Hogwarts Legacy', playtimeForever: 2160, playtime2Weeks: 0 },
-      { appId: 2358720, name: 'Black Myth: Wukong', playtimeForever: 1800, playtime2Weeks: 720 },
-      { appId: 1086940, name: 'Baldur\'s Gate 3', playtimeForever: 6000, playtime2Weeks: 480 }
-    ];
-    
-    return {
-      success: true,
-      gameCount: mockGames.length,
-      games: mockGames.map(game => ({
-        ...game,
-        imgIconUrl: null,
-        imgLogoUrl: null,
-        headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`
-      })),
-      isDemo: true
-    };
-  },
-  
-  _getMockRecentGames(steamId) {
-    const recentGames = [
-      { appId: 2358720, name: 'Black Myth: Wukong', playtimeForever: 1800, playtime2Weeks: 720 },
-      { appId: 730, name: 'Counter-Strike 2', playtimeForever: 15420, playtime2Weeks: 840 },
-      { appId: 1086940, name: 'Baldur\'s Gate 3', playtimeForever: 6000, playtime2Weeks: 480 },
-      { appId: 1245620, name: 'ELDEN RING', playtimeForever: 4320, playtime2Weeks: 360 }
-    ];
-    
-    return {
-      success: true,
-      totalCount: recentGames.length,
-      games: recentGames.map(game => ({
-        ...game,
-        imgIconUrl: null,
-        headerImage: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`
-      })),
-      isDemo: true
-    };
-  }
+
 };
 
 // =============================================
@@ -1687,7 +1605,7 @@ const UserDataManager = {
       success: true,
       message: 'Steam 账号绑定成功！',
       data: userData.steam,
-      isDemo: playerResult.isDemo || gamesResult.isDemo
+
     };
   },
   
