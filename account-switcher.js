@@ -23,7 +23,14 @@ const AccountSwitcher = {
         avatar: user.avatar || '🎮',
         user_id: user.id,
         last_login: new Date().toISOString(),
-        email_confirmed: user.email_confirmed || false
+        email_confirmed: user.email_confirmed || false,
+        // 🔑 保存 session 信息（用于快速切换）
+        session: session ? {
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+          expires_at: session.expires_at,
+          user_id: session.user?.id || user.id
+        } : null
       };
 
       // 如果账号已存在，更新信息
@@ -104,9 +111,10 @@ const AccountSwitcher = {
   /**
    * 切换到指定账号
    * @param {string} email - 目标账号邮箱
+   * @param {Object} GameBoxAuth - 认证系统实例
    * @returns {Promise<Object>} 切换结果
    */
-  async switchToAccount(email) {
+  async switchToAccount(email, GameBoxAuth) {
     try {
       const accounts = this.getAllAccounts();
       const account = accounts[email];
@@ -115,11 +123,50 @@ const AccountSwitcher = {
         throw new Error('账号不存在');
       }
 
+      // 检查是否有保存的 session
+      if (!account.session || !account.session.access_token) {
+        throw new Error('账号 session 已过期，请重新登录');
+      }
+
+      // 检查 session 是否过期
+      const expiresAt = new Date(account.session.expires_at);
+      if (expiresAt <= new Date()) {
+        throw new Error('账号 session 已过期，请重新登录');
+      }
+
+      // 先退出当前账号
+      await GameBoxAuth.signOut();
+
+      // 恢复 session 到 Supabase
+      if (window.supabase && GameBoxAuth.supabaseClient) {
+        const { data, error } = await GameBoxAuth.supabaseClient.auth.setSession({
+          access_token: account.session.access_token,
+          refresh_token: account.session.refresh_token
+        });
+
+        if (error) {
+          throw new Error('恢复 session 失败: ' + error.message);
+        }
+
+        console.log('[Account Switcher] Session 恢复成功:', data);
+      }
+
       // 更新最后登录时间
       account.last_login = new Date().toISOString();
       accounts[email] = account;
       localStorage.setItem(this.ACCOUNTS_KEY, JSON.stringify(accounts));
       localStorage.setItem(this.CURRENT_ACCOUNT_KEY, email);
+
+      // 更新本地会话
+      if (window.LOCAL_AUTH) {
+        window.LOCAL_AUTH.setSession({
+          id: account.user_id,
+          email: account.email,
+          username: account.username,
+          avatar: account.avatar,
+          email_confirmed: account.email_confirmed
+        });
+      }
 
       console.log(`[Account Switcher] 已切换到账号: ${email}`);
       
@@ -132,7 +179,8 @@ const AccountSwitcher = {
       console.error('[Account Switcher] 切换账号失败:', error);
       return {
         success: false,
-        message: error.message
+        message: error.message,
+        needsRelogin: true
       };
     }
   },

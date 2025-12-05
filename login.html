@@ -1298,13 +1298,28 @@ const SUPABASE_CONFIG = {
       // 切换账号回调
       async (email) => {
         showMessage(`正在切换到账号：${email}...`, 'info');
-        // 先退出当前账号
-        await GameBoxAuth.signOut();
-        // 显示登录表单
-        showAuthForm();
-        // 自动填充邮箱
-        document.getElementById('authEmail').value = email;
-        showMessage('请输入密码以继续', 'info');
+        
+        // 尝试直接切换（使用保存的 session）
+        const result = await window.AccountSwitcher.switchToAccount(email, GameBoxAuth);
+        
+        if (result.success) {
+          showMessage(result.message + ' 🎉', 'success');
+          // 刷新页面状态
+          setTimeout(async () => {
+            await checkAuthState();
+          }, 500);
+        } else {
+          // session 过期，需要重新登录
+          showMessage(result.message, 'error');
+          
+          if (result.needsRelogin) {
+            // 显示登录表单，自动填充邮箱
+            await GameBoxAuth.signOut();
+            showAuthForm();
+            document.getElementById('loginEmail').value = email;
+            showMessage('Session 已过期，请重新输入密码', 'info');
+          }
+        }
       },
       // 添加新账号回调
       async () => {

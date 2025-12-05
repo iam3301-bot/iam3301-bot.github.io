@@ -245,6 +245,11 @@ const LOCAL_AUTH = {
 // =============================================
 
 const GameBoxAuth = {
+  // 暴露 supabaseClient 供账号切换使用
+  get supabaseClient() {
+    return supabaseClient;
+  },
+  
   // 初始化
   async init() {
     LOCAL_AUTH.init();
