@@ -65,7 +65,29 @@
       } else {
         // 手动创建客户端
         console.log('🔌 正在连接 Supabase:', SUPABASE_CONFIG.url);
-        supabaseClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        
+        // 使用明确的配置选项，禁用可能导致问题的功能
+        supabaseClient = supabase.createClient(
+          SUPABASE_CONFIG.url, 
+          SUPABASE_CONFIG.anonKey,
+          {
+            auth: {
+              autoRefreshToken: false,
+              persistSession: false,
+              detectSessionInUrl: false
+            },
+            global: {
+              headers: {
+                'apikey': SUPABASE_CONFIG.anonKey
+              }
+            }
+          }
+        );
+        
+        console.log('✅ Supabase 客户端配置：');
+        console.log('  - autoRefreshToken: false');
+        console.log('  - persistSession: false');
+        console.log('  - 自定义请求头: 已设置');
       }
       
       if (supabaseClient) {
