@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>🔥 终极缓存清理工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 20px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 10px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    .status {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: left;
+      display: none;
+    }
+    .status.show {
+      display: block;
+    }
+    .step {
+      margin: 10px 0;
+      padding: 10px;
+      background: white;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+    }
+    .success { color: #28a745; }
+    .warning { color: #ffc107; }
+    .error { color: #dc3545; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔥 终极缓存清理工具</h1>
+    <p class="subtitle">一键清除所有缓存，强制加载最新版本</p>
+    
+    <button class="btn" onclick="clearAll()">
+      🚀 立即清除缓存并跳转
+    </button>
+    
+    <button class="btn" onclick="testSupabase()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+      🧪 测试 Supabase 连接
+    </button>
+    
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    function log(msg, type = '') {
+      const status = document.getElementById('status');
+      status.classList.add('show');
+      const step = document.createElement('div');
+      step.className = 'step ' + type;
+      step.textContent = msg;
+      status.appendChild(step);
+      console.log(msg);
+    }
+    
+    async function clearAll() {
+      document.getElementById('status').innerHTML = '';
+      log('🔄 开始清理缓存...', 'warning');
+      
+      // 1. 清除 localStorage
+      try {
+        localStorage.clear();
+        log('✅ localStorage 已清除', 'success');
+      } catch (e) {
+        log('❌ localStorage 清除失败: ' + e.message, 'error');
+      }
+      
+      // 2. 清除 sessionStorage
+      try {
+        sessionStorage.clear();
+        log('✅ sessionStorage 已清除', 'success');
+      } catch (e) {
+        log('❌ sessionStorage 清除失败: ' + e.message, 'error');
+      }
+      
+      // 3. 清除 Service Worker
+      if ('serviceWorker' in navigator) {
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+          }
+          log('✅ Service Worker 已清除', 'success');
+        } catch (e) {
+          log('⚠️ Service Worker 清除失败: ' + e.message, 'warning');
+        }
+      }
+      
+      // 4. 清除所有缓存
+      if ('caches' in window) {
+        try {
+          const cacheNames = await caches.keys();
+          for (let name of cacheNames) {
+            await caches.delete(name);
+          }
+          log('✅ Cache API 已清除 (' + cacheNames.length + ' 个缓存)', 'success');
+        } catch (e) {
+          log('⚠️ Cache API 清除失败: ' + e.message, 'warning');
+        }
+      }
+      
+      log('', '');
+      log('🎉 清理完成！准备跳转...', 'success');
+      log('⏰ 3 秒后自动跳转到社区页面', 'warning');
+      
+      setTimeout(() => {
+        // 添加时间戳强制刷新
+        window.location.href = 'community.html?t=' + Date.now();
+      }, 3000);
+    }
+    
+    async function testSupabase() {
+      document.getElementById('status').innerHTML = '';
+      log('🧪 开始测试 Supabase 连接...', 'warning');
+      
+      // 加载依赖
+      if (typeof supabase === 'undefined') {
+        log('📦 加载 Supabase SDK...', 'warning');
+        await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      
+      if (typeof SUPABASE_CONFIG === 'undefined') {
+        log('📦 加载配置文件...', 'warning');
+        await loadScript('supabase-config.js');
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      if (typeof supabase === 'undefined') {
+        log('❌ Supabase SDK 加载失败', 'error');
+        return;
+      }
+      
+      if (typeof SUPABASE_CONFIG === 'undefined') {
+        log('❌ 配置文件加载失败', 'error');
+        return;
+      }
+      
+      log('✅ 依赖加载完成', 'success');
+      log('', '');
+      log('📋 配置信息:', 'warning');
+      log('  URL: ' + SUPABASE_CONFIG.url, '');
+      log('  Enabled: ' + SUPABASE_CONFIG.enabled, '');
+      log('', '');
+      
+      if (!SUPABASE_CONFIG.enabled) {
+        log('❌ Supabase 未启用', 'error');
+        return;
+      }
+      
+      try {
+        log('🔌 创建 Supabase 客户端...', 'warning');
+        const client = supabase.createClient(
+          SUPABASE_CONFIG.url,
+          SUPABASE_CONFIG.anonKey
+        );
+        log('✅ 客户端创建成功', 'success');
+        
+        log('', '');
+        log('🔍 测试查询 community_posts...', 'warning');
+        const { data, error } = await client
+          .from('community_posts')
+          .select('id, title')
+          .limit(3);
+        
+        if (error) {
+          log('❌ 查询失败: ' + error.message, 'error');
+          log('错误码: ' + error.code, 'error');
+        } else {
+          log('✅ 查询成功！', 'success');
+          log('返回数据: ' + JSON.stringify(data, null, 2), 'success');
+          log('', '');
+          log('🎉 Supabase 连接完全正常！', 'success');
+          log('💡 问题可能在 community-data-service.js 的初始化逻辑', 'warning');
+        }
+      } catch (e) {
+        log('❌ 测试异常: ' + e.message, 'error');
+      }
+    }
+    
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+  </script>
+</body>
+</html>
