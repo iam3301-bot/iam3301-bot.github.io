@@ -23,6 +23,8 @@
    * 初始化 Supabase 连接
    */
   async function initSupabase() {
+    console.log('🔌 [DEBUG] initSupabase 开始执行');
+    
     // 检查 Supabase SDK 是否加载
     if (typeof supabase === 'undefined') {
       console.error('❌ Supabase SDK 未加载！');
@@ -1677,8 +1679,12 @@ ON CONFLICT (id) DO NOTHING;
    * 初始化社区数据服务
    */
   async function initCommunityData() {
+    console.log('🚀 [DEBUG] initCommunityData 开始执行');
+    
     // 初始化 Supabase 连接
+    console.log('🚀 [DEBUG] 准备调用 initSupabase()');
     await initSupabase();
+    console.log('🚀 [DEBUG] initSupabase() 执行完毕');
     
     // 确保当前用户资料存在
     await ensureUserProfile();
