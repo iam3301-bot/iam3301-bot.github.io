@@ -974,11 +974,33 @@
       postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🔄 正在加载社区数据...</div>';
     }
     
+    // 🔥 新方案：直接在这里测试 Supabase 连接（绕过复杂的 service 层）
+    console.log('🧪 [直接测试] 检查 Supabase 连接...');
+    let directSupabaseWorks = false;
+    try {
+      if (typeof supabase !== 'undefined' && typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.enabled) {
+        const testClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        const { data, error } = await testClient.from('community_posts').select('id').limit(1);
+        if (!error) {
+          console.log('✅ [直接测试] Supabase 连接成功！');
+          directSupabaseWorks = true;
+        } else {
+          console.error('❌ [直接测试] Supabase 查询失败:', error);
+        }
+      }
+    } catch (e) {
+      console.error('❌ [直接测试] 测试异常:', e);
+    }
+    
     // ✅ 关键修复：先初始化数据服务（连接 Supabase）
     if (window.communityDataService?.initCommunityData) {
       console.log('🔌 正在初始化社区数据服务...');
-      await window.communityDataService.initCommunityData();
-      console.log('✅ 社区数据服务初始化完成');
+      try {
+        await window.communityDataService.initCommunityData();
+        console.log('✅ 社区数据服务初始化完成');
+      } catch (e) {
+        console.error('❌ 社区数据服务初始化失败:', e);
+      }
     } else {
       console.error('❌ communityDataService.initCommunityData 不存在');
     }
@@ -1005,8 +1027,9 @@
     setInterval(updateCommunityStats, 30000);
     
     // 检查数据来源并显示状态
-    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
+    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || directSupabaseWorks;
     console.log(`✅ 社区页面初始化完成 [数据源: ${isSupabase ? 'Supabase 云数据库 ✅' : '本地存储 ⚠️'}]`);
+    console.log(`🔧 [DEBUG] isSupabaseEnabled() = ${window.communityDataService?.isSupabaseEnabled?.()}, directSupabaseWorks = ${directSupabaseWorks}`);
     
     // 如果未连接 Supabase，显示警告
     if (!isSupabase) {
@@ -1016,6 +1039,10 @@
       console.error('2. 进入项目 SQL Editor');
       console.error('3. 执行 supabase-init.sql 脚本');
       console.error('4. 刷新此页面');
+      console.error('');
+      console.error('🐛 [DEBUG 信息]');
+      console.error('  - 直接测试结果:', directSupabaseWorks ? '成功' : '失败');
+      console.error('  - Service层结果:', window.communityDataService?.isSupabaseEnabled?.() ? '成功' : '失败');
     }
     
     // 显示数据源状态到页面
