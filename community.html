@@ -999,22 +999,49 @@
     const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
     console.log(`✅ 社区页面初始化完成 [数据源: ${isSupabase ? 'Supabase 云数据库 ✅' : '本地存储 ⚠️'}]`);
     
+    // 如果未连接 Supabase，显示警告
+    if (!isSupabase) {
+      console.error('❌ 未连接到 Supabase 数据库！');
+      console.error('📝 请按以下步骤操作：');
+      console.error('1. 访问 https://supabase.com');
+      console.error('2. 进入项目 SQL Editor');
+      console.error('3. 执行 supabase-init.sql 脚本');
+      console.error('4. 刷新此页面');
+    }
+    
     // 显示数据源状态到页面
     const dataSourceBadge = document.createElement('div');
     dataSourceBadge.style.cssText = `
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: ${isSupabase ? 'linear-gradient(135deg, rgba(0, 255, 159, 0.2), rgba(85, 234, 212, 0.15))' : 'linear-gradient(135deg, rgba(255, 211, 0, 0.2), rgba(255, 61, 148, 0.15))'};
-      border: 1px solid ${isSupabase ? 'var(--cyber-cyan)' : 'var(--cyber-yellow)'};
+      background: ${isSupabase ? 'linear-gradient(135deg, rgba(0, 255, 159, 0.2), rgba(85, 234, 212, 0.15))' : 'linear-gradient(135deg, rgba(255, 69, 0, 0.3), rgba(255, 0, 0, 0.2))'};
+      border: 2px solid ${isSupabase ? 'var(--cyber-cyan)' : '#ff4500'};
       border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 11px;
+      padding: ${isSupabase ? '8px 16px' : '12px 20px'};
+      font-size: ${isSupabase ? '11px' : '12px'};
       color: var(--text-main);
       z-index: 1000;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       font-family: 'Orbitron', sans-serif;
+      cursor: ${isSupabase ? 'default' : 'pointer'};
+      transition: all 0.3s ease;
     `;
+    
+    if (!isSupabase) {
+      dataSourceBadge.onmouseover = () => {
+        dataSourceBadge.style.transform = 'scale(1.05)';
+        dataSourceBadge.style.boxShadow = '0 6px 16px rgba(255, 69, 0, 0.5)';
+      };
+      dataSourceBadge.onmouseout = () => {
+        dataSourceBadge.style.transform = 'scale(1)';
+        dataSourceBadge.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+      };
+      dataSourceBadge.onclick = () => {
+        alert('⚠️ 数据库未连接！\n\n当前使用本地存储模式，帖子数据仅保存在您的浏览器中。\n\n要启用多用户共享功能：\n1. 在 Supabase 执行 supabase-init.sql\n2. 刷新页面\n\n详见浏览器控制台（F12）');
+      };
+    }
+    
     dataSourceBadge.innerHTML = `
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 14px;">${isSupabase ? '🌐' : '💾'}</span>

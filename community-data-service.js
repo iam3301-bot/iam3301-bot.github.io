@@ -23,40 +23,78 @@
    * 初始化 Supabase 连接
    */
   async function initSupabase() {
-    // 检查是否有全局 Supabase 配置
-    if (typeof SUPABASE_CONFIG !== 'undefined' && 
-        SUPABASE_CONFIG.enabled &&
-        typeof supabase !== 'undefined') {
-      try {
-        // 使用已初始化的客户端
-        if (typeof getSupabase === 'function') {
-          supabaseClient = getSupabase();
-        } else if (typeof window.supabaseClient !== 'undefined') {
-          supabaseClient = window.supabaseClient;
-        } else {
-          // 手动创建客户端
-          supabaseClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-        }
+    // 检查 Supabase SDK 是否加载
+    if (typeof supabase === 'undefined') {
+      console.error('❌ Supabase SDK 未加载！');
+      console.error('请确保 community.html 包含：');
+      console.error('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>');
+      return false;
+    }
+    
+    // 检查配置是否存在
+    if (typeof SUPABASE_CONFIG === 'undefined') {
+      console.error('❌ SUPABASE_CONFIG 未定义！');
+      console.error('请确保 community.html 包含：');
+      console.error('<script src="supabase-config.js"></script>');
+      return false;
+    }
+    
+    // 检查配置是否启用
+    if (!SUPABASE_CONFIG.enabled) {
+      console.warn('⚠️ Supabase 未启用（SUPABASE_CONFIG.enabled = false）');
+      console.log('ℹ️ 社区数据服务: 使用本地存储模式');
+      return false;
+    }
+    
+    // 检查 URL 和 Key 是否配置
+    if (!SUPABASE_CONFIG.url || !SUPABASE_CONFIG.anonKey) {
+      console.error('❌ Supabase URL 或 anonKey 未配置！');
+      console.error('当前配置：', {
+        url: SUPABASE_CONFIG.url,
+        anonKey: SUPABASE_CONFIG.anonKey ? '已设置' : '未设置'
+      });
+      return false;
+    }
+    
+    try {
+      // 使用已初始化的客户端
+      if (typeof getSupabase === 'function') {
+        supabaseClient = getSupabase();
+      } else if (typeof window.supabaseClient !== 'undefined') {
+        supabaseClient = window.supabaseClient;
+      } else {
+        // 手动创建客户端
+        console.log('🔌 正在连接 Supabase:', SUPABASE_CONFIG.url);
+        supabaseClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+      }
+      
+      if (supabaseClient) {
+        console.log('✅ Supabase 客户端已创建');
         
-        if (supabaseClient) {
-          useSupabase = true;
+        // 测试连接
+        console.log('🔍 正在检查数据库表...');
+        
+        // 确保数据库表存在
+        await ensureDatabaseTables();
+        
+        if (useSupabase) {
           console.log('✅ 社区数据服务: 已连接 Supabase 数据库');
-          
-          // 确保数据库表存在
-          await ensureDatabaseTables();
           
           // 订阅实时更新
           subscribeToRealtimeUpdates();
           
           return true;
+        } else {
+          console.error('❌ 数据库表检查失败，降级到本地存储');
+          return false;
         }
-      } catch (e) {
-        console.warn('⚠️ Supabase 初始化失败，使用本地存储:', e);
-        useSupabase = false;
       }
-    } else {
-      console.log('ℹ️ 社区数据服务: 使用本地存储模式 (Supabase 未配置)');
+    } catch (e) {
+      console.error('❌ Supabase 初始化失败:', e);
+      console.error('错误详情:', e.message);
+      useSupabase = false;
     }
+    
     return false;
   }
 
@@ -64,33 +102,90 @@
    * 确保数据库表存在 - 如果不存在则创建
    */
   async function ensureDatabaseTables() {
-    if (!useSupabase || !supabaseClient) return;
+    if (!supabaseClient) {
+      console.error('❌ Supabase 客户端未初始化');
+      return;
+    }
 
     try {
       // 检查 community_posts 表是否存在
+      console.log('🔍 检查 community_posts 表...');
       const { data, error } = await supabaseClient
         .from('community_posts')
         .select('id')
         .limit(1);
 
-      if (error && error.code === '42P01') {
-        // 表不存在，需要手动创建
-        console.warn('⚠️ community_posts 表不存在，请在 Supabase 控制台执行以下 SQL：');
-        console.log(getCreateTableSQL());
+      if (error) {
+        console.error('❌ 数据库表检查失败:', error);
+        console.error('错误代码:', error.code);
+        console.error('错误信息:', error.message);
+        
+        if (error.code === '42P01') {
+          // 表不存在
+          console.error('');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('❌ 数据库表不存在！');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('');
+          console.error('📝 请按以下步骤修复：');
+          console.error('');
+          console.error('1. 访问 Supabase 控制台:');
+          console.error('   https://supabase.com/dashboard/project/gybgiqyyltckgxbdtzwu');
+          console.error('');
+          console.error('2. 点击左侧菜单 "SQL Editor"');
+          console.error('');
+          console.error('3. 点击 "New Query"');
+          console.error('');
+          console.error('4. 复制项目中的 supabase-init.sql 文件内容');
+          console.error('   文件位置: /supabase-init.sql');
+          console.error('');
+          console.error('5. 粘贴到 SQL Editor 并点击 "Run"');
+          console.error('');
+          console.error('6. 等待执行完成后，刷新此页面');
+          console.error('');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('');
+        } else if (error.code === 'PGRST301') {
+          // 权限问题
+          console.error('❌ 数据库权限错误！');
+          console.error('请检查 Supabase RLS 策略是否正确设置');
+        } else {
+          console.error('❌ 未知数据库错误');
+        }
         
         // 降级到本地存储
         useSupabase = false;
         return;
       }
 
+      console.log('✅ community_posts 表存在');
+      
+      // 检查 user_profiles 表
+      console.log('🔍 检查 user_profiles 表...');
+      const { error: profileError } = await supabaseClient
+        .from('user_profiles')
+        .select('id')
+        .limit(1);
+      
+      if (profileError && profileError.code === '42P01') {
+        console.warn('⚠️ user_profiles 表不存在');
+        console.warn('请执行 supabase-init.sql 创建该表');
+      } else {
+        console.log('✅ user_profiles 表存在');
+      }
+      
       console.log('✅ 数据库表检查通过');
+      useSupabase = true;
       
       // 检查是否有初始数据，如果没有则迁移本地数据
       if (!error && (!data || data.length === 0)) {
+        console.log('📤 检测到无数据，准备迁移本地数据...');
         await migrateLocalDataToSupabase();
       }
     } catch (e) {
-      console.error('检查数据库表失败:', e);
+      console.error('❌ 检查数据库表失败:', e);
+      console.error('错误堆栈:', e.stack);
+      useSupabase = false;
     }
   }
 
