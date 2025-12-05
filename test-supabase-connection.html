@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Supabase 连接测试</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #0f0;
+    }
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #333;
+      background: #000;
+    }
+    .success { color: #0f0; }
+    .error { color: #f00; }
+    .info { color: #ff0; }
+    pre {
+      background: #000;
+      padding: 10px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Supabase 连接测试</h1>
+  <div id="results"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const results = document.getElementById('results');
+    
+    function log(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `test-result ${type}`;
+      div.innerHTML = message;
+      results.appendChild(div);
+    }
+
+    async function testSupabase() {
+      log('🚀 开始测试 Supabase 连接...', 'info');
+      
+      // 配置
+      const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA';
+      
+      log(`📍 URL: ${SUPABASE_URL}`, 'info');
+      log(`🔑 Key: ${SUPABASE_KEY.substring(0, 50)}...`, 'info');
+      
+      // 创建客户端
+      let client;
+      try {
+        client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        log('✅ Supabase 客户端创建成功', 'success');
+      } catch (error) {
+        log(`❌ 创建客户端失败: ${error.message}`, 'error');
+        return;
+      }
+      
+      // 测试各个表
+      const tables = ['community_posts', 'user_profiles', 'online_users', 'community_comments'];
+      
+      for (const table of tables) {
+        log(`<br>📊 测试表: ${table}`, 'info');
+        
+        try {
+          const { data, error, count } = await client
+            .from(table)
+            .select('*', { count: 'exact' })
+            .limit(5);
+          
+          if (error) {
+            log(`❌ ${table} 查询失败:`, 'error');
+            log(`<pre>${JSON.stringify(error, null, 2)}</pre>`, 'error');
+          } else {
+            log(`✅ ${table} 查询成功`, 'success');
+            log(`📈 记录数: ${count || data.length}`, 'success');
+            if (data && data.length > 0) {
+              log(`<pre>${JSON.stringify(data[0], null, 2)}</pre>`, 'info');
+            } else {
+              log('⚠️ 表为空', 'info');
+            }
+          }
+        } catch (error) {
+          log(`❌ ${table} 查询异常: ${error.message}`, 'error');
+        }
+      }
+      
+      log('<br>🏁 测试完成', 'success');
+    }
+    
+    // 页面加载后立即测试
+    window.addEventListener('DOMContentLoaded', testSupabase);
+  </script>
+</body>
+</html>
