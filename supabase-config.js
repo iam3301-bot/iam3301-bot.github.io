@@ -1546,6 +1546,11 @@ const UserDataManager = {
     // 自动备份到永久存储
     this._backupUserData(userId, allData[userId]);
     
+    // 自动同步平台绑定到云端（异步，不阻塞）
+    this._syncPlatformBindingsToCloud(userId, allData[userId]).catch(err => {
+      console.warn('[UserDataManager] 云端同步失败（非阻塞）:', err);
+    });
+    
     return allData[userId];
   },
   
@@ -1680,7 +1685,7 @@ const UserDataManager = {
   },
   
   // 解绑 Steam 账号
-  unlinkSteam(userId) {
+  async unlinkSteam(userId) {
     const userData = this.getData(userId);
     userData.steam = {
       linked: false,
@@ -1693,6 +1698,11 @@ const UserDataManager = {
       totalPlaytime: 0
     };
     this.saveData(userId, userData);
+    
+    // 同时删除云端绑定
+    await this.removePlatformBinding(userId, 'steam').catch(err => {
+      console.warn('[unlinkSteam] 删除云端绑定失败（非阻塞）:', err);
+    });
     
     return { success: true, message: 'Steam 账号已解绑' };
   },
@@ -1785,6 +1795,147 @@ const UserDataManager = {
       console.error('[UserDataManager] 从云端同步失败:', error);
       return { success: false, error: error.message };
     }
+  },
+  
+  // =============================================
+  // 平台绑定云端同步（新方法）
+  // =============================================
+  
+  // 同步平台绑定到云端（私有方法，自动调用）
+  async _syncPlatformBindingsToCloud(userId, userData) {
+    if (!isSupabaseEnabled()) {
+      console.log('[UserDataManager] Supabase未启用，跳过云端同步');
+      return;
+    }
+    
+    try {
+      // 同步 Steam 绑定
+      if (userData.steam?.linked && userData.steam?.steamId) {
+        await this.savePlatformBinding(userId, 'steam', {
+          platformUserId: userData.steam.steamId,
+          platformUsername: userData.steam.personaName,
+          platformAvatar: userData.steam.avatar,
+          platformProfileUrl: userData.steam.profileUrl,
+          platformData: {
+            games: userData.steam.games || [],
+            gameCount: userData.steam.gameCount || 0,
+            totalPlaytime: userData.steam.totalPlaytime || 0,
+            lastSync: userData.steam.lastSync
+          }
+        });
+      }
+      
+      console.log('[UserDataManager] 平台绑定已同步到云端');
+    } catch (error) {
+      console.error('[UserDataManager] 平台绑定云端同步失败:', error);
+      throw error;
+    }
+  },
+  
+  // 保存平台绑定到云端
+  async savePlatformBinding(userId, platform, bindingData) {
+    if (!isSupabaseEnabled()) {
+      return { success: false, error: '云同步需要配置 Supabase' };
+    }
+    
+    try {
+      const { data, error } = await supabaseClient
+        .from('user_platform_bindings')
+        .upsert({
+          user_id: userId,
+          platform: platform,
+          platform_user_id: bindingData.platformUserId,
+          platform_username: bindingData.platformUsername,
+          platform_avatar: bindingData.platformAvatar,
+          platform_profile_url: bindingData.platformProfileUrl,
+          platform_data: bindingData.platformData || {},
+          last_sync_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,platform'
+        });
+      
+      if (error) throw error;
+      
+      console.log(`[UserDataManager] ${platform} 绑定已保存到云端`);
+      return { success: true, data };
+    } catch (error) {
+      console.error(`[UserDataManager] 保存 ${platform} 绑定失败:`, error);
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // 从云端加载平台绑定
+  async loadPlatformBindings(userId) {
+    if (!isSupabaseEnabled()) {
+      console.log('[UserDataManager] Supabase未启用，从本地加载数据');
+      return { success: true, data: this.getData(userId) };
+    }
+    
+    try {
+      const { data: bindings, error } = await supabaseClient
+        .from('user_platform_bindings')
+        .select('*')
+        .eq('user_id', userId);
+      
+      if (error) throw error;
+      
+      if (bindings && bindings.length > 0) {
+        const userData = this.getData(userId);
+        
+        // 处理 Steam 绑定
+        const steamBinding = bindings.find(b => b.platform === 'steam');
+        if (steamBinding) {
+          userData.steam = {
+            linked: true,
+            steamId: steamBinding.platform_user_id,
+            personaName: steamBinding.platform_username,
+            avatar: steamBinding.platform_avatar,
+            profileUrl: steamBinding.platform_profile_url,
+            games: steamBinding.platform_data?.games || [],
+            gameCount: steamBinding.platform_data?.gameCount || 0,
+            totalPlaytime: steamBinding.platform_data?.totalPlaytime || 0,
+            lastSync: steamBinding.platform_data?.lastSync || steamBinding.last_sync_at
+          };
+        }
+        
+        // TODO: 处理其他平台绑定 (PSN, Xbox, Epic等)
+        
+        // 保存到本地
+        this.saveData(userId, userData);
+        
+        console.log('[UserDataManager] 平台绑定已从云端加载:', bindings.length, '个绑定');
+        return { success: true, data: userData, bindings: bindings };
+      }
+      
+      console.log('[UserDataManager] 云端暂无平台绑定数据');
+      return { success: true, data: this.getData(userId), bindings: [] };
+    } catch (error) {
+      console.error('[UserDataManager] 从云端加载平台绑定失败:', error);
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // 删除平台绑定（从云端）
+  async removePlatformBinding(userId, platform) {
+    if (!isSupabaseEnabled()) {
+      return { success: false, error: '云同步需要配置 Supabase' };
+    }
+    
+    try {
+      const { error } = await supabaseClient
+        .from('user_platform_bindings')
+        .delete()
+        .eq('user_id', userId)
+        .eq('platform', platform);
+      
+      if (error) throw error;
+      
+      console.log(`[UserDataManager] ${platform} 绑定已从云端删除`);
+      return { success: true };
+    } catch (error) {
+      console.error(`[UserDataManager] 删除 ${platform} 绑定失败:`, error);
+      return { success: false, error: error.message };
+    }
   }
 };
 
@@ -1835,6 +1986,52 @@ $$ language 'plpgsql';
 
 CREATE TRIGGER update_user_profiles_updated_at
   BEFORE UPDATE ON user_profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- =============================================
+-- 创建用户平台绑定表（新增）
+-- =============================================
+CREATE TABLE IF NOT EXISTS user_platform_bindings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  platform VARCHAR(50) NOT NULL,
+  platform_user_id VARCHAR(255) NOT NULL,
+  platform_username VARCHAR(255),
+  platform_avatar TEXT,
+  platform_profile_url TEXT,
+  platform_data JSONB,
+  linked_at TIMESTAMPTZ DEFAULT NOW(),
+  last_sync_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, platform)
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_user_platform_bindings_user_id ON user_platform_bindings(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_platform_bindings_platform ON user_platform_bindings(platform);
+CREATE INDEX IF NOT EXISTS idx_user_platform_bindings_user_platform ON user_platform_bindings(user_id, platform);
+
+-- 启用 RLS
+ALTER TABLE user_platform_bindings ENABLE ROW LEVEL SECURITY;
+
+-- 创建策略
+CREATE POLICY "Users can view own bindings" ON user_platform_bindings
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own bindings" ON user_platform_bindings
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own bindings" ON user_platform_bindings
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own bindings" ON user_platform_bindings
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- 创建触发器
+CREATE TRIGGER update_user_platform_bindings_updated_at
+  BEFORE UPDATE ON user_platform_bindings
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 `;

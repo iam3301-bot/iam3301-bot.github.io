@@ -1245,7 +1245,14 @@
       loginPrompt.style.display = 'none';
       profileContent.style.display = 'grid';
       
-      // 加载用户数据
+      // 首先从云端加载平台绑定（如果可用）
+      console.log('[Profile] 从云端加载平台绑定...');
+      const cloudResult = await UserDataManager.loadPlatformBindings(currentUser.id);
+      if (cloudResult.success && cloudResult.bindings && cloudResult.bindings.length > 0) {
+        console.log('[Profile] 已从云端恢复', cloudResult.bindings.length, '个平台绑定');
+      }
+      
+      // 加载用户数据（已包含云端数据）
       userData = UserDataManager.getData(currentUser.id);
       
       // 检查是否有通过绑定向导保存的 Steam 数据
@@ -1560,14 +1567,19 @@
   });
   
   // 解绑 Steam
-  document.getElementById('unlinkSteamBtn').addEventListener('click', () => {
+  document.getElementById('unlinkSteamBtn').addEventListener('click', async () => {
     if (confirm('确定要解绑 Steam 账号吗？这将清除已同步的游戏数据。')) {
-      UserDataManager.unlinkSteam(currentUser.id);
-      userData = UserDataManager.getData(currentUser.id);
-      renderUserInfo();
-      renderStats();
-      renderSteamSection();
-      showMessage('Steam 账号已解绑', 'info');
+      try {
+        await UserDataManager.unlinkSteam(currentUser.id);
+        userData = UserDataManager.getData(currentUser.id);
+        renderUserInfo();
+        renderStats();
+        renderSteamSection();
+        showMessage('Steam 账号已解绑（本地和云端）', 'info');
+      } catch (error) {
+        console.error('解绑失败:', error);
+        showMessage('解绑失败: ' + error.message, 'error');
+      }
     }
   });
   
