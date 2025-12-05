@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>GameBox 游盒 - 社区</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    /* 使用 community.html 的样式 */
+    .community-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .community-stat {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .community-stat:hover {
+      border-color: var(--cyber-yellow);
+      box-shadow: 0 0 20px rgba(255, 211, 0, 0.3);
+    }
+    
+    .community-stat .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    
+    .community-stat .value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cyber-yellow);
+    }
+    
+    .community-stat .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .post-card {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(20, 0, 30, 0.85) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .post-card:hover {
+      border-color: rgba(255, 211, 0, 0.5);
+      transform: translateX(5px);
+    }
+  </style>
+</head>
+<body data-current-page="community">
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">G</div>
+        <div>
+          <div>GameBox 游盒</div>
+          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
+        </div>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">排行榜</a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link">社区</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user" onclick="window.location.href='profile.html';" style="cursor: pointer;">未登录 · 游客</button>
+      </div>
+    </div>
+  </header>
+  
+  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+  <div id="particles-container" class="particles-container"></div>
+  <div id="scroll-progress" class="scroll-progress"></div>
+
+  <main class="main">
+    <section>
+      <div class="card">
+        <div class="page-title">💬 社区广场 (简化版)</div>
+        <div class="page-intro">
+          🎉 直接连接 Supabase，无需复杂的 Service 层
+        </div>
+      </div>
+
+      <!-- 社区统计 -->
+      <div class="community-stats">
+        <div class="community-stat">
+          <div class="icon">📝</div>
+          <div class="value" id="statPosts">0</div>
+          <div class="label">帖子总数</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">👥</div>
+          <div class="value" id="statMembers">0</div>
+          <div class="label">社区成员</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">💬</div>
+          <div class="value" id="statReplies">0</div>
+          <div class="label">回复总数</div>
+        </div>
+        <div class="community-stat">
+          <div class="icon">🟢</div>
+          <div class="value" id="statOnline">0</div>
+          <div class="label">在线人数</div>
+        </div>
+      </div>
+
+      <!-- 帖子列表 -->
+      <div class="card">
+        <header class="card-header">
+          <div class="card-title">
+            <span class="dot"></span><span>帖子列表</span>
+          </div>
+        </header>
+        <div id="postList">加载中...</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="common.js"></script>
+<script src="cyber-effects.js"></script>
+
+<!-- 直接加载 Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+  initCommon();
+  
+  // ===== 直接实现 Supabase 连接，不使用 community-data-service.js =====
+  
+  let supabaseClient = null;
+  let currentUserId = 'user-' + Date.now();
+  
+  // 初始化
+  async function init() {
+    console.log('🚀 社区简化版初始化...');
+    
+    // 创建 Supabase 客户端
+    if (typeof supabase !== 'undefined' && SUPABASE_CONFIG?.enabled) {
+      console.log('🔌 创建 Supabase 客户端...');
+      supabaseClient = supabase.createClient(
+        SUPABASE_CONFIG.url,
+        SUPABASE_CONFIG.anonKey
+      );
+      console.log('✅ 客户端创建成功');
+      
+      // 注册当前用户
+      await registerUser();
+      
+      // 更新在线状态
+      await updateOnlineStatus();
+      setInterval(updateOnlineStatus, 30000);
+      
+      // 加载数据
+      await loadPosts();
+      await updateStats();
+      
+      // 定期刷新
+      setInterval(updateStats, 10000);
+      
+      // 显示状态徽章
+      showStatusBadge(true);
+    } else {
+      console.error('❌ Supabase 未配置或未启用');
+      showStatusBadge(false);
+    }
+  }
+  
+  // 注册用户
+  async function registerUser() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('user_profiles')
+        .upsert({
+          id: currentUserId,
+          username: '访客' + Math.floor(Math.random() * 1000),
+          avatar: '👤',
+          last_login_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' })
+        .select();
+      
+      if (!error) {
+        console.log('✅ 用户注册成功:', currentUserId);
+      }
+    } catch (e) {
+      console.error('用户注册失败:', e);
+    }
+  }
+  
+  // 更新在线状态
+  async function updateOnlineStatus() {
+    try {
+      const { error } = await supabaseClient
+        .from('online_users')
+        .upsert({
+          user_id: currentUserId,
+          last_seen_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+      
+      if (!error) {
+        console.log('🟢 在线状态已更新');
+      }
+    } catch (e) {
+      console.error('更新在线状态失败:', e);
+    }
+  }
+  
+  // 加载帖子
+  async function loadPosts() {
+    const postListEl = document.getElementById('postList');
+    
+    try {
+      const { data, error } = await supabaseClient
+        .from('community_posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (!data || data.length === 0) {
+        postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">📝 暂无帖子</div>';
+        return;
+      }
+      
+      postListEl.innerHTML = data.map(post => `
+        <div class="post-card">
+          <div style="font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">
+            ${post.avatar || '👤'} ${post.title}
+          </div>
+          <div style="font-size: 13px; color: var(--text-soft); margin-bottom: 8px;">
+            ${post.content?.substring(0, 100) || ''}...
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">
+            👤 ${post.author} · 💬 ${post.replies || 0} · 👍 ${post.likes || 0} · 👁️ ${post.views || 0}
+          </div>
+        </div>
+      `).join('');
+      
+      console.log('✅ 加载了', data.length, '条帖子');
+      
+    } catch (e) {
+      console.error('加载帖子失败:', e);
+      postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 加载失败: ' + e.message + '</div>';
+    }
+  }
+  
+  // 更新统计
+  async function updateStats() {
+    try {
+      // 帖子总数
+      const { count: postsCount } = await supabaseClient
+        .from('community_posts')
+        .select('*', { count: 'exact', head: true });
+      
+      // 成员总数
+      const { count: membersCount } = await supabaseClient
+        .from('user_profiles')
+        .select('*', { count: 'exact', head: true });
+      
+      // 在线人数
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+      const { count: onlineCount } = await supabaseClient
+        .from('online_users')
+        .select('*', { count: 'exact', head: true })
+        .gte('last_seen_at', fiveMinutesAgo);
+      
+      // 总回复数
+      const { data: posts } = await supabaseClient
+        .from('community_posts')
+        .select('replies');
+      const totalReplies = posts?.reduce((sum, p) => sum + (p.replies || 0), 0) || 0;
+      
+      document.getElementById('statPosts').textContent = postsCount || 0;
+      document.getElementById('statMembers').textContent = membersCount || 0;
+      document.getElementById('statReplies').textContent = totalReplies;
+      document.getElementById('statOnline').textContent = onlineCount || 0;
+      
+      console.log('📊 统计更新 [Supabase]:', {
+        posts: postsCount,
+        members: membersCount,
+        online: onlineCount,
+        replies: totalReplies
+      });
+      
+    } catch (e) {
+      console.error('更新统计失败:', e);
+    }
+  }
+  
+  // 显示状态徽章
+  function showStatusBadge(isConnected) {
+    const badge = document.createElement('div');
+    badge.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: ${isConnected ? 'linear-gradient(135deg, rgba(0, 255, 159, 0.2), rgba(85, 234, 212, 0.15))' : 'linear-gradient(135deg, rgba(255, 69, 0, 0.3), rgba(255, 0, 0, 0.2))'};
+      border: 2px solid ${isConnected ? 'var(--cyber-cyan)' : '#ff4500'};
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 12px;
+      color: var(--text-main);
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      font-family: 'Orbitron', sans-serif;
+    `;
+    badge.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 14px;">${isConnected ? '🟢' : '🔴'}</span>
+        <span>${isConnected ? 'Supabase 云数据库' : '连接失败'}</span>
+      </div>
+    `;
+    document.body.appendChild(badge);
+  }
+  
+  // 启动
+  init();
+</script>
+</body>
+</html>
