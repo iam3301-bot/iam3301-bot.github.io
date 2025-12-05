@@ -1335,12 +1335,13 @@
     // 头像 - 优先使用自定义头像，其次Steam头像，最后表情
     const avatarEl = document.getElementById('userAvatar');
     if (userData.customAvatar) {
+      // 优先使用自定义头像
       avatarEl.innerHTML = `<img src="${userData.customAvatar}" alt="Avatar" />`;
-    } else if (userData.useSteamAvatar && userData.steam?.linked && userData.steam?.avatar) {
-      avatarEl.innerHTML = `<img src="${userData.steam.avatar}" alt="Avatar" />`;
-    } else if (userData.steam?.linked && userData.steam?.avatar && !currentUser.avatar) {
+    } else if (userData.steam?.linked && userData.steam?.avatar) {
+      // 如果绑定了Steam且有头像，自动使用Steam头像
       avatarEl.innerHTML = `<img src="${userData.steam.avatar}" alt="Avatar" />`;
     } else {
+      // 否则使用表情头像
       avatarEl.textContent = currentUser.avatar || '🎮';
     }
     
