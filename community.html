@@ -855,8 +855,8 @@
 
   document.getElementById("postSearch").addEventListener("input", renderPosts);
 
-  function createPost() {
-    alert('发帖功能开发中...');
+  async function createPost() {
+    openCreatePostModal();
   }
 
   function showStatusBadge(connected) {
@@ -932,6 +932,9 @@
       await loadOnlineUsers();
       await updateStats();
       
+      // 订阅 Realtime 更新
+      subscribeToRealtimeUpdates();
+      
       // 定期更新
       setInterval(async () => {
         await updateStats();
@@ -945,6 +948,372 @@
       showStatusBadge(false);
       document.getElementById('postList').innerHTML = 
         '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 连接失败: ' + e.message + '</div>';
+    }
+  }
+
+  // ============================================
+  // Realtime 订阅
+  // ============================================
+  
+  function subscribeToRealtimeUpdates() {
+    try {
+      const channel = supabaseClient
+        .channel('community-updates')
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'community_posts'
+        }, async (payload) => {
+          console.log('📡 收到实时更新:', payload);
+          await loadAllPosts();
+          renderPosts();
+          updateBoardCounts();
+          await updateStats();
+        })
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('✅ Realtime 订阅成功');
+          }
+        });
+    } catch (e) {
+      console.error('Realtime 订阅失败:', e);
+    }
+  }
+
+  // ============================================
+  // 发帖模态框
+  // ============================================
+  
+  const modalHTML = `
+    <div id="createPostModal" class="create-post-modal" style="display: none;">
+      <div class="modal-overlay" onclick="closeCreatePostModal()"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>✏️ 发布新帖</h3>
+          <button class="modal-close" onclick="closeCreatePostModal()">✕</button>
+        </div>
+        
+        <div class="modal-body">
+          <form id="createPostForm" onsubmit="handlePostSubmit(event); return false;">
+            <div class="form-group">
+              <label for="postTitle">帖子标题 *</label>
+              <input 
+                type="text" 
+                id="postTitle" 
+                placeholder="请输入帖子标题（10-100字符）" 
+                maxlength="100"
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="postGame">相关游戏 *</label>
+              <input 
+                type="text" 
+                id="postGame" 
+                placeholder="例如：艾尔登法环、赛博朋克2077"
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="postBoard">板块选择 *</label>
+              <select id="postBoard" required>
+                <option value="general">💬 综合讨论</option>
+                <option value="guide">📚 攻略心得</option>
+                <option value="shot">📷 游戏截图</option>
+                <option value="trade">🔄 交易求助</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="postContent">帖子内容 *</label>
+              <textarea 
+                id="postContent" 
+                rows="10"
+                placeholder="分享你的游戏心得、攻略、截图或问题..."
+                required
+              ></textarea>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="closeCreatePostModal()">
+                取消
+              </button>
+              <button type="submit" class="btn btn-primary" id="submitPostBtn">
+                🚀 发布帖子
+              </button>
+            </div>
+          </form>
+          
+          <div id="postResult" class="post-result" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const modalCSS = `
+    <style>
+      .create-post-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+      }
+      
+      .modal-content {
+        position: relative;
+        width: 90%;
+        max-width: 700px;
+        max-height: 90vh;
+        background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.95) 100%);
+        border: 2px solid rgba(255, 211, 0, 0.5);
+        border-radius: 12px;
+        box-shadow: 0 0 50px rgba(255, 211, 0, 0.3);
+        overflow: hidden;
+        animation: modalSlideIn 0.3s ease;
+      }
+      
+      @keyframes modalSlideIn {
+        from { opacity: 0; transform: translateY(-50px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        border-bottom: 2px solid rgba(255, 211, 0, 0.3);
+        background: rgba(255, 211, 0, 0.05);
+      }
+      
+      .modal-header h3 {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--cyber-yellow);
+      }
+      
+      .modal-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 0, 0, 0.2);
+        color: #fff;
+        font-size: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .modal-close:hover {
+        background: rgba(255, 0, 0, 0.4);
+        transform: rotate(90deg);
+      }
+      
+      .modal-body {
+        padding: 24px;
+        max-height: calc(90vh - 80px);
+        overflow-y: auto;
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--cyber-cyan);
+      }
+      
+      .form-group input[type="text"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(85, 234, 212, 0.3);
+        border-radius: 6px;
+        color: var(--text-main);
+        font-size: 14px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+      }
+      
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--cyber-cyan);
+        box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+      }
+      
+      .form-group textarea {
+        resize: vertical;
+        min-height: 200px;
+        line-height: 1.6;
+      }
+      
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(85, 234, 212, 0.2);
+      }
+      
+      .btn {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-secondary {
+        background: rgba(128, 128, 128, 0.3);
+        color: var(--text-main);
+        border: 1px solid rgba(128, 128, 128, 0.5);
+      }
+      
+      .btn-secondary:hover {
+        background: rgba(128, 128, 128, 0.5);
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.3));
+        color: var(--cyber-cyan);
+        border: 2px solid var(--cyber-cyan);
+      }
+      
+      .btn-primary:hover {
+        background: linear-gradient(135deg, rgba(85, 234, 212, 0.5), rgba(0, 255, 159, 0.5));
+        box-shadow: 0 0 20px rgba(85, 234, 212, 0.4);
+        transform: translateY(-2px);
+      }
+      
+      .post-result {
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+      }
+      
+      .post-result.success {
+        background: rgba(0, 255, 159, 0.1);
+        border: 1px solid rgba(0, 255, 159, 0.3);
+        color: var(--cyber-cyan);
+      }
+      
+      .post-result.error {
+        background: rgba(255, 0, 0, 0.1);
+        border: 1px solid rgba(255, 0, 0, 0.3);
+        color: #ff5555;
+      }
+    </style>
+  `;
+  
+  document.head.insertAdjacentHTML('beforeend', modalCSS);
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  
+  function openCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('postResult').style.display = 'none';
+  }
+  
+  function closeCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+  
+  async function handlePostSubmit(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitPostBtn');
+    const resultDiv = document.getElementById('postResult');
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ 发布中...';
+    
+    try {
+      const title = document.getElementById('postTitle').value.trim();
+      const game = document.getElementById('postGame').value.trim();
+      const board = document.getElementById('postBoard').value;
+      const content = document.getElementById('postContent').value.trim();
+      
+      if (!title || title.length < 5) {
+        throw new Error('标题至少需要5个字符');
+      }
+      
+      if (!content || content.length < 10) {
+        throw new Error('内容至少需要10个字符');
+      }
+      
+      const newPost = {
+        id: 'post-' + Date.now(),
+        title: title,
+        content: content,
+        game: game,
+        board: board,
+        author: '访客' + Math.floor(Math.random() * 1000),
+        avatar: '👤',
+        replies: 0,
+        likes: 0,
+        views: 0,
+        is_pinned: false,
+        is_new: true,
+        created_at: new Date().toISOString()
+      };
+      
+      const { data, error } = await supabaseClient
+        .from('community_posts')
+        .insert([newPost])
+        .select();
+      
+      if (error) throw error;
+      
+      resultDiv.className = 'post-result success';
+      resultDiv.style.display = 'block';
+      resultDiv.textContent = '✅ 帖子发布成功！';
+      
+      document.getElementById('createPostForm').reset();
+      
+      setTimeout(() => {
+        closeCreatePostModal();
+      }, 1500);
+      
+    } catch (error) {
+      resultDiv.className = 'post-result error';
+      resultDiv.style.display = 'block';
+      resultDiv.textContent = '❌ ' + error.message;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '🚀 发布帖子';
     }
   }
 
