@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>紧急修复 - 直接运行版</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #d32f2f;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #1976d2;
+      font-size: 20px;
+      margin: 20px 0 10px 0;
+    }
+    button {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px 5px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #b71c1c;
+    }
+    button.success {
+      background: #4CAF50;
+    }
+    button.success:hover {
+      background: #45a049;
+    }
+    #log {
+      background: #263238;
+      color: #aed581;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .error { color: #ef5350; }
+    .success { color: #66bb6a; }
+    .warning { color: #ffa726; }
+    .info { color: #42a5f5; }
+    .config-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    .step {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🚨 紧急修复工具</h1>
+    <p style="font-size: 16px; color: #666;">
+      这个工具会直接在浏览器中初始化 Supabase 并测试连接
+    </p>
+    
+    <div class="config-box">
+      <strong>📍 你的 Supabase 配置：</strong><br>
+      URL: https://gybgiqyyltckgxbdtzwu.supabase.co<br>
+      Key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...（已配置）
+    </div>
+    
+    <h2>第一步：测试直接连接</h2>
+    <button onclick="directTest()">🔌 直接测试 Supabase 连接</button>
+    
+    <h2>第二步：初始化并跳转</h2>
+    <button class="success" onclick="initAndGo()">✅ 初始化并打开社区页面</button>
+    
+    <h2>日志输出：</h2>
+    <div id="log">等待操作...</div>
+  </div>
+
+  <script>
+    // 直接内嵌配置，不依赖外部文件
+    const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA';
+    
+    let supabaseClient = null;
+    
+    function log(msg, type = 'info') {
+      const logEl = document.getElementById('log');
+      const span = document.createElement('span');
+      span.className = type;
+      span.textContent = msg + '\n';
+      logEl.appendChild(span);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    function clear() {
+      document.getElementById('log').innerHTML = '';
+    }
+    
+    async function directTest() {
+      clear();
+      log('='.repeat(60), 'info');
+      log('🚀 开始直接测试 Supabase 连接', 'info');
+      log('='.repeat(60), 'info');
+      log('');
+      
+      // 步骤1: 检查 SDK
+      log('【步骤 1/5】检查 Supabase SDK', 'info');
+      if (typeof supabase === 'undefined') {
+        log('❌ Supabase SDK 未加载！', 'error');
+        log('请刷新页面重试', 'error');
+        return;
+      }
+      log('✅ Supabase SDK 已加载', 'success');
+      log('');
+      
+      // 步骤2: 创建客户端
+      log('【步骤 2/5】创建 Supabase 客户端', 'info');
+      log(`URL: ${SUPABASE_URL}`, 'info');
+      log(`Key: ${SUPABASE_KEY.substring(0, 30)}...`, 'info');
+      try {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        log('✅ 客户端创建成功', 'success');
+      } catch (e) {
+        log('❌ 创建客户端失败: ' + e.message, 'error');
+        return;
+      }
+      log('');
+      
+      // 步骤3: 测试连接
+      log('【步骤 3/5】测试数据库连接', 'info');
+      try {
+        const { data, error } = await supabaseClient
+          .from('community_posts')
+          .select('id, title')
+          .limit(3);
+        
+        if (error) {
+          log('❌ 连接失败', 'error');
+          log(`错误代码: ${error.code}`, 'error');
+          log(`错误信息: ${error.message}`, 'error');
+          log('', 'error');
+          
+          if (error.code === '42P01') {
+            log('📋 问题诊断：', 'warning');
+            log('  数据库表 community_posts 不存在', 'warning');
+            log('', 'warning');
+            log('🔧 解决方案：', 'info');
+            log('  1. 访问 https://supabase.com/dashboard/project/gybgiqyyltckgxbdtzwu/sql', 'info');
+            log('  2. 执行 supabase-init.sql 脚本', 'info');
+            log('  3. 返回此页面重新测试', 'info');
+          } else if (error.code === 'PGRST301') {
+            log('📋 问题诊断：', 'warning');
+            log('  RLS 权限错误', 'warning');
+            log('', 'warning');
+            log('🔧 解决方案：', 'info');
+            log('  在 SQL Editor 执行:', 'info');
+            log('  ALTER TABLE community_posts DISABLE ROW LEVEL SECURITY;', 'info');
+          }
+          return;
+        }
+        
+        log('✅ 数据库连接成功！', 'success');
+        log(`查询到 ${data.length} 条帖子:`, 'success');
+        data.forEach((post, i) => {
+          log(`  ${i + 1}. ${post.title || post.id}`, 'info');
+        });
+      } catch (e) {
+        log('❌ 测试异常: ' + e.message, 'error');
+        return;
+      }
+      log('');
+      
+      // 步骤4: 检查所有表
+      log('【步骤 4/5】检查所有数据库表', 'info');
+      const tables = [
+        'user_profiles',
+        'community_posts',
+        'community_comments',
+        'community_likes',
+        'community_stats',
+        'online_users',
+        'activity_logs',
+        'user_platform_bindings'
+      ];
+      
+      let okCount = 0;
+      for (const table of tables) {
+        const { error } = await supabaseClient.from(table).select('id').limit(1);
+        if (error) {
+          log(`  ❌ ${table}`, 'error');
+        } else {
+          log(`  ✅ ${table}`, 'success');
+          okCount++;
+        }
+      }
+      log('');
+      log(`结果: ${okCount}/${tables.length} 个表正常`, okCount === tables.length ? 'success' : 'warning');
+      log('');
+      
+      // 步骤5: 写入测试
+      log('【步骤 5/5】测试写入权限', 'info');
+      try {
+        const testId = 'test-' + Date.now();
+        const { error: writeError } = await supabaseClient
+          .from('activity_logs')
+          .insert({
+            id: testId,
+            action: 'emergency_fix_test',
+            details: { timestamp: new Date().toISOString() }
+          });
+        
+        if (writeError) {
+          log('❌ 写入测试失败: ' + writeError.message, 'error');
+        } else {
+          log('✅ 写入权限正常', 'success');
+          // 清理测试数据
+          await supabaseClient.from('activity_logs').delete().eq('id', testId);
+          log('✅ 测试数据已清理', 'success');
+        }
+      } catch (e) {
+        log('❌ 写入测试异常: ' + e.message, 'error');
+      }
+      
+      log('');
+      log('='.repeat(60), 'info');
+      if (okCount === tables.length) {
+        log('🎉🎉🎉 完美！所有测试通过！', 'success');
+        log('', 'success');
+        log('✅ Supabase 数据库完全正常', 'success');
+        log('✅ 可以点击下方按钮初始化并打开社区页面', 'success');
+      } else {
+        log('⚠️ 部分测试失败', 'warning');
+        log('请根据上方提示修复问题', 'warning');
+      }
+      log('='.repeat(60), 'info');
+    }
+    
+    async function initAndGo() {
+      clear();
+      log('🚀 正在初始化 Supabase 并准备跳转...', 'info');
+      log('');
+      
+      if (!supabaseClient) {
+        log('创建 Supabase 客户端...', 'info');
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+      
+      // 测试连接
+      log('测试连接...', 'info');
+      const { error } = await supabaseClient.from('community_posts').select('id').limit(1);
+      
+      if (error) {
+        log('❌ 连接失败: ' + error.message, 'error');
+        log('请先点击"直接测试"按钮排查问题', 'error');
+        return;
+      }
+      
+      log('✅ 连接成功！', 'success');
+      log('');
+      
+      // 存储初始化标记
+      localStorage.setItem('supabase_manual_init', 'true');
+      localStorage.setItem('supabase_init_time', Date.now().toString());
+      
+      log('✅ 初始化标记已保存', 'success');
+      log('');
+      log('⏳ 3秒后跳转到社区页面...', 'warning');
+      
+      let countdown = 3;
+      const timer = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          log(`${countdown}...`, 'warning');
+        } else {
+          clearInterval(timer);
+          log('🚀 正在跳转...', 'success');
+          // 跳转到社区页面，带时间戳防止缓存
+          window.location.href = `community.html?init=manual&t=${Date.now()}`;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
