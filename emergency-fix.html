@@ -218,7 +218,7 @@
       for (const table of tables) {
         const { error } = await supabaseClient.from(table).select('id').limit(1);
         if (error) {
-          log(`  ❌ ${table}`, 'error');
+          log(`  ❌ ${table} - 错误码: ${error.code}, ${error.message}`, 'error');
         } else {
           log(`  ✅ ${table}`, 'success');
           okCount++;
