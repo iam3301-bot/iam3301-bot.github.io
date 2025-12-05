@@ -17,7 +17,7 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      padding-top: 120px;
+      padding-top: 90px; /* 减少顶部空白 */
     }
     
     /* 返回按钮 */
@@ -330,20 +330,37 @@
   <div id="particles-js"></div>
 
   <!-- 导航栏 -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="nav-logo">
-        <span class="logo-icon">🎮</span>
-        <span class="logo-text">GameBox</span>
+  <header class="site-header">
+    <div class="header-container">
+      <div class="header-left">
+        <div class="header-logo">
+          <span class="logo-icon">🎮</span>
+          <span class="logo-text">GameBox</span>
+          <span class="logo-tagline">游盒</span>
+        </div>
       </div>
-      <ul class="nav-links">
-        <li><a href="index.html">首页</a></li>
-        <li><a href="library.html">游戏库</a></li>
-        <li><a href="community.html" class="active">社区</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
+      <nav class="nav-main">
+        <a href="index.html" data-page="home" class="nav-link">首页</a>
+        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
+        <a href="ranking.html" data-page="ranking" class="nav-link">
+          排行榜 <span class="badge">HOT</span>
+        </a>
+        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
+        <a href="community.html" data-page="community" class="nav-link is-active">社区</a>
+        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
+        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
+        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
+        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+      </nav>
+      <div class="header-right">
+        <div class="header-search">
+          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
+          <span class="header-search-icon">🔍</span>
+        </div>
+        <button class="header-user" style="cursor: pointer;">未登录 · 游客</button>
+      </div>
     </div>
-  </nav>
+  </header>
 
   <!-- 主内容区 -->
   <div class="post-detail-container">
@@ -392,6 +409,17 @@
 
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Common Scripts -->
+  <script src="common.js"></script>
+  <script src="cyber-effects.js"></script>
+
+  <script>
+    // 初始化通用功能
+    if (typeof initCommon === 'function') {
+      initCommon();
+    }
+  </script>
 
   <script>
     // ========== Supabase 配置 ==========
