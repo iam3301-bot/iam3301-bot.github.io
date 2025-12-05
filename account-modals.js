@@ -222,7 +222,7 @@ const AccountModals = {
       window.location.href = `login.html?email=${encodeURIComponent(email)}`;
     } catch (error) {
       console.error('切换账号失败:', error);
-      alert('切换失败：' + error.message);
+      this.showCustomAlert('切换失败：' + error.message);
     }
   },
 
@@ -279,13 +279,47 @@ const AccountModals = {
         localStorage.removeItem('currentUser');
       }
 
-      // 关闭浮窗并跳转
+      // 关闭浮窗
       this.closeModal();
-      window.location.href = 'login.html';
+      
+      // 智能判断：受保护页面跳转到登录页，公共页面只刷新
+      const protectedPages = ['profile.html', 'user-center.html'];
+      const currentPage = window.location.pathname.split('/').pop();
+      
+      if (protectedPages.includes(currentPage)) {
+        window.location.href = 'login.html';
+      } else {
+        // 在公共页面，只需要刷新页面即可（更新登录状态）
+        window.location.reload();
+      }
     } catch (error) {
       console.error('退出登录失败:', error);
-      alert('退出失败：' + error.message);
+      this.showCustomAlert('退出失败：' + error.message);
     }
+  },
+  
+  // 自定义提示框（替代alert）
+  showCustomAlert(message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 10001;
+      animation: slideInRight 0.3s ease;
+    `;
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+      alertDiv.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => alertDiv.remove(), 300);
+    }, 3000);
   },
 
   // 注入样式

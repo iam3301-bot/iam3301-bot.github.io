@@ -86,10 +86,9 @@ function showUserMenu(user) {
       if (typeof AccountModals !== 'undefined') {
         AccountModals.showLogoutModal(user);
       } else {
-        if (confirm('确定要退出登录吗？')) {
-          localStorage.removeItem('currentUser');
-          window.location.href = 'login.html';
-        }
+        // 直接退出，不使用confirm
+        localStorage.removeItem('currentUser');
+        window.location.reload(); // 刷新当前页面
       }
     }, danger: true }
   ];
