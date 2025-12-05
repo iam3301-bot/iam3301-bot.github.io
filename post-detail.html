@@ -16,8 +16,8 @@
     .post-detail-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
-      padding-top: 100px; /* 直接紧贴导航栏 */
+      padding: 15px 20px 20px;
+      padding-top: 85px; /* 紧贴导航栏 */
     }
     
     /* 确保导航栏固定在顶部 */
@@ -27,23 +27,25 @@
       left: 0;
       right: 0;
       z-index: 1000;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
     }
     
     /* 返回按钮 */
     .back-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+      gap: 6px;
+      padding: 6px 14px;
       background: rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(255, 211, 0, 0.3);
-      border-radius: 8px;
+      border-radius: 6px;
       color: var(--cyber-yellow);
       font-size: 13px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     
     .back-btn:hover {
@@ -57,27 +59,29 @@
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
       border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 12px;
-      padding: 25px;
+      padding: 30px;
       margin-bottom: 20px;
       box-shadow: 0 4px 20px rgba(255, 211, 0, 0.1);
     }
     
     .post-header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 20px;
       padding-bottom: 20px;
       border-bottom: 1px solid rgba(255, 211, 0, 0.2);
+      gap: 15px;
     }
     
     .post-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--cyber-yellow);
       margin: 0;
       flex: 1;
+      line-height: 1.3;
     }
     
     .post-badges {
@@ -165,7 +169,7 @@
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
       border: 2px solid rgba(255, 211, 0, 0.3);
       border-radius: 12px;
-      padding: 25px;
+      padding: 30px;
     }
     
     .comments-header {
