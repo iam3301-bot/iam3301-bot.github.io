@@ -697,10 +697,14 @@
       try {
         console.log('📤 发表评论:', content);
 
+        // 生成唯一的评论 ID
+        const commentId = 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+
         const { data, error } = await supabaseClient
           .from('community_comments')
           .insert([
             {
+              id: commentId,
               post_id: postId,
               author: currentUser.name,
               content: content
