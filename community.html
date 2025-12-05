@@ -544,7 +544,19 @@
   let supabaseClient = null;
   let postData = [];
   let currentBoard = "all";
-  const userId = 'user-' + Date.now();
+  
+  // 获取或创建唯一用户ID（持久化）
+  function getUserId() {
+    let userId = localStorage.getItem('gamebox_user_id');
+    if (!userId) {
+      userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('gamebox_user_id', userId);
+    }
+    return userId;
+  }
+  
+  const userId = getUserId();
+  console.log('👤 当前用户ID:', userId);
 
   // 动态加载 Supabase SDK
   function loadSupabaseSDK() {
@@ -567,18 +579,40 @@
   
   async function registerUser() {
     try {
-      await supabaseClient
+      // 检查用户是否已存在
+      const { data: existingUser } = await supabaseClient
         .from('user_profiles')
-        .upsert({
-          id: userId,
-          username: '访客' + Math.floor(Math.random() * 1000),
-          avatar: '👤',
-          last_login_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
-      console.log('✅ 用户注册成功');
+        .select('id, username')
+        .eq('id', userId)
+        .single();
+      
+      if (existingUser) {
+        console.log('✅ 用户已存在，更新最后登录时间:', existingUser.username);
+        // 只更新最后登录时间
+        await supabaseClient
+          .from('user_profiles')
+          .update({ 
+            last_login_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', userId);
+      } else {
+        console.log('📝 注册新用户...');
+        // 生成唯一用户名
+        const username = '访客' + Math.floor(Math.random() * 10000);
+        await supabaseClient
+          .from('user_profiles')
+          .insert({
+            id: userId,
+            username: username,
+            avatar: '👤',
+            last_login_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+        console.log('✅ 新用户注册成功:', username);
+      }
     } catch (e) {
-      console.error('用户注册失败:', e);
+      console.error('❌ 用户注册失败:', e);
     }
   }
 
@@ -791,7 +825,7 @@
       if ((p.replies + p.likes) > 500) badges += '<span class="post-badge hot">🔥 热门</span>';
 
       return `
-        <div class="post-card ${p.isPinned ? 'pinned' : ''}">
+        <div class="post-card ${p.isPinned ? 'pinned' : ''}" onclick="viewPostDetail('${p.id}')" style="cursor: pointer;">
           <div class="post-header">
             <div class="post-avatar">${p.avatar}</div>
             <div class="post-info">
@@ -1279,6 +1313,10 @@
   function closeCreatePostModal() {
     document.getElementById('createPostModal').style.display = 'none';
     document.body.style.overflow = 'auto';
+  }
+  
+  function viewPostDetail(postId) {
+    window.location.href = 'post-detail.html?id=' + postId;
   }
   
   async function handlePostSubmit(e) {

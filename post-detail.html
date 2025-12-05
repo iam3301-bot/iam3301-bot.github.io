@@ -2,217 +2,133 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 帖子详情</title>
-  <!-- Cyberpunk Fonts -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>帖子详情 - GameBox 游盒</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="index.css" />
   <style>
-    /* 帖子详情页专属样式 */
-    .post-header-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid rgba(255, 211, 0, 0.2);
+    .post-detail {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
     }
     
-    .post-author-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-pink));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      flex-shrink: 0;
-      box-shadow: 0 0 20px rgba(255, 211, 0, 0.4);
-    }
-    
-    .post-author-info {
-      flex: 1;
-    }
-    
-    .post-author-name {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 16px;
+    .post-title {
+      font-size: 24px;
       font-weight: 700;
       color: var(--cyber-yellow);
-      margin-bottom: 4px;
+      margin-bottom: 16px;
     }
     
-    .post-stats-bar {
+    .post-meta {
       display: flex;
-      gap: 16px;
-      font-size: 12px;
+      gap: 20px;
+      margin-bottom: 20px;
+      font-size: 13px;
       color: var(--text-muted);
     }
     
-    .post-stat-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .post-content-full {
-      font-size: 14px;
-      color: var(--text-soft);
+    .post-content {
       line-height: 1.8;
-      margin: 20px 0;
-    }
-    
-    .post-content-full p {
-      margin-bottom: 12px;
+      color: var(--text-main);
+      margin-bottom: 24px;
+      font-size: 15px;
     }
     
     .post-actions {
       display: flex;
-      gap: 12px;
-      margin: 20px 0;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 8px;
+      gap: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 211, 0, 0.2);
     }
     
     .action-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: rgba(255, 211, 0, 0.1);
-      border: 1px solid rgba(255, 211, 0, 0.3);
-      border-radius: 4px;
-      color: var(--text-main);
-      font-size: 13px;
+      padding: 8px 20px;
+      background: rgba(85, 234, 212, 0.1);
+      border: 1px solid rgba(85, 234, 212, 0.3);
+      border-radius: 6px;
+      color: var(--cyber-cyan);
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
     .action-btn:hover {
-      background: rgba(255, 211, 0, 0.2);
-      border-color: var(--cyber-yellow);
-      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
+      background: rgba(85, 234, 212, 0.2);
+      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
     }
     
-    .action-btn.active {
-      background: linear-gradient(135deg, rgba(255, 211, 0, 0.3), rgba(255, 61, 148, 0.2));
-      border-color: var(--cyber-yellow);
-      color: var(--cyber-yellow);
+    .comments-section {
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 211, 0, 0.3);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    
+    .comment-form {
+      margin-bottom: 24px;
+    }
+    
+    .comment-form textarea {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(85, 234, 212, 0.3);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--cyber-cyan);
+      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
     }
     
     .comment-item {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(85, 234, 212, 0.2);
-      border-radius: 8px;
       padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
       margin-bottom: 12px;
-      transition: all 0.3s ease;
-    }
-    
-    .comment-item:hover {
-      border-color: rgba(85, 234, 212, 0.4);
-      transform: translateX(3px);
+      border-left: 3px solid var(--cyber-cyan);
     }
     
     .comment-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    
-    .comment-author {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .comment-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-pink));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    
-    .comment-author-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--cyber-cyan);
-    }
-    
-    .comment-meta {
-      font-size: 11px;
+      margin-bottom: 8px;
+      font-size: 12px;
       color: var(--text-muted);
     }
     
     .comment-content {
-      font-size: 13px;
-      color: var(--text-soft);
-      line-height: 1.6;
-      margin-bottom: 8px;
-    }
-    
-    .comment-actions {
-      display: flex;
-      gap: 16px;
-      font-size: 12px;
-    }
-    
-    .comment-action {
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    
-    .comment-action:hover {
-      color: var(--cyber-cyan);
-    }
-    
-    .reply-form {
-      margin-top: 8px;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 4px;
-      display: none;
-    }
-    
-    .reply-form.show {
-      display: block;
-    }
-    
-    .reply-input {
-      width: 100%;
-      padding: 8px 12px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(85, 234, 212, 0.3);
-      border-radius: 4px;
       color: var(--text-main);
-      font-size: 12px;
-      margin-bottom: 8px;
+      line-height: 1.6;
     }
     
-    .reply-btn {
-      padding: 6px 16px;
-      background: linear-gradient(135deg, rgba(85, 234, 212, 0.2), rgba(0, 255, 159, 0.1));
-      border: 1px solid var(--cyber-cyan);
-      border-radius: 4px;
+    .submit-btn {
+      padding: 10px 24px;
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.3));
       color: var(--cyber-cyan);
-      font-size: 12px;
+      border: 2px solid var(--cyber-cyan);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
-    .reply-btn:hover {
-      background: linear-gradient(135deg, rgba(85, 234, 212, 0.3), rgba(0, 255, 159, 0.2));
-      box-shadow: 0 0 15px rgba(85, 234, 212, 0.3);
+    .submit-btn:hover {
+      background: linear-gradient(135deg, rgba(85, 234, 212, 0.5), rgba(0, 255, 159, 0.5));
+      box-shadow: 0 0 20px rgba(85, 234, 212, 0.4);
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -229,854 +145,292 @@
       </a>
       <nav class="nav-main">
         <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">
-          排行榜 <span class="badge">HOT</span>
-        </a>
-        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
-        <a href="community.html" data-page="community" class="nav-link">社区</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
-        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
+        <a href="community.html" data-page="community" class="nav-link">返回社区</a>
       </nav>
-      <div class="header-right">
-        <div class="header-search">
-          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
-          <span class="header-search-icon">🔍</span>
-        </div>
-        <button class="header-user" onclick="window.location.href='profile.html';" style="cursor: pointer;">未登录 · 游客</button>
-      </div>
     </div>
   </header>
   
-  <!-- Cyberpunk Effects -->
   <canvas id="matrix-canvas" class="matrix-bg"></canvas>
   <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
-    </div>
-  </div>
 
   <main class="main">
     <section>
-      <article class="card">
-        <div class="page-title" id="postTitle">加载中...</div>
-        
-        <div class="post-header-info" id="postHeaderInfo">
-          <div class="post-author-avatar" id="authorAvatar">⚔️</div>
-          <div class="post-author-info">
-            <div class="post-author-name" id="authorName">加载中...</div>
-            <div class="post-stats-bar">
-              <span class="post-stat-item">📅 <span id="postTime">--</span></span>
-              <span class="post-stat-item">👁️ <span id="postViews">--</span> 浏览</span>
-              <span class="post-stat-item">💬 <span id="postReplies">--</span> 回复</span>
-              <span class="post-stat-item">🎮 <span id="postGame">--</span></span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="post-content-full" id="postContent">
-          <p>正在加载帖子内容...</p>
-        </div>
-        
-        <div class="post-actions">
-          <button class="action-btn" id="btnLike">
-            <span>👍</span>
-            <span id="likeText">点赞 (<span id="likeCount">0</span>)</span>
-          </button>
-          <button class="action-btn" id="btnFavorite">
-            <span>⭐</span>
-            <span>收藏</span>
-          </button>
-          <button class="action-btn" id="btnShare">
-            <span>🔗</span>
-            <span>分享</span>
-          </button>
-        </div>
-      </article>
+      <div class="card">
+        <a href="community.html" style="color: var(--cyber-cyan); text-decoration: none; display: inline-block; margin-bottom: 16px;">
+          ← 返回社区
+        </a>
+      </div>
 
-      <article class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>评论区 (<span id="commentCount">0</span>)</span>
-          </div>
-        </header>
+      <!-- 帖子详情 -->
+      <div id="postDetail" class="post-detail">
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+          加载中...
+        </div>
+      </div>
+
+      <!-- 评论区 -->
+      <div class="comments-section">
+        <h3 style="color: var(--cyber-yellow); margin-bottom: 20px; font-family: 'Orbitron', sans-serif;">
+          💬 评论区 (<span id="commentCount">0</span>)
+        </h3>
         
-        <div class="comment-list" id="commentList"></div>
-        
-        <div class="form" style="margin-top:20px;">
-          <div class="form-row">
-            <label for="newComment">发表你的看法</label>
-            <textarea id="newComment" placeholder="说点什么吧……" rows="4"></textarea>
-          </div>
-          <button class="btn btn-primary btn-inline" id="btnComment">💬 发表评论</button>
-          <div id="commentMsg" style="font-size:11px;color:var(--text-soft);margin-top:8px;">
-            提示：当前为演示版本，评论数据仅保存在本地内存中
+        <div class="comment-form">
+          <textarea id="commentInput" placeholder="发表你的评论...（至少5个字符）"></textarea>
+          <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
+            <button class="submit-btn" onclick="submitComment()">🚀 发表评论</button>
           </div>
         </div>
-      </article>
+        
+        <div id="commentsList">
+          <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+            暂无评论，来抢沙发吧！
+          </div>
+        </div>
+      </div>
     </section>
-
-    <aside>
-      <div class="sidebar-card">
-        <div class="sidebar-title">🔙 返回</div>
-        <div class="sidebar-item">
-          <span class="label">社区</span><span class="value"><a href="community.html">返回社区列表</a></span>
-        </div>
-      </div>
-      
-      <div class="sidebar-card" style="margin-top: 16px;">
-        <div class="sidebar-title">📊 帖子统计</div>
-        <div class="sidebar-item">
-          <span class="label">发布时间</span><span class="value" id="sidebarTime">--</span>
-        </div>
-        <div class="sidebar-item">
-          <span class="label">浏览次数</span><span class="value" id="sidebarViews">--</span>
-        </div>
-        <div class="sidebar-item">
-          <span class="label">回复数量</span><span class="value" id="sidebarReplies">--</span>
-        </div>
-        <div class="sidebar-item">
-          <span class="label">点赞数量</span><span class="value" id="sidebarLikes">--</span>
-        </div>
-      </div>
-    </aside>
   </main>
 </div>
 
-<!-- Supabase SDK (真实数据库支持) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-
 <script src="common.js"></script>
 <script src="cyber-effects.js"></script>
-<script src="community-data-service.js"></script>
+
 <script>
   initCommon();
 
-  // 示例帖子数据（兜底数据）
-  const postDatabase = {
-    "pinned-1": {
-      id: "pinned-1",
-      title: "【公告】社区使用指南 - 新人必读",
-      content: `
-        <h3>欢迎来到 GameBox 社区！</h3>
-        <p>本帖包含社区规则、发帖指南、常见问题解答等内容，建议新玩家仔细阅读。</p>
-        
-        <h4>1. 社区规则</h4>
-        <ul>
-          <li>友善交流，尊重他人意见</li>
-          <li>禁止发布广告、垃圾信息</li>
-          <li>剧透内容请标注明确警告</li>
-          <li>遵守游戏开发商的服务条款</li>
-        </ul>
-        
-        <h4>2. 发帖指南</h4>
-        <ul>
-          <li>选择合适的板块发布内容</li>
-          <li>标题简洁明了，准确描述内容</li>
-          <li>善用标签分类您的帖子</li>
-          <li>排版清晰，方便他人阅读</li>
-        </ul>
-        
-        <h4>3. 常见问题</h4>
-        <p><strong>Q: 如何获得更多权限？</strong><br>
-        A: 保持活跃发帖和评论，获取经验值提升等级即可解锁更多功能。</p>
-        
-        <p><strong>Q: 帖子被删除了怎么办？</strong><br>
-        A: 检查是否违反社区规则，可联系管理员咨询具体原因。</p>
-        
-        <p>感谢您的支持，祝您在GameBox社区玩得开心！🎮</p>
-      `,
-      author: "GameBox官方",
-      avatar: "🎮",
-      game: "GameBox",
-      board: "general",
-      replies: 156,
-      likes: 892,
-      views: 5432,
-      time: "置顶"
-    },
-    "elden-newbie": {
-      id: "elden-newbie",
-      title: "新手入门：如何在《艾尔登法环》中少死一点",
-      content: `
-        <p>大家好，作为一个从魂系游戏一路走来的老玩家，今天分享一些艾尔登法环的新手技巧。</p>
-        
-        <h4>🎯 职业选择建议</h4>
-        <p>对于新手，推荐选择以下职业：</p>
-        <ul>
-          <li><strong>流浪骑士</strong>：高防御，容错率高，适合近战</li>
-          <li><strong>魔法师</strong>：远程输出，可以风筝大部分Boss</li>
-          <li><strong>武士</strong>：平衡型，初始装备优秀</li>
-        </ul>
-        
-        <h4>⚔️ 战斗技巧</h4>
-        <ol>
-          <li><strong>不要贪刀</strong>：看准时机，打一两刀就撤，耐心磨血</li>
-          <li><strong>学会翻滚</strong>：翻滚是最重要的防御手段，练习翻滚时机</li>
-          <li><strong>体力管理</strong>：永远保留一些体力用于翻滚和跑路</li>
-          <li><strong>善用盾反</strong>：中小型敌人可以尝试盾反，高伤害+硬直</li>
-        </ol>
-        
-        <h4>🗺️ 探索建议</h4>
-        <ul>
-          <li>前期不要急着打Boss，先在宁姆格福地区充分探索</li>
-          <li>多收集黄金卢恩，提升等级让游戏更轻松</li>
-          <li>寻找散落各地的战灰和护符，提升战斗力</li>
-          <li>善用地图标记功能，记录重要地点</li>
-        </ul>
-        
-        <h4>🌟 实用道具</h4>
-        <ul>
-          <li><strong>灵体召唤</strong>：不是作弊！合理使用可以大幅降低难度</li>
-          <li><strong>药瓶升级</strong>：优先升级红瓶，保证续航能力</li>
-          <li><strong>制作材料</strong>：多收集草药和材料，可以制作实用消耗品</li>
-        </ul>
-        
-        <p>记住，艾尔登法环是一个需要耐心和学习的游戏。死亡是游戏的一部分，不要气馁，每次失败都是在积累经验。祝大家早日成为艾尔登之王！💪</p>
-      `,
-      author: "褪色者小明",
-      avatar: "⚔️",
-      game: "艾尔登法环",
-      board: "guide",
-      replies: 89,
-      likes: 456,
-      views: 2341,
-      time: "2小时前"
-    },
-    "cp-photo": {
-      id: "cp-photo",
-      title: "【截图分享】夜之城的霓虹灯太美了！",
-      content: `
-        <p>用 RTX 4090 开满光追拍的，这游戏的画面真的是绝了！</p>
-        
-        <h4>📸 拍摄参数</h4>
-        <ul>
-          <li><strong>显卡</strong>：RTX 4090 24GB</li>
-          <li><strong>分辨率</strong>：4K (3840x2160)</li>
-          <li><strong>光追等级</strong>：Psycho (最高)</li>
-          <li><strong>DLSS</strong>：质量模式</li>
-        </ul>
-        
-        <h4>🌃 拍摄地点</h4>
-        <ol>
-          <li><strong>雾街</strong>：霓虹灯最密集的地方，晚上去最美</li>
-          <li><strong>市中心</strong>：高楼大厦，科技感满满</li>
-          <li><strong>北区工业园</strong>：废土朋克风格</li>
-          <li><strong>日本街</strong>：传统与未来的碰撞</li>
-        </ol>
-        
-        <p>夜之城的每个角落都是一幅赛博朋克画卷。特别是雨天，地面的反射配合霓虹灯，简直就是电影级别的画面！</p>
-        
-        <p><strong>Tips：</strong> 推荐大家下载Appearance Menu Mod，可以随时切换V的外观，拍照更方便！</p>
-        
-        <p>晚点我会把这些截图上传到Steam创意工坊，喜欢的朋友可以收藏~</p>
-      `,
-      author: "V",
-      avatar: "🌃",
-      game: "赛博朋克 2077",
-      board: "shot",
-      replies: 67,
-      likes: 234,
-      views: 1567,
-      time: "30分钟前"
-    },
-    "zelda-tears": {
-      id: "zelda-tears",
-      title: "王国之泪 神庙全收集攻略（持续更新中）",
-      content: `
-        <p>本帖整理了王国之泪所有神庙的位置和解谜方法，目前已更新 120/152 个，欢迎收藏！</p>
-        
-        <h4>📍 神庙分布统计</h4>
-        <ul>
-          <li><strong>地表神庙</strong>：60个 ✅ 已完成</li>
-          <li><strong>天空岛神庙</strong>：40个 ✅ 已完成</li>
-          <li><strong>地下神庙</strong>：20个 🔄 进行中</li>
-          <li><strong>特殊神庙</strong>：32个 🔄 进行中</li>
-        </ul>
-        
-        <h4>🎯 新手必做神庙Top 10</h4>
-        <ol>
-          <li><strong>启始之塔</strong> - 解锁地图塔功能</li>
-          <li><strong>鸟望台神庙</strong> - 获得滑翔伞</li>
-          <li><strong>回忆之林</strong> - 增加心之器皿</li>
-          <li><strong>时间停止</strong> - 学会重要技能</li>
-          <li><strong>火焰之试炼</strong> - 获得炎之大剑</li>
-          <li><strong>冰雪神庙</strong> - 学会冰冻技巧</li>
-          <li><strong>雷电殿堂</strong> - 掌握雷电应用</li>
-          <li><strong>风之祭坛</strong> - 强化滑翔能力</li>
-          <li><strong>力量测试</strong> - 提升攻击力</li>
-          <li><strong>智慧考验</strong> - 获得珍稀道具</li>
-        </ol>
-        
-        <h4>💡 解谜技巧汇总</h4>
-        <ul>
-          <li><strong>究极手</strong>：最常用的能力，可以移动和组合物体</li>
-          <li><strong>通天术</strong>：向上穿透物体，快速到达高处</li>
-          <li><strong>时光倒流</strong>：让物体时间倒流，创造性解谜</li>
-          <li><strong>余料建造</strong>：粘合物品制作工具和武器</li>
-        </ul>
-        
-        <h4>🗺️ 地图资源</h4>
-        <p>我制作了一个互动地图，标记了所有神庙位置、呀哈哈种子、材料点等。需要的朋友可以私信我获取链接。</p>
-        
-        <h4>📢 更新计划</h4>
-        <ul>
-          <li>✅ 地表神庙 (已完成)</li>
-          <li>✅ 天空岛神庙 (已完成)</li>
-          <li>🔄 地下神庙 (进行中，预计3天完成)</li>
-          <li>📅 特殊神庙 (计划下周开始)</li>
-        </ul>
-        
-        <p>感谢大家的支持！有任何问题欢迎在评论区提问，我会尽快回复~</p>
-      `,
-      author: "海拉鲁勇者",
-      avatar: "🗡️",
-      game: "塞尔达传说：王国之泪",
-      board: "guide",
-      replies: 234,
-      likes: 678,
-      views: 4521,
-      time: "1天前"
-    }
-  };
+  const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA';
 
-  // 获取URL参数
-  const urlParams = new URLSearchParams(window.location.search);
-  const postId = urlParams.get('id') || 'elden-newbie';
+  let supabaseClient = null;
+  let postId = null;
   
-  // 帖子数据
-  let currentPost = null;
-  
-  // 异步加载帖子数据
-  async function loadPostData() {
-    try {
-      // 优先从 communityDataService 获取帖子（支持 Supabase）
-      if (window.communityDataService && typeof window.communityDataService.getPostById === 'function') {
-        const result = window.communityDataService.getPostById(postId);
-        currentPost = result instanceof Promise ? await result : result;
-        
-        if (currentPost) {
-          console.log('✅ 从社区数据服务加载帖子:', postId);
-          
-          // 格式化时间
-          if (typeof currentPost.time === 'number' || typeof currentPost.createdAt === 'number') {
-            currentPost.time = formatTimeAgo(currentPost.createdAt || currentPost.time);
-          }
-          
-          return;
-        }
-      }
-    } catch (e) {
-      console.error('加载帖子失败:', e);
+  function getUserId() {
+    let userId = localStorage.getItem('gamebox_user_id');
+    if (!userId) {
+      userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('gamebox_user_id', userId);
     }
-    
-    // 如果没找到，则使用兜底数据
-    currentPost = postDatabase[postId] || postDatabase['elden-newbie'];
-    console.log('📄 使用兜底帖子数据:', postId);
+    return userId;
   }
   
-  // 评论存储键
-  const COMMENTS_KEY = `gamebox_post_comments_${postId}`;
-  
-  // 加载评论（优先从 Supabase）
-  async function loadComments() {
+  const userId = getUserId();
+
+  function loadSupabaseSDK() {
+    return new Promise((resolve, reject) => {
+      if (typeof supabase !== 'undefined') {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    postId = params.get('id');
+    
+    if (!postId) {
+      document.getElementById('postDetail').innerHTML = 
+        '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 帖子不存在</div>';
+      return;
+    }
+
     try {
-      // 优先从 communityDataService 获取（支持 Supabase）
-      if (window.communityDataService && typeof window.communityDataService.getPostComments === 'function') {
-        const result = window.communityDataService.getPostComments(postId);
-        const comments = result instanceof Promise ? await result : result;
-        if (comments && comments.length > 0) {
-          return comments;
-        }
+      await loadSupabaseSDK();
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      
+      await loadPost();
+      await loadComments();
+      subscribeToComments();
+      
+    } catch (e) {
+      console.error('初始化失败:', e);
+    }
+  }
+
+  async function loadPost() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('community_posts')
+        .select('*')
+        .eq('id', postId)
+        .single();
+      
+      if (error) throw error;
+      
+      if (!data) {
+        document.getElementById('postDetail').innerHTML = 
+          '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 帖子不存在</div>';
+        return;
       }
       
-      // 从 localStorage 获取
-      const stored = localStorage.getItem(COMMENTS_KEY);
-      if (stored) {
-        return JSON.parse(stored);
+      // 增加浏览数
+      await supabaseClient
+        .from('community_posts')
+        .update({ views: (data.views || 0) + 1 })
+        .eq('id', postId);
+      
+      const formatTime = (timestamp) => {
+        const time = new Date(timestamp);
+        return time.toLocaleString('zh-CN');
+      };
+      
+      document.getElementById('postDetail').innerHTML = `
+        <div class="post-title">${data.title}</div>
+        <div class="post-meta">
+          <span>👤 ${data.author}</span>
+          <span>🎮 ${data.game}</span>
+          <span>🕒 ${formatTime(data.created_at)}</span>
+          <span>👁️ ${(data.views || 0) + 1} 浏览</span>
+        </div>
+        <div class="post-content">${data.content.replace(/\n/g, '<br>')}</div>
+        <div class="post-actions">
+          <button class="action-btn" onclick="likePost()">
+            👍 点赞 (<span id="likeCount">${data.likes || 0}</span>)
+          </button>
+          <button class="action-btn">
+            💬 评论 (<span id="replyCount">${data.replies || 0}</span>)
+          </button>
+        </div>
+      `;
+      
+    } catch (e) {
+      console.error('加载帖子失败:', e);
+      document.getElementById('postDetail').innerHTML = 
+        '<div style="text-align:center;padding:40px;color:#ff4444;">❌ 加载失败: ' + e.message + '</div>';
+    }
+  }
+
+  async function loadComments() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('community_comments')
+        .select('*')
+        .eq('post_id', postId)
+        .order('created_at', { ascending: true });
+      
+      if (error) throw error;
+      
+      const commentsList = document.getElementById('commentsList');
+      const commentCount = document.getElementById('commentCount');
+      
+      commentCount.textContent = data.length;
+      
+      if (data.length === 0) {
+        commentsList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">暂无评论，来抢沙发吧！</div>';
+        return;
       }
+      
+      const formatTime = (timestamp) => {
+        const now = new Date();
+        const time = new Date(timestamp);
+        const diff = Math.floor((now - time) / 1000);
+        
+        if (diff < 60) return '刚刚';
+        if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
+        if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
+        return time.toLocaleDateString();
+      };
+      
+      commentsList.innerHTML = data.map(comment => `
+        <div class="comment-item">
+          <div class="comment-header">
+            <span>👤 ${comment.author}</span>
+            <span>🕒 ${formatTime(comment.created_at)}</span>
+          </div>
+          <div class="comment-content">${comment.content}</div>
+        </div>
+      `).join('');
+      
     } catch (e) {
       console.error('加载评论失败:', e);
     }
-    return [];
-  }
-  
-  // 保存评论（同时保存到 Supabase 和本地）
-  async function saveComments(comments) {
-    try {
-      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-    } catch (e) {
-      console.error('保存评论失败:', e);
-    }
-  }
-  
-  // 添加评论（使用 communityDataService）
-  async function addNewComment(commentData) {
-    try {
-      if (window.communityDataService && typeof window.communityDataService.addComment === 'function') {
-        const result = window.communityDataService.addComment(postId, commentData);
-        return result instanceof Promise ? await result : result;
-      }
-    } catch (e) {
-      console.error('添加评论失败:', e);
-    }
-    return { success: false };
-  }
-  
-  // 格式化时间
-  function formatTimeAgo(timestamp) {
-    const now = Date.now();
-    const diff = now - timestamp;
-    
-    const minutes = Math.floor(diff / 60000);
-    if (minutes < 1) return '刚刚';
-    if (minutes < 60) return `${minutes} 分钟前`;
-    
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} 小时前`;
-    
-    const days = Math.floor(hours / 24);
-    if (days < 30) return `${days} 天前`;
-    
-    const months = Math.floor(days / 30);
-    return `${months} 个月前`;
-  }
-  
-  // 评论数据
-  let comments = [];
-  
-  // 默认评论
-  const defaultComments = [
-    { 
-      id: 1,
-      author: "路人甲", 
-      avatar: "👤",
-      time: "1小时前", 
-      content: "感谢分享！这个攻略太有用了，正好需要。",
-      likes: 12
-    },
-    { 
-      id: 2,
-      author: "游戏达人", 
-      avatar: "🎮",
-      time: "30分钟前", 
-      content: "写得很详细，新手玩家必看！",
-      likes: 8
-    },
-    {
-      id: 3,
-      author: "探险者",
-      avatar: "🧭",
-      time: "15分钟前",
-      content: "补充一点：前期可以去龙墓刷卢恩，效率很高。",
-      likes: 15
-    }
-  ];
-
-  // 渲染帖子内容
-  function renderPost() {
-    document.title = `${currentPost.title} - GameBox 游盒`;
-    document.getElementById('postTitle').textContent = currentPost.title;
-    document.getElementById('authorAvatar').textContent = currentPost.avatar;
-    document.getElementById('authorName').textContent = currentPost.author;
-    document.getElementById('postTime').textContent = currentPost.time;
-    document.getElementById('postViews').textContent = currentPost.views.toLocaleString();
-    document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
-    document.getElementById('postGame').textContent = currentPost.game;
-    document.getElementById('postContent').innerHTML = currentPost.content;
-    document.getElementById('likeCount').textContent = currentPost.likes;
-    
-    // 侧边栏统计
-    document.getElementById('sidebarTime').textContent = currentPost.time;
-    document.getElementById('sidebarViews').textContent = currentPost.views.toLocaleString();
-    document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
-    document.getElementById('sidebarLikes').textContent = currentPost.likes;
   }
 
-  // 渲染评论列表
-  function renderComments() {
-    const commentListEl = document.getElementById("commentList");
-    const commentCountEl = document.getElementById("commentCount");
-    
-    commentCountEl.textContent = comments.length;
-    commentListEl.innerHTML = "";
-    
-    if (comments.length === 0) {
-      commentListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">💬 还没有评论，来发表第一条吧！</div>';
-      return;
-    }
-    
-    comments.forEach((c) => {
-      const div = document.createElement("div");
-      div.className = "comment-item";
-      // 处理时间显示（支持时间戳和文本）
-      const displayTime = typeof c.time === 'number' ? formatTimeAgo(c.time) : (c.timeText || c.time);
-      div.innerHTML = `
-        <div class="comment-header">
-          <div class="comment-author">
-            <div class="comment-avatar">${c.avatar}</div>
-            <div>
-              <div class="comment-author-name">${c.author}</div>
-              <div class="comment-meta">发布于 ${displayTime}</div>
-            </div>
-          </div>
-        </div>
-        <div class="comment-content">${c.content}</div>
-        <div class="comment-actions">
-          <span class="comment-action" onclick="likeComment(${c.id})">👍 点赞 (${c.likes})</span>
-          <span class="comment-action" onclick="toggleReply(${c.id})">💬 回复</span>
-        </div>
-        <div class="reply-form" id="reply-form-${c.id}">
-          <input type="text" class="reply-input" id="reply-input-${c.id}" placeholder="输入回复内容..." />
-          <button class="reply-btn" onclick="submitReply(${c.id})">发送</button>
-        </div>
-      `;
-      commentListEl.appendChild(div);
-    });
-  }
-
-  // 点赞评论 - 使用真实的 communityDataService API
-  window.likeComment = async function(commentId) {
-    // 使用真实的评论点赞API
-    if (window.communityDataService && typeof window.communityDataService.likeComment === 'function') {
-      try {
-        const result = window.communityDataService.likeComment(commentId);
-        const likeResult = result instanceof Promise ? await result : result;
-        
-        if (likeResult.success) {
-          // 更新本地评论列表中的点赞数
-          const comment = comments.find(c => c.id === commentId);
-          if (comment) {
-            comment.likes = likeResult.likes;
-          }
-          renderComments();
-          console.log(`${likeResult.liked ? '👍' : '👎'} 评论点赞状态更新:`, commentId, likeResult.likes);
-        }
-      } catch (e) {
-        console.error('评论点赞失败:', e);
-      }
-    } else {
-      // 降级到本地模式
-      const comment = comments.find(c => c.id === commentId);
-      if (comment) {
-        comment.likes = (comment.likes || 0) + 1;
-        renderComments();
-      }
-    }
-  };
-
-  // 切换回复框
-  window.toggleReply = function(commentId) {
-    const replyForm = document.getElementById(`reply-form-${commentId}`);
-    if (replyForm) {
-      replyForm.classList.toggle('show');
-    }
-  };
-
-  // 提交回复
-  window.submitReply = function(commentId) {
-    const input = document.getElementById(`reply-input-${commentId}`);
+  async function submitComment() {
+    const input = document.getElementById('commentInput');
     const content = input.value.trim();
     
-    if (!content) {
-      alert('回复内容不能为空');
+    if (!content || content.length < 5) {
+      alert('评论内容至少需要5个字符');
       return;
     }
     
-    const user = getCurrentUser();
-    const userName = user ? (user.nickname || user.username || "已登录玩家") : "游客";
-    
-    const comment = comments.find(c => c.id === commentId);
-    if (comment) {
-      const newComment = {
-        id: Date.now(),
-        author: userName,
-        avatar: "👥",
-        time: "刚刚",
-        content: `回复 @${comment.author}: ${content}`,
-        likes: 0
-      };
-      comments.push(newComment);
-      input.value = "";
-      toggleReply(commentId);
-      renderComments();
+    try {
+      const { error } = await supabaseClient
+        .from('community_comments')
+        .insert({
+          post_id: postId,
+          author: '访客' + Math.floor(Math.random() * 10000),
+          content: content,
+          created_at: new Date().toISOString()
+        });
       
-      // 更新回复数
-      currentPost.replies = currentPost.replies + 1;
-      document.getElementById('postReplies').textContent = currentPost.replies + comments.length;
-      document.getElementById('sidebarReplies').textContent = currentPost.replies + comments.length;
-    }
-  };
-
-  // 获取当前用户
-  function getCurrentUser() {
-    try {
-      const raw = localStorage.getItem("currentUser");
-      if (!raw) return null;
-      return JSON.parse(raw);
-    } catch { 
-      return null; 
-    }
-  }
-
-  // 发表评论 - 使用真实的 communityDataService API
-  const btnComment = document.getElementById("btnComment");
-  const newCommentEl = document.getElementById("newComment");
-  const commentMsg = document.getElementById("commentMsg");
-
-  btnComment.addEventListener("click", async () => {
-    const text = newCommentEl.value.trim();
-    if (!text) {
-      commentMsg.textContent = "❌ 评论内容不能为空";
-      commentMsg.style.color = "var(--danger)";
-      return;
-    }
-    
-    // 禁用按钮，防止重复提交
-    btnComment.disabled = true;
-    btnComment.textContent = "💬 发布中...";
-    
-    try {
-      // 使用真实的评论API
-      if (window.communityDataService && typeof window.communityDataService.addComment === 'function') {
-        const user = getCurrentUser();
-        const userName = user ? (user.nickname || user.username || "已登录玩家") : "游客";
-        const userAvatar = user?.avatar || "👤";
-        
-        const commentData = {
-          author: userName,
-          avatar: userAvatar,
-          content: text
-        };
-        
-        const result = window.communityDataService.addComment(postId, commentData);
-        const addResult = result instanceof Promise ? await result : result;
-        
-        if (addResult.success) {
-          // 添加到本地评论列表
-          comments.push(addResult.comment);
-          
-          // 更新UI
-          newCommentEl.value = "";
-          commentMsg.textContent = "✅ 评论发布成功！";
-          commentMsg.style.color = "var(--cyber-cyan)";
-          
-          // 更新回复数
-          currentPost.replies = (currentPost.replies || 0) + 1;
-          document.getElementById('postReplies').textContent = currentPost.replies;
-          document.getElementById('sidebarReplies').textContent = currentPost.replies;
-          
-          // 重新渲染评论列表
-          renderComments();
-          
-          // 滚动到最新评论
-          setTimeout(() => {
-            const commentListEl = document.getElementById('commentList');
-            commentListEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          }, 100);
-          
-          console.log('✅ 评论发布成功:', addResult.comment);
-          
-          // 3秒后清除提示
-          setTimeout(() => {
-            const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
-            commentMsg.textContent = isSupabase ? "💡 评论已保存到云数据库" : "💡 评论已保存到本地存储";
-            commentMsg.style.color = "var(--text-soft)";
-          }, 3000);
-        } else {
-          throw new Error(addResult.error || '评论发布失败');
-        }
-      } else {
-        // 降级到本地模式
-        const user = getCurrentUser();
-        const name = user ? (user.nickname || user.username || "已登录玩家") : "游客";
-
-        const newComment = {
-          id: Date.now(),
-          author: name,
-          avatar: "👤",
-          time: Date.now(),
-          timeText: "刚刚",
-          content: text,
-          likes: 0
-        };
-        
-        comments.push(newComment);
-        saveComments(comments);
-        
-        newCommentEl.value = "";
-        commentMsg.textContent = "✅ 评论发布成功！（本地存储）";
-        commentMsg.style.color = "var(--cyber-cyan)";
-        
-        currentPost.replies = (currentPost.replies || 0) + 1;
-        document.getElementById('postReplies').textContent = currentPost.replies;
-        document.getElementById('sidebarReplies').textContent = currentPost.replies;
-        
-        renderComments();
-      }
+      if (error) throw error;
+      
+      // 更新帖子的回复数
+      const { data: post } = await supabaseClient
+        .from('community_posts')
+        .select('replies')
+        .eq('id', postId)
+        .single();
+      
+      await supabaseClient
+        .from('community_posts')
+        .update({ replies: (post.replies || 0) + 1 })
+        .eq('id', postId);
+      
+      input.value = '';
+      alert('✅ 评论发表成功！');
+      
     } catch (e) {
-      console.error('评论发布失败:', e);
-      commentMsg.textContent = `❌ 评论发布失败: ${e.message}`;
-      commentMsg.style.color = "var(--danger)";
-    } finally {
-      // 恢复按钮状态
-      btnComment.disabled = false;
-      btnComment.textContent = "💬 发表评论";
-    }
-  });
-
-  // 点赞按钮 - 使用真实的 communityDataService API
-  const btnLike = document.getElementById("btnLike");
-  let liked = false;
-
-  // 检查初始点赞状态
-  async function checkInitialLikeStatus() {
-    if (window.communityDataService && typeof window.communityDataService.isPostLiked === 'function') {
-      try {
-        const result = window.communityDataService.isPostLiked(postId);
-        liked = result instanceof Promise ? await result : result;
-        if (liked) {
-          btnLike.classList.add('active');
-        }
-      } catch (e) {
-        console.error('检查点赞状态失败:', e);
-      }
+      console.error('发表评论失败:', e);
+      alert('❌ 发表失败: ' + e.message);
     }
   }
 
-  btnLike.addEventListener("click", async () => {
-    // 使用真实的点赞API
-    if (window.communityDataService && typeof window.communityDataService.likePost === 'function') {
-      try {
-        const result = window.communityDataService.likePost(postId);
-        const likeResult = result instanceof Promise ? await result : result;
-        
-        if (likeResult.success) {
-          liked = likeResult.liked;
-          currentPost.likes = likeResult.likes;
-          
-          if (liked) {
-            btnLike.classList.add('active');
-          } else {
-            btnLike.classList.remove('active');
-          }
-          
-          document.getElementById('likeCount').textContent = currentPost.likes;
-          document.getElementById('sidebarLikes').textContent = currentPost.likes;
-          
-          console.log(`${liked ? '👍' : '👎'} 点赞状态更新:`, currentPost.likes);
-        }
-      } catch (e) {
-        console.error('点赞操作失败:', e);
-        alert('点赞失败，请稍后重试');
-      }
-    } else {
-      // 降级到本地模式
-      if (!liked) {
-        currentPost.likes++;
-        liked = true;
-        btnLike.classList.add('active');
-      } else {
-        currentPost.likes--;
-        liked = false;
-        btnLike.classList.remove('active');
-      }
-      document.getElementById('likeCount').textContent = currentPost.likes;
-      document.getElementById('sidebarLikes').textContent = currentPost.likes;
-    }
-  });
-
-  // 收藏按钮
-  const btnFavorite = document.getElementById("btnFavorite");
-  let favorited = false;
-
-  btnFavorite.addEventListener("click", () => {
-    if (!favorited) {
-      favorited = true;
-      btnFavorite.classList.add('active');
-      alert('✅ 已收藏到"我的收藏"');
-    } else {
-      favorited = false;
-      btnFavorite.classList.remove('active');
-      alert('❌ 已取消收藏');
-    }
-  });
-
-  // 分享按钮
-  const btnShare = document.getElementById("btnShare");
-  btnShare.addEventListener("click", () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      alert('🔗 链接已复制到剪贴板！');
-    }).catch(() => {
-      alert('🔗 分享链接：\n' + url);
-    });
-  });
-
-  // 初始化（异步）
-  async function initPostDetail() {
-    console.log('🚀 初始化帖子详情页...');
-    
-    // 等待数据服务初始化
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // 加载帖子数据
-    await loadPostData();
-    
-    // 加载评论数据
-    const storedComments = await loadComments();
-    comments = storedComments.length > 0 ? storedComments : defaultComments;
-    
-    // 渲染页面
-    renderPost();
-    renderComments();
-    
-    // 检查初始点赞状态
-    await checkInitialLikeStatus();
-    
-    // 记录页面访问
-    if (window.communityDataService?.logPageView) {
-      window.communityDataService.logPageView('post_detail');
-    }
-    
-    // 显示数据源状态
-    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
-    console.log(`✅ 帖子详情页加载完成 [数据源: ${isSupabase ? 'Supabase 云数据库 ✅' : '本地存储 ⚠️'}]`);
-    
-    // 显示数据源提示
-    const dataSourceTip = document.getElementById('commentMsg');
-    if (dataSourceTip) {
-      dataSourceTip.textContent = isSupabase 
-        ? '💡 已连接云数据库，评论和点赞实时同步' 
-        : '💡 本地存储模式，数据仅保存在当前浏览器';
-      dataSourceTip.style.color = 'var(--text-soft)';
+  async function likePost() {
+    try {
+      const { data } = await supabaseClient
+        .from('community_posts')
+        .select('likes')
+        .eq('id', postId)
+        .single();
+      
+      await supabaseClient
+        .from('community_posts')
+        .update({ likes: (data.likes || 0) + 1 })
+        .eq('id', postId);
+      
+      document.getElementById('likeCount').textContent = (data.likes || 0) + 1;
+      
+    } catch (e) {
+      console.error('点赞失败:', e);
     }
   }
-  
-  // 启动初始化
-  initPostDetail();
-  
-  // 监听点赞实时更新事件
-  window.addEventListener('post-like-update', (e) => {
-    if (e.detail && e.detail.postId === postId) {
-      currentPost.likes = e.detail.likes;
-      liked = e.detail.liked;
-      document.getElementById('likeCount').textContent = currentPost.likes;
-      document.getElementById('sidebarLikes').textContent = currentPost.likes;
-      if (liked) {
-        btnLike.classList.add('active');
-      } else {
-        btnLike.classList.remove('active');
-      }
-      console.log('📡 收到点赞实时更新:', e.detail);
+
+  function subscribeToComments() {
+    try {
+      supabaseClient
+        .channel('post-comments-' + postId)
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'community_comments',
+          filter: 'post_id=eq.' + postId
+        }, () => {
+          loadComments();
+        })
+        .subscribe();
+    } catch (e) {
+      console.error('订阅评论失败:', e);
     }
-  });
+  }
+
+  init();
 </script>
 </body>
 </html>
