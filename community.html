@@ -2,1128 +2,377 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>GameBox 游盒 - 社区</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>GameBox 社区 V2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="index.css" />
   <style>
-    /* 社区页面专属样式 */
-    .community-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
     }
-    
-    .community-stat {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(20, 0, 30, 0.9) 100%);
-      border: 1px solid rgba(255, 211, 0, 0.3);
-      border-radius: 8px;
-      padding: 16px;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .header {
       text-align: center;
-      transition: all 0.3s ease;
+      margin-bottom: 40px;
     }
-    
-    .community-stat:hover {
-      border-color: var(--cyber-yellow);
-      box-shadow: 0 0 20px rgba(255, 211, 0, 0.3);
-    }
-    
-    .community-stat .icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-    
-    .community-stat .value {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--cyber-yellow);
-    }
-    
-    .community-stat .label {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    
-    /* 板块选择器 */
-    .board-selector {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-    
-    .board-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 2px solid rgba(255, 211, 0, 0.3);
-      border-radius: 8px;
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .board-btn:hover {
-      border-color: var(--cyber-yellow);
-      color: var(--cyber-yellow);
-    }
-    
-    .board-btn.active {
-      background: linear-gradient(135deg, rgba(255, 211, 0, 0.15) 0%, rgba(255, 61, 148, 0.1) 100%);
-      border-color: var(--cyber-yellow);
-      color: var(--cyber-yellow);
-      box-shadow: 0 0 15px rgba(255, 211, 0, 0.3);
-    }
-    
-    .board-btn .board-icon {
-      font-size: 18px;
-    }
-    
-    .board-btn .board-count {
-      background: rgba(255, 211, 0, 0.2);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 11px;
-    }
-    
-    /* 帖子卡片 */
-    .post-card {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(20, 0, 30, 0.85) 100%);
-      border: 1px solid rgba(255, 211, 0, 0.2);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .post-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(180deg, var(--cyber-yellow), var(--cyber-pink));
-      transform: scaleY(0);
-      transition: transform 0.3s ease;
-    }
-    
-    .post-card:hover {
-      border-color: rgba(255, 211, 0, 0.5);
-      transform: translateX(5px);
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
-    }
-    
-    .post-card:hover::before {
-      transform: scaleY(1);
-    }
-    
-    .post-card.pinned {
-      border-color: rgba(255, 61, 148, 0.4);
-      background: linear-gradient(135deg, rgba(255, 61, 148, 0.1) 0%, rgba(20, 0, 30, 0.9) 100%);
-    }
-    
-    .post-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+    h1 {
+      font-size: 36px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 10px;
     }
-    
-    .post-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyber-yellow), var(--cyber-pink));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
+    .status {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 10px;
     }
-    
-    .post-info {
-      flex: 1;
+    .status.error {
+      background: #dc3545;
     }
-    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .stat-value {
+      font-size: 42px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .posts {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 15px;
+    }
+    .post-item {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .post-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
     .post-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
     }
-    
-    .post-badge {
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 600;
+    .post-content {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
-    
-    .post-badge.hot {
-      background: linear-gradient(135deg, #FF0055, #FF3D94);
-      color: #fff;
-    }
-    
-    .post-badge.pinned {
-      background: linear-gradient(135deg, var(--cyber-yellow), #FFC700);
-      color: #000;
-    }
-    
-    .post-badge.new {
-      background: linear-gradient(135deg, var(--cyber-cyan), #00FF9F);
-      color: #000;
-    }
-    
     .post-meta {
       font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      color: #999;
     }
-    
-    .post-content {
-      font-size: 13px;
-      color: var(--text-soft);
-      line-height: 1.5;
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #667eea;
+      font-size: 18px;
     }
-    
-    .post-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .post-tags {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .post-tag {
-      padding: 3px 10px;
-      background: rgba(85, 234, 212, 0.15);
-      border: 1px solid rgba(85, 234, 212, 0.3);
-      border-radius: 4px;
-      font-size: 11px;
-      color: var(--cyber-cyan);
-    }
-    
-    .post-stats {
-      display: flex;
-      gap: 16px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    
-    .post-stat {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    /* 发帖按钮 */
-    .create-post-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: linear-gradient(135deg, rgba(255, 211, 0, 0.2) 0%, rgba(255, 61, 148, 0.15) 100%);
-      border: 2px solid var(--cyber-yellow);
-      color: var(--cyber-yellow);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 4px;
-    }
-    
-    .create-post-btn:hover {
-      background: linear-gradient(135deg, rgba(255, 211, 0, 0.3) 0%, rgba(255, 61, 148, 0.2) 100%);
-      box-shadow: 0 0 20px rgba(255, 211, 0, 0.4);
-      transform: translateY(-2px);
-    }
-    
-    /* 在线用户 */
-    .online-users {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    
-    .online-user {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
-      font-size: 11px;
-    }
-    
-    .online-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--cyber-cyan);
-      border-radius: 50%;
-      animation: pulse-dot 1.5s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    /* 热门话题 */
-    .hot-topic {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 6px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .hot-topic:hover {
-      background: rgba(255, 211, 0, 0.1);
-      transform: translateX(3px);
-    }
-    
-    .hot-topic-rank {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--cyber-pink);
-      min-width: 24px;
-    }
-    
-    .hot-topic-title {
-      flex: 1;
-      font-size: 12px;
-      color: var(--text-main);
-    }
-    
-    .hot-topic-heat {
-      font-size: 11px;
-      color: var(--cyber-yellow);
-    }
-    
-    @media (max-width: 768px) {
-      .community-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .board-selector {
-        flex-direction: column;
-      }
-      
-      .board-btn {
-        justify-content: center;
-      }
+    .error-msg {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 20px;
+      border-radius: 10px;
+      color: #856404;
+      margin-bottom: 20px;
     }
   </style>
 </head>
-<body data-current-page="community">
-<div class="page">
-  <header class="header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <div class="logo-mark">G</div>
-        <div>
-          <div>GameBox 游盒</div>
-          <div class="logo-sub">LIGHTWEIGHT GAME HUB</div>
-        </div>
-      </a>
-      <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">
-          排行榜 <span class="badge">HOT</span>
-        </a>
-        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
-        <a href="community.html" data-page="community" class="nav-link">社区</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
-        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
-      </nav>
-      <div class="header-right">
-        <div class="header-search">
-          <input type="text" placeholder="搜索游戏 / 资讯 / 帖子" />
-          <span class="header-search-icon">🔍</span>
-        </div>
-        <button class="header-user" onclick="window.location.href='profile.html';" style="cursor: pointer;">未登录 · 游客</button>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎮 GameBox 社区 V2</h1>
+      <div id="statusBadge" class="status">正在连接...</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="statPosts">-</div>
+        <div class="stat-label">📝 帖子总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statMembers">-</div>
+        <div class="stat-label">👥 社区成员</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statReplies">-</div>
+        <div class="stat-label">💬 回复总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statOnline">-</div>
+        <div class="stat-label">🟢 在线人数</div>
       </div>
     </div>
-  </header>
-  
-  <canvas id="matrix-canvas" class="matrix-bg"></canvas>
-  <div id="particles-container" class="particles-container"></div>
-  <div id="scroll-progress" class="scroll-progress"></div>
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="cyberpunk-loader">
-      <div class="loader-hexagon"></div>
-      <div class="loader-text">LOADING...</div>
+
+    <div id="errorContainer"></div>
+
+    <div class="posts">
+      <h2 style="margin-bottom: 20px; color: #333;">📋 最新帖子</h2>
+      <div id="postList" class="loading">正在加载帖子...</div>
     </div>
   </div>
 
-  <main class="main">
-    <section>
-      <!-- 页面标题 -->
-      <div class="card">
-        <div class="page-title">💬 社区广场</div>
-        <div class="page-intro">
-          与玩家交流心得、分享攻略、发布截图，加入最活跃的游戏社区。
-        </div>
-      </div>
-
-      <!-- 社区统计 -->
-      <div class="community-stats">
-        <div class="community-stat">
-          <div class="icon">📝</div>
-          <div class="value" id="statPosts">0</div>
-          <div class="label">帖子总数</div>
-        </div>
-        <div class="community-stat">
-          <div class="icon">👥</div>
-          <div class="value" id="statMembers">0</div>
-          <div class="label">社区成员</div>
-        </div>
-        <div class="community-stat">
-          <div class="icon">💬</div>
-          <div class="value" id="statReplies">0</div>
-          <div class="label">回复总数</div>
-        </div>
-        <div class="community-stat">
-          <div class="icon">🟢</div>
-          <div class="value" id="statOnline">0</div>
-          <div class="label">在线人数 <span style="font-size: 9px; opacity: 0.7; color: var(--cyber-cyan);">●实时</span></div>
-        </div>
-      </div>
-
-      <!-- 板块与搜索 -->
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>// BOARDS</span>
-          </div>
-          <button class="create-post-btn" onclick="createPost()">
-            <span>✏️</span>
-            <span>发布新帖</span>
-          </button>
-        </header>
-        
-        <div class="board-selector" id="boardSelector">
-          <button class="board-btn active" data-board="all">
-            <span class="board-icon">🌐</span>
-            <span>全部</span>
-            <span class="board-count" id="countAll">0</span>
-          </button>
-          <button class="board-btn" data-board="general">
-            <span class="board-icon">💬</span>
-            <span>综合讨论</span>
-            <span class="board-count" id="countGeneral">0</span>
-          </button>
-          <button class="board-btn" data-board="guide">
-            <span class="board-icon">📚</span>
-            <span>攻略心得</span>
-            <span class="board-count" id="countGuide">0</span>
-          </button>
-          <button class="board-btn" data-board="shot">
-            <span class="board-icon">📷</span>
-            <span>游戏截图</span>
-            <span class="board-count" id="countShot">0</span>
-          </button>
-          <button class="board-btn" data-board="trade">
-            <span class="board-icon">🔄</span>
-            <span>交易求助</span>
-            <span class="board-count" id="countTrade">0</span>
-          </button>
-        </div>
-        
-        <div style="margin-top: 16px;">
-          <input id="postSearch" type="text" placeholder="🔍 搜索帖子标题、游戏名称..." style="width: 100%;" />
-        </div>
-      </div>
-
-      <!-- 帖子列表 -->
-      <div class="card">
-        <header class="card-header">
-          <div class="card-title">
-            <span class="dot"></span><span>帖子列表</span>
-          </div>
-          <div class="chip" id="postCount">共 0 帖</div>
-        </header>
-        <div id="postList"></div>
-      </div>
-    </section>
-
-    <aside>
-      <!-- 热门话题 -->
-      <div class="sidebar-card">
-        <div class="sidebar-title">🔥 热门话题</div>
-        <div id="hotTopics"></div>
-      </div>
-      
-      <!-- 在线用户 -->
-      <div class="sidebar-card" style="margin-top: 16px;">
-        <div class="sidebar-title">🟢 在线玩家</div>
-        <div class="online-users" id="onlineUsers"></div>
-      </div>
-      
-      <!-- 社区规则 -->
-      <div class="sidebar-card" style="margin-top: 16px;">
-        <div class="sidebar-title">📋 社区规则</div>
-        <div class="sidebar-item">
-          <span class="label">1</span>
-          <span class="value">友善交流，尊重他人</span>
-        </div>
-        <div class="sidebar-item">
-          <span class="label">2</span>
-          <span class="value">禁止广告和垃圾信息</span>
-        </div>
-        <div class="sidebar-item">
-          <span class="label">3</span>
-          <span class="value">剧透请标注警告</span>
-        </div>
-      </div>
-    </aside>
-  </main>
-</div>
-
-<script src="common.js"></script>
-<script src="cyber-effects.js"></script>
-
-<!-- Supabase SDK (真实数据库支持) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-
-<!-- 社区数据服务 (自动检测 Supabase 或 LocalStorage) -->
-<script src="community-data-service.js"></script>
-<script src="create-post-modal.js"></script>
-<script>
-  initCommon();
-
-  // 使用真实社区数据服务
-  // 初始化时使用本地数据，异步加载完成后更新
-  let postData = [];
-  
-  // 旧的示例数据（作为备份）
-  const postDataBackup = [
-    {
-      id: "pinned-1",
-      title: "【公告】社区使用指南 - 新人必读",
-      content: "欢迎来到 GameBox 社区！本帖包含社区规则、发帖指南、常见问题解答等内容，建议新玩家仔细阅读...",
-      author: "GameBox官方",
-      avatar: "🎮",
-      game: "GameBox",
-      board: "general",
-      replies: 156,
-      likes: 892,
-      views: 5432,
-      isPinned: true,
-      isNew: false,
-      time: "置顶"
-    },
-    {
-      id: "elden-newbie",
-      title: "新手入门：如何在《艾尔登法环》中少死一点",
-      content: "大家好，作为一个从魂系游戏一路走来的老玩家，今天分享一些艾尔登法环的新手技巧。首先是选择职业...",
-      author: "褪色者小明",
-      avatar: "⚔️",
-      game: "艾尔登法环",
-      board: "guide",
-      replies: 89,
-      likes: 456,
-      views: 2341,
-      isPinned: false,
-      isNew: false,
-      time: "2小时前"
-    },
-    {
-      id: "cp-photo",
-      title: "【截图分享】夜之城的霓虹灯太美了！",
-      content: "用 RTX 4090 开满光追拍的，这游戏的画面真的是绝了，分享几张我最满意的截图...",
-      author: "V",
-      avatar: "🌃",
-      game: "赛博朋克 2077",
-      board: "shot",
-      replies: 67,
-      likes: 234,
-      views: 1567,
-      isPinned: false,
-      isNew: true,
-      time: "30分钟前"
-    },
-    {
-      id: "zelda-tears",
-      title: "王国之泪 神庙全收集攻略（持续更新中）",
-      content: "本帖整理了王国之泪所有神庙的位置和解谜方法，目前已更新 120/152 个，欢迎收藏...",
-      author: "海拉鲁勇者",
-      avatar: "🗡️",
-      game: "塞尔达传说：王国之泪",
-      board: "guide",
-      replies: 234,
-      likes: 678,
-      views: 4521,
-      isPinned: false,
-      isNew: false,
-      time: "1天前"
-    },
-    {
-      id: "steam-deck",
-      title: "Steam Deck 上玩什么游戏体验最好？",
-      content: "刚入手 Steam Deck，求推荐一些适合掌机玩的游戏，最好是能离线玩的，出差时候打发时间...",
-      author: "掌机党",
-      avatar: "🎮",
-      game: "多游戏",
-      board: "general",
-      replies: 45,
-      likes: 123,
-      views: 892,
-      isPinned: false,
-      isNew: false,
-      time: "3小时前"
-    },
-    {
-      id: "hollow-shot",
-      title: "《空洞骑士》深渊区域截图分享",
-      content: "终于打完了深渊，这个区域的氛围太压抑了，但是美术风格真的很棒，分享一些截图...",
-      author: "小骑士",
-      avatar: "🪲",
-      game: "空洞骑士",
-      board: "shot",
-      replies: 28,
-      likes: 167,
-      views: 756,
-      isPinned: false,
-      isNew: false,
-      time: "5小时前"
-    },
-    {
-      id: "trade-1",
-      title: "【求购】博德之门3 Steam 激活码",
-      content: "想买一个博德之门3的Steam激活码，正版的，价格私聊，骗子勿扰...",
-      author: "买家小王",
-      avatar: "💰",
-      game: "博德之门3",
-      board: "trade",
-      replies: 12,
-      likes: 8,
-      views: 234,
-      isPinned: false,
-      isNew: false,
-      time: "6小时前"
-    },
-    {
-      id: "gta6-hype",
-      title: "GTA6 预告片发布！大家怎么看？",
-      content: "R星终于发预告了！看起来比GTA5还要惊艳，希望这次PC版不要等太久...",
-      author: "罪恶都市粉",
-      avatar: "🚗",
-      game: "GTA6",
-      board: "general",
-      replies: 567,
-      likes: 1234,
-      views: 8765,
-      isPinned: false,
-      isNew: false,
-      time: "12小时前"
-    }
-  ];
-
-  // 热门话题
-  const hotTopics = [
-    { title: "艾尔登法环 DLC 讨论", heat: 9999 },
-    { title: "Steam 秋季特卖推荐", heat: 8765 },
-    { title: "GTA6 预告片分析", heat: 7654 },
-    { title: "黑神话悟空期待", heat: 6543 },
-    { title: "独立游戏推荐", heat: 5432 }
-  ];
-
-  // 在线用户
-  const onlineUsers = ["褪色者小明", "V", "海拉鲁勇者", "掌机党", "小骑士", "买家小王", "罪恶都市粉", "GameBox官方"];
-
-  let currentBoard = "all";
-  const postList = document.getElementById("postList");
-  const postCount = document.getElementById("postCount");
-  const postSearch = document.getElementById("postSearch");
-
-  // 渲染帖子列表
-  function renderPosts() {
-    const kw = postSearch.value.trim().toLowerCase();
-    
-    let list = postData.filter(p => {
-      if (currentBoard !== "all" && p.board !== currentBoard) return false;
-      if (kw) {
-        const text = (p.title + " " + p.game + " " + p.content).toLowerCase();
-        if (!text.includes(kw)) return false;
-      }
-      return true;
-    });
-
-    // 置顶帖排前面，然后按热度排序
-    list.sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
-      return (b.replies + b.likes) - (a.replies + a.likes);
-    });
-
-    postList.innerHTML = "";
-    postCount.textContent = `共 ${list.length} 帖`;
-
-    if (!list.length) {
-      postList.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">💬 暂无符合条件的帖子</div>';
-      return;
-    }
-
-    list.forEach(p => {
-      const card = document.createElement("div");
-      card.className = `post-card ${p.isPinned ? 'pinned' : ''}`;
-
-      let badges = '';
-      if (p.isPinned) badges += '<span class="post-badge pinned">📌 置顶</span>';
-      if (p.isNew) badges += '<span class="post-badge new">NEW</span>';
-      if ((p.replies + p.likes) > 500) badges += '<span class="post-badge hot">🔥 热门</span>';
-
-      card.innerHTML = `
-        <div class="post-header">
-          <div class="post-avatar">${p.avatar}</div>
-          <div class="post-info">
-            <div class="post-title">
-              ${p.title}
-              ${badges}
-            </div>
-            <div class="post-meta">
-              <span>👤 ${p.author}</span>
-              <span>🕒 ${p.time}</span>
-              <span>👁️ ${p.views.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-        <div class="post-content">${p.content}</div>
-        <div class="post-footer">
-          <div class="post-tags">
-            <span class="post-tag">🎮 ${p.game}</span>
-          </div>
-          <div class="post-stats">
-            <span class="post-stat">💬 ${p.replies}</span>
-            <span class="post-stat">👍 ${p.likes}</span>
-          </div>
-        </div>
-      `;
-
-      card.onclick = () => {
-        window.location.href = `post-detail.html?id=${p.id}`;
-      };
-
-      postList.appendChild(card);
-    });
-  }
-
-  // 渲染热门话题（基于真实帖子数据）
-  async function renderHotTopics() {
-    const container = document.getElementById("hotTopics");
-    
-    try {
-      // 获取所有帖子
-      const posts = await getAllPostsForTopics();
-      
-      // 按热度排序（点赞数 + 回复数 + 浏览数/10）
-      const sortedPosts = posts
-        .map(post => ({
-          title: post.title,
-          game: post.game,
-          heat: (post.likes || 0) * 2 + (post.replies || 0) * 3 + Math.floor((post.views || 0) / 10)
-        }))
-        .sort((a, b) => b.heat - a.heat)
-        .slice(0, 5);
-      
-      // 如果没有足够的真实数据，补充默认话题
-      const displayTopics = sortedPosts.length >= 3 ? sortedPosts : [...sortedPosts, ...hotTopics.slice(0, 5 - sortedPosts.length)];
-      
-      container.innerHTML = displayTopics.map((topic, i) => `
-        <div class="hot-topic" onclick="searchTopic('${topic.title}')">
-          <span class="hot-topic-rank" style="color: ${i < 3 ? 'var(--cyber-pink)' : 'var(--text-muted)'}">${i + 1}</span>
-          <span class="hot-topic-title">${topic.title}</span>
-          <span class="hot-topic-heat">🔥 ${topic.heat}</span>
-        </div>
-      `).join('');
-    } catch (e) {
-      console.error('渲染热门话题失败:', e);
-      // 降级到默认话题
-      container.innerHTML = hotTopics.map((topic, i) => `
-        <div class="hot-topic">
-          <span class="hot-topic-rank">${i + 1}</span>
-          <span class="hot-topic-title">${topic.title}</span>
-          <span class="hot-topic-heat">🔥 ${topic.heat}</span>
-        </div>
-      `).join('');
-    }
-  }
-  
-  // 获取所有帖子用于热门话题计算
-  async function getAllPostsForTopics() {
-    if (window.communityDataService && typeof window.communityDataService.getAllPosts === 'function') {
-      const result = window.communityDataService.getAllPosts();
-      return result instanceof Promise ? await result : result;
-    }
-    return postData;
-  }
-  
-  // 搜索话题
-  window.searchTopic = function(title) {
-    const searchBox = document.getElementById('postSearch');
-    if (searchBox) {
-      searchBox.value = title;
-      searchBox.dispatchEvent(new Event('input'));
-      // 平滑滚动到帖子列表
-      document.getElementById('postList').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  // 渲染在线用户 - 使用实时数据
-  async function renderOnlineUsers() {
-    const container = document.getElementById("onlineUsers");
-    try {
-      // 从实时数据服务获取在线用户（支持异步）
-      let realOnlineUsers;
-      if (typeof window.communityDataService.getOnlineUsers === 'function') {
-        const result = window.communityDataService.getOnlineUsers();
-        realOnlineUsers = result instanceof Promise ? await result : result;
-      }
-      realOnlineUsers = realOnlineUsers || onlineUsers;
-      
-      const displayUsers = realOnlineUsers.slice(0, 6);
-      const remainingCount = Math.max(0, realOnlineUsers.length - 6);
-      
-      container.innerHTML = displayUsers.map(user => `
-        <div class="online-user">
-          <span class="online-dot"></span>
-          <span>${user}</span>
-        </div>
-      `).join('') + (remainingCount > 0 ? `<div class="online-user" style="color: var(--text-muted);">+${remainingCount} 更多</div>` : '');
-    } catch (e) {
-      console.error('渲染在线用户失败:', e);
-    }
-  }
-
-  // 更新板块计数
-  function updateBoardCounts() {
-    const counts = {
-      all: postData.length,
-      general: postData.filter(p => p.board === 'general').length,
-      guide: postData.filter(p => p.board === 'guide').length,
-      shot: postData.filter(p => p.board === 'shot').length,
-      trade: postData.filter(p => p.board === 'trade').length
-    };
-    
-    document.getElementById('countAll').textContent = counts.all;
-    document.getElementById('countGeneral').textContent = counts.general;
-    document.getElementById('countGuide').textContent = counts.guide;
-    document.getElementById('countShot').textContent = counts.shot;
-    document.getElementById('countTrade').textContent = counts.trade;
-  }
-
-  // 板块切换
-  document.getElementById("boardSelector").addEventListener("click", e => {
-    const btn = e.target.closest(".board-btn");
-    if (!btn) return;
-    
-    currentBoard = btn.dataset.board;
-    document.querySelectorAll(".board-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    renderPosts();
-  });
-
-  // 搜索
-  postSearch.addEventListener("input", renderPosts);
-
-  // 发帖
-  function createPost() {
-    window.openCreatePostModal();
-  }
-
-  // 更新社区统计数据 - 实时更新
-  async function updateCommunityStats() {
-    try {
-      let stats;
-      
-      // 使用社区数据服务获取统计（自动选择 Supabase 或本地存储）
-      if (window.communityDataService && typeof window.communityDataService.getCommunityStats === 'function') {
-        const result = window.communityDataService.getCommunityStats();
-        stats = result instanceof Promise ? await result : result;
-      } else {
-        stats = { totalPosts: 0, totalMembers: 5678, totalReplies: 12345, onlineUsers: 89 };
-      }
-      
-      // 动画效果更新数字
-      animateNumber('statPosts', stats.totalPosts);
-      animateNumber('statMembers', stats.totalMembers);
-      animateNumber('statReplies', stats.totalReplies);
-      animateNumber('statOnline', stats.onlineUsers);
-      
-      // 同时更新在线用户列表
-      await renderOnlineUsers();
-      
-      // 显示数据来源
-      const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || false;
-      console.log(`📊 社区统计更新 [${isSupabase ? 'Supabase' : '本地存储'}]:`, stats);
-    } catch (error) {
-      console.error('❌ 更新统计失败:', error);
-    }
-  }
-  
-  // 数字动画效果
-  function animateNumber(elementId, targetValue) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    const currentValue = parseInt(element.textContent.replace(/,/g, '')) || 0;
-    if (currentValue === targetValue) return;
-    
-    // 如果变化不大，直接设置
-    if (Math.abs(targetValue - currentValue) < 5) {
-      element.textContent = targetValue.toLocaleString();
-      return;
-    }
-    
-    // 动画效果
-    const duration = 500;
-    const startTime = performance.now();
-    
-    function update(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      const value = Math.round(currentValue + (targetValue - currentValue) * easeOut);
-      element.textContent = value.toLocaleString();
-      
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      }
-    }
-    
-    requestAnimationFrame(update);
-  }
-
-  // 刷新帖子数据
-  async function refreshPostsData() {
-    try {
-      // 使用社区数据服务获取帖子（自动选择 Supabase 或本地存储）
-      if (window.communityDataService && typeof window.communityDataService.getAllPosts === 'function') {
-        const result = window.communityDataService.getAllPosts();
-        postData = result instanceof Promise ? await result : result;
-      } else {
-        postData = postDataBackup;
-      }
-      
-      // 确保 postData 是数组
-      if (!Array.isArray(postData)) {
-        postData = postDataBackup;
-      }
-      
-      renderPosts();
-      updateBoardCounts();
-      await updateCommunityStats();
-      
-      // 记录页面访问
-      if (window.communityDataService?.logPageView) {
-        window.communityDataService.logPageView('community');
-      }
-    } catch (error) {
-      console.error('❌ 刷新数据失败:', error);
-      // 使用备份数据
-      postData = postDataBackup;
-      renderPosts();
-      updateBoardCounts();
-    }
-  }
-
-  // 初始化（异步）
-  async function initializeCommunity() {
-    console.log('🚀 初始化社区页面...');
-    
-    // 显示加载状态
-    const postListEl = document.getElementById('postList');
-    if (postListEl) {
-      postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">🔄 正在加载社区数据...</div>';
-    }
-    
-    // 🔥 新方案：直接在这里测试 Supabase 连接（绕过复杂的 service 层）
-    console.log('🧪 [直接测试] 检查 Supabase 连接...');
-    let directSupabaseWorks = false;
-    try {
-      if (typeof supabase !== 'undefined' && typeof SUPABASE_CONFIG !== 'undefined' && SUPABASE_CONFIG.enabled) {
-        const testClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-        const { data, error } = await testClient.from('community_posts').select('id').limit(1);
-        if (!error) {
-          console.log('✅ [直接测试] Supabase 连接成功！');
-          directSupabaseWorks = true;
-        } else {
-          console.error('❌ [直接测试] Supabase 查询失败:', error);
+  <script>
+    // 禁用 Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
         }
-      }
-    } catch (e) {
-      console.error('❌ [直接测试] 测试异常:', e);
+      });
     }
-    
-    // ✅ 关键修复：先初始化数据服务（连接 Supabase）
-    if (window.communityDataService?.initCommunityData) {
-      console.log('🔌 正在初始化社区数据服务...');
-      try {
-        await window.communityDataService.initCommunityData();
-        console.log('✅ 社区数据服务初始化完成');
-      } catch (e) {
-        console.error('❌ 社区数据服务初始化失败:', e);
-      }
-    } else {
-      console.error('❌ communityDataService.initCommunityData 不存在');
-    }
-    
-    // 等待数据服务完全就绪
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // 确保当前用户已注册到 user_profiles 表
-    if (window.communityDataService?.ensureUserProfile) {
-      try {
-        await window.communityDataService.ensureUserProfile();
-        console.log('✅ 用户资料已同步');
-      } catch (e) {
-        console.debug('同步用户资料失败:', e);
-      }
-    }
-    
-    // 加载数据
-    await refreshPostsData();
-    renderHotTopics();
-    await renderOnlineUsers();
-    
-    // 定期更新（每30秒）
-    setInterval(updateCommunityStats, 30000);
-    
-    // 检查数据来源并显示状态
-    const isSupabase = window.communityDataService?.isSupabaseEnabled?.() || directSupabaseWorks;
-    console.log(`✅ 社区页面初始化完成 [数据源: ${isSupabase ? 'Supabase 云数据库 ✅' : '本地存储 ⚠️'}]`);
-    console.log(`🔧 [DEBUG] isSupabaseEnabled() = ${window.communityDataService?.isSupabaseEnabled?.()}, directSupabaseWorks = ${directSupabaseWorks}`);
-    
-    // 如果未连接 Supabase，显示警告
-    if (!isSupabase) {
-      console.error('❌ 未连接到 Supabase 数据库！');
-      console.error('📝 请按以下步骤操作：');
-      console.error('1. 访问 https://supabase.com');
-      console.error('2. 进入项目 SQL Editor');
-      console.error('3. 执行 supabase-init.sql 脚本');
-      console.error('4. 刷新此页面');
-      console.error('');
-      console.error('🐛 [DEBUG 信息]');
-      console.error('  - 直接测试结果:', directSupabaseWorks ? '成功' : '失败');
-      console.error('  - Service层结果:', window.communityDataService?.isSupabaseEnabled?.() ? '成功' : '失败');
-    }
-    
-    // 显示数据源状态到页面
-    const dataSourceBadge = document.createElement('div');
-    dataSourceBadge.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: ${isSupabase ? 'linear-gradient(135deg, rgba(0, 255, 159, 0.2), rgba(85, 234, 212, 0.15))' : 'linear-gradient(135deg, rgba(255, 69, 0, 0.3), rgba(255, 0, 0, 0.2))'};
-      border: 2px solid ${isSupabase ? 'var(--cyber-cyan)' : '#ff4500'};
-      border-radius: 8px;
-      padding: ${isSupabase ? '8px 16px' : '12px 20px'};
-      font-size: ${isSupabase ? '11px' : '12px'};
-      color: var(--text-main);
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      font-family: 'Orbitron', sans-serif;
-      cursor: ${isSupabase ? 'default' : 'pointer'};
-      transition: all 0.3s ease;
-    `;
-    
-    if (!isSupabase) {
-      dataSourceBadge.onmouseover = () => {
-        dataSourceBadge.style.transform = 'scale(1.05)';
-        dataSourceBadge.style.boxShadow = '0 6px 16px rgba(255, 69, 0, 0.5)';
-      };
-      dataSourceBadge.onmouseout = () => {
-        dataSourceBadge.style.transform = 'scale(1)';
-        dataSourceBadge.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-      };
-      dataSourceBadge.onclick = () => {
-        alert('⚠️ 数据库未连接！\n\n当前使用本地存储模式，帖子数据仅保存在您的浏览器中。\n\n要启用多用户共享功能：\n1. 在 Supabase 执行 supabase-init.sql\n2. 刷新页面\n\n详见浏览器控制台（F12）');
-      };
-    }
-    
-    dataSourceBadge.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 14px;">${isSupabase ? '🌐' : '💾'}</span>
-        <span>${isSupabase ? 'Supabase 云数据库' : '本地存储模式'}</span>
-      </div>
-    `;
-    document.body.appendChild(dataSourceBadge);
-    
-    // 5秒后淡出
-    setTimeout(() => {
-      dataSourceBadge.style.transition = 'opacity 1s ease';
-      dataSourceBadge.style.opacity = '0';
-      setTimeout(() => dataSourceBadge.remove(), 1000);
-    }, 5000);
-    
-    // 如果 Supabase 未配置，显示提示
-    if (!isSupabase) {
-      console.log('💡 提示: 配置 Supabase 可启用云端数据同步和多用户功能，详见 BACKEND_SETUP.md');
-    }
-  }
 
-  // 启动初始化
-  initializeCommunity();
-  
-  // 每15秒刷新在线用户和统计数据（更实时）
-  setInterval(async () => {
-    await renderOnlineUsers();
-    await updateCommunityStats();
-  }, 15000);
-  
-  // 监听社区数据更新事件
-  window.addEventListener('community-stats-update', () => {
-    updateCommunityStats();
-  });
-  
-  window.addEventListener('community-update', (e) => {
-    console.log('📡 收到社区实时更新:', e.detail);
-    refreshPostsData();
-  });
-  
-  // 页面可见性变化时刷新数据
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      refreshPostsData();
+    // Supabase 配置（硬编码，避免加载外部文件）
+    const SUPABASE_URL = 'https://gybgiqyyltckgxbdtzwu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5YmdpcXl5bHRja2d4YmR0end1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTA2MDksImV4cCI6MjA4MDM4NjYwOX0.WWF_rPUyIVOFDccLXm06Npf6J3fJoA_bbFoVJeZQzrA';
+
+    let supabaseClient = null;
+    const userId = 'user-' + Date.now();
+
+    // 动态加载 Supabase SDK
+    function loadSupabaseSDK() {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+        script.onload = () => {
+          console.log('✅ Supabase SDK 加载成功');
+          resolve();
+        };
+        script.onerror = () => {
+          console.error('❌ Supabase SDK 加载失败');
+          reject(new Error('SDK 加载失败'));
+        };
+        document.head.appendChild(script);
+      });
     }
-  });
-</script>
+
+    // 显示错误
+    function showError(msg) {
+      const errorContainer = document.getElementById('errorContainer');
+      errorContainer.innerHTML = `<div class="error-msg">❌ ${msg}</div>`;
+      document.getElementById('statusBadge').className = 'status error';
+      document.getElementById('statusBadge').textContent = '连接失败';
+    }
+
+    // 更新状态徽章
+    function updateStatus(connected) {
+      const badge = document.getElementById('statusBadge');
+      if (connected) {
+        badge.className = 'status';
+        badge.textContent = '🟢 Supabase 云数据库';
+      } else {
+        badge.className = 'status error';
+        badge.textContent = '❌ 连接失败';
+      }
+    }
+
+    // 注册用户
+    async function registerUser() {
+      try {
+        const { error } = await supabaseClient
+          .from('user_profiles')
+          .upsert({
+            id: userId,
+            username: '访客' + Math.floor(Math.random() * 1000),
+            avatar: '👤',
+            last_login_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'id' });
+        
+        if (!error) {
+          console.log('✅ 用户注册成功');
+        }
+      } catch (e) {
+        console.error('用户注册失败:', e);
+      }
+    }
+
+    // 更新在线状态
+    async function updateOnlineStatus() {
+      try {
+        await supabaseClient
+          .from('online_users')
+          .upsert({
+            user_id: userId,
+            last_seen_at: new Date().toISOString()
+          }, { onConflict: 'user_id' });
+        
+        console.log('🟢 在线状态已更新');
+      } catch (e) {
+        console.error('更新在线状态失败:', e);
+      }
+    }
+
+    // 加载帖子
+    async function loadPosts() {
+      const postListEl = document.getElementById('postList');
+      
+      try {
+        const { data, error } = await supabaseClient
+          .from('community_posts')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(20);
+        
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+          postListEl.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">📝 暂无帖子</div>';
+          return;
+        }
+        
+        postListEl.innerHTML = data.map(post => `
+          <div class="post-item">
+            <div class="post-title">${post.avatar || '👤'} ${post.title}</div>
+            <div class="post-content">${(post.content || '').substring(0, 150)}...</div>
+            <div class="post-meta">
+              👤 ${post.author} · 💬 ${post.replies || 0} 回复 · 👍 ${post.likes || 0} 点赞 · 👁️ ${post.views || 0} 浏览
+            </div>
+          </div>
+        `).join('');
+        
+        console.log('✅ 成功加载', data.length, '条帖子');
+        
+      } catch (e) {
+        console.error('加载帖子失败:', e);
+        postListEl.innerHTML = `<div style="text-align:center;padding:40px;color:#dc3545;">❌ 加载失败: ${e.message}</div>`;
+      }
+    }
+
+    // 更新统计
+    async function updateStats() {
+      try {
+        // 帖子总数
+        const { count: postsCount } = await supabaseClient
+          .from('community_posts')
+          .select('*', { count: 'exact', head: true });
+        
+        // 成员总数
+        const { count: membersCount } = await supabaseClient
+          .from('user_profiles')
+          .select('*', { count: 'exact', head: true });
+        
+        // 在线人数（5分钟内活跃）
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+        const { count: onlineCount } = await supabaseClient
+          .from('online_users')
+          .select('*', { count: 'exact', head: true })
+          .gte('last_seen_at', fiveMinutesAgo);
+        
+        // 总回复数
+        const { data: posts } = await supabaseClient
+          .from('community_posts')
+          .select('replies');
+        const totalReplies = posts?.reduce((sum, p) => sum + (p.replies || 0), 0) || 0;
+        
+        document.getElementById('statPosts').textContent = postsCount || 0;
+        document.getElementById('statMembers').textContent = membersCount || 0;
+        document.getElementById('statReplies').textContent = totalReplies;
+        document.getElementById('statOnline').textContent = onlineCount || 0;
+        
+        console.log('📊 统计数据:', { posts: postsCount, members: membersCount, online: onlineCount, replies: totalReplies });
+        
+      } catch (e) {
+        console.error('更新统计失败:', e);
+      }
+    }
+
+    // 主初始化函数
+    async function init() {
+      console.log('🚀 GameBox 社区 V2 初始化...');
+      
+      try {
+        // 1. 加载 Supabase SDK
+        await loadSupabaseSDK();
+        
+        // 2. 创建客户端
+        if (typeof supabase === 'undefined') {
+          throw new Error('Supabase SDK 未加载');
+        }
+        
+        console.log('🔌 创建 Supabase 客户端...');
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('✅ 客户端创建成功');
+        
+        // 3. 测试连接
+        console.log('🔍 测试数据库连接...');
+        const { data: testData, error: testError } = await supabaseClient
+          .from('community_posts')
+          .select('id')
+          .limit(1);
+        
+        if (testError) {
+          throw new Error('数据库连接测试失败: ' + testError.message);
+        }
+        
+        console.log('✅ 数据库连接正常');
+        updateStatus(true);
+        
+        // 4. 注册用户
+        await registerUser();
+        
+        // 5. 更新在线状态
+        await updateOnlineStatus();
+        setInterval(updateOnlineStatus, 30000);
+        
+        // 6. 加载数据
+        await loadPosts();
+        await updateStats();
+        
+        // 7. 定期刷新
+        setInterval(updateStats, 15000);
+        
+        console.log('🎉 初始化完成！');
+        
+      } catch (e) {
+        console.error('❌ 初始化失败:', e);
+        showError(e.message);
+        updateStatus(false);
+      }
+    }
+
+    // 启动
+    init();
+  </script>
 </body>
 </html>
