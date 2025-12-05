@@ -36,10 +36,8 @@ function initAuthButton() {
   btn.addEventListener("click", () => {
     const user = getCurrentUser();
     if (user) {
-      if (confirm("确定要退出登录吗？")) {
-        localStorage.removeItem("currentUser");
-        location.reload();
-      }
+      // 跳转到账号设置页面，不再使用confirm弹窗
+      window.location.href = "account-settings.html";
     } else {
       window.location.href = "login.html";
     }
