@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Supabase 连接诊断工具</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #00ff00;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .success { color: #00ff00; }
+    .error { color: #ff4444; }
+    .warning { color: #ffaa00; }
+    .info { color: #00aaff; }
+    pre {
+      background: #0a0a0a;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      overflow-x: auto;
+    }
+    button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #00cc00;
+    }
+    .section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #222;
+      border-left: 4px solid #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Supabase 连接诊断工具</h1>
+  
+  <div class="section">
+    <h2>步骤 1：基础检查</h2>
+    <button onclick="checkBasics()">运行基础检查</button>
+    <pre id="basics-output">点击按钮开始检查...</pre>
+  </div>
+
+  <div class="section">
+    <h2>步骤 2：测试数据库连接</h2>
+    <button onclick="testConnection()">测试连接</button>
+    <pre id="connection-output">点击按钮测试连接...</pre>
+  </div>
+
+  <div class="section">
+    <h2>步骤 3：查询帖子数据</h2>
+    <button onclick="queryPosts()">查询帖子</button>
+    <pre id="posts-output">点击按钮查询数据...</pre>
+  </div>
+
+  <div class="section">
+    <h2>步骤 4：修复建议</h2>
+    <pre id="fix-output">等待诊断完成...</pre>
+  </div>
+
+  <!-- 加载依赖 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <script>
+    function log(elementId, message, type = 'info') {
+      const element = document.getElementById(elementId);
+      const className = type === 'success' ? 'success' : 
+                       type === 'error' ? 'error' : 
+                       type === 'warning' ? 'warning' : 'info';
+      element.innerHTML += `<span class="${className}">${message}</span>\n`;
+    }
+
+    function clearLog(elementId) {
+      document.getElementById(elementId).innerHTML = '';
+    }
+
+    async function checkBasics() {
+      clearLog('basics-output');
+      
+      log('basics-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('basics-output', '🔍 开始基础检查...', 'info');
+      log('basics-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('basics-output', '');
+
+      // 检查 1: Supabase SDK
+      log('basics-output', '1️⃣ 检查 Supabase SDK...', 'info');
+      if (typeof supabase !== 'undefined') {
+        log('basics-output', '   ✅ Supabase SDK 已加载', 'success');
+      } else {
+        log('basics-output', '   ❌ Supabase SDK 未加载！', 'error');
+        log('basics-output', '   💡 解决方法：在 HTML 中添加以下代码：', 'warning');
+        log('basics-output', '   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>', 'info');
+        return;
+      }
+      log('basics-output', '');
+
+      // 检查 2: 配置文件
+      log('basics-output', '2️⃣ 检查配置文件...', 'info');
+      if (typeof SUPABASE_CONFIG !== 'undefined') {
+        log('basics-output', '   ✅ SUPABASE_CONFIG 已定义', 'success');
+        log('basics-output', `   📝 URL: ${SUPABASE_CONFIG.url}`, 'info');
+        log('basics-output', `   📝 Enabled: ${SUPABASE_CONFIG.enabled}`, 'info');
+        log('basics-output', `   📝 Has Key: ${SUPABASE_CONFIG.anonKey ? 'Yes' : 'No'}`, 'info');
+      } else {
+        log('basics-output', '   ❌ SUPABASE_CONFIG 未定义！', 'error');
+        log('basics-output', '   💡 解决方法：确保加载了 supabase-config.js', 'warning');
+        return;
+      }
+      log('basics-output', '');
+
+      // 检查 3: 配置是否启用
+      log('basics-output', '3️⃣ 检查配置状态...', 'info');
+      if (SUPABASE_CONFIG.enabled === true) {
+        log('basics-output', '   ✅ Supabase 已启用', 'success');
+      } else {
+        log('basics-output', '   ❌ Supabase 未启用！', 'error');
+        log('basics-output', '   💡 解决方法：在 supabase-config.js 中设置 enabled: true', 'warning');
+        return;
+      }
+      log('basics-output', '');
+
+      // 检查 4: URL 和 Key
+      log('basics-output', '4️⃣ 检查 URL 和 Key...', 'info');
+      if (SUPABASE_CONFIG.url && SUPABASE_CONFIG.url.includes('supabase.co')) {
+        log('basics-output', '   ✅ URL 格式正确', 'success');
+      } else {
+        log('basics-output', '   ❌ URL 格式错误！', 'error');
+        log('basics-output', `   当前 URL: ${SUPABASE_CONFIG.url}`, 'info');
+        return;
+      }
+
+      if (SUPABASE_CONFIG.anonKey && SUPABASE_CONFIG.anonKey.length > 100) {
+        log('basics-output', '   ✅ anonKey 格式正确', 'success');
+      } else {
+        log('basics-output', '   ❌ anonKey 格式错误或未设置！', 'error');
+        return;
+      }
+      log('basics-output', '');
+
+      log('basics-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+      log('basics-output', '✅ 基础检查通过！请继续测试连接...', 'success');
+      log('basics-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+    }
+
+    async function testConnection() {
+      clearLog('connection-output');
+      
+      log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('connection-output', '🔌 测试数据库连接...', 'info');
+      log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('connection-output', '');
+
+      try {
+        log('connection-output', '1️⃣ 创建 Supabase 客户端...', 'info');
+        const client = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        log('connection-output', '   ✅ 客户端创建成功', 'success');
+        log('connection-output', '');
+
+        log('connection-output', '2️⃣ 测试 community_posts 表...', 'info');
+        const { data, error, count } = await client
+          .from('community_posts')
+          .select('id', { count: 'exact', head: true });
+
+        if (error) {
+          log('connection-output', '   ❌ 连接失败！', 'error');
+          log('connection-output', `   错误代码: ${error.code}`, 'error');
+          log('connection-output', `   错误信息: ${error.message}`, 'error');
+          log('connection-output', '', 'error');
+          
+          if (error.code === '42P01') {
+            log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'error');
+            log('connection-output', '❌ 数据库表不存在！', 'error');
+            log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'error');
+            log('connection-output', '', 'error');
+            log('connection-output', '📝 修复步骤：', 'warning');
+            log('connection-output', '1. 访问: https://supabase.com/dashboard', 'info');
+            log('connection-output', '2. 进入项目 SQL Editor', 'info');
+            log('connection-output', '3. 执行 supabase-init.sql 脚本', 'info');
+            log('connection-output', '4. 刷新此页面重新测试', 'info');
+          } else if (error.code === 'PGRST301') {
+            log('connection-output', '❌ 权限错误！', 'error');
+            log('connection-output', '💡 可能是 RLS 策略问题', 'warning');
+          }
+        } else {
+          log('connection-output', `   ✅ 连接成功！表中有 ${count || 0} 条记录`, 'success');
+        }
+        log('connection-output', '');
+
+        log('connection-output', '3️⃣ 测试 user_profiles 表...', 'info');
+        const { error: profileError, count: profileCount } = await client
+          .from('user_profiles')
+          .select('id', { count: 'exact', head: true });
+
+        if (profileError) {
+          log('connection-output', `   ⚠️ user_profiles 表查询失败: ${profileError.message}`, 'warning');
+        } else {
+          log('connection-output', `   ✅ user_profiles 表正常！有 ${profileCount || 0} 个用户`, 'success');
+        }
+        log('connection-output', '');
+
+        log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+        log('connection-output', '✅ 数据库连接测试完成！', 'success');
+        log('connection-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+
+      } catch (e) {
+        log('connection-output', `❌ 连接测试异常: ${e.message}`, 'error');
+        log('connection-output', `堆栈: ${e.stack}`, 'error');
+      }
+    }
+
+    async function queryPosts() {
+      clearLog('posts-output');
+      
+      log('posts-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('posts-output', '📊 查询帖子数据...', 'info');
+      log('posts-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+      log('posts-output', '');
+
+      try {
+        const client = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        log('posts-output', '1️⃣ 查询最新帖子...', 'info');
+        const { data, error } = await client
+          .from('community_posts')
+          .select('id, title, author, created_at')
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        if (error) {
+          log('posts-output', `   ❌ 查询失败: ${error.message}`, 'error');
+          return;
+        }
+
+        log('posts-output', `   ✅ 查询成功！找到 ${data.length} 条帖子`, 'success');
+        log('posts-output', '');
+        
+        if (data.length > 0) {
+          log('posts-output', '📝 帖子列表：', 'info');
+          data.forEach((post, index) => {
+            log('posts-output', `   ${index + 1}. ${post.title}`, 'info');
+            log('posts-output', `      作者: ${post.author}`, 'info');
+            log('posts-output', `      时间: ${new Date(post.created_at).toLocaleString('zh-CN')}`, 'info');
+            log('posts-output', '', 'info');
+          });
+        } else {
+          log('posts-output', '   ⚠️ 数据库中没有帖子', 'warning');
+          log('posts-output', '   💡 请在社区页面发布第一个帖子', 'info');
+        }
+
+        log('posts-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+        log('posts-output', '✅ 数据查询完成！', 'success');
+        log('posts-output', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
+
+      } catch (e) {
+        log('posts-output', `❌ 查询异常: ${e.message}`, 'error');
+      }
+    }
+
+    // 自动运行基础检查
+    window.onload = () => {
+      setTimeout(checkBasics, 500);
+    };
+  </script>
+</body>
+</html>
