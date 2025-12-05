@@ -63,31 +63,16 @@
       } else if (typeof window.supabaseClient !== 'undefined') {
         supabaseClient = window.supabaseClient;
       } else {
-        // 手动创建客户端
+        // 手动创建客户端（使用最简单的配置，与 test-direct-api.html 一致）
         console.log('🔌 正在连接 Supabase:', SUPABASE_CONFIG.url);
         
-        // 使用明确的配置选项，禁用可能导致问题的功能
+        // 🔥 关键修复：使用最简单的客户端创建方式，不添加任何额外配置
         supabaseClient = supabase.createClient(
           SUPABASE_CONFIG.url, 
-          SUPABASE_CONFIG.anonKey,
-          {
-            auth: {
-              autoRefreshToken: false,
-              persistSession: false,
-              detectSessionInUrl: false
-            },
-            global: {
-              headers: {
-                'apikey': SUPABASE_CONFIG.anonKey
-              }
-            }
-          }
+          SUPABASE_CONFIG.anonKey
         );
         
-        console.log('✅ Supabase 客户端配置：');
-        console.log('  - autoRefreshToken: false');
-        console.log('  - persistSession: false');
-        console.log('  - 自定义请求头: 已设置');
+        console.log('✅ Supabase 客户端已创建（使用默认配置）');
       }
       
       if (supabaseClient) {
