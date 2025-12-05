@@ -16,47 +16,26 @@
     .post-detail-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 15px 20px 20px;
-      padding-top: 85px; /* 紧贴导航栏 */
-    }
-    
-    /* 确保导航栏固定在顶部 */
-    .site-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
-    }
-    
-    /* 隐藏搜索框和用户按钮 */
-    .header-right {
-      display: none !important;
-    }
-    
-    /* 调整导航栏布局 */
-    .header-container {
-      justify-content: flex-start;
-      gap: 40px;
+      padding: 20px;
+      padding-top: 20px; /* 无导航栏，直接从顶部开始 */
     }
     
     /* 返回按钮 */
     .back-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 2px solid rgba(255, 211, 0, 0.3);
-      border-radius: 6px;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 211, 0, 0.4);
+      border-radius: 8px;
       color: var(--cyber-yellow);
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     
     .back-btn:hover {
@@ -354,31 +333,7 @@
   <!-- 粒子背景 -->
   <div id="particles-js"></div>
 
-  <!-- 导航栏 -->
-  <header class="site-header">
-    <div class="header-container">
-      <div class="header-left">
-        <div class="header-logo">
-          <span class="logo-icon">🎮</span>
-          <span class="logo-text">GameBox</span>
-          <span class="logo-tagline">游盒</span>
-        </div>
-      </div>
-      <nav class="nav-main">
-        <a href="index.html" data-page="home" class="nav-link">首页</a>
-        <a href="game-library.html" data-page="library" class="nav-link">游戏库</a>
-        <a href="ranking.html" data-page="ranking" class="nav-link">
-          排行榜 <span class="badge">HOT</span>
-        </a>
-        <a href="discount.html" data-page="discount" class="nav-link">折扣 / 史低</a>
-        <a href="community.html" data-page="community" class="nav-link is-active">社区</a>
-        <a href="news-list.html" data-page="news" class="nav-link">资讯</a>
-        <a href="tools.html" data-page="tools" class="nav-link">工具</a>
-        <a href="my-library.html" data-page="my" class="nav-link">我的游戏</a>
-        <a href="profile.html" data-page="profile" class="nav-link">用户中心</a>
-      </nav>
-    </div>
-  </header>
+  <!-- 移除导航栏，保持简洁 -->
 
   <!-- 主内容区 -->
   <div class="post-detail-container">
