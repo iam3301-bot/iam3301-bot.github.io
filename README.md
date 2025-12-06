@@ -624,7 +624,7 @@ emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
 - [ ] 游戏时长统计
 - [ ] 愿望单功能
 - [ ] PWA 支持（离线访问）
-- [ ] 国际化（多语言）
+- [ ] 国际化
 - [ ] 黑暗/明亮主题切换
 
 ---
