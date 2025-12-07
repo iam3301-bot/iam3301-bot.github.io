@@ -24,34 +24,11 @@
       }
     },
     {
-      "id": 618,
-      "name": "skate.",
-      "platform": "Windows · Sports",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
-      "score": 9.25,
-      "tag": "焦点热门",
-      "description": "The latest, free-to-play, entry in the Skate franchise.",
-      "releaseDate": "2025-09-16",
-      "publisher": "Full Circle",
-      "developer": "Electronic Arts",
-      "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate",
-      "systemRequirements": {
-        "os": "Win 10 64 Bit, non-launch version",
-        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
-        "memory": "8 GB RAM",
-        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
-        "storage": "25 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
-      "score": 9.200000000000001,
+      "score": 9.25,
       "tag": "焦点热门",
       "description": "A free-to-play battle royale game built with Battlefield DNA.",
       "releaseDate": "2025-10-28",
@@ -65,6 +42,29 @@
         "memory": "16 GB RAM",
         "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
         "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 618,
+      "name": "skate.",
+      "platform": "Windows · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
+      "score": 9.200000000000001,
+      "tag": "焦点热门",
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -116,34 +116,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 9.05,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 475,
       "name": "Genshin Impact",
       "platform": "Windows · Action RPG",
       "cover": "https://www.freetogame.com/g/475/thumbnail.jpg",
-      "score": 9,
+      "score": 9.05,
       "tag": "高人气",
       "description": "If you’ve been looking for a game to scratch that open-world action RPG itch, one with perhaps a bit of Asian flair, then you’re going to want to check out miHoYo’s Genshin Impact.",
       "releaseDate": "2020-09-28",
@@ -157,6 +134,29 @@
         "memory": "16 GB",
         "graphics": "NVIDIA GeForce GTX 1060 6GB or better",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 9,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -254,34 +254,11 @@
       }
     },
     {
-      "id": 540,
-      "name": "Overwatch 2",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.75,
-      "tag": "人气不错",
-      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
-      "releaseDate": "2022-10-04",
-      "publisher": "Activision Blizzard",
-      "developer": "Blizzard Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit ",
-        "processor": "Intel Core i3 or AMD Phenom X3 8650",
-        "memory": "6 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
-        "storage": "50 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 625,
       "name": "Superball",
       "platform": "Windows · Sports",
       "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.700000000000001,
+      "score": 8.75,
       "tag": "人气不错",
       "description": "A free-to-play futuristic sports game.",
       "releaseDate": "2025-10-28",
@@ -295,6 +272,29 @@
         "memory": " 8 GB RAM",
         "graphics": "Nvidia GeForce GTX760",
         "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 540,
+      "name": "Overwatch 2",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
+      "score": 8.700000000000001,
+      "tag": "人气不错",
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -392,34 +392,11 @@
       }
     },
     {
-      "id": 511,
-      "name": "Phantasy Star Online 2 New Genesis",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.450000000000001,
-      "tag": "人气不错",
-      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
-      "releaseDate": "2021-06-09",
-      "publisher": "Sega",
-      "developer": "Sega",
-      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
-      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
-      "systemRequirements": {
-        "os": "Windows 8.1",
-        "processor": "Intel Core i5-9400 ",
-        "memory": "8 GB",
-        "graphics": "GeForce GTX 950 or Radeon R9 285",
-        "storage": "100 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 560,
       "name": "Palia",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/560/thumbnail.jpg",
-      "score": 8.4,
+      "score": 8.450000000000001,
       "tag": "人气不错",
       "description": "A cozy MMO with homebuilding and some adventure.",
       "releaseDate": "2023-08-10",
@@ -442,7 +419,7 @@
       "name": "Throne And Liberty",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
-      "score": 8.350000000000001,
+      "score": 8.4,
       "tag": "人气不错",
       "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
       "releaseDate": "2024-10-01",
@@ -456,6 +433,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA Geforce GTX960",
         "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 511,
+      "name": "Phantasy Star Online 2 New Genesis",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
+      "score": 8.350000000000001,
+      "tag": "人气不错",
+      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
+      "releaseDate": "2021-06-09",
+      "publisher": "Sega",
+      "developer": "Sega",
+      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
+      "systemRequirements": {
+        "os": "Windows 8.1",
+        "processor": "Intel Core i5-9400 ",
+        "memory": "8 GB",
+        "graphics": "GeForce GTX 950 or Radeon R9 285",
+        "storage": "100 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -716,34 +716,11 @@
       }
     },
     {
-      "id": 618,
-      "name": "skate.",
-      "platform": "Windows · Sports",
-      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
-      "score": 9.25,
-      "tag": "焦点热门",
-      "description": "The latest, free-to-play, entry in the Skate franchise.",
-      "releaseDate": "2025-09-16",
-      "publisher": "Full Circle",
-      "developer": "Electronic Arts",
-      "gameUrl": "https://www.freetogame.com/open/skate",
-      "profileUrl": "https://www.freetogame.com/skate",
-      "systemRequirements": {
-        "os": "Win 10 64 Bit, non-launch version",
-        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
-        "memory": "8 GB RAM",
-        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
-        "storage": "25 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 624,
       "name": "Battlefield REDSEC",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/624/thumbnail.jpg",
-      "score": 9.200000000000001,
+      "score": 9.25,
       "tag": "焦点热门",
       "description": "A free-to-play battle royale game built with Battlefield DNA.",
       "releaseDate": "2025-10-28",
@@ -757,6 +734,29 @@
         "memory": "16 GB RAM",
         "graphics": "Nvidia RTX 2060, AMD Radeon RX 5600 XT 6GB, Intel Arc A380",
         "storage": "55 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 618,
+      "name": "skate.",
+      "platform": "Windows · Sports",
+      "cover": "https://www.freetogame.com/g/618/thumbnail.jpg",
+      "score": 9.200000000000001,
+      "tag": "焦点热门",
+      "description": "The latest, free-to-play, entry in the Skate franchise.",
+      "releaseDate": "2025-09-16",
+      "publisher": "Full Circle",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/skate",
+      "profileUrl": "https://www.freetogame.com/skate",
+      "systemRequirements": {
+        "os": "Win 10 64 Bit, non-launch version",
+        "processor": "Intel Core i5-6600k or AMD Ryzen 3 3100",
+        "memory": "8 GB RAM",
+        "graphics": "GeForce GTX 1050 Ti or Radeon RX 460 (4GB)",
+        "storage": "25 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -808,34 +808,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 9.05,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 475,
       "name": "Genshin Impact",
       "platform": "Windows · Action RPG",
       "cover": "https://www.freetogame.com/g/475/thumbnail.jpg",
-      "score": 9,
+      "score": 9.05,
       "tag": "高人气",
       "description": "If you’ve been looking for a game to scratch that open-world action RPG itch, one with perhaps a bit of Asian flair, then you’re going to want to check out miHoYo’s Genshin Impact.",
       "releaseDate": "2020-09-28",
@@ -849,6 +826,29 @@
         "memory": "16 GB",
         "graphics": "NVIDIA GeForce GTX 1060 6GB or better",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 9,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -946,34 +946,11 @@
       }
     },
     {
-      "id": 540,
-      "name": "Overwatch 2",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.75,
-      "tag": "人气不错",
-      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
-      "releaseDate": "2022-10-04",
-      "publisher": "Activision Blizzard",
-      "developer": "Blizzard Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit ",
-        "processor": "Intel Core i3 or AMD Phenom X3 8650",
-        "memory": "6 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
-        "storage": "50 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 625,
       "name": "Superball",
       "platform": "Windows · Sports",
       "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.700000000000001,
+      "score": 8.75,
       "tag": "人气不错",
       "description": "A free-to-play futuristic sports game.",
       "releaseDate": "2025-10-28",
@@ -987,6 +964,29 @@
         "memory": " 8 GB RAM",
         "graphics": "Nvidia GeForce GTX760",
         "storage": "15 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 540,
+      "name": "Overwatch 2",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
+      "score": 8.700000000000001,
+      "tag": "人气不错",
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1084,34 +1084,11 @@
       }
     },
     {
-      "id": 511,
-      "name": "Phantasy Star Online 2 New Genesis",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.450000000000001,
-      "tag": "人气不错",
-      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
-      "releaseDate": "2021-06-09",
-      "publisher": "Sega",
-      "developer": "Sega",
-      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
-      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
-      "systemRequirements": {
-        "os": "Windows 8.1",
-        "processor": "Intel Core i5-9400 ",
-        "memory": "8 GB",
-        "graphics": "GeForce GTX 950 or Radeon R9 285",
-        "storage": "100 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 560,
       "name": "Palia",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/560/thumbnail.jpg",
-      "score": 8.4,
+      "score": 8.450000000000001,
       "tag": "人气不错",
       "description": "A cozy MMO with homebuilding and some adventure.",
       "releaseDate": "2023-08-10",
@@ -1134,7 +1111,7 @@
       "name": "Throne And Liberty",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/590/thumbnail.jpg",
-      "score": 8.350000000000001,
+      "score": 8.4,
       "tag": "人气不错",
       "description": "A free-to-play multi-platorm MMORPG from NCSoft and Amazon Games.",
       "releaseDate": "2024-10-01",
@@ -1148,6 +1125,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA Geforce GTX960",
         "storage": "63 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 511,
+      "name": "Phantasy Star Online 2 New Genesis",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
+      "score": 8.350000000000001,
+      "tag": "人气不错",
+      "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
+      "releaseDate": "2021-06-09",
+      "publisher": "Sega",
+      "developer": "Sega",
+      "gameUrl": "https://www.freetogame.com/open/pso2-new-genesis",
+      "profileUrl": "https://www.freetogame.com/pso2-new-genesis",
+      "systemRequirements": {
+        "os": "Windows 8.1",
+        "processor": "Intel Core i5-9400 ",
+        "memory": "8 GB",
+        "graphics": "GeForce GTX 950 or Radeon R9 285",
+        "storage": "100 GB",
         "source": "freetogame",
         "steamRaw": null
       }
