@@ -2318,7 +2318,7 @@ www -> your-username.github.io
 
 - **项目主页**：https://iam3301-bot.github.io/
 - **GitHub**：https://github.com/iam3301-bot/iam3301-bot.github.io
-- **邮箱**：278442912@qq.com
+- **邮箱**：2784422912@qq.com
 
 ---
 
