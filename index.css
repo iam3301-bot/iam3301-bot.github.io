@@ -648,10 +648,14 @@ a:not(.nav-link):not(.btn):hover::after {
 
 .nav-main {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 6px;
   flex: 1;
   font-size: 13px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .nav-link {
@@ -661,6 +665,7 @@ a:not(.nav-link):not(.btn):hover::after {
   border: 1px solid transparent;
   border-left: 2px solid transparent;
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   gap: 6px;
   font-weight: 600;
@@ -670,6 +675,8 @@ a:not(.nav-link):not(.btn):hover::after {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
 }
 
 .nav-link .badge {
@@ -722,6 +729,24 @@ a:not(.nav-link):not(.btn):hover::after {
   border-left-width: 3px;
   text-shadow: 0 0 10px var(--cyber-yellow-glow);
   box-shadow: inset 0 0 20px rgba(255, 211, 0, 0.1);
+}
+
+/* Custom scrollbar for horizontal navigation */
+.nav-main::-webkit-scrollbar {
+  height: 4px;
+}
+
+.nav-main::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.nav-main::-webkit-scrollbar-thumb {
+  background: var(--cyber-cyan);
+  border-radius: 2px;
+}
+
+.nav-main::-webkit-scrollbar-thumb:hover {
+  background: var(--cyber-yellow);
 }
 
 .header-right {
@@ -1665,8 +1690,9 @@ mark {
 
   .nav-main {
     order: 2;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    overflow-x: auto;
   }
 
   .header-right {
