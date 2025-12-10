@@ -596,12 +596,12 @@ a:not(.nav-link):not(.btn):hover::after {
 }
 
 .header-inner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 8px 16px;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .logo {
@@ -650,16 +650,16 @@ a:not(.nav-link):not(.btn):hover::after {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
-  font-size: 13px;
+  font-size: 11px;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: visible;
+  justify-content: center;
 }
 
 .nav-link {
-  padding: 6px 14px;
+  padding: 7px 12px;
   border-radius: 0;
   color: var(--text-muted);
   border: 1px solid transparent;
@@ -667,10 +667,10 @@ a:not(.nav-link):not(.btn):hover::after {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.05em;
+  font-size: 11px;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -686,7 +686,7 @@ a:not(.nav-link):not(.btn):hover::after {
   background: var(--cyber-pink);
   color: #000;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-shadow: none;
   box-shadow: 0 0 10px var(--cyber-pink-glow);
   animation: badge-blink 2s ease-in-out infinite;
@@ -731,28 +731,21 @@ a:not(.nav-link):not(.btn):hover::after {
   box-shadow: inset 0 0 20px rgba(255, 211, 0, 0.1);
 }
 
-/* Custom scrollbar for horizontal navigation */
+/* Hide scrollbar for horizontal navigation */
 .nav-main::-webkit-scrollbar {
-  height: 4px;
+  display: none;
 }
 
-.nav-main::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.nav-main::-webkit-scrollbar-thumb {
-  background: var(--cyber-cyan);
-  border-radius: 2px;
-}
-
-.nav-main::-webkit-scrollbar-thumb:hover {
-  background: var(--cyber-yellow);
+.nav-main {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .header-search {
@@ -764,8 +757,8 @@ a:not(.nav-link):not(.btn):hover::after {
   border-radius: 0;
   border: 1px solid var(--cyber-cyan);
   border-left: 3px solid var(--cyber-cyan);
-  padding: 7px 30px 7px 12px;
-  font-size: 12px;
+  padding: 7px 32px 7px 12px;
+  font-size: 11px;
   color: var(--text-main);
   width: 200px;
   font-weight: 600;
@@ -816,9 +809,9 @@ a:not(.nav-link):not(.btn):hover::after {
   background: linear-gradient(135deg, rgba(255, 61, 148, 0.15) 0%, rgba(197, 0, 60, 0.1) 100%);
   color: var(--text-main);
   padding: 7px 14px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
@@ -1692,7 +1685,14 @@ mark {
     order: 2;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    overflow-x: auto;
+    overflow-x: hidden;
+    gap: 4px;
+    font-size: 10px;
+  }
+  
+  .nav-link {
+    padding: 6px 8px;
+    font-size: 10px;
   }
 
   .header-right {
@@ -1713,7 +1713,13 @@ mark {
     padding: 8px 10px;
   }
   .header-search input {
-    width: 130px;
+    width: 140px;
+    font-size: 10px;
+    padding: 6px 28px 6px 10px;
+  }
+  
+  .header-right {
+    gap: 8px;
   }
   .card {
     padding: 12px 12px;
