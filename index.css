@@ -596,12 +596,12 @@ a:not(.nav-link):not(.btn):hover::after {
 }
 
 .header-inner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 8px 16px;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .logo {
@@ -650,15 +650,16 @@ a:not(.nav-link):not(.btn):hover::after {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2px;
-  flex: 0 1 auto;
-  font-size: 10.5px;
+  gap: 8px;
+  flex: 1;
+  font-size: 11px;
   flex-wrap: nowrap;
   overflow: visible;
+  justify-content: center;
 }
 
 .nav-link {
-  padding: 6px 6px;
+  padding: 7px 12px;
   border-radius: 0;
   color: var(--text-muted);
   border: 1px solid transparent;
@@ -666,10 +667,10 @@ a:not(.nav-link):not(.btn):hover::after {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
   font-weight: 600;
-  font-size: 10.5px;
-  letter-spacing: 0;
+  font-size: 11px;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -679,13 +680,13 @@ a:not(.nav-link):not(.btn):hover::after {
 }
 
 .nav-link .badge {
-  font-size: 8px;
-  padding: 2px 4px;
+  font-size: 9px;
+  padding: 2px 6px;
   border-radius: 0;
   background: var(--cyber-pink);
   color: #000;
   font-weight: 900;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-shadow: none;
   box-shadow: 0 0 10px var(--cyber-pink-glow);
   animation: badge-blink 2s ease-in-out infinite;
@@ -743,9 +744,8 @@ a:not(.nav-link):not(.btn):hover::after {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
 .header-search {
@@ -757,10 +757,10 @@ a:not(.nav-link):not(.btn):hover::after {
   border-radius: 0;
   border: 1px solid var(--cyber-cyan);
   border-left: 3px solid var(--cyber-cyan);
-  padding: 6px 28px 6px 8px;
-  font-size: 10px;
+  padding: 7px 32px 7px 12px;
+  font-size: 11px;
   color: var(--text-main);
-  width: 120px;
+  width: 200px;
   font-weight: 600;
   letter-spacing: 0.03em;
   box-shadow: inset 0 0 15px rgba(85, 234, 212, 0.1), 0 0 10px rgba(85, 234, 212, 0.2);
@@ -808,10 +808,10 @@ a:not(.nav-link):not(.btn):hover::after {
   border: 2px solid var(--cyber-pink);
   background: linear-gradient(135deg, rgba(255, 61, 148, 0.15) 0%, rgba(197, 0, 60, 0.1) 100%);
   color: var(--text-main);
-  padding: 6px 8px;
-  font-size: 9px;
+  padding: 7px 14px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
@@ -1686,7 +1686,13 @@ mark {
     flex-wrap: nowrap;
     justify-content: flex-start;
     overflow-x: hidden;
-    gap: 2px;
+    gap: 4px;
+    font-size: 10px;
+  }
+  
+  .nav-link {
+    padding: 6px 8px;
+    font-size: 10px;
   }
 
   .header-right {
@@ -1707,9 +1713,13 @@ mark {
     padding: 8px 10px;
   }
   .header-search input {
-    width: 100px;
+    width: 140px;
     font-size: 10px;
-    padding: 6px 25px 6px 8px;
+    padding: 6px 28px 6px 10px;
+  }
+  
+  .header-right {
+    gap: 8px;
   }
   .card {
     padding: 12px 12px;
