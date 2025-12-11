@@ -139,34 +139,11 @@
       }
     },
     {
-      "id": 121,
-      "name": "Forza Motorsport 6: Apex",
-      "platform": "Windows · Racing",
-      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 9,
-      "tag": "高人气",
-      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
-      "releaseDate": "2015-09-15",
-      "publisher": "Microsoft",
-      "developer": "Turn 10",
-      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
-      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
-      "systemRequirements": {
-        "os": " Windows 10 64-bit version 1511",
-        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
-        "storage": "30 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 466,
       "name": "Valorant",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.950000000000001,
+      "score": 9,
       "tag": "高人气",
       "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
       "releaseDate": "2020-06-02",
@@ -180,6 +157,29 @@
         "memory": "4 GB RAM",
         "graphics": "Intel HD 4000",
         "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 121,
+      "name": "Forza Motorsport 6: Apex",
+      "platform": "Windows · Racing",
+      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
+      "score": 8.950000000000001,
+      "tag": "高人气",
+      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
+      "releaseDate": "2015-09-15",
+      "publisher": "Microsoft",
+      "developer": "Turn 10",
+      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
+      "systemRequirements": {
+        "os": " Windows 10 64-bit version 1511",
+        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
+        "storage": "30 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -323,34 +323,11 @@
       }
     },
     {
-      "id": 608,
-      "name": "Odin: Valhalla Rising",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "An open-world MMORPG based on Norse mythology.",
-      "releaseDate": "2025-04-29",
-      "publisher": "Kakao Games",
-      "developer": "Lionheart Studios",
-      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
-      "systemRequirements": {
-        "os": "Windows 10 (64 bit)",
-        "processor": "Higher than Intel i5 3.0GHz",
-        "memory": "Higher than 8GB",
-        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
-        "storage": "More than 20GB (NTFS Type)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -373,7 +350,7 @@
       "name": "Fortnite",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
-      "score": 8.5,
+      "score": 8.55,
       "tag": "人气不错",
       "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
       "releaseDate": "2017-09-26",
@@ -387,6 +364,29 @@
         "memory": "4 GB",
         "graphics": "Core i3 2.4",
         "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 608,
+      "name": "Odin: Valhalla Rising",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
+      "score": 8.5,
+      "tag": "人气不错",
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -553,34 +553,11 @@
       }
     },
     {
-      "id": 593,
-      "name": "Return Alive",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
-      "score": 8.100000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play top-down tactical shooter.",
-      "releaseDate": "2024-10-23",
-      "publisher": "KOG",
-      "developer": "KOG",
-      "gameUrl": "https://www.freetogame.com/open/return-alive",
-      "profileUrl": "https://www.freetogame.com/return-alive",
-      "systemRequirements": {
-        "os": "Windows 10 (64Bit)",
-        "processor": "Intel Core i5-4430 / AMD FX-6300",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
-        "storage": "30 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 526,
       "name": "Chimeraland",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/526/thumbnail.jpg",
-      "score": 8.05,
+      "score": 8.100000000000001,
       "tag": "人气不错",
       "description": "Explore the open-world sandbox MMO game set in a mythical world. Play as one of a large number of races, from jelly-fish to dragon-person – or even a regular old human if that’s your thing. Explore the land, gather resources, craft items, build homes and more.",
       "releaseDate": "2022-07-14",
@@ -594,6 +571,29 @@
         "memory": "8 GB RAM",
         "graphics": "GTX 760",
         "storage": "12 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 593,
+      "name": "Return Alive",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
+      "score": 8.05,
+      "tag": "人气不错",
+      "description": "A free-to-play top-down tactical shooter.",
+      "releaseDate": "2024-10-23",
+      "publisher": "KOG",
+      "developer": "KOG",
+      "gameUrl": "https://www.freetogame.com/open/return-alive",
+      "profileUrl": "https://www.freetogame.com/return-alive",
+      "systemRequirements": {
+        "os": "Windows 10 (64Bit)",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "30 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -622,34 +622,11 @@
       }
     },
     {
-      "id": 588,
-      "name": "Vigor",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
-      "score": 7.950000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
-      "releaseDate": "2024-09-18",
-      "publisher": "Bohemia Interactive ",
-      "developer": "Bohemia Interactive",
-      "gameUrl": "https://www.freetogame.com/open/vigor",
-      "profileUrl": "https://www.freetogame.com/vigor",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
-        "storage": "18 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 2,
       "name": "World of Tanks",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
-      "score": 7.9,
+      "score": 7.950000000000001,
       "tag": "人气不错",
       "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
       "releaseDate": "2011-04-12",
@@ -663,6 +640,29 @@
         "memory": "2 GB",
         "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
         "storage": "16 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 588,
+      "name": "Vigor",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
+      "score": 7.9,
+      "tag": "人气不错",
+      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
+      "releaseDate": "2024-09-18",
+      "publisher": "Bohemia Interactive ",
+      "developer": "Bohemia Interactive",
+      "gameUrl": "https://www.freetogame.com/open/vigor",
+      "profileUrl": "https://www.freetogame.com/vigor",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
+        "storage": "18 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -831,34 +831,11 @@
       }
     },
     {
-      "id": 121,
-      "name": "Forza Motorsport 6: Apex",
-      "platform": "Windows · Racing",
-      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 9,
-      "tag": "高人气",
-      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
-      "releaseDate": "2015-09-15",
-      "publisher": "Microsoft",
-      "developer": "Turn 10",
-      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
-      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
-      "systemRequirements": {
-        "os": " Windows 10 64-bit version 1511",
-        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
-        "storage": "30 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 466,
       "name": "Valorant",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.950000000000001,
+      "score": 9,
       "tag": "高人气",
       "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
       "releaseDate": "2020-06-02",
@@ -872,6 +849,29 @@
         "memory": "4 GB RAM",
         "graphics": "Intel HD 4000",
         "storage": "?",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 121,
+      "name": "Forza Motorsport 6: Apex",
+      "platform": "Windows · Racing",
+      "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
+      "score": 8.950000000000001,
+      "tag": "高人气",
+      "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
+      "releaseDate": "2015-09-15",
+      "publisher": "Microsoft",
+      "developer": "Turn 10",
+      "gameUrl": "https://www.freetogame.com/open/forza-motorsport-6-apex",
+      "profileUrl": "https://www.freetogame.com/forza-motorsport-6-apex",
+      "systemRequirements": {
+        "os": " Windows 10 64-bit version 1511",
+        "processor": "Intel Core i3-4170 @ 3.7 Ghz",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
+        "storage": "30 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1015,34 +1015,11 @@
       }
     },
     {
-      "id": 608,
-      "name": "Odin: Valhalla Rising",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "An open-world MMORPG based on Norse mythology.",
-      "releaseDate": "2025-04-29",
-      "publisher": "Kakao Games",
-      "developer": "Lionheart Studios",
-      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
-      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
-      "systemRequirements": {
-        "os": "Windows 10 (64 bit)",
-        "processor": "Higher than Intel i5 3.0GHz",
-        "memory": "Higher than 8GB",
-        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
-        "storage": "More than 20GB (NTFS Type)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -1065,7 +1042,7 @@
       "name": "Fortnite",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/57/thumbnail.jpg",
-      "score": 8.5,
+      "score": 8.55,
       "tag": "人气不错",
       "description": "A free-to-play, standalone mode of Epic Game's Fortnite. ",
       "releaseDate": "2017-09-26",
@@ -1079,6 +1056,29 @@
         "memory": "4 GB",
         "graphics": "Core i3 2.4",
         "storage": "Not defined",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 608,
+      "name": "Odin: Valhalla Rising",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/608/thumbnail.jpg",
+      "score": 8.5,
+      "tag": "人气不错",
+      "description": "An open-world MMORPG based on Norse mythology.",
+      "releaseDate": "2025-04-29",
+      "publisher": "Kakao Games",
+      "developer": "Lionheart Studios",
+      "gameUrl": "https://www.freetogame.com/open/odin-valhalla-rising",
+      "profileUrl": "https://www.freetogame.com/odin-valhalla-rising",
+      "systemRequirements": {
+        "os": "Windows 10 (64 bit)",
+        "processor": "Higher than Intel i5 3.0GHz",
+        "memory": "Higher than 8GB",
+        "graphics": "Higher than NVIDIA GeForce GTX9xx Series",
+        "storage": "More than 20GB (NTFS Type)",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1245,34 +1245,11 @@
       }
     },
     {
-      "id": 593,
-      "name": "Return Alive",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
-      "score": 8.100000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play top-down tactical shooter.",
-      "releaseDate": "2024-10-23",
-      "publisher": "KOG",
-      "developer": "KOG",
-      "gameUrl": "https://www.freetogame.com/open/return-alive",
-      "profileUrl": "https://www.freetogame.com/return-alive",
-      "systemRequirements": {
-        "os": "Windows 10 (64Bit)",
-        "processor": "Intel Core i5-4430 / AMD FX-6300",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
-        "storage": "30 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 526,
       "name": "Chimeraland",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/526/thumbnail.jpg",
-      "score": 8.05,
+      "score": 8.100000000000001,
       "tag": "人气不错",
       "description": "Explore the open-world sandbox MMO game set in a mythical world. Play as one of a large number of races, from jelly-fish to dragon-person – or even a regular old human if that’s your thing. Explore the land, gather resources, craft items, build homes and more.",
       "releaseDate": "2022-07-14",
@@ -1286,6 +1263,29 @@
         "memory": "8 GB RAM",
         "graphics": "GTX 760",
         "storage": "12 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 593,
+      "name": "Return Alive",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/593/thumbnail.jpg",
+      "score": 8.05,
+      "tag": "人气不错",
+      "description": "A free-to-play top-down tactical shooter.",
+      "releaseDate": "2024-10-23",
+      "publisher": "KOG",
+      "developer": "KOG",
+      "gameUrl": "https://www.freetogame.com/open/return-alive",
+      "profileUrl": "https://www.freetogame.com/return-alive",
+      "systemRequirements": {
+        "os": "Windows 10 (64Bit)",
+        "processor": "Intel Core i5-4430 / AMD FX-6300",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 2GB / AMD Radeon R7 370 2GB",
+        "storage": "30 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1314,34 +1314,11 @@
       }
     },
     {
-      "id": 588,
-      "name": "Vigor",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
-      "score": 7.950000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
-      "releaseDate": "2024-09-18",
-      "publisher": "Bohemia Interactive ",
-      "developer": "Bohemia Interactive",
-      "gameUrl": "https://www.freetogame.com/open/vigor",
-      "profileUrl": "https://www.freetogame.com/vigor",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
-        "storage": "18 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 2,
       "name": "World of Tanks",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
-      "score": 7.9,
+      "score": 7.950000000000001,
       "tag": "人气不错",
       "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
       "releaseDate": "2011-04-12",
@@ -1355,6 +1332,29 @@
         "memory": "2 GB",
         "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
         "storage": "16 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 588,
+      "name": "Vigor",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
+      "score": 7.9,
+      "tag": "人气不错",
+      "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
+      "releaseDate": "2024-09-18",
+      "publisher": "Bohemia Interactive ",
+      "developer": "Bohemia Interactive",
+      "gameUrl": "https://www.freetogame.com/open/vigor",
+      "profileUrl": "https://www.freetogame.com/vigor",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i3-8100 / AMD Ryzen 3 1300X",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
+        "storage": "18 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
