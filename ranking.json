@@ -139,34 +139,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 9,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "Windows · Racing",
       "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 8.950000000000001,
+      "score": 9,
       "tag": "高人气",
       "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
       "releaseDate": "2015-09-15",
@@ -180,6 +157,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 8.950000000000001,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -231,34 +231,11 @@
       }
     },
     {
-      "id": 625,
-      "name": "Superball",
-      "platform": "Windows · Sports",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.8,
-      "tag": "人气不错",
-      "description": "A free-to-play futuristic sports game.",
-      "releaseDate": "2025-10-28",
-      "publisher": "Logoi Games",
-      "developer": "Pathea Games",
-      "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball",
-      "systemRequirements": {
-        "os": " Windows 7+ / 8.1 / 10 64 bit",
-        "processor": "Intel Core i5-4590",
-        "memory": " 8 GB RAM",
-        "graphics": "Nvidia GeForce GTX760",
-        "storage": "15 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 540,
       "name": "Overwatch 2",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.75,
+      "score": 8.8,
       "tag": "人气不错",
       "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
       "releaseDate": "2022-10-04",
@@ -272,6 +249,29 @@
         "memory": "6 GB RAM",
         "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
         "storage": "50 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 625,
+      "name": "Superball",
+      "platform": "Windows · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
+      "score": 8.75,
+      "tag": "人气不错",
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -461,34 +461,11 @@
       }
     },
     {
-      "id": 621,
-      "name": "2XKO",
-      "platform": "Windows · Fighting",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
-      "score": 8.3,
-      "tag": "人气不错",
-      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
-      "releaseDate": "2025-10-07",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel: i7-4790",
-        "memory": "8GB",
-        "graphics": "NVidia: GTX 960 @1080p",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 599,
       "name": "Marvel Rivals",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.25,
+      "score": 8.3,
       "tag": "人气不错",
       "description": "A free-to-play superhero team shooter from NetEase.",
       "releaseDate": "2024-12-06",
@@ -502,6 +479,29 @@
         "memory": "16 GB RAM",
         "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
         "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 621,
+      "name": "2XKO",
+      "platform": "Windows · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
+      "score": 8.25,
+      "tag": "人气不错",
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -831,34 +831,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 9,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 121,
       "name": "Forza Motorsport 6: Apex",
       "platform": "Windows · Racing",
       "cover": "https://www.freetogame.com/g/121/thumbnail.jpg",
-      "score": 8.950000000000001,
+      "score": 9,
       "tag": "高人气",
       "description": "A free-to-play MMO racing game that comes from makers of one of the most popular video game racing series ever. ",
       "releaseDate": "2015-09-15",
@@ -872,6 +849,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GT 740 AMD Radeon R7 250X",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 8.950000000000001,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -923,34 +923,11 @@
       }
     },
     {
-      "id": 625,
-      "name": "Superball",
-      "platform": "Windows · Sports",
-      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
-      "score": 8.8,
-      "tag": "人气不错",
-      "description": "A free-to-play futuristic sports game.",
-      "releaseDate": "2025-10-28",
-      "publisher": "Logoi Games",
-      "developer": "Pathea Games",
-      "gameUrl": "https://www.freetogame.com/open/superball",
-      "profileUrl": "https://www.freetogame.com/superball",
-      "systemRequirements": {
-        "os": " Windows 7+ / 8.1 / 10 64 bit",
-        "processor": "Intel Core i5-4590",
-        "memory": " 8 GB RAM",
-        "graphics": "Nvidia GeForce GTX760",
-        "storage": "15 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 540,
       "name": "Overwatch 2",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.75,
+      "score": 8.8,
       "tag": "人气不错",
       "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
       "releaseDate": "2022-10-04",
@@ -964,6 +941,29 @@
         "memory": "6 GB RAM",
         "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
         "storage": "50 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 625,
+      "name": "Superball",
+      "platform": "Windows · Sports",
+      "cover": "https://www.freetogame.com/g/625/thumbnail.jpg",
+      "score": 8.75,
+      "tag": "人气不错",
+      "description": "A free-to-play futuristic sports game.",
+      "releaseDate": "2025-10-28",
+      "publisher": "Logoi Games",
+      "developer": "Pathea Games",
+      "gameUrl": "https://www.freetogame.com/open/superball",
+      "profileUrl": "https://www.freetogame.com/superball",
+      "systemRequirements": {
+        "os": " Windows 7+ / 8.1 / 10 64 bit",
+        "processor": "Intel Core i5-4590",
+        "memory": " 8 GB RAM",
+        "graphics": "Nvidia GeForce GTX760",
+        "storage": "15 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1153,34 +1153,11 @@
       }
     },
     {
-      "id": 621,
-      "name": "2XKO",
-      "platform": "Windows · Fighting",
-      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
-      "score": 8.3,
-      "tag": "人气不错",
-      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
-      "releaseDate": "2025-10-07",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/2xko",
-      "profileUrl": "https://www.freetogame.com/2xko",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel: i7-4790",
-        "memory": "8GB",
-        "graphics": "NVidia: GTX 960 @1080p",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 599,
       "name": "Marvel Rivals",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.25,
+      "score": 8.3,
       "tag": "人气不错",
       "description": "A free-to-play superhero team shooter from NetEase.",
       "releaseDate": "2024-12-06",
@@ -1194,6 +1171,29 @@
         "memory": "16 GB RAM",
         "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
         "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 621,
+      "name": "2XKO",
+      "platform": "Windows · Fighting",
+      "cover": "https://www.freetogame.com/g/621/thumbnail.jpg",
+      "score": 8.25,
+      "tag": "人气不错",
+      "description": "A free-to-play 2v2 fighting game set in the League of Legends universe.",
+      "releaseDate": "2025-10-07",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/2xko",
+      "profileUrl": "https://www.freetogame.com/2xko",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel: i7-4790",
+        "memory": "8GB",
+        "graphics": "NVidia: GTX 960 @1080p",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
