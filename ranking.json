@@ -438,34 +438,11 @@
       }
     },
     {
-      "id": 575,
-      "name": "One Punch Man: World",
-      "platform": "Windows · Action Game",
-      "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.350000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
-      "releaseDate": "2024-01-31",
-      "publisher": "Perfect World Games",
-      "developer": "Crunchyroll",
-      "gameUrl": "https://www.freetogame.com/open/one-punch-man-world",
-      "profileUrl": "https://www.freetogame.com/one-punch-man-world",
-      "systemRequirements": {
-        "os": "Windows 7 SP1 (64-bit)",
-        "processor": "Intel Core i5 or equivalent",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 9,
       "name": "World of Warships",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 8.3,
+      "score": 8.350000000000001,
       "tag": "人气不错",
       "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
       "releaseDate": "2015-07-02",
@@ -488,7 +465,7 @@
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.25,
+      "score": 8.3,
       "tag": "人气不错",
       "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
       "releaseDate": "2021-06-09",
@@ -502,6 +479,29 @@
         "memory": "8 GB",
         "graphics": "GeForce GTX 950 or Radeon R9 285",
         "storage": "100 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 575,
+      "name": "One Punch Man: World",
+      "platform": "Windows · Action Game",
+      "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
+      "score": 8.25,
+      "tag": "人气不错",
+      "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
+      "releaseDate": "2024-01-31",
+      "publisher": "Perfect World Games",
+      "developer": "Crunchyroll",
+      "gameUrl": "https://www.freetogame.com/open/one-punch-man-world",
+      "profileUrl": "https://www.freetogame.com/one-punch-man-world",
+      "systemRequirements": {
+        "os": "Windows 7 SP1 (64-bit)",
+        "processor": "Intel Core i5 or equivalent",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -599,34 +599,11 @@
       }
     },
     {
-      "id": 2,
-      "name": "World of Tanks",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
-      "score": 8,
-      "tag": "人气不错",
-      "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
-      "releaseDate": "2011-04-12",
-      "publisher": "Wargaming",
-      "developer": "Wargaming",
-      "gameUrl": "https://www.freetogame.com/open/world-of-tanks",
-      "profileUrl": "https://www.freetogame.com/world-of-tanks",
-      "systemRequirements": {
-        "os": "Windows XP / Vista / 7 / 8",
-        "processor": "Intel Pentium 4 2.2 GHz",
-        "memory": "2 GB",
-        "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
-        "storage": "16 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 588,
       "name": "Vigor",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
-      "score": 7.950000000000001,
+      "score": 8,
       "tag": "人气不错",
       "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
       "releaseDate": "2024-09-18",
@@ -640,6 +617,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
         "storage": "18 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 2,
+      "name": "World of Tanks",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
+      "score": 7.950000000000001,
+      "tag": "人气不错",
+      "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
+      "releaseDate": "2011-04-12",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-tanks",
+      "profileUrl": "https://www.freetogame.com/world-of-tanks",
+      "systemRequirements": {
+        "os": "Windows XP / Vista / 7 / 8",
+        "processor": "Intel Pentium 4 2.2 GHz",
+        "memory": "2 GB",
+        "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
+        "storage": "16 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1130,34 +1130,11 @@
       }
     },
     {
-      "id": 575,
-      "name": "One Punch Man: World",
-      "platform": "Windows · Action Game",
-      "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.350000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
-      "releaseDate": "2024-01-31",
-      "publisher": "Perfect World Games",
-      "developer": "Crunchyroll",
-      "gameUrl": "https://www.freetogame.com/open/one-punch-man-world",
-      "profileUrl": "https://www.freetogame.com/one-punch-man-world",
-      "systemRequirements": {
-        "os": "Windows 7 SP1 (64-bit)",
-        "processor": "Intel Core i5 or equivalent",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 9,
       "name": "World of Warships",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 8.3,
+      "score": 8.350000000000001,
       "tag": "人气不错",
       "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
       "releaseDate": "2015-07-02",
@@ -1180,7 +1157,7 @@
       "name": "Phantasy Star Online 2 New Genesis",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/511/thumbnail.jpg",
-      "score": 8.25,
+      "score": 8.3,
       "tag": "人气不错",
       "description": "The legacy of Phantasy Star Online 2 continues a thousand years later!",
       "releaseDate": "2021-06-09",
@@ -1194,6 +1171,29 @@
         "memory": "8 GB",
         "graphics": "GeForce GTX 950 or Radeon R9 285",
         "storage": "100 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 575,
+      "name": "One Punch Man: World",
+      "platform": "Windows · Action Game",
+      "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
+      "score": 8.25,
+      "tag": "人气不错",
+      "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
+      "releaseDate": "2024-01-31",
+      "publisher": "Perfect World Games",
+      "developer": "Crunchyroll",
+      "gameUrl": "https://www.freetogame.com/open/one-punch-man-world",
+      "profileUrl": "https://www.freetogame.com/one-punch-man-world",
+      "systemRequirements": {
+        "os": "Windows 7 SP1 (64-bit)",
+        "processor": "Intel Core i5 or equivalent",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1291,34 +1291,11 @@
       }
     },
     {
-      "id": 2,
-      "name": "World of Tanks",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
-      "score": 8,
-      "tag": "人气不错",
-      "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
-      "releaseDate": "2011-04-12",
-      "publisher": "Wargaming",
-      "developer": "Wargaming",
-      "gameUrl": "https://www.freetogame.com/open/world-of-tanks",
-      "profileUrl": "https://www.freetogame.com/world-of-tanks",
-      "systemRequirements": {
-        "os": "Windows XP / Vista / 7 / 8",
-        "processor": "Intel Pentium 4 2.2 GHz",
-        "memory": "2 GB",
-        "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
-        "storage": "16 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 588,
       "name": "Vigor",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/588/thumbnail.jpg",
-      "score": 7.950000000000001,
+      "score": 8,
       "tag": "人气不错",
       "description": "A free-to-play looter shooter from the developers of Operation Flashpoint and the Arma series.",
       "releaseDate": "2024-09-18",
@@ -1332,6 +1309,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA GeForce GTX 680 / AMD Radeon R9 280",
         "storage": "18 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 2,
+      "name": "World of Tanks",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/2/thumbnail2.jpg",
+      "score": 7.950000000000001,
+      "tag": "人气不错",
+      "description": "If you like blowing up tanks, with a quick and intense game style you will love this game!",
+      "releaseDate": "2011-04-12",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-tanks",
+      "profileUrl": "https://www.freetogame.com/world-of-tanks",
+      "systemRequirements": {
+        "os": "Windows XP / Vista / 7 / 8",
+        "processor": "Intel Pentium 4 2.2 GHz",
+        "memory": "2 GB",
+        "graphics": "Nvidia GeForce 6800 / ATI X1800 with 256 mb ram",
+        "storage": "16 GB",
         "source": "freetogame",
         "steamRaw": null
       }
