@@ -323,34 +323,11 @@
       }
     },
     {
-      "id": 185,
-      "name": "Eldevin",
-      "platform": "Windows, Web Browser · MMORPG",
-      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A indie story-driven Free to Play MMORPG.",
-      "releaseDate": "2014-11-05",
-      "publisher": "Hunted Cow Studios",
-      "developer": "Hunted Cow Studios",
-      "gameUrl": "https://www.freetogame.com/open/eldevin",
-      "profileUrl": "https://www.freetogame.com/eldevin",
-      "systemRequirements": {
-        "os": "Windows XP, Vista, 7, 8",
-        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
-        "memory": " 2 GB",
-        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
-        "storage": "1 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 575,
       "name": "One Punch Man: World",
       "platform": "Windows · Action Game",
       "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
       "releaseDate": "2024-01-31",
@@ -364,6 +341,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
         "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 185,
+      "name": "Eldevin",
+      "platform": "Windows, Web Browser · MMORPG",
+      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "A indie story-driven Free to Play MMORPG.",
+      "releaseDate": "2014-11-05",
+      "publisher": "Hunted Cow Studios",
+      "developer": "Hunted Cow Studios",
+      "gameUrl": "https://www.freetogame.com/open/eldevin",
+      "profileUrl": "https://www.freetogame.com/eldevin",
+      "systemRequirements": {
+        "os": "Windows XP, Vista, 7, 8",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
+        "memory": " 2 GB",
+        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
+        "storage": "1 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -438,34 +438,11 @@
       }
     },
     {
-      "id": 540,
-      "name": "Overwatch 2",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.350000000000001,
-      "tag": "人气不错",
-      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
-      "releaseDate": "2022-10-04",
-      "publisher": "Activision Blizzard",
-      "developer": "Blizzard Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit ",
-        "processor": "Intel Core i3 or AMD Phenom X3 8650",
-        "memory": "6 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
-        "storage": "50 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 630,
       "name": "My Hero Ultra Rumble",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/630/thumbnail.jpg",
-      "score": 8.3,
+      "score": 8.350000000000001,
       "tag": "人气不错",
       "description": "A free-to-play 24-person battle royale based on My Hero Academia.",
       "releaseDate": "2023-09-28",
@@ -479,6 +456,29 @@
         "memory": "4 GB RAM",
         "graphics": "AMD Radeon HD 7770 / Nvidia GeForce GTX 650 Ti",
         "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 540,
+      "name": "Overwatch 2",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
+      "score": 8.3,
+      "tag": "人气不错",
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -507,34 +507,11 @@
       }
     },
     {
-      "id": 567,
-      "name": "Microvolts: Recharged",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.200000000000001,
-      "tag": "人气不错",
-      "description": "A lobby-based third-person shooter with a toy-theme.",
-      "releaseDate": "2023-09-08",
-      "publisher": "Masangsoft",
-      "developer": "Masangsoft",
-      "gameUrl": "https://www.freetogame.com/open/microvolts",
-      "profileUrl": "https://www.freetogame.com/microvolts",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
-        "memory": "4 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
-        "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 628,
       "name": "World of Sea Battle",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/628/thumbnail.jpg",
-      "score": 8.15,
+      "score": 8.200000000000001,
       "tag": "人气不错",
       "description": "A free-to-play historical open-sea MMORPG.",
       "releaseDate": "2025-10-21",
@@ -548,6 +525,29 @@
         "memory": "2 GB RAM",
         "graphics": "GeForce GTX 460 1GB or AMD Radeon",
         "storage": "1 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 567,
+      "name": "Microvolts: Recharged",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
+      "score": 8.15,
+      "tag": "人气不错",
+      "description": "A lobby-based third-person shooter with a toy-theme.",
+      "releaseDate": "2023-09-08",
+      "publisher": "Masangsoft",
+      "developer": "Masangsoft",
+      "gameUrl": "https://www.freetogame.com/open/microvolts",
+      "profileUrl": "https://www.freetogame.com/microvolts",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
+        "storage": "4 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -668,24 +668,24 @@
       }
     },
     {
-      "id": 529,
-      "name": "Tower of Fantasy",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/529/thumbnail.jpg",
+      "id": 23,
+      "name": "Apex Legends",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/23/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "description": "Tower of Fantasy is a 3D open-world RPG, anime-style sci-fi MMO RPG game with unique characters and beautiful open vistas!",
-      "releaseDate": "2022-08-10",
-      "publisher": "Level Infinite",
-      "developer": "Hotta Studio",
-      "gameUrl": "https://www.freetogame.com/open/tower-of-fantasy",
-      "profileUrl": "https://www.freetogame.com/tower-of-fantasy",
+      "description": "A free-to-play strategic battle royale game featuring 60-player matches and team-based play. ",
+      "releaseDate": "2019-02-04",
+      "publisher": "Electronic Arts",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/apex-legends",
+      "profileUrl": "https://www.freetogame.com/apex-legends",
       "systemRequirements": {
-        "os": "Windows 7 SP1 64-bit",
-        "processor": "Intel Core i5 or equivalent",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GT 1030",
-        "storage": "25 GB",
+        "os": "64-bit Windows 10",
+        "processor": "Intel Core i3-6300 3.8GHz / AMD FX-4350 4.2 GHz Quad-Core Processor",
+        "memory": "6GB",
+        "graphics": "NVIDIA GeForce GT 640 / Radeon HD 7700",
+        "storage": "Minimum 30 GB of free space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1015,34 +1015,11 @@
       }
     },
     {
-      "id": 185,
-      "name": "Eldevin",
-      "platform": "Windows, Web Browser · MMORPG",
-      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A indie story-driven Free to Play MMORPG.",
-      "releaseDate": "2014-11-05",
-      "publisher": "Hunted Cow Studios",
-      "developer": "Hunted Cow Studios",
-      "gameUrl": "https://www.freetogame.com/open/eldevin",
-      "profileUrl": "https://www.freetogame.com/eldevin",
-      "systemRequirements": {
-        "os": "Windows XP, Vista, 7, 8",
-        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
-        "memory": " 2 GB",
-        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
-        "storage": "1 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 575,
       "name": "One Punch Man: World",
       "platform": "Windows · Action Game",
       "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
       "releaseDate": "2024-01-31",
@@ -1056,6 +1033,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
         "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 185,
+      "name": "Eldevin",
+      "platform": "Windows, Web Browser · MMORPG",
+      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "A indie story-driven Free to Play MMORPG.",
+      "releaseDate": "2014-11-05",
+      "publisher": "Hunted Cow Studios",
+      "developer": "Hunted Cow Studios",
+      "gameUrl": "https://www.freetogame.com/open/eldevin",
+      "profileUrl": "https://www.freetogame.com/eldevin",
+      "systemRequirements": {
+        "os": "Windows XP, Vista, 7, 8",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
+        "memory": " 2 GB",
+        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
+        "storage": "1 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1130,34 +1130,11 @@
       }
     },
     {
-      "id": 540,
-      "name": "Overwatch 2",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
-      "score": 8.350000000000001,
-      "tag": "人气不错",
-      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
-      "releaseDate": "2022-10-04",
-      "publisher": "Activision Blizzard",
-      "developer": "Blizzard Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
-      "profileUrl": "https://www.freetogame.com/overwatch-2",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit ",
-        "processor": "Intel Core i3 or AMD Phenom X3 8650",
-        "memory": "6 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
-        "storage": "50 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 630,
       "name": "My Hero Ultra Rumble",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/630/thumbnail.jpg",
-      "score": 8.3,
+      "score": 8.350000000000001,
       "tag": "人气不错",
       "description": "A free-to-play 24-person battle royale based on My Hero Academia.",
       "releaseDate": "2023-09-28",
@@ -1171,6 +1148,29 @@
         "memory": "4 GB RAM",
         "graphics": "AMD Radeon HD 7770 / Nvidia GeForce GTX 650 Ti",
         "storage": "10 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 540,
+      "name": "Overwatch 2",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/540/thumbnail.jpg",
+      "score": 8.3,
+      "tag": "人气不错",
+      "description": "A hero-focused first-person team shooter from Blizzard Entertainment.",
+      "releaseDate": "2022-10-04",
+      "publisher": "Activision Blizzard",
+      "developer": "Blizzard Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/overwatch-2",
+      "profileUrl": "https://www.freetogame.com/overwatch-2",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit ",
+        "processor": "Intel Core i3 or AMD Phenom X3 8650",
+        "memory": "6 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 600 series, AMD Radeon HD 7000 series",
+        "storage": "50 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1199,34 +1199,11 @@
       }
     },
     {
-      "id": 567,
-      "name": "Microvolts: Recharged",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.200000000000001,
-      "tag": "人气不错",
-      "description": "A lobby-based third-person shooter with a toy-theme.",
-      "releaseDate": "2023-09-08",
-      "publisher": "Masangsoft",
-      "developer": "Masangsoft",
-      "gameUrl": "https://www.freetogame.com/open/microvolts",
-      "profileUrl": "https://www.freetogame.com/microvolts",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
-        "memory": "4 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
-        "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 628,
       "name": "World of Sea Battle",
       "platform": "Windows · MMORPG",
       "cover": "https://www.freetogame.com/g/628/thumbnail.jpg",
-      "score": 8.15,
+      "score": 8.200000000000001,
       "tag": "人气不错",
       "description": "A free-to-play historical open-sea MMORPG.",
       "releaseDate": "2025-10-21",
@@ -1240,6 +1217,29 @@
         "memory": "2 GB RAM",
         "graphics": "GeForce GTX 460 1GB or AMD Radeon",
         "storage": "1 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 567,
+      "name": "Microvolts: Recharged",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
+      "score": 8.15,
+      "tag": "人气不错",
+      "description": "A lobby-based third-person shooter with a toy-theme.",
+      "releaseDate": "2023-09-08",
+      "publisher": "Masangsoft",
+      "developer": "Masangsoft",
+      "gameUrl": "https://www.freetogame.com/open/microvolts",
+      "profileUrl": "https://www.freetogame.com/microvolts",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
+        "storage": "4 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1360,24 +1360,24 @@
       }
     },
     {
-      "id": 529,
-      "name": "Tower of Fantasy",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/529/thumbnail.jpg",
+      "id": 23,
+      "name": "Apex Legends",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/23/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "description": "Tower of Fantasy is a 3D open-world RPG, anime-style sci-fi MMO RPG game with unique characters and beautiful open vistas!",
-      "releaseDate": "2022-08-10",
-      "publisher": "Level Infinite",
-      "developer": "Hotta Studio",
-      "gameUrl": "https://www.freetogame.com/open/tower-of-fantasy",
-      "profileUrl": "https://www.freetogame.com/tower-of-fantasy",
+      "description": "A free-to-play strategic battle royale game featuring 60-player matches and team-based play. ",
+      "releaseDate": "2019-02-04",
+      "publisher": "Electronic Arts",
+      "developer": "Electronic Arts",
+      "gameUrl": "https://www.freetogame.com/open/apex-legends",
+      "profileUrl": "https://www.freetogame.com/apex-legends",
       "systemRequirements": {
-        "os": "Windows 7 SP1 64-bit",
-        "processor": "Intel Core i5 or equivalent",
-        "memory": "8 GB RAM",
-        "graphics": "NVIDIA GeForce GT 1030",
-        "storage": "25 GB",
+        "os": "64-bit Windows 10",
+        "processor": "Intel Core i3-6300 3.8GHz / AMD FX-4350 4.2 GHz Quad-Core Processor",
+        "memory": "6GB",
+        "graphics": "NVIDIA GeForce GT 640 / Radeon HD 7700",
+        "storage": "Minimum 30 GB of free space",
         "source": "freetogame",
         "steamRaw": null
       }
