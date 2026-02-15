@@ -162,34 +162,11 @@
       }
     },
     {
-      "id": 5,
-      "name": "Crossout",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
-      "score": 8.950000000000001,
-      "tag": "高人气",
-      "description": "A post-apocalyptic MMO vehicle combat game! ",
-      "releaseDate": "2017-05-30",
-      "publisher": "Targem",
-      "developer": "Gaijin",
-      "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout",
-      "systemRequirements": {
-        "os": null,
-        "processor": null,
-        "memory": null,
-        "graphics": null,
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 466,
       "name": "Valorant",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.9,
+      "score": 8.950000000000001,
       "tag": "高人气",
       "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
       "releaseDate": "2020-06-02",
@@ -212,7 +189,7 @@
       "name": "Call of Duty: Warzone",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
       "releaseDate": "2020-03-10",
@@ -226,6 +203,29 @@
         "memory": "8GB RAM",
         "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
         "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 5,
+      "name": "Crossout",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -854,34 +854,11 @@
       }
     },
     {
-      "id": 5,
-      "name": "Crossout",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
-      "score": 8.950000000000001,
-      "tag": "高人气",
-      "description": "A post-apocalyptic MMO vehicle combat game! ",
-      "releaseDate": "2017-05-30",
-      "publisher": "Targem",
-      "developer": "Gaijin",
-      "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout",
-      "systemRequirements": {
-        "os": null,
-        "processor": null,
-        "memory": null,
-        "graphics": null,
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 466,
       "name": "Valorant",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.9,
+      "score": 8.950000000000001,
       "tag": "高人气",
       "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
       "releaseDate": "2020-06-02",
@@ -904,7 +881,7 @@
       "name": "Call of Duty: Warzone",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
       "releaseDate": "2020-03-10",
@@ -918,6 +895,29 @@
         "memory": "8GB RAM",
         "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
         "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 5,
+      "name": "Crossout",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
