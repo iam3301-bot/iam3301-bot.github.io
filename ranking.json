@@ -1663,7 +1663,7 @@
     {
       "id": 619,
       "name": "Blade & Soul Heroes",
-      "platform": "Windows · MMORPG",
+      "platform": "PC (Windows) · MMORPG",
       "cover": "https://www.freetogame.com/g/619/thumbnail.jpg",
       "score": 8.4,
       "tag": "最近上线",
@@ -1673,15 +1673,7 @@
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
       "profileUrl": "https://www.freetogame.com/blade-soul-heroes",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit v1607+",
-        "processor": "Intel i5-6500 or AMD Ryzen 5 1600",
-        "memory": "8 GB RAM",
-        "graphics": "GeForce GTX 1060 3G or AMD Radeon RX 480 8G or INTEL® Arc A380 (6GB, Alchemist)",
-        "storage": "35 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
+      "systemRequirements": null
     },
     {
       "id": 616,
@@ -2355,7 +2347,7 @@
     {
       "id": 619,
       "name": "Blade & Soul Heroes",
-      "platform": "Windows · MMORPG",
+      "platform": "PC (Windows) · MMORPG",
       "cover": "https://www.freetogame.com/g/619/thumbnail.jpg",
       "score": 8.4,
       "tag": "最近上线",
@@ -2365,15 +2357,7 @@
       "developer": "NCSoft",
       "gameUrl": "https://www.freetogame.com/open/blade-soul-heroes",
       "profileUrl": "https://www.freetogame.com/blade-soul-heroes",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit v1607+",
-        "processor": "Intel i5-6500 or AMD Ryzen 5 1600",
-        "memory": "8 GB RAM",
-        "graphics": "GeForce GTX 1060 3G or AMD Radeon RX 480 8G or INTEL® Arc A380 (6GB, Alchemist)",
-        "storage": "35 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
+      "systemRequirements": null
     },
     {
       "id": 616,
