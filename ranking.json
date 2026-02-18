@@ -185,34 +185,11 @@
       }
     },
     {
-      "id": 5,
-      "name": "Crossout",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
-      "score": 8.9,
-      "tag": "高人气",
-      "description": "A post-apocalyptic MMO vehicle combat game! ",
-      "releaseDate": "2017-05-30",
-      "publisher": "Targem",
-      "developer": "Gaijin",
-      "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout",
-      "systemRequirements": {
-        "os": null,
-        "processor": null,
-        "memory": null,
-        "graphics": null,
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 599,
       "name": "Marvel Rivals",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A free-to-play superhero team shooter from NetEase.",
       "releaseDate": "2024-12-06",
@@ -226,6 +203,29 @@
         "memory": "16 GB RAM",
         "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
         "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 5,
+      "name": "Crossout",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -277,34 +277,11 @@
       }
     },
     {
-      "id": 623,
-      "name": "Raven2",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
-      "score": 8.700000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play open-world MMORPG.",
-      "releaseDate": "2025-10-22",
-      "publisher": "Netmarble",
-      "developer": "Netmarble",
-      "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit) or later",
-        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
-        "memory": "16 GB",
-        "graphics": "GTX 960",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.65,
+      "score": 8.700000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -318,6 +295,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA GTX 660 or AMD Radeon HD 7950",
         "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 623,
+      "name": "Raven2",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
+      "score": 8.65,
+      "tag": "人气不错",
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -877,34 +877,11 @@
       }
     },
     {
-      "id": 5,
-      "name": "Crossout",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
-      "score": 8.9,
-      "tag": "高人气",
-      "description": "A post-apocalyptic MMO vehicle combat game! ",
-      "releaseDate": "2017-05-30",
-      "publisher": "Targem",
-      "developer": "Gaijin",
-      "gameUrl": "https://www.freetogame.com/open/crossout",
-      "profileUrl": "https://www.freetogame.com/crossout",
-      "systemRequirements": {
-        "os": null,
-        "processor": null,
-        "memory": null,
-        "graphics": null,
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 599,
       "name": "Marvel Rivals",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/599/thumbnail.jpg",
-      "score": 8.850000000000001,
+      "score": 8.9,
       "tag": "高人气",
       "description": "A free-to-play superhero team shooter from NetEase.",
       "releaseDate": "2024-12-06",
@@ -918,6 +895,29 @@
         "memory": "16 GB RAM",
         "graphics": "NVIDIA GeForce GTX 1060 / AMD RX 580 / Intel Arc A380",
         "storage": "70 GB available space (SSD Preferred)",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 5,
+      "name": "Crossout",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/5/thumbnail.jpg",
+      "score": 8.850000000000001,
+      "tag": "高人气",
+      "description": "A post-apocalyptic MMO vehicle combat game! ",
+      "releaseDate": "2017-05-30",
+      "publisher": "Targem",
+      "developer": "Gaijin",
+      "gameUrl": "https://www.freetogame.com/open/crossout",
+      "profileUrl": "https://www.freetogame.com/crossout",
+      "systemRequirements": {
+        "os": null,
+        "processor": null,
+        "memory": null,
+        "graphics": null,
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
@@ -969,34 +969,11 @@
       }
     },
     {
-      "id": 623,
-      "name": "Raven2",
-      "platform": "Windows · MMORPG",
-      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
-      "score": 8.700000000000001,
-      "tag": "人气不错",
-      "description": "A free-to-play open-world MMORPG.",
-      "releaseDate": "2025-10-22",
-      "publisher": "Netmarble",
-      "developer": "Netmarble",
-      "gameUrl": "https://www.freetogame.com/open/raven2",
-      "profileUrl": "https://www.freetogame.com/raven2",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit) or later",
-        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
-        "memory": "16 GB",
-        "graphics": "GTX 960",
-        "storage": null,
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 523,
       "name": "Fall Guys",
       "platform": "Windows · Battle Royale",
       "cover": "https://www.freetogame.com/g/523/thumbnail.jpg",
-      "score": 8.65,
+      "score": 8.700000000000001,
       "tag": "人气不错",
       "description": "Play the most competitive massively multiplayer party royale game featuring beans ever for free on a variety of platforms. ",
       "releaseDate": "2020-08-04",
@@ -1010,6 +987,29 @@
         "memory": "8 GB RAM",
         "graphics": "NVIDIA GTX 660 or AMD Radeon HD 7950",
         "storage": "2 GB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 623,
+      "name": "Raven2",
+      "platform": "Windows · MMORPG",
+      "cover": "https://www.freetogame.com/g/623/thumbnail.jpg",
+      "score": 8.65,
+      "tag": "人气不错",
+      "description": "A free-to-play open-world MMORPG.",
+      "releaseDate": "2025-10-22",
+      "publisher": "Netmarble",
+      "developer": "Netmarble",
+      "gameUrl": "https://www.freetogame.com/open/raven2",
+      "profileUrl": "https://www.freetogame.com/raven2",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit) or later",
+        "processor": "Intel i5 (3.0GHz) / Ryzen 5 (3.0GHz) or higher",
+        "memory": "16 GB",
+        "graphics": "GTX 960",
+        "storage": null,
         "source": "freetogame",
         "steamRaw": null
       }
