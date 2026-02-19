@@ -323,34 +323,11 @@
       }
     },
     {
-      "id": 185,
-      "name": "Eldevin",
-      "platform": "Windows, Web Browser · MMORPG",
-      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A indie story-driven Free to Play MMORPG.",
-      "releaseDate": "2014-11-05",
-      "publisher": "Hunted Cow Studios",
-      "developer": "Hunted Cow Studios",
-      "gameUrl": "https://www.freetogame.com/open/eldevin",
-      "profileUrl": "https://www.freetogame.com/eldevin",
-      "systemRequirements": {
-        "os": "Windows XP, Vista, 7, 8",
-        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
-        "memory": " 2 GB",
-        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
-        "storage": "1 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 508,
       "name": "Enlisted",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
       "releaseDate": "2021-04-08",
@@ -364,6 +341,29 @@
         "memory": "8 GB",
         "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
         "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 185,
+      "name": "Eldevin",
+      "platform": "Windows, Web Browser · MMORPG",
+      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "A indie story-driven Free to Play MMORPG.",
+      "releaseDate": "2014-11-05",
+      "publisher": "Hunted Cow Studios",
+      "developer": "Hunted Cow Studios",
+      "gameUrl": "https://www.freetogame.com/open/eldevin",
+      "profileUrl": "https://www.freetogame.com/eldevin",
+      "systemRequirements": {
+        "os": "Windows XP, Vista, 7, 8",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
+        "memory": " 2 GB",
+        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
+        "storage": "1 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -553,34 +553,11 @@
       }
     },
     {
-      "id": 9,
-      "name": "World of Warships",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 8.100000000000001,
-      "tag": "人气不错",
-      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
-      "releaseDate": "2015-07-02",
-      "publisher": "Wargaming",
-      "developer": "Wargaming",
-      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
-      "profileUrl": "https://www.freetogame.com/world-of-warships",
-      "systemRequirements": {
-        "os": "Windows XP, Windows Vista, or Windows 7",
-        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
-        "memory": "4GB DDR2",
-        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
-        "storage": "30 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 437,
       "name": "Stay Out",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/437/thumbnail.jpg",
-      "score": 8.05,
+      "score": 8.100000000000001,
       "tag": "人气不错",
       "description": "An MMORPG featuring urban exploration and shooter elements.",
       "releaseDate": "2019-11-27",
@@ -594,6 +571,29 @@
         "memory": "8000 MB RAM",
         "graphics": "GeForce 1050Ti / AMD RX570 with 3Gb memory",
         "storage": "7000 MB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 9,
+      "name": "World of Warships",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
+      "score": 8.05,
+      "tag": "人气不错",
+      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
+      "releaseDate": "2015-07-02",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
+      "profileUrl": "https://www.freetogame.com/world-of-warships",
+      "systemRequirements": {
+        "os": "Windows XP, Windows Vista, or Windows 7",
+        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
+        "memory": "4GB DDR2",
+        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
+        "storage": "30 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -668,24 +668,24 @@
       }
     },
     {
-      "id": 584,
-      "name": "Once Human",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg",
+      "id": 517,
+      "name": "Lost Ark",
+      "platform": "Windows · ARPG",
+      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "description": "A post-apocalyptic open-world survival game from Starry Studio.",
-      "releaseDate": "2024-07-09",
-      "publisher": "Starry Studio",
-      "developer": "Starry Studio",
-      "gameUrl": "https://www.freetogame.com/open/once-human",
-      "profileUrl": "https://www.freetogame.com/once-human",
+      "description": "Smilegate’s free-to-play multiplayer ARPG is a massive adventure filled with lands waiting to be explored, people waiting to be met, and an ancient evil waiting to be destroyed.",
+      "releaseDate": "2022-02-11",
+      "publisher": "Amazon Games",
+      "developer": "Smilegate RPG",
+      "gameUrl": "https://www.freetogame.com/open/lost-ark",
+      "profileUrl": "https://www.freetogame.com/lost-ark",
       "systemRequirements": {
-        "os": "Windows 10 64-bit",
-        "processor": "Intedl Core i5-4460",
-        "memory": "8 GB",
-        "graphics": "Nvidia GTX 750ti 4G / AMD Radeon RX550",
-        "storage": "60 GB",
+        "os": "Windows 10 (64-bit only)",
+        "processor": "Intel i3 or AMD Ryzen 3",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460 / AMD HD6850",
+        "storage": "50 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1015,34 +1015,11 @@
       }
     },
     {
-      "id": 185,
-      "name": "Eldevin",
-      "platform": "Windows, Web Browser · MMORPG",
-      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
-      "score": 8.600000000000001,
-      "tag": "人气不错",
-      "description": "A indie story-driven Free to Play MMORPG.",
-      "releaseDate": "2014-11-05",
-      "publisher": "Hunted Cow Studios",
-      "developer": "Hunted Cow Studios",
-      "gameUrl": "https://www.freetogame.com/open/eldevin",
-      "profileUrl": "https://www.freetogame.com/eldevin",
-      "systemRequirements": {
-        "os": "Windows XP, Vista, 7, 8",
-        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
-        "memory": " 2 GB",
-        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
-        "storage": "1 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 508,
       "name": "Enlisted",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.600000000000001,
       "tag": "人气不错",
       "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
       "releaseDate": "2021-04-08",
@@ -1056,6 +1033,29 @@
         "memory": "8 GB",
         "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
         "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 185,
+      "name": "Eldevin",
+      "platform": "Windows, Web Browser · MMORPG",
+      "cover": "https://www.freetogame.com/g/185/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "A indie story-driven Free to Play MMORPG.",
+      "releaseDate": "2014-11-05",
+      "publisher": "Hunted Cow Studios",
+      "developer": "Hunted Cow Studios",
+      "gameUrl": "https://www.freetogame.com/open/eldevin",
+      "profileUrl": "https://www.freetogame.com/eldevin",
+      "systemRequirements": {
+        "os": "Windows XP, Vista, 7, 8",
+        "processor": "Intel® Core™ 2 Duo E6600 or AMD Phenom™ X3 8750 processor or better ",
+        "memory": " 2 GB",
+        "graphics": "Graphics Card Recommended. (OpenGL 3.0 support and above) ",
+        "storage": "1 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1245,34 +1245,11 @@
       }
     },
     {
-      "id": 9,
-      "name": "World of Warships",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 8.100000000000001,
-      "tag": "人气不错",
-      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
-      "releaseDate": "2015-07-02",
-      "publisher": "Wargaming",
-      "developer": "Wargaming",
-      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
-      "profileUrl": "https://www.freetogame.com/world-of-warships",
-      "systemRequirements": {
-        "os": "Windows XP, Windows Vista, or Windows 7",
-        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
-        "memory": "4GB DDR2",
-        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
-        "storage": "30 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 437,
       "name": "Stay Out",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/437/thumbnail.jpg",
-      "score": 8.05,
+      "score": 8.100000000000001,
       "tag": "人气不错",
       "description": "An MMORPG featuring urban exploration and shooter elements.",
       "releaseDate": "2019-11-27",
@@ -1286,6 +1263,29 @@
         "memory": "8000 MB RAM",
         "graphics": "GeForce 1050Ti / AMD RX570 with 3Gb memory",
         "storage": "7000 MB available space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 9,
+      "name": "World of Warships",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
+      "score": 8.05,
+      "tag": "人气不错",
+      "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
+      "releaseDate": "2015-07-02",
+      "publisher": "Wargaming",
+      "developer": "Wargaming",
+      "gameUrl": "https://www.freetogame.com/open/world-of-warships",
+      "profileUrl": "https://www.freetogame.com/world-of-warships",
+      "systemRequirements": {
+        "os": "Windows XP, Windows Vista, or Windows 7",
+        "processor": "Core2 Duo E6750 (Pentium 4 2.4GHz or Athlon XP 3100+)",
+        "memory": "4GB DDR2",
+        "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
+        "storage": "30 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1360,24 +1360,24 @@
       }
     },
     {
-      "id": 584,
-      "name": "Once Human",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/584/thumbnail.jpg",
+      "id": 517,
+      "name": "Lost Ark",
+      "platform": "Windows · ARPG",
+      "cover": "https://www.freetogame.com/g/517/thumbnail.jpg",
       "score": 7.8500000000000005,
       "tag": "人气不错",
-      "description": "A post-apocalyptic open-world survival game from Starry Studio.",
-      "releaseDate": "2024-07-09",
-      "publisher": "Starry Studio",
-      "developer": "Starry Studio",
-      "gameUrl": "https://www.freetogame.com/open/once-human",
-      "profileUrl": "https://www.freetogame.com/once-human",
+      "description": "Smilegate’s free-to-play multiplayer ARPG is a massive adventure filled with lands waiting to be explored, people waiting to be met, and an ancient evil waiting to be destroyed.",
+      "releaseDate": "2022-02-11",
+      "publisher": "Amazon Games",
+      "developer": "Smilegate RPG",
+      "gameUrl": "https://www.freetogame.com/open/lost-ark",
+      "profileUrl": "https://www.freetogame.com/lost-ark",
       "systemRequirements": {
-        "os": "Windows 10 64-bit",
-        "processor": "Intedl Core i5-4460",
-        "memory": "8 GB",
-        "graphics": "Nvidia GTX 750ti 4G / AMD Radeon RX550",
-        "storage": "60 GB",
+        "os": "Windows 10 (64-bit only)",
+        "processor": "Intel i3 or AMD Ryzen 3",
+        "memory": "8 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 460 / AMD HD6850",
+        "storage": "50 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
