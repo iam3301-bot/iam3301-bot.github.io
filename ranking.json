@@ -162,34 +162,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.950000000000001,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 452,
       "name": "Call of Duty: Warzone",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
-      "score": 8.9,
+      "score": 8.950000000000001,
       "tag": "高人气",
       "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
       "releaseDate": "2020-03-10",
@@ -203,6 +180,29 @@
         "memory": "8GB RAM",
         "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
         "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 8.9,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -369,34 +369,11 @@
       }
     },
     {
-      "id": 567,
-      "name": "Microvolts: Recharged",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.5,
-      "tag": "人气不错",
-      "description": "A lobby-based third-person shooter with a toy-theme.",
-      "releaseDate": "2023-09-08",
-      "publisher": "Masangsoft",
-      "developer": "Masangsoft",
-      "gameUrl": "https://www.freetogame.com/open/microvolts",
-      "profileUrl": "https://www.freetogame.com/microvolts",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
-        "memory": "4 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
-        "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 508,
       "name": "Enlisted",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.450000000000001,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
       "releaseDate": "2021-04-08",
@@ -410,6 +387,29 @@
         "memory": "8 GB",
         "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
         "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 567,
+      "name": "Microvolts: Recharged",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
+      "score": 8.450000000000001,
+      "tag": "人气不错",
+      "description": "A lobby-based third-person shooter with a toy-theme.",
+      "releaseDate": "2023-09-08",
+      "publisher": "Masangsoft",
+      "developer": "Masangsoft",
+      "gameUrl": "https://www.freetogame.com/open/microvolts",
+      "profileUrl": "https://www.freetogame.com/microvolts",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
+        "storage": "4 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -507,34 +507,11 @@
       }
     },
     {
-      "id": 637,
-      "name": "Highguard",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
-      "score": 8.200000000000001,
-      "tag": "人气不错",
-      "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
-      "releaseDate": "2026-01-26",
-      "publisher": "Wildlight Entertainment",
-      "developer": "Wildlight Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/highguard",
-      "profileUrl": "https://www.freetogame.com/highguard",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel Core i5-6600K / AMD Ryzen R5 1600",
-        "memory": "8 GB RAM",
-        "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
-        "storage": "25 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 575,
       "name": "One Punch Man: World",
       "platform": "Windows · Action Game",
       "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.15,
+      "score": 8.200000000000001,
       "tag": "人气不错",
       "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
       "releaseDate": "2024-01-31",
@@ -548,6 +525,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
         "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 637,
+      "name": "Highguard",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
+      "score": 8.15,
+      "tag": "人气不错",
+      "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
+      "releaseDate": "2026-01-26",
+      "publisher": "Wildlight Entertainment",
+      "developer": "Wildlight Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/highguard",
+      "profileUrl": "https://www.freetogame.com/highguard",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-6600K / AMD Ryzen R5 1600",
+        "memory": "8 GB RAM",
+        "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
+        "storage": "25 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -645,34 +645,11 @@
       }
     },
     {
-      "id": 636,
-      "name": "Arknights: Endfield",
-      "platform": "Windows · Strategy",
-      "cover": "https://www.freetogame.com/g/636/thumbnail.jpg",
-      "score": 7.9,
-      "tag": "人气不错",
-      "description": "A free-to-play RTS RPG gacha game.",
-      "releaseDate": "2026-01-21",
-      "publisher": "GRYPHLINE",
-      "developer": "Hypergryph",
-      "gameUrl": "https://www.freetogame.com/open/arknights-endfield",
-      "profileUrl": "https://www.freetogame.com/arknights-endfield",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit",
-        "processor": "Intel Core i5-9400F or equivalent ",
-        "memory": "16GB",
-        "graphics": "NVIDIA GeForce GTX 1060 or equivalent",
-        "storage": "50GB free space or higher. (Requires an additional 40GB of free storage for unpacking)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 9,
       "name": "World of Warships",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 7.8500000000000005,
+      "score": 7.9,
       "tag": "人气不错",
       "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
       "releaseDate": "2015-07-02",
@@ -686,6 +663,29 @@
         "memory": "4GB DDR2",
         "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 636,
+      "name": "Arknights: Endfield",
+      "platform": "Windows · Strategy",
+      "cover": "https://www.freetogame.com/g/636/thumbnail.jpg",
+      "score": 7.8500000000000005,
+      "tag": "人气不错",
+      "description": "A free-to-play RTS RPG gacha game.",
+      "releaseDate": "2026-01-21",
+      "publisher": "GRYPHLINE",
+      "developer": "Hypergryph",
+      "gameUrl": "https://www.freetogame.com/open/arknights-endfield",
+      "profileUrl": "https://www.freetogame.com/arknights-endfield",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-9400F or equivalent ",
+        "memory": "16GB",
+        "graphics": "NVIDIA GeForce GTX 1060 or equivalent",
+        "storage": "50GB free space or higher. (Requires an additional 40GB of free storage for unpacking)",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -854,34 +854,11 @@
       }
     },
     {
-      "id": 466,
-      "name": "Valorant",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
-      "score": 8.950000000000001,
-      "tag": "高人气",
-      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
-      "releaseDate": "2020-06-02",
-      "publisher": "Riot Games",
-      "developer": "Riot Games",
-      "gameUrl": "https://www.freetogame.com/open/valorant",
-      "profileUrl": "https://www.freetogame.com/valorant",
-      "systemRequirements": {
-        "os": "Windows 7/8/10",
-        "processor": "Intel Core 2 Duo E8400",
-        "memory": "4 GB RAM",
-        "graphics": "Intel HD 4000",
-        "storage": "?",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 452,
       "name": "Call of Duty: Warzone",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/452/thumbnail.jpg",
-      "score": 8.9,
+      "score": 8.950000000000001,
       "tag": "高人气",
       "description": "A standalone free-to-play battle royale and modes accessible via Call of Duty: Modern Warfare.",
       "releaseDate": "2020-03-10",
@@ -895,6 +872,29 @@
         "memory": "8GB RAM",
         "graphics": "NVIDIA GeForce GTX 670 / GeForce GTX 1650 or Radeon HD 7950",
         "storage": "175GB HD space",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 466,
+      "name": "Valorant",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/466/thumbnail.jpg",
+      "score": 8.9,
+      "tag": "高人气",
+      "description": "Test your mettle in Riot Games’ character-based FPS shooter Valorant.",
+      "releaseDate": "2020-06-02",
+      "publisher": "Riot Games",
+      "developer": "Riot Games",
+      "gameUrl": "https://www.freetogame.com/open/valorant",
+      "profileUrl": "https://www.freetogame.com/valorant",
+      "systemRequirements": {
+        "os": "Windows 7/8/10",
+        "processor": "Intel Core 2 Duo E8400",
+        "memory": "4 GB RAM",
+        "graphics": "Intel HD 4000",
+        "storage": "?",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1061,34 +1061,11 @@
       }
     },
     {
-      "id": 567,
-      "name": "Microvolts: Recharged",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.5,
-      "tag": "人气不错",
-      "description": "A lobby-based third-person shooter with a toy-theme.",
-      "releaseDate": "2023-09-08",
-      "publisher": "Masangsoft",
-      "developer": "Masangsoft",
-      "gameUrl": "https://www.freetogame.com/open/microvolts",
-      "profileUrl": "https://www.freetogame.com/microvolts",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
-        "memory": "4 GB RAM",
-        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
-        "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 508,
       "name": "Enlisted",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.450000000000001,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
       "releaseDate": "2021-04-08",
@@ -1102,6 +1079,29 @@
         "memory": "8 GB",
         "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
         "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 567,
+      "name": "Microvolts: Recharged",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
+      "score": 8.450000000000001,
+      "tag": "人气不错",
+      "description": "A lobby-based third-person shooter with a toy-theme.",
+      "releaseDate": "2023-09-08",
+      "publisher": "Masangsoft",
+      "developer": "Masangsoft",
+      "gameUrl": "https://www.freetogame.com/open/microvolts",
+      "profileUrl": "https://www.freetogame.com/microvolts",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Dual-Core Intel i5 CPU @ 2GHz+",
+        "memory": "4 GB RAM",
+        "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
+        "storage": "4 GB available space",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1199,34 +1199,11 @@
       }
     },
     {
-      "id": 637,
-      "name": "Highguard",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
-      "score": 8.200000000000001,
-      "tag": "人气不错",
-      "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
-      "releaseDate": "2026-01-26",
-      "publisher": "Wildlight Entertainment",
-      "developer": "Wildlight Entertainment",
-      "gameUrl": "https://www.freetogame.com/open/highguard",
-      "profileUrl": "https://www.freetogame.com/highguard",
-      "systemRequirements": {
-        "os": "Windows 10",
-        "processor": "Intel Core i5-6600K / AMD Ryzen R5 1600",
-        "memory": "8 GB RAM",
-        "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
-        "storage": "25 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 575,
       "name": "One Punch Man: World",
       "platform": "Windows · Action Game",
       "cover": "https://www.freetogame.com/g/575/thumbnail.jpg",
-      "score": 8.15,
+      "score": 8.200000000000001,
       "tag": "人气不错",
       "description": "A free-to-play multiplayer 3D action game from Crunchyroll Games.",
       "releaseDate": "2024-01-31",
@@ -1240,6 +1217,29 @@
         "memory": "8 GB",
         "graphics": "NVIDIA GeForce GTX 1060 (3 GB)",
         "storage": null,
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 637,
+      "name": "Highguard",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
+      "score": 8.15,
+      "tag": "人气不错",
+      "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
+      "releaseDate": "2026-01-26",
+      "publisher": "Wildlight Entertainment",
+      "developer": "Wildlight Entertainment",
+      "gameUrl": "https://www.freetogame.com/open/highguard",
+      "profileUrl": "https://www.freetogame.com/highguard",
+      "systemRequirements": {
+        "os": "Windows 10",
+        "processor": "Intel Core i5-6600K / AMD Ryzen R5 1600",
+        "memory": "8 GB RAM",
+        "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
+        "storage": "25 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1337,34 +1337,11 @@
       }
     },
     {
-      "id": 636,
-      "name": "Arknights: Endfield",
-      "platform": "Windows · Strategy",
-      "cover": "https://www.freetogame.com/g/636/thumbnail.jpg",
-      "score": 7.9,
-      "tag": "人气不错",
-      "description": "A free-to-play RTS RPG gacha game.",
-      "releaseDate": "2026-01-21",
-      "publisher": "GRYPHLINE",
-      "developer": "Hypergryph",
-      "gameUrl": "https://www.freetogame.com/open/arknights-endfield",
-      "profileUrl": "https://www.freetogame.com/arknights-endfield",
-      "systemRequirements": {
-        "os": "Windows 10 64-bit",
-        "processor": "Intel Core i5-9400F or equivalent ",
-        "memory": "16GB",
-        "graphics": "NVIDIA GeForce GTX 1060 or equivalent",
-        "storage": "50GB free space or higher. (Requires an additional 40GB of free storage for unpacking)",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 9,
       "name": "World of Warships",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/9/thumbnail.jpg",
-      "score": 7.8500000000000005,
+      "score": 7.9,
       "tag": "人气不错",
       "description": "A 3D free to play naval action-themed MMO from the creators of World of Tanks! ",
       "releaseDate": "2015-07-02",
@@ -1378,6 +1355,29 @@
         "memory": "4GB DDR2",
         "graphics": "GeForce 9600GT (512 Mb) / GeForce 6800 GT or Radeon X800 GT",
         "storage": "30 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 636,
+      "name": "Arknights: Endfield",
+      "platform": "Windows · Strategy",
+      "cover": "https://www.freetogame.com/g/636/thumbnail.jpg",
+      "score": 7.8500000000000005,
+      "tag": "人气不错",
+      "description": "A free-to-play RTS RPG gacha game.",
+      "releaseDate": "2026-01-21",
+      "publisher": "GRYPHLINE",
+      "developer": "Hypergryph",
+      "gameUrl": "https://www.freetogame.com/open/arknights-endfield",
+      "profileUrl": "https://www.freetogame.com/arknights-endfield",
+      "systemRequirements": {
+        "os": "Windows 10 64-bit",
+        "processor": "Intel Core i5-9400F or equivalent ",
+        "memory": "16GB",
+        "graphics": "NVIDIA GeForce GTX 1060 or equivalent",
+        "storage": "50GB free space or higher. (Requires an additional 40GB of free storage for unpacking)",
         "source": "freetogame",
         "steamRaw": null
       }
