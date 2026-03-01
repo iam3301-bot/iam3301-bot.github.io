@@ -346,11 +346,34 @@
       }
     },
     {
+      "id": 508,
+      "name": "Enlisted",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
+      "releaseDate": "2021-04-08",
+      "publisher": "Gaijin Entertainment",
+      "developer": "Darkflow Software",
+      "gameUrl": "https://www.freetogame.com/open/enlisted",
+      "profileUrl": "https://www.freetogame.com/enlisted",
+      "systemRequirements": {
+        "os": "Windows 7 / 8 / 10 64bit",
+        "processor": "Intel Core i3 or better",
+        "memory": "8 GB",
+        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
+        "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
       "id": 614,
       "name": "Dungeon Stalker",
       "platform": "Windows · Dungeon Crawler",
       "cover": "https://www.freetogame.com/g/614/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "A free-to-play dungeon crawler with survival elements.",
       "releaseDate": "2025-08-13",
@@ -373,7 +396,7 @@
       "name": "Microvolts: Recharged",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.5,
+      "score": 8.450000000000001,
       "tag": "人气不错",
       "description": "A lobby-based third-person shooter with a toy-theme.",
       "releaseDate": "2023-09-08",
@@ -387,29 +410,6 @@
         "memory": "4 GB RAM",
         "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
         "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
-      "id": 508,
-      "name": "Enlisted",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.450000000000001,
-      "tag": "人气不错",
-      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
-      "releaseDate": "2021-04-08",
-      "publisher": "Gaijin Entertainment",
-      "developer": "Darkflow Software",
-      "gameUrl": "https://www.freetogame.com/open/enlisted",
-      "profileUrl": "https://www.freetogame.com/enlisted",
-      "systemRequirements": {
-        "os": "Windows 7 / 8 / 10 64bit",
-        "processor": "Intel Core i3 or better",
-        "memory": "8 GB",
-        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
-        "storage": "12GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -484,34 +484,11 @@
       }
     },
     {
-      "id": 537,
-      "name": "Gundam Evolution",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/537/thumbnail.jpg",
-      "score": 8.25,
-      "tag": "人气不错",
-      "description": "A 6v6 team-based shooter based on the Gundam multiverse",
-      "releaseDate": "2022-09-21",
-      "publisher": "Bandai Namco",
-      "developer": "Bandai Namco",
-      "gameUrl": "https://www.freetogame.com/open/gundam-evolution",
-      "profileUrl": "https://www.freetogame.com/gundam-evolution",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit)/Windows 11",
-        "processor": "Intel Core i5-3570",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GTX 1050",
-        "storage": "40 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 637,
       "name": "Highguard",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
-      "score": 8.200000000000001,
+      "score": 8.25,
       "tag": "人气不错",
       "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
       "releaseDate": "2026-01-26",
@@ -525,6 +502,29 @@
         "memory": "8 GB RAM",
         "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
         "storage": "25 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 537,
+      "name": "Gundam Evolution",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/537/thumbnail.jpg",
+      "score": 8.200000000000001,
+      "tag": "人气不错",
+      "description": "A 6v6 team-based shooter based on the Gundam multiverse",
+      "releaseDate": "2022-09-21",
+      "publisher": "Bandai Namco",
+      "developer": "Bandai Namco",
+      "gameUrl": "https://www.freetogame.com/open/gundam-evolution",
+      "profileUrl": "https://www.freetogame.com/gundam-evolution",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit)/Windows 11",
+        "processor": "Intel Core i5-3570",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GTX 1050",
+        "storage": "40 GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1038,11 +1038,34 @@
       }
     },
     {
+      "id": 508,
+      "name": "Enlisted",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
+      "score": 8.55,
+      "tag": "人气不错",
+      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
+      "releaseDate": "2021-04-08",
+      "publisher": "Gaijin Entertainment",
+      "developer": "Darkflow Software",
+      "gameUrl": "https://www.freetogame.com/open/enlisted",
+      "profileUrl": "https://www.freetogame.com/enlisted",
+      "systemRequirements": {
+        "os": "Windows 7 / 8 / 10 64bit",
+        "processor": "Intel Core i3 or better",
+        "memory": "8 GB",
+        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
+        "storage": "12GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
       "id": 614,
       "name": "Dungeon Stalker",
       "platform": "Windows · Dungeon Crawler",
       "cover": "https://www.freetogame.com/g/614/thumbnail.jpg",
-      "score": 8.55,
+      "score": 8.5,
       "tag": "人气不错",
       "description": "A free-to-play dungeon crawler with survival elements.",
       "releaseDate": "2025-08-13",
@@ -1065,7 +1088,7 @@
       "name": "Microvolts: Recharged",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/567/thumbnail.jpg",
-      "score": 8.5,
+      "score": 8.450000000000001,
       "tag": "人气不错",
       "description": "A lobby-based third-person shooter with a toy-theme.",
       "releaseDate": "2023-09-08",
@@ -1079,29 +1102,6 @@
         "memory": "4 GB RAM",
         "graphics": "NVIDIA GeForce GTX 960 / AMD Radeon R7 370",
         "storage": "4 GB available space",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
-      "id": 508,
-      "name": "Enlisted",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/508/thumbnail.jpg",
-      "score": 8.450000000000001,
-      "tag": "人气不错",
-      "description": "Get ready to command your own World War II military squad in Gaijin and Darkflow Software’s MMO squad-based shooter Enlisted. ",
-      "releaseDate": "2021-04-08",
-      "publisher": "Gaijin Entertainment",
-      "developer": "Darkflow Software",
-      "gameUrl": "https://www.freetogame.com/open/enlisted",
-      "profileUrl": "https://www.freetogame.com/enlisted",
-      "systemRequirements": {
-        "os": "Windows 7 / 8 / 10 64bit",
-        "processor": "Intel Core i3 or better",
-        "memory": "8 GB",
-        "graphics": "Nvidia GeForce 660, AMD Radeon series 78XX or better",
-        "storage": "12GB",
         "source": "freetogame",
         "steamRaw": null
       }
@@ -1176,34 +1176,11 @@
       }
     },
     {
-      "id": 537,
-      "name": "Gundam Evolution",
-      "platform": "Windows · Shooter",
-      "cover": "https://www.freetogame.com/g/537/thumbnail.jpg",
-      "score": 8.25,
-      "tag": "人气不错",
-      "description": "A 6v6 team-based shooter based on the Gundam multiverse",
-      "releaseDate": "2022-09-21",
-      "publisher": "Bandai Namco",
-      "developer": "Bandai Namco",
-      "gameUrl": "https://www.freetogame.com/open/gundam-evolution",
-      "profileUrl": "https://www.freetogame.com/gundam-evolution",
-      "systemRequirements": {
-        "os": "Windows 10 (64-bit)/Windows 11",
-        "processor": "Intel Core i5-3570",
-        "memory": "8 GB",
-        "graphics": "NVIDIA GeForce GTX 1050",
-        "storage": "40 GB",
-        "source": "freetogame",
-        "steamRaw": null
-      }
-    },
-    {
       "id": 637,
       "name": "Highguard",
       "platform": "Windows · Shooter",
       "cover": "https://www.freetogame.com/g/637/thumbnail.jpg",
-      "score": 8.200000000000001,
+      "score": 8.25,
       "tag": "人气不错",
       "description": "Grab two friends and form a team of arcane gunslingers known as Wardens.",
       "releaseDate": "2026-01-26",
@@ -1217,6 +1194,29 @@
         "memory": "8 GB RAM",
         "graphics": "Nvidia GTX 1060 6GB / AMD RX 580 8 GB",
         "storage": "25 GB",
+        "source": "freetogame",
+        "steamRaw": null
+      }
+    },
+    {
+      "id": 537,
+      "name": "Gundam Evolution",
+      "platform": "Windows · Shooter",
+      "cover": "https://www.freetogame.com/g/537/thumbnail.jpg",
+      "score": 8.200000000000001,
+      "tag": "人气不错",
+      "description": "A 6v6 team-based shooter based on the Gundam multiverse",
+      "releaseDate": "2022-09-21",
+      "publisher": "Bandai Namco",
+      "developer": "Bandai Namco",
+      "gameUrl": "https://www.freetogame.com/open/gundam-evolution",
+      "profileUrl": "https://www.freetogame.com/gundam-evolution",
+      "systemRequirements": {
+        "os": "Windows 10 (64-bit)/Windows 11",
+        "processor": "Intel Core i5-3570",
+        "memory": "8 GB",
+        "graphics": "NVIDIA GeForce GTX 1050",
+        "storage": "40 GB",
         "source": "freetogame",
         "steamRaw": null
       }
