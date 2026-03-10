@@ -1,0 +1,895 @@
+/* ================================================
+   0. CSS Custom Properties
+   ================================================ */
+:root {
+  /* Colors */
+  --color-bg:           #faf5f7;
+  --color-text-primary: #3d2b3d;
+  --color-text-body:    #6b5a6b;
+  --color-text-muted:   #a08898;
+  --color-text-light:   #b08a9a;
+  --color-text-accent:  #c0a8b4;
+  --color-accent:       #8a4060;
+  --color-accent-soft:  #dc78a0;
+  --color-tag-bg:       rgba(220, 120, 160, 0.12);
+  --color-tag-text:     #b0607a;
+
+  /* Glass */
+  --glass-bg:           rgba(255, 255, 255, 0.45);
+  --glass-bg-hover:     rgba(255, 255, 255, 0.55);
+  --glass-bg-elevated:  rgba(255, 255, 255, 0.55);
+  --glass-bg-subtle:    rgba(255, 255, 255, 0.25);
+  --glass-border:       rgba(255, 255, 255, 0.6);
+  --glass-border-elevated: rgba(255, 255, 255, 0.7);
+  --glass-blur:         40px;
+  --glass-blur-elevated: 60px;
+  --glass-blur-subtle:  20px;
+
+  /* Orb colors */
+  --orb-pink:    radial-gradient(circle, rgba(220, 130, 170, 0.55) 0%, rgba(220, 130, 170, 0) 70%);
+  --orb-purple:  radial-gradient(circle, rgba(170, 120, 200, 0.45) 0%, rgba(170, 120, 200, 0) 70%);
+  --orb-blue:    radial-gradient(circle, rgba(120, 170, 210, 0.40) 0%, rgba(120, 170, 210, 0) 70%);
+  --orb-rose:    radial-gradient(circle, rgba(200, 140, 160, 0.35) 0%, rgba(200, 140, 160, 0) 70%);
+
+  /* Spacing */
+  --section-py:    6rem;
+  --section-py-sm: 9rem;
+
+  /* Fonts */
+  --font-serif: 'Noto Serif SC', Georgia, serif;
+  --font-hand:  'Dancing Script', cursive;
+
+  /* Transitions */
+  --ease-glass: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* ================================================
+   1. Reset & Base
+   ================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-serif);
+  background: var(--color-bg);
+  color: var(--color-text-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::-webkit-scrollbar {
+  width: 6px;
+}
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background: rgba(200, 160, 176, 0.3);
+  border-radius: 3px;
+}
+
+::selection {
+  background: rgba(220, 120, 160, 0.2);
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+/* ================================================
+   2. Glass Panel System
+   ================================================ */
+.glass-panel {
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8) brightness(1.1);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  transition: all 0.4s var(--ease-glass);
+  position: relative;
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px rgba(0, 0, 0, 0.02);
+}
+
+.glass-panel:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.4),
+    0 12px 48px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.03),
+    inset 0 1px rgba(255, 255, 255, 0.9),
+    inset 0 -1px rgba(0, 0, 0, 0.02);
+}
+
+.glass-panel-elevated {
+  backdrop-filter: blur(var(--glass-blur-elevated)) saturate(2) brightness(1.15);
+  -webkit-backdrop-filter: blur(var(--glass-blur-elevated)) saturate(2) brightness(1.15);
+  background: var(--glass-bg-elevated);
+  border: 1px solid var(--glass-border-elevated);
+  transition: all 0.5s var(--ease-glass);
+  position: relative;
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.4),
+    0 16px 64px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1.5px rgba(255, 255, 255, 0.9),
+    inset 0 -0.5px rgba(0, 0, 0, 0.03);
+}
+
+.glass-panel-subtle {
+  backdrop-filter: blur(var(--glass-blur-subtle)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle)) saturate(1.4);
+  background: var(--glass-bg-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  position: relative;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px rgba(255, 255, 255, 0.6);
+}
+
+/* Specular highlight overlay */
+.glass-specular::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.2) 40%,
+    transparent 60%,
+    rgba(255, 255, 255, 0.15)
+  );
+  padding: 1px;
+  mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+  -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+  -webkit-mask-clip: content-box, border-box;
+  -webkit-mask-composite: xor;
+}
+
+
+/* ================================================
+   3. Floating Orbs Background
+   ================================================ */
+.floating-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.orb-1 {
+  width: 28rem;
+  height: 28rem;
+  background: var(--orb-pink);
+  top: 3%;
+  left: -8%;
+  animation: float-slow 20s ease-in-out infinite, orb-fade-in 2s 0.2s ease forwards;
+}
+
+.orb-2 {
+  width: 24rem;
+  height: 24rem;
+  background: var(--orb-purple);
+  top: 20%;
+  right: -6%;
+  animation: float-slow-reverse 25s ease-in-out infinite, orb-fade-in 2s 0.5s ease forwards;
+}
+
+.orb-3 {
+  width: 20rem;
+  height: 20rem;
+  background: var(--orb-blue);
+  top: 46%;
+  left: -5%;
+  animation: float-slow 22s ease-in-out infinite, orb-fade-in 2s 0.8s ease forwards;
+}
+
+.orb-4 {
+  width: 22rem;
+  height: 22rem;
+  background: var(--orb-pink);
+  top: 68%;
+  right: -7%;
+  animation: float-slow-reverse 24s ease-in-out infinite, orb-fade-in 2s 1.1s ease forwards;
+}
+
+.orb-5 {
+  width: 16rem;
+  height: 16rem;
+  background: var(--orb-rose);
+  top: 85%;
+  left: 10%;
+  animation: float-slow 18s ease-in-out infinite, orb-fade-in 2s 1.4s ease forwards;
+}
+
+.orb-6 {
+  width: 18rem;
+  height: 18rem;
+  background: var(--orb-purple);
+  top: 40%;
+  right: 15%;
+  animation: float-slow-reverse 26s ease-in-out infinite, orb-fade-in 2s 0.6s ease forwards;
+}
+
+
+/* ================================================
+   4. Keyframe Animations
+   ================================================ */
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%      { transform: translate(15px, -20px) scale(1.02); }
+  50%      { transform: translate(-10px, -35px) scale(0.98); }
+  75%      { transform: translate(20px, -15px) scale(1.01); }
+}
+
+@keyframes float-slow-reverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%      { transform: translate(-20px, -15px) scale(0.98); }
+  50%      { transform: translate(15px, -30px) scale(1.02); }
+  75%      { transform: translate(-10px, -20px) scale(1); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+@keyframes orb-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 0.55; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(220, 120, 160, 0.3)); }
+  50%      { filter: drop-shadow(0 0 20px rgba(220, 120, 160, 0.5)); }
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { opacity: 0.6; transform: translateY(0); }
+  50%      { opacity: 1;   transform: translateY(6px); }
+}
+
+@keyframes count-in {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+
+/* ================================================
+   5. Hero Section
+   ================================================ */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 1rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+.hero-content.is-visible {
+  animation: fade-in-up 0.9s ease forwards;
+}
+
+.hero-icon-wrap {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.hero-icon-wrap:hover {
+  transform: translateY(-2px);
+}
+
+.hero-heart-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  color: var(--color-text-muted);
+  margin-bottom: 2.5rem;
+  min-height: 1.5em;
+}
+
+
+/* ================================================
+   6. Day Counter
+   ================================================ */
+.counter-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 1.5rem;
+  border-radius: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.counter-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.5rem;
+}
+
+.counter-number {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.counter-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-top: 0.35rem;
+  font-weight: 500;
+  min-height: 1em;
+}
+
+.counter-sep {
+  font-size: 1.5rem;
+  color: var(--color-text-accent);
+  font-weight: 300;
+  margin: 0 0.15rem;
+  align-self: flex-start;
+  padding-top: 0.3rem;
+}
+
+
+/* ================================================
+   7. Scroll Hint
+   ================================================ */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  animation: scroll-bounce 2.5s ease-in-out infinite;
+}
+
+.scroll-text {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-accent);
+}
+
+.scroll-arrow {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-text-accent);
+}
+
+
+/* ================================================
+   8. About Section
+   ================================================ */
+.about-section {
+  position: relative;
+  z-index: 10;
+  padding: var(--section-py) 1rem;
+}
+
+.about-card {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.about-avatar {
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(220, 160, 180, 0.3), rgba(180, 140, 200, 0.2));
+}
+
+.about-text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.about-text .section-heading {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  min-height: 1.3em;
+}
+
+.about-description {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--color-text-body);
+  min-height: 4em;
+}
+
+
+/* ================================================
+   9. Section Headings (shared)
+   ================================================ */
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-heading {
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
+}
+
+.section-subheading {
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  color: var(--color-text-muted);
+  min-height: 1.5em;
+}
+
+
+/* ================================================
+   10. Timeline Section
+   ================================================ */
+.timeline-section {
+  position: relative;
+  z-index: 10;
+  padding: var(--section-py) 1rem;
+}
+
+.timeline-line {
+  display: none;
+}
+
+.timeline-container {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.timeline-item.timeline-right {
+  transform: translateX(40px);
+}
+
+.timeline-item.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.7s var(--ease-glass);
+}
+
+.timeline-dot {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-dot:hover {
+  transform: translateY(-2px);
+}
+
+.timeline-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent);
+}
+
+.timeline-card {
+  flex: 1;
+  max-width: 24rem;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+}
+
+.timeline-image-placeholder {
+  width: 100%;
+  height: 10rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(200, 160, 180, 0.15), rgba(160, 140, 200, 0.1));
+  margin-bottom: 1rem;
+}
+
+.timeline-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-tag-bg);
+  color: var(--color-tag-text);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
+  min-width: 2rem;
+}
+
+.timeline-date {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+  min-height: 1em;
+}
+
+.timeline-card-title {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  min-height: 1.3em;
+}
+
+.timeline-card-desc {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--color-text-body);
+  min-height: 3em;
+}
+
+
+/* ================================================
+   11. Gallery Section
+   ================================================ */
+.gallery-section {
+  position: relative;
+  z-index: 10;
+  padding: var(--section-py) 1rem;
+}
+
+.gallery-grid {
+  max-width: 52rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.gallery-slot {
+  aspect-ratio: 1;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(220, 160, 180, 0.08), rgba(160, 140, 200, 0.06));
+  transition: all 0.4s var(--ease-glass);
+}
+
+.gallery-slot:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+
+/* ================================================
+   12. Declaration Section
+   ================================================ */
+.declaration-section {
+  position: relative;
+  z-index: 10;
+  padding: var(--section-py) 1rem;
+}
+
+.declaration-card {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+}
+
+.declaration-heart {
+  margin-bottom: 1.5rem;
+}
+
+.declaration-heart svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+  margin: 0 auto;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.declaration-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 300;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  min-height: 1.3em;
+}
+
+.declaration-lead {
+  font-size: 0.95rem;
+  color: var(--color-text-body);
+  margin-bottom: 1.25rem;
+  min-height: 1.5em;
+}
+
+.declaration-body {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--color-text-body);
+  margin-bottom: 1.5rem;
+  min-height: 3em;
+}
+
+.declaration-closing {
+  font-size: 0.9rem;
+  color: var(--color-text-body);
+  margin-bottom: 2rem;
+  min-height: 1.5em;
+}
+
+.declaration-signature {
+  font-size: 1rem;
+  color: var(--color-accent);
+  font-weight: 400;
+  min-height: 1.3em;
+}
+
+
+/* ================================================
+   13. Footer
+   ================================================ */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.footer-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.footer-line {
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background: rgba(200, 160, 176, 0.2);
+}
+
+.footer-heart {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: rgba(200, 160, 176, 0.5);
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: var(--color-text-accent);
+  letter-spacing: 0.05em;
+  min-height: 1.5em;
+}
+
+
+/* ================================================
+   14. Reveal Animations (scroll-triggered)
+   ================================================ */
+.reveal-section .section-header,
+.reveal-section .about-card,
+.reveal-section .declaration-card,
+.reveal-section .gallery-grid {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s var(--ease-glass);
+}
+
+.reveal-section.is-visible .section-header,
+.reveal-section.is-visible .about-card,
+.reveal-section.is-visible .declaration-card,
+.reveal-section.is-visible .gallery-grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-up {
+  opacity: 0;
+}
+
+
+/* ================================================
+   15. Desktop Layout (md: 768px+)
+   ================================================ */
+@media (min-width: 768px) {
+  :root {
+    --section-py: var(--section-py-sm);
+  }
+
+  .timeline-line {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 14rem;
+    bottom: 6rem;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(200, 160, 176, 0.25), transparent);
+    transform: translateX(-50%);
+  }
+
+  .timeline-container {
+    gap: 3rem;
+  }
+
+  .timeline-item {
+    width: 50%;
+    position: relative;
+  }
+
+  .timeline-item.timeline-left {
+    align-self: flex-start;
+    padding-right: 2.5rem;
+    flex-direction: row-reverse;
+  }
+
+  .timeline-item.timeline-right {
+    align-self: flex-end;
+    padding-left: 2.5rem;
+  }
+
+  .timeline-item.timeline-left .timeline-dot {
+    position: absolute;
+    right: -1.25rem;
+  }
+
+  .timeline-item.timeline-right .timeline-dot {
+    position: absolute;
+    left: -1.25rem;
+  }
+
+  .about-card {
+    flex-wrap: nowrap;
+    padding: 3rem;
+  }
+
+  .gallery-grid {
+    gap: 1.25rem;
+  }
+
+  .counter-unit {
+    min-width: 4.5rem;
+  }
+
+  .declaration-card {
+    padding: 3.5rem;
+  }
+}
+
+
+/* ================================================
+   16. Small screens (max-width: 480px)
+   ================================================ */
+@media (max-width: 480px) {
+  .orb-1 { width: 16rem; height: 16rem; }
+  .orb-2 { width: 14rem; height: 14rem; }
+  .orb-3 { width: 12rem; height: 12rem; }
+  .orb-4 { width: 14rem; height: 14rem; }
+  .orb-5 { width: 10rem; height: 10rem; }
+  .orb-6 { width: 12rem; height: 12rem; }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-card {
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .counter-wrap {
+    padding: 0.75rem 1rem;
+  }
+
+  .counter-unit {
+    min-width: 2.8rem;
+  }
+
+  .declaration-card {
+    padding: 2rem 1.5rem;
+  }
+}
